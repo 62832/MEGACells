@@ -1,0 +1,45 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="LGPLv3.0"
+
+[[mods]]
+modId="megacells"
+version="${version}"
+displayName="MEGA Cells"
+# logoFile="icon.png"
+credits="big up AE2"
+authors="90"
+description='''
+ME Greater Accumulation Cells - Higher-tier storage cells ranging from 1M to 256M.
+Also includes ME Chemical Cells with Applied Mekanistics.
+
+MEGA DISKs: never ever.
+'''
+
+[[dependencies.megacells]]
+    modId="ae2"
+    mandatory=true
+    versionRange = "(,12.0.0)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.megacells]]
+    modId="appmek"
+    mandatory=false
+    versionRange="(,2.0.0)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.megacells]]
+    modId="forge"
+    mandatory=true
+    versionRange="[40,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.megacells]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"

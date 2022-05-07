@@ -1,0 +1,228 @@
+buildscript {
+    repositories {
+        maven {
+            name = "MinecraftForge"
+            url = uri("https://files.minecraftforge.net/maven/")
+        }
+
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath(group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true)
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+    }
+}
+
+plugins {
+    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("com.diffplug.spotless") version "6.4.1"
+}
+
+apply(plugin: "net.minecraftforge.gradle")
+apply plugin: 'org.spongepowered.mixin'
+
+group = "ninety"
+version = "1.0.0-alpha.1"
+
+repositories {
+    maven {
+        name = "Modmaven"
+        url = uri("https://modmaven.dev/")
+
+        content {
+            includeGroup("appeng")
+            includeGroup("mekanism")
+        }
+    }
+
+    maven {
+        name = "CurseMaven"
+        url = uri("https://cursemaven.com")
+
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
+    maven {
+        name = "Progwml6 maven"
+        url = uri("https://dvs1.progwml6.com/files/maven/")
+
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
+
+    maven {
+        name = "Local"
+        url = file("libs").toURI()
+    }
+}
+
+dependencies {
+    minecraft("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+
+    implementation(fg.deobf("appeng:appliedenergistics2:${ae2_version}"))
+
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}"))
+
+    compileOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
+    runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
+
+    compileOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
+    runtimeOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+        }
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+////////////////////
+// Forge/Minecraft
+minecraft {
+    mappings(channel: "official", version: "${minecraft_version}")
+
+    /**
+     * Configures properties common to all run configurations
+     */
+    def commonRunProperties = {
+        workingDirectory(project.file("run"))
+
+        property("forge.logging.console.level", "debug")
+        property("fml.earlyprogresswindow", "false")
+        jvmArgs("--add-opens", "java.base/sun.security.util=ALL-UNNAMED")
+        jvmArgs("--add-opens", "java.base/java.util.jar=ALL-UNNAMED")
+
+        // See https://github.com/Vazkii/Patchouli#mixin-troubleshooting
+        property("mixin.env.remapRefMap", "true")
+        property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+        // property "mixin.debug.export", "true"
+
+        mods {
+            megacells {
+                source(sourceSets.main)
+            }
+        }
+    }
+
+    runs {
+        client {
+            with(commonRunProperties)
+        }
+
+        server {
+            with(commonRunProperties)
+        }
+
+        data {
+            with(commonRunProperties)
+            // ForgeGradle will just force-exit the Gradle Daemon which fails our builds in case
+            // a daemon is used for any reason.
+            forceExit false
+            args("--mod", "megacells", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources"))
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.release.set(17)
+}
+
+processResources {
+    inputs.property("version", project.version)
+
+    exclude(".cache")
+
+    filesMatching("META-INF/mods.toml") {
+        expand("version": project.version)
+    }
+}
+
+jar {
+    finalizedBy("reobfJar")
+
+    from(sourceSets.main.output.classesDirs)
+    from(sourceSets.main.output.resourcesDir)
+
+    manifest {
+        attributes([
+                "Specification-Title"     : "MEGA Cells",
+                "Specification-Vendor"    : "90",
+                "Specification-Version"   : "${project.version}",
+                "Implementation-Title"    : "${project.name}",
+                "Implementation-Version"  : "${project.version}",
+                "Implementation-Vendor"   : "90",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+/////////////
+// Spotless
+spotless {
+    java {
+        target("src/main/java/**/*.java")
+
+        endWithNewline()
+        indentWithSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+        eclipse().configFile("codeformat/codeformat.xml")
+        importOrderFile("codeformat/ae2.importorder")
+    }
+
+    format("json") {
+        target("src/*/resources/**/*.json")
+        targetExclude("src/generated/resources/**")
+        prettier().config(parser: "json")
+    }
+}
+
+////////////////
+// CurseForge
+/*
+System.getenv("CURSEFORGE")?.with { String key ->
+    curseforge {
+        apiKey = key
+
+        project {
+            id = "609977"
+            changelogType = "markdown"
+            changelog = "View changelog at [the release page](https://github.com/Technici4n/AE2Things-Forge/releases/tag/${version})"
+
+            if (version.contains("alpha")) {
+                releaseType = "alpha"
+            } else if (version.contains("beta")) {
+                releaseType = "beta"
+            } else {
+                releaseType = "release"
+            }
+
+            addGameVersion("${minecraft_version}")
+            addGameVersion("Forge")
+
+            mainArtifact(jar) {
+                displayName = "AE2 Things v${version}"
+
+                relations {
+                    requiredDependency("applied-energistics-2")
+                }
+            }
+        }
+    }
+}
+*/
