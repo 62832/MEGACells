@@ -10,10 +10,7 @@ displayName="MEGA Cells"
 credits="big up AE2"
 authors="90"
 description='''
-ME Greater Accumulation Cells - Higher-tier storage cells ranging from 1M to 256M.
-Also includes ME Chemical Cells with Applied Mekanistics.
-
-MEGA DISKs: never ever.
+ME Greater Accumulation Cells - For when kilobytes just won't do.
 '''
 
 [[dependencies.megacells]]
@@ -21,13 +18,6 @@ MEGA DISKs: never ever.
     mandatory=true
     versionRange = "(,12.0.0)"
     ordering="AFTER"
-    side="BOTH"
-
-[[dependencies.megacells]]
-    modId="appmek"
-    mandatory=false
-    versionRange="(,2.0.0)"
-    ordering="NONE"
     side="BOTH"
 
 [[dependencies.megacells]]
