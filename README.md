@@ -9,6 +9,6 @@ Active work-in-progress.
 * MEGA Crafting Storage Units
 * Further recipe/energy balancing for cells
 * Potential dedicated crafting ingredients
-* Potential dedicated components for cells (lmao "MEGA Drive")
+* Potential dedicated blocks/devices for cells (lmao "MEGA Drive")
 * AppMek integration (MEGA Chemical Cells)
 * ~~AE2Things integration (MEGA DISKs)~~ _never ever_
