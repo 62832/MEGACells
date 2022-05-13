@@ -11,11 +11,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.item.util.IMEGACellType;
+import ninety.megacells.item.util.MEGACellTier;
+import ninety.megacells.item.util.MEGACellType;
 
 import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 
-public class MEGAItems {
+public final class MEGAItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MEGACells.MODID);
 
@@ -31,7 +34,7 @@ public class MEGAItems {
         }
     };
 
-    private static final Item.Properties props = new Item.Properties().tab(CREATIVE_TAB);
+    public static final Item.Properties props = new Item.Properties().tab(CREATIVE_TAB);
 
     public static final RegistryObject<Item> MEGA_ITEM_CELL_HOUSING = ITEMS.register("mega_item_cell_housing", () -> new MaterialItem(props));
     public static final RegistryObject<Item> MEGA_FLUID_CELL_HOUSING = ITEMS.register("mega_fluid_cell_housing", () -> new MaterialItem(props));
@@ -42,17 +45,17 @@ public class MEGAItems {
     public static final RegistryObject<Item> CELL_COMPONENT_64M = component(MEGACellTier._64M);
     public static final RegistryObject<Item> CELL_COMPONENT_256M = component(MEGACellTier._256M);
 
-    public static final RegistryObject<Item> ITEM_CELL_1M = cell(CELL_COMPONENT_1M, MEGACellTier._1M, MEGACellType.ITEM);
-    public static final RegistryObject<Item> ITEM_CELL_4M = cell(CELL_COMPONENT_4M, MEGACellTier._4M, MEGACellType.ITEM);
-    public static final RegistryObject<Item> ITEM_CELL_16M = cell(CELL_COMPONENT_16M, MEGACellTier._16M, MEGACellType.ITEM);
-    public static final RegistryObject<Item> ITEM_CELL_64M = cell(CELL_COMPONENT_64M, MEGACellTier._64M, MEGACellType.ITEM);
-    public static final RegistryObject<Item> ITEM_CELL_256M = cell(CELL_COMPONENT_256M, MEGACellTier._256M, MEGACellType.ITEM);
+    public static final RegistryObject<Item> ITEM_CELL_1M = cell(MEGACellTier._1M, MEGACellType.ITEM);
+    public static final RegistryObject<Item> ITEM_CELL_4M = cell(MEGACellTier._4M, MEGACellType.ITEM);
+    public static final RegistryObject<Item> ITEM_CELL_16M = cell(MEGACellTier._16M, MEGACellType.ITEM);
+    public static final RegistryObject<Item> ITEM_CELL_64M = cell(MEGACellTier._64M, MEGACellType.ITEM);
+    public static final RegistryObject<Item> ITEM_CELL_256M = cell(MEGACellTier._256M, MEGACellType.ITEM);
 
-    public static final RegistryObject<Item> FLUID_CELL_1M = cell(CELL_COMPONENT_1M, MEGACellTier._1M, MEGACellType.FLUID);
-    public static final RegistryObject<Item> FLUID_CELL_4M = cell(CELL_COMPONENT_4M, MEGACellTier._4M, MEGACellType.FLUID);
-    public static final RegistryObject<Item> FLUID_CELL_16M = cell(CELL_COMPONENT_16M, MEGACellTier._16M, MEGACellType.FLUID);
-    public static final RegistryObject<Item> FLUID_CELL_64M = cell(CELL_COMPONENT_64M, MEGACellTier._64M, MEGACellType.FLUID);
-    public static final RegistryObject<Item> FLUID_CELL_256M = cell(CELL_COMPONENT_256M, MEGACellTier._256M, MEGACellType.FLUID);
+    public static final RegistryObject<Item> FLUID_CELL_1M = cell(MEGACellTier._1M, MEGACellType.FLUID);
+    public static final RegistryObject<Item> FLUID_CELL_4M = cell(MEGACellTier._4M, MEGACellType.FLUID);
+    public static final RegistryObject<Item> FLUID_CELL_16M = cell(MEGACellTier._16M, MEGACellType.FLUID);
+    public static final RegistryObject<Item> FLUID_CELL_64M = cell(MEGACellTier._64M, MEGACellType.FLUID);
+    public static final RegistryObject<Item> FLUID_CELL_256M = cell(MEGACellTier._256M, MEGACellType.FLUID);
 
     public static final RegistryObject<Item> PORTABLE_ITEM_CELL_1M = portable(MEGACellTier._1M, MEGACellType.ITEM);
     public static final RegistryObject<Item> PORTABLE_ITEM_CELL_4M = portable(MEGACellTier._4M, MEGACellType.ITEM);
@@ -72,13 +75,13 @@ public class MEGAItems {
                 () -> new StorageComponentItem(props, cellTier.kbFactor()));
     }
 
-    private static RegistryObject<Item> cell(RegistryObject<Item> component, MEGACellTier tier, MEGACellType type) {
-        return ITEMS.register(type.affix + "_storage_cell_" + tier.affix,
-                () -> new MEGAStorageCell(props.stacksTo(1), component.get(), tier, type));
+    private static RegistryObject<Item> cell(MEGACellTier tier, IMEGACellType type) {
+        return ITEMS.register(type.affix() + "_storage_cell_" + tier.affix,
+                () -> new MEGAStorageCell(props.stacksTo(1), tier, type));
     }
 
-    private static RegistryObject<Item> portable(MEGACellTier tier, MEGACellType type) {
-        return ITEMS.register("portable_" + type.affix + "_cell_" + tier.affix,
+    private static RegistryObject<Item> portable(MEGACellTier tier, IMEGACellType type) {
+        return ITEMS.register("portable_" + type.affix() + "_cell_" + tier.affix,
                 () -> new MEGAPortableCell(props.stacksTo(1), tier, type));
     }
 

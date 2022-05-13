@@ -5,6 +5,8 @@ import java.util.Objects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import ninety.megacells.item.util.IMEGACellType;
+import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.api.upgrades.IUpgradeInventory;
@@ -15,10 +17,10 @@ import appeng.items.tools.powered.PortableCellItem;
 public class MEGAPortableCell extends PortableCellItem {
 
     public final MEGACellTier tier;
-    public final MEGACellType type;
+    public final IMEGACellType type;
 
-    public MEGAPortableCell(Properties props, MEGACellTier tier, MEGACellType type) {
-        super(type.key, type.portableMenu, makePortableTier(tier), props);
+    public MEGAPortableCell(Properties props, MEGACellTier tier, IMEGACellType type) {
+        super(type.keyType(), type.portableCellMenu(), makePortableTier(tier), props);
         this.tier = tier;
         this.type = type;
     }

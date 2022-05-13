@@ -7,6 +7,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.integration.appmek.MEGAMekIntegration;
+import ninety.megacells.integration.appmek.data.MEGAMekBlockModelProvider;
+import ninety.megacells.integration.appmek.data.MEGAMekItemModelProvider;
+import ninety.megacells.integration.appmek.data.MEGAMekRecipeProvider;
 
 @Mod.EventBusSubscriber(modid = MEGACells.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MEGADataGenerators {
@@ -19,5 +23,11 @@ public class MEGADataGenerators {
         generator.addProvider(new MEGAItemModelProvider(generator, existingFileHelper));
         generator.addProvider(new MEGABlockModelProvider(generator, existingFileHelper));
         generator.addProvider(new MEGARecipeProvider(generator));
+
+        if (MEGAMekIntegration.isLoaded()) {
+            generator.addProvider(new MEGAMekItemModelProvider(generator, existingFileHelper));
+            generator.addProvider(new MEGAMekBlockModelProvider(generator, existingFileHelper));
+            generator.addProvider(new MEGAMekRecipeProvider(generator));
+        }
     }
 }

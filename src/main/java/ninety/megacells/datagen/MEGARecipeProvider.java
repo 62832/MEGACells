@@ -12,7 +12,11 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
 
-import ninety.megacells.item.*;
+import ninety.megacells.item.MEGAItems;
+import ninety.megacells.item.MEGAPortableCell;
+import ninety.megacells.item.MEGAStorageCell;
+import ninety.megacells.item.util.IMEGACellType;
+import ninety.megacells.item.util.MEGACellType;
 import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.core.definitions.AEBlocks;
@@ -23,6 +27,7 @@ public class MEGARecipeProvider extends RecipeProvider {
         super(generator);
     }
 
+    @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         // spotless:off
         component(consumer, AEItems.CELL_COMPONENT_64K.asItem(), MEGAItems.CELL_COMPONENT_1M.get(), AEItems.SKY_DUST.asItem());
@@ -56,12 +61,12 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(output)));
     }
 
-    private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
+    protected void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
         var cell = (MEGAStorageCell) cellItem;
 
         var component = cell.getTier().getComponent();
-        var housing = cell.getType().getHousing();
-        var housingMaterial = cell.getType().housingMaterial;
+        var housing = cell.getType().housing();
+        var housingMaterial = cell.getType().housingMaterial();
 
         var componentPath = MEGACellsUtil.getItemPath(component);
         var cellPath = MEGACellsUtil.getItemPath(cellItem);
@@ -84,9 +89,9 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACellsUtil.makeId("cells/standard" + cellPath + "_with_housing"));
     }
 
-    private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
+    protected void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
         var portableCell = (MEGAPortableCell) portableCellItem;
-        var housing = portableCell.type.getHousing();
+        var housing = portableCell.type.housing();
         ShapelessRecipeBuilder.shapeless(portableCell)
                 .requires(AEBlocks.CHEST)
                 .requires(portableCell.tier.getComponent())
@@ -97,15 +102,15 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACellsUtil.makeId("cells/portable/" + MEGACellsUtil.getItemPath(portableCell)));
     }
 
-    private void housing(Consumer<FinishedRecipe> consumer, MEGACellType type) {
-        var housing = type.getHousing();
-        ShapedRecipeBuilder.shaped(type.getHousing())
+    protected void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
+        var housing = type.housing();
+        ShapedRecipeBuilder.shaped(type.housing())
                 .pattern("aba")
                 .pattern("b b")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .define('b', AEItems.SKY_DUST)
-                .define('d', type.housingMaterial)
+                .define('d', type.housingMaterial())
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
                 .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(housing)));
     }

@@ -8,20 +8,21 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import ninety.megacells.MEGACells;
-import ninety.megacells.item.MEGACellType;
+import ninety.megacells.item.util.MEGACellType;
 import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.core.AppEng;
 
 public class MEGABlockModelProvider extends BlockModelProvider {
 
-    private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
+    protected static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
     public MEGABlockModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, MEGACells.MODID, existingFileHelper);
         existingFileHelper.trackGenerated(DRIVE_CELL, MODEL);
     }
 
+    @Override
     protected void registerModels() {
         for (var cell : Stream.concat(MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream()).toList()) {

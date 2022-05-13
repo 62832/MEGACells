@@ -1,17 +1,19 @@
 package ninety.megacells.item;
 
-import net.minecraft.world.level.ItemLike;
+import ninety.megacells.item.util.IMEGACellType;
+import ninety.megacells.item.util.MEGACellTier;
+import ninety.megacells.item.util.MEGACellType;
 
 import appeng.items.storage.BasicStorageCell;
 
 public class MEGAStorageCell extends BasicStorageCell {
 
     private final MEGACellTier tier;
-    private final MEGACellType type;
+    private final IMEGACellType type;
 
-    public MEGAStorageCell(Properties properties, ItemLike coreItem, MEGACellTier tier, MEGACellType type) {
-        super(properties, coreItem, type.getHousing(), 2.5f + 0.5f * tier.index, tier.kbFactor(),
-                tier.kbFactor() * 8, type == MEGACellType.ITEM ? 63 : 5, type.key);
+    public MEGAStorageCell(Properties properties, MEGACellTier tier, IMEGACellType type) {
+        super(properties, tier.getComponent(), type.housing(), 2.5f + 0.5f * tier.index, tier.kbFactor(),
+                tier.kbFactor() * 8, type == MEGACellType.ITEM ? 63 : 5, type.keyType());
         this.tier = tier;
         this.type = type;
     }
@@ -20,7 +22,7 @@ public class MEGAStorageCell extends BasicStorageCell {
         return this.tier;
     }
 
-    public MEGACellType getType() {
+    public IMEGACellType getType() {
         return this.type;
     }
 
