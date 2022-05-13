@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.MEGACellType;
 import ninety.megacells.util.MEGACellsUtil;
 
@@ -24,8 +25,10 @@ public class MEGABlockModelProvider extends BlockModelProvider {
 
     @Override
     protected void registerModels() {
-        for (var cell : Stream.concat(MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream()).toList()) {
+        for (var cell : Stream.of(
+                MEGACellType.ITEM.getCells().stream(),
+                MEGACellType.FLUID.getCells().stream(),
+                ChemicalCellType.TYPE.getCells().stream()).flatMap(s -> s).toList()) {
             String path = "block/drive/cells/" + MEGACellsUtil.getItemPath(cell);
             withExistingParent(path, DRIVE_CELL).texture("cell", path);
         }
@@ -35,5 +38,8 @@ public class MEGABlockModelProvider extends BlockModelProvider {
 
         String portableFluidCell = "block/drive/cells/portable_mega_fluid_cell";
         withExistingParent(portableFluidCell, DRIVE_CELL).texture("cell", portableFluidCell);
+
+        String portableChemicalCell = "block/drive/cells/portable_mega_chemical_cell";
+        withExistingParent(portableChemicalCell, DRIVE_CELL).texture("cell", portableChemicalCell);
     }
 }

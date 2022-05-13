@@ -11,6 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
@@ -38,6 +39,7 @@ public final class MEGAItems {
 
     public static final RegistryObject<Item> MEGA_ITEM_CELL_HOUSING = ITEMS.register("mega_item_cell_housing", () -> new MaterialItem(props));
     public static final RegistryObject<Item> MEGA_FLUID_CELL_HOUSING = ITEMS.register("mega_fluid_cell_housing", () -> new MaterialItem(props));
+    public static final RegistryObject<Item> MEGA_CHEMICAL_CELL_HOUSING = ITEMS.register("mega_chemical_cell_housing", () -> new MaterialItem(props));
 
     public static final RegistryObject<Item> CELL_COMPONENT_1M = component(MEGACellTier._1M);
     public static final RegistryObject<Item> CELL_COMPONENT_4M = component(MEGACellTier._4M);
@@ -57,6 +59,12 @@ public final class MEGAItems {
     public static final RegistryObject<Item> FLUID_CELL_64M = cell(MEGACellTier._64M, MEGACellType.FLUID);
     public static final RegistryObject<Item> FLUID_CELL_256M = cell(MEGACellTier._256M, MEGACellType.FLUID);
 
+    public static final RegistryObject<Item> CHEMICAL_CELL_1M = cell(MEGACellTier._1M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> CHEMICAL_CELL_4M = cell(MEGACellTier._4M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> CHEMICAL_CELL_16M = cell(MEGACellTier._16M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> CHEMICAL_CELL_64M = cell(MEGACellTier._64M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> CHEMICAL_CELL_256M = cell(MEGACellTier._256M, ChemicalCellType.TYPE);
+
     public static final RegistryObject<Item> PORTABLE_ITEM_CELL_1M = portable(MEGACellTier._1M, MEGACellType.ITEM);
     public static final RegistryObject<Item> PORTABLE_ITEM_CELL_4M = portable(MEGACellTier._4M, MEGACellType.ITEM);
     public static final RegistryObject<Item> PORTABLE_ITEM_CELL_16M = portable(MEGACellTier._16M, MEGACellType.ITEM);
@@ -68,6 +76,12 @@ public final class MEGAItems {
     public static final RegistryObject<Item> PORTABLE_FLUID_CELL_16M = portable(MEGACellTier._16M, MEGACellType.FLUID);
     public static final RegistryObject<Item> PORTABLE_FLUID_CELL_64M = portable(MEGACellTier._64M, MEGACellType.FLUID);
     public static final RegistryObject<Item> PORTABLE_FLUID_CELL_256M = portable(MEGACellTier._256M, MEGACellType.FLUID);
+
+    public static final RegistryObject<Item> PORTABLE_CHEMICAL_CELL_1M = portable(MEGACellTier._1M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> PORTABLE_CHEMICAL_CELL_4M = portable(MEGACellTier._4M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> PORTABLE_CHEMICAL_CELL_16M = portable(MEGACellTier._16M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> PORTABLE_CHEMICAL_CELL_64M = portable(MEGACellTier._64M, ChemicalCellType.TYPE);
+    public static final RegistryObject<Item> PORTABLE_CHEMICAL_CELL_256M = portable(MEGACellTier._256M, ChemicalCellType.TYPE);
     // spotless:on
 
     private static RegistryObject<Item> component(MEGACellTier cellTier) {

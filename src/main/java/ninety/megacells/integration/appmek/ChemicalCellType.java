@@ -1,6 +1,5 @@
 package ninety.megacells.integration.appmek;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +10,7 @@ import net.minecraft.world.item.Item;
 
 import me.ramidzkh.mekae2.AMMenus;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
+import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.util.IMEGACellType;
 
 import appeng.api.stacks.AEKeyType;
@@ -21,7 +21,7 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public AEKeyType keyType() {
-        return MekanismKeyType.TYPE;
+        return AppMekIntegration.isAppMekLoaded() ? MekanismKeyType.TYPE : AEKeyType.fluids();
     }
 
     @Override
@@ -31,7 +31,7 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public Item housing() {
-        return MEGAMekItems.MEGA_CHEMICAL_CELL_HOUSING;
+        return MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.get();
     }
 
     @Override
@@ -41,28 +41,22 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public MenuType<MEStorageMenu> portableCellMenu() {
-        return AMMenus.PORTABLE_CHEMICAL_CELL_TYPE;
+        return AppMekIntegration.isAppMekLoaded()
+                ? AMMenus.PORTABLE_CHEMICAL_CELL_TYPE
+                : MEStorageMenu.PORTABLE_FLUID_CELL_TYPE;
     }
 
     @Override
     public List<Item> getCells() {
-        var cells = new ArrayList<Item>();
-        cells.add(MEGAMekItems.CHEMICAL_STORAGE_CELL_1M);
-        cells.add(MEGAMekItems.CHEMICAL_STORAGE_CELL_4M);
-        cells.add(MEGAMekItems.CHEMICAL_STORAGE_CELL_16M);
-        cells.add(MEGAMekItems.CHEMICAL_STORAGE_CELL_64M);
-        cells.add(MEGAMekItems.CHEMICAL_STORAGE_CELL_256M);
-        return cells;
+        return List.of(MEGAItems.CHEMICAL_CELL_1M.get(), MEGAItems.CHEMICAL_CELL_4M.get(),
+                MEGAItems.CHEMICAL_CELL_16M.get(), MEGAItems.CHEMICAL_CELL_64M.get(),
+                MEGAItems.CHEMICAL_CELL_256M.get());
     }
 
     @Override
     public List<Item> getPortableCells() {
-        var cells = new ArrayList<Item>();
-        cells.add(MEGAMekItems.PORTABLE_CHEMICAL_CELL_1M);
-        cells.add(MEGAMekItems.PORTABLE_CHEMICAL_CELL_4M);
-        cells.add(MEGAMekItems.PORTABLE_CHEMICAL_CELL_16M);
-        cells.add(MEGAMekItems.PORTABLE_CHEMICAL_CELL_64M);
-        cells.add(MEGAMekItems.PORTABLE_CHEMICAL_CELL_256M);
-        return cells;
+        return List.of(MEGAItems.PORTABLE_CHEMICAL_CELL_1M.get(), MEGAItems.PORTABLE_CHEMICAL_CELL_4M.get(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_16M.get(), MEGAItems.PORTABLE_CHEMICAL_CELL_64M.get(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.get());
     }
 }

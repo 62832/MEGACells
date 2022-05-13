@@ -14,7 +14,8 @@ import appeng.menu.me.common.MEStorageMenu;
 
 public enum MEGACellType implements IMEGACellType {
     ITEM(AEKeyType.items(), "item", ConventionTags.IRON_INGOT, MEStorageMenu.PORTABLE_ITEM_CELL_TYPE),
-    FLUID(AEKeyType.fluids(), "fluid", ConventionTags.COPPER_INGOT, MEStorageMenu.PORTABLE_FLUID_CELL_TYPE);
+    FLUID(AEKeyType.fluids(), "fluid", ConventionTags.COPPER_INGOT, MEStorageMenu.PORTABLE_FLUID_CELL_TYPE),
+    ;
 
     public final AEKeyType key;
     public final String affix;

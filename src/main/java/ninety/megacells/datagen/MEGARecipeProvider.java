@@ -12,6 +12,8 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
 
+import ninety.megacells.integration.appmek.AppMekIntegration;
+import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
@@ -45,6 +47,16 @@ public class MEGARecipeProvider extends RecipeProvider {
         for (var portable : Stream.concat(MEGACellType.ITEM.getPortableCells().stream(), MEGACellType.FLUID.getPortableCells().stream()).toList()) {
             portable(consumer, portable);
         }
+
+        if (AppMekIntegration.isAppMekLoaded()) {
+            housing(consumer, ChemicalCellType.TYPE);
+            for (var chemStorage : ChemicalCellType.TYPE.getCells()) {
+                cell(consumer, chemStorage);
+            }
+            for (var chemPortable : ChemicalCellType.TYPE.getPortableCells()) {
+                portable(consumer, chemPortable);
+            }
+        }
         // spotless:on
     }
 
@@ -61,7 +73,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(output)));
     }
 
-    protected void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
+    private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
         var cell = (MEGAStorageCell) cellItem;
 
         var component = cell.getTier().getComponent();
@@ -80,16 +92,16 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('c', component)
                 .define('d', housingMaterial)
                 .unlockedBy("has_" + componentPath, has(component))
-                .save(consumer, MEGACellsUtil.makeId("cells/standard" + cellPath));
+                .save(consumer, MEGACellsUtil.makeId("cells/standard/" + cellPath));
         ShapelessRecipeBuilder.shapeless(cellItem)
                 .requires(housing)
                 .requires(component)
                 .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_" + MEGACellsUtil.getItemPath(housing), has(housing))
-                .save(consumer, MEGACellsUtil.makeId("cells/standard" + cellPath + "_with_housing"));
+                .save(consumer, MEGACellsUtil.makeId("cells/standard/" + cellPath + "_with_housing"));
     }
 
-    protected void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
+    private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
         var portableCell = (MEGAPortableCell) portableCellItem;
         var housing = portableCell.type.housing();
         ShapelessRecipeBuilder.shapeless(portableCell)
@@ -102,7 +114,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACellsUtil.makeId("cells/portable/" + MEGACellsUtil.getItemPath(portableCell)));
     }
 
-    protected void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
+    private void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
         var housing = type.housing();
         ShapedRecipeBuilder.shaped(type.housing())
                 .pattern("aba")

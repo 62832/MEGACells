@@ -10,7 +10,9 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.MEGAItems;
+import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
 import ninety.megacells.util.MEGACellsUtil;
 
@@ -31,20 +33,22 @@ public class MEGAItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.get());
         flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.get());
+        flatSingleLayer(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.get());
 
-        flatSingleLayer(MEGAItems.CELL_COMPONENT_1M.get());
-        flatSingleLayer(MEGAItems.CELL_COMPONENT_4M.get());
-        flatSingleLayer(MEGAItems.CELL_COMPONENT_16M.get());
-        flatSingleLayer(MEGAItems.CELL_COMPONENT_64M.get());
-        flatSingleLayer(MEGAItems.CELL_COMPONENT_256M.get());
+        for (var tier : MEGACellTier.values()) {
+            flatSingleLayer(tier.getComponent());
+        }
 
-        for (var storage : Stream.concat(MEGACellType.ITEM.getCells().stream(), MEGACellType.FLUID.getCells().stream())
-                .toList()) {
+        for (var storage : Stream.of(
+                MEGACellType.ITEM.getCells().stream(),
+                MEGACellType.FLUID.getCells().stream(),
+                ChemicalCellType.TYPE.getCells().stream()).flatMap(s -> s).toList()) {
             cell(storage);
         }
-        for (var portable : Stream
-                .concat(MEGACellType.ITEM.getPortableCells().stream(), MEGACellType.FLUID.getPortableCells().stream())
-                .toList()) {
+        for (var portable : Stream.of(
+                MEGACellType.ITEM.getPortableCells().stream(),
+                MEGACellType.FLUID.getPortableCells().stream(),
+                ChemicalCellType.TYPE.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(portable);
         }
     }
