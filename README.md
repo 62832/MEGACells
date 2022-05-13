@@ -5,10 +5,11 @@ Active work-in-progress.
 
 ## TODO/NYI
 
-* Fabric port (currently Forge-only)
-* MEGA Crafting Storage Units
-* Further recipe/energy balancing for cells
-* Potential dedicated crafting ingredients
-* Potential dedicated blocks/devices for cells (lmao "MEGA Drive")
-* AppMek integration (MEGA Chemical Cells)
-* ~~AE2Things integration (MEGA DISKs)~~ _never ever_
+- [ ] Fabric port (currently Forge-only)
+- [ ] MEGA Crafting Storage Units
+- [ ] Further recipe/energy balancing for cells
+- [ ] Potential dedicated crafting ingredients
+- [ ] Potential dedicated blocks/devices for cells (lmao "MEGA Drive")
+- [x] AppMek integration (MEGA Chemical Cells)
+
+AE2Things Integration: _never ever_
