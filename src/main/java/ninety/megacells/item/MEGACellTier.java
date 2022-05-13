@@ -18,7 +18,7 @@ public enum MEGACellTier {
     }
 
     public int kbFactor() {
-        return 64 * (int) Math.pow(4, this.index);
+        return 256 * (int) Math.pow(4, this.index);
     }
 
     public Item getComponent() {
