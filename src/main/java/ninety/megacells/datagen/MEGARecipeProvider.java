@@ -14,10 +14,10 @@ import net.minecraft.world.item.Item;
 
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
 import ninety.megacells.item.util.IMEGACellType;
+import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
 import ninety.megacells.util.MEGACellsUtil;
 
@@ -32,11 +32,11 @@ public class MEGARecipeProvider extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         // spotless:off
-        component(consumer, AEItems.CELL_COMPONENT_64K.asItem(), MEGAItems.CELL_COMPONENT_1M.get(), AEItems.SKY_DUST.asItem());
-        component(consumer, MEGAItems.CELL_COMPONENT_1M.get(), MEGAItems.CELL_COMPONENT_4M.get(), AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGAItems.CELL_COMPONENT_4M.get(), MEGAItems.CELL_COMPONENT_16M.get(), AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGAItems.CELL_COMPONENT_16M.get(), MEGAItems.CELL_COMPONENT_64M.get(), AEItems.SINGULARITY.asItem());
-        component(consumer, MEGAItems.CELL_COMPONENT_64M.get(), MEGAItems.CELL_COMPONENT_256M.get(), AEItems.SINGULARITY.asItem());
+        component(consumer, MEGACellTier._1M, AEItems.SKY_DUST.asItem());
+        component(consumer, MEGACellTier._4M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGACellTier._16M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGACellTier._64M, AEItems.SINGULARITY.asItem());
+        component(consumer, MEGACellTier._256M, AEItems.SINGULARITY.asItem());
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
@@ -48,7 +48,7 @@ public class MEGARecipeProvider extends RecipeProvider {
             portable(consumer, portable);
         }
 
-        if (AppMekIntegration.isAppMekLoaded()) {
+        if (AppMekIntegration.isAppMekLoaded()) { // this check doesn't actually do shit lol
             housing(consumer, ChemicalCellType.TYPE);
             for (var chemStorage : ChemicalCellType.TYPE.getCells()) {
                 cell(consumer, chemStorage);
@@ -60,17 +60,20 @@ public class MEGARecipeProvider extends RecipeProvider {
         // spotless:on
     }
 
-    private void component(Consumer<FinishedRecipe> consumer, Item preceding, Item output, Item substrate) {
-        ShapedRecipeBuilder.shaped(output)
+    private void component(Consumer<FinishedRecipe> consumer, MEGACellTier tier, Item binder) {
+        var preceding = tier == MEGACellTier._1M ? AEItems.CELL_COMPONENT_256K.asItem()
+                : MEGACellTier.values()[tier.index - 2].getComponent();
+
+        ShapedRecipeBuilder.shaped(tier.getComponent())
                 .pattern("aba")
                 .pattern("cdc")
                 .pattern("aca")
-                .define('a', substrate)
+                .define('a', binder)
                 .define('b', AEItems.CALCULATION_PROCESSOR)
                 .define('c', preceding)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_" + MEGACellsUtil.getItemPath(preceding), has(preceding))
-                .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(output)));
+                .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(tier.getComponent())));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
