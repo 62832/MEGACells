@@ -23,7 +23,7 @@ apply(plugin: "net.minecraftforge.gradle")
 apply plugin: 'org.spongepowered.mixin'
 
 group = "ninety"
-version = "1.0.0-beta.1"
+version = "1.0.0"
 
 repositories {
     maven {
