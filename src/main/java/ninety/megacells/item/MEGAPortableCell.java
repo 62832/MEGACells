@@ -10,11 +10,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
-import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
@@ -39,7 +39,7 @@ public class MEGAPortableCell extends PortableCellItem {
 
     @Override
     public ResourceLocation getRecipeId() {
-        return MEGACellsUtil.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
+        return MEGACells.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
 
     @Override

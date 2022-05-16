@@ -12,14 +12,15 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
 
+import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
-import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -72,8 +73,8 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('b', AEItems.CALCULATION_PROCESSOR)
                 .define('c', preceding)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .unlockedBy("has_" + MEGACellsUtil.getItemPath(preceding), has(preceding))
-                .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(tier.getComponent())));
+                .unlockedBy("has_" + MEGAItems.getItemPath(preceding), has(preceding))
+                .save(consumer, MEGACells.makeId("cells/" + MEGAItems.getItemPath(tier.getComponent())));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
@@ -83,8 +84,8 @@ public class MEGARecipeProvider extends RecipeProvider {
         var housing = cell.getType().housing();
         var housingMaterial = cell.getType().housingMaterial();
 
-        var componentPath = MEGACellsUtil.getItemPath(component);
-        var cellPath = MEGACellsUtil.getItemPath(cellItem);
+        var componentPath = MEGAItems.getItemPath(component);
+        var cellPath = MEGAItems.getItemPath(cellItem);
 
         ShapedRecipeBuilder.shaped(cellItem)
                 .pattern("aba")
@@ -95,13 +96,13 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('c', component)
                 .define('d', housingMaterial)
                 .unlockedBy("has_" + componentPath, has(component))
-                .save(consumer, MEGACellsUtil.makeId("cells/standard/" + cellPath));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cellPath));
         ShapelessRecipeBuilder.shapeless(cellItem)
                 .requires(housing)
                 .requires(component)
                 .unlockedBy("has_" + componentPath, has(component))
-                .unlockedBy("has_" + MEGACellsUtil.getItemPath(housing), has(housing))
-                .save(consumer, MEGACellsUtil.makeId("cells/standard/" + cellPath + "_with_housing"));
+                .unlockedBy("has_" + MEGAItems.getItemPath(housing), has(housing))
+                .save(consumer, MEGACells.makeId("cells/standard/" + cellPath + "_with_housing"));
     }
 
     private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
@@ -112,9 +113,9 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .requires(portableCell.tier.getComponent())
                 .requires(AEBlocks.DENSE_ENERGY_CELL)
                 .requires(housing)
-                .unlockedBy("has_" + MEGACellsUtil.getItemPath(housing), has(housing))
+                .unlockedBy("has_" + MEGAItems.getItemPath(housing), has(housing))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-                .save(consumer, MEGACellsUtil.makeId("cells/portable/" + MEGACellsUtil.getItemPath(portableCell)));
+                .save(consumer, MEGACells.makeId("cells/portable/" + MEGAItems.getItemPath(portableCell)));
     }
 
     private void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
@@ -127,6 +128,6 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('b', AEItems.SKY_DUST)
                 .define('d', type.housingMaterial())
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
-                .save(consumer, MEGACellsUtil.makeId("cells/" + MEGACellsUtil.getItemPath(housing)));
+                .save(consumer, MEGACells.makeId("cells/" + MEGAItems.getItemPath(housing)));
     }
 }

@@ -41,8 +41,8 @@ public enum MEGACellType implements IMEGACellType {
 
     public Item housing() {
         return switch (this) {
-            case ITEM -> MEGAItems.MEGA_ITEM_CELL_HOUSING.get();
-            case FLUID -> MEGAItems.MEGA_FLUID_CELL_HOUSING.get();
+            case ITEM -> MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem();
+            case FLUID -> MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem();
         };
     }
 
@@ -58,21 +58,35 @@ public enum MEGACellType implements IMEGACellType {
 
     public List<Item> getCells() {
         return switch (this) {
-            case ITEM -> List.of(MEGAItems.ITEM_CELL_1M.get(), MEGAItems.ITEM_CELL_4M.get(),
-                    MEGAItems.ITEM_CELL_16M.get(), MEGAItems.ITEM_CELL_64M.get(), MEGAItems.ITEM_CELL_256M.get());
-            case FLUID -> List.of(MEGAItems.FLUID_CELL_1M.get(), MEGAItems.FLUID_CELL_4M.get(),
-                    MEGAItems.FLUID_CELL_16M.get(), MEGAItems.FLUID_CELL_64M.get(), MEGAItems.FLUID_CELL_256M.get());
+            case ITEM -> List.of(
+                    MEGAItems.ITEM_CELL_1M.asItem(),
+                    MEGAItems.ITEM_CELL_4M.asItem(),
+                    MEGAItems.ITEM_CELL_16M.asItem(),
+                    MEGAItems.ITEM_CELL_64M.asItem(),
+                    MEGAItems.ITEM_CELL_256M.asItem());
+            case FLUID -> List.of(
+                    MEGAItems.FLUID_CELL_1M.asItem(),
+                    MEGAItems.FLUID_CELL_4M.asItem(),
+                    MEGAItems.FLUID_CELL_16M.asItem(),
+                    MEGAItems.FLUID_CELL_64M.asItem(),
+                    MEGAItems.FLUID_CELL_256M.asItem());
         };
     }
 
     public List<Item> getPortableCells() {
         return switch (this) {
-            case ITEM -> List.of(MEGAItems.PORTABLE_ITEM_CELL_1M.get(), MEGAItems.PORTABLE_ITEM_CELL_4M.get(),
-                    MEGAItems.PORTABLE_ITEM_CELL_16M.get(), MEGAItems.PORTABLE_ITEM_CELL_64M.get(),
-                    MEGAItems.PORTABLE_ITEM_CELL_256M.get());
-            case FLUID -> List.of(MEGAItems.PORTABLE_FLUID_CELL_1M.get(), MEGAItems.PORTABLE_FLUID_CELL_4M.get(),
-                    MEGAItems.PORTABLE_FLUID_CELL_16M.get(), MEGAItems.PORTABLE_FLUID_CELL_64M.get(),
-                    MEGAItems.PORTABLE_FLUID_CELL_256M.get());
+            case ITEM -> List.of(
+                    MEGAItems.PORTABLE_ITEM_CELL_1M.asItem(),
+                    MEGAItems.PORTABLE_ITEM_CELL_4M.asItem(),
+                    MEGAItems.PORTABLE_ITEM_CELL_16M.asItem(),
+                    MEGAItems.PORTABLE_ITEM_CELL_64M.asItem(),
+                    MEGAItems.PORTABLE_ITEM_CELL_256M.asItem());
+            case FLUID -> List.of(
+                    MEGAItems.PORTABLE_FLUID_CELL_1M.asItem(),
+                    MEGAItems.PORTABLE_FLUID_CELL_4M.asItem(),
+                    MEGAItems.PORTABLE_FLUID_CELL_16M.asItem(),
+                    MEGAItems.PORTABLE_FLUID_CELL_64M.asItem(),
+                    MEGAItems.PORTABLE_FLUID_CELL_256M.asItem());
         };
     }
 }

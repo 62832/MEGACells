@@ -21,7 +21,7 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public AEKeyType keyType() {
-        return AppMekIntegration.isAppMekLoaded() ? MekanismKeyType.TYPE : AEKeyType.fluids();
+        return MekanismKeyType.TYPE;
     }
 
     @Override
@@ -31,7 +31,7 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public Item housing() {
-        return MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.get();
+        return MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.asItem();
     }
 
     @Override
@@ -41,22 +41,26 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public MenuType<MEStorageMenu> portableCellMenu() {
-        return AppMekIntegration.isAppMekLoaded()
-                ? AMMenus.PORTABLE_CHEMICAL_CELL_TYPE
-                : MEStorageMenu.PORTABLE_FLUID_CELL_TYPE;
+        return AMMenus.PORTABLE_CHEMICAL_CELL_TYPE;
     }
 
     @Override
     public List<Item> getCells() {
-        return List.of(MEGAItems.CHEMICAL_CELL_1M.get(), MEGAItems.CHEMICAL_CELL_4M.get(),
-                MEGAItems.CHEMICAL_CELL_16M.get(), MEGAItems.CHEMICAL_CELL_64M.get(),
-                MEGAItems.CHEMICAL_CELL_256M.get());
+        return List.of(
+                MEGAItems.CHEMICAL_CELL_1M.asItem(),
+                MEGAItems.CHEMICAL_CELL_4M.asItem(),
+                MEGAItems.CHEMICAL_CELL_16M.asItem(),
+                MEGAItems.CHEMICAL_CELL_64M.asItem(),
+                MEGAItems.CHEMICAL_CELL_256M.asItem());
     }
 
     @Override
     public List<Item> getPortableCells() {
-        return List.of(MEGAItems.PORTABLE_CHEMICAL_CELL_1M.get(), MEGAItems.PORTABLE_CHEMICAL_CELL_4M.get(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_16M.get(), MEGAItems.PORTABLE_CHEMICAL_CELL_64M.get(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.get());
+        return List.of(
+                MEGAItems.PORTABLE_CHEMICAL_CELL_1M.asItem(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_16M.asItem(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
+                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.asItem());
     }
 }

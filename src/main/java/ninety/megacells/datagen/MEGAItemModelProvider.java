@@ -14,7 +14,6 @@ import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
-import ninety.megacells.util.MEGACellsUtil;
 
 import appeng.core.AppEng;
 
@@ -31,9 +30,9 @@ public class MEGAItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.get());
-        flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.get());
-        flatSingleLayer(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.get());
+        flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem());
+        flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
+        flatSingleLayer(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
         for (var tier : MEGACellTier.values()) {
             flatSingleLayer(tier.getComponent());
@@ -62,7 +61,7 @@ public class MEGAItemModelProvider extends ItemModelProvider {
     }
 
     protected ItemModelBuilder flatSingleLayer(Item item) {
-        String path = MEGACellsUtil.getItemPath(item);
-        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACellsUtil.makeId("item/" + path));
+        String path = MEGAItems.getItemPath(item);
+        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + path));
     }
 }

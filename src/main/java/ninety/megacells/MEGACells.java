@@ -1,5 +1,7 @@
 package ninety.megacells;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -9,18 +11,23 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.datagen.MEGADataGenerators;
 import ninety.megacells.init.InitCellModels;
+import ninety.megacells.init.InitItems;
 import ninety.megacells.init.InitUpgrades;
 import ninety.megacells.init.client.InitItemColors;
-import ninety.megacells.item.MEGAItems;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
 
     public static final String MODID = "megacells";
 
+    public static ResourceLocation makeId(String path) {
+        return new ResourceLocation(MEGACells.MODID, path);
+    }
+
     public MEGACells() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        MEGAItems.init(bus);
+
+        bus.addGenericListener(Item.class, InitItems::register);
 
         bus.addListener(MEGADataGenerators::onGatherData);
         bus.addListener((FMLCommonSetupEvent event) -> {

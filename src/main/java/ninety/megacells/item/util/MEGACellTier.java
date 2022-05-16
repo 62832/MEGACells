@@ -25,11 +25,11 @@ public enum MEGACellTier {
 
     public Item getComponent() {
         return switch (this) {
-            case _1M -> MEGAItems.CELL_COMPONENT_1M.get();
-            case _4M -> MEGAItems.CELL_COMPONENT_4M.get();
-            case _16M -> MEGAItems.CELL_COMPONENT_16M.get();
-            case _64M -> MEGAItems.CELL_COMPONENT_64M.get();
-            case _256M -> MEGAItems.CELL_COMPONENT_256M.get();
+            case _1M -> MEGAItems.CELL_COMPONENT_1M.asItem();
+            case _4M -> MEGAItems.CELL_COMPONENT_4M.asItem();
+            case _16M -> MEGAItems.CELL_COMPONENT_16M.asItem();
+            case _64M -> MEGAItems.CELL_COMPONENT_64M.asItem();
+            case _256M -> MEGAItems.CELL_COMPONENT_256M.asItem();
         };
     }
 }
