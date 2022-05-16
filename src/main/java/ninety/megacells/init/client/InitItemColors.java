@@ -1,4 +1,4 @@
-package ninety.megacells.init;
+package ninety.megacells.init.client;
 
 import java.util.stream.Stream;
 
@@ -10,10 +10,10 @@ import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
 import ninety.megacells.item.util.MEGACellType;
 
-public class MEGACellsClient {
+public class InitItemColors {
     public static void initialize() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(MEGACellsClient::initItemColors);
+        bus.addListener(InitItemColors::initItemColors);
     }
 
     private static void initItemColors(ColorHandlerEvent.Item event) {
