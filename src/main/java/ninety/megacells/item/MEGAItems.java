@@ -105,10 +105,10 @@ public final class MEGAItems {
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory,
             boolean register) {
-        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
-        T item = factory.apply(p);
-
         if (register) {
+            Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+            T item = factory.apply(p);
+
             ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
             ITEMS.add(definition);
 

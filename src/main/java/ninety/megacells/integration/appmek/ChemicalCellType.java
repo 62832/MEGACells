@@ -1,5 +1,6 @@
 package ninety.megacells.integration.appmek;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
@@ -46,21 +47,23 @@ public enum ChemicalCellType implements IMEGACellType {
 
     @Override
     public List<Item> getCells() {
-        return List.of(
+        return AppMekIntegration.isAppMekLoaded() ? List.of(
                 MEGAItems.CHEMICAL_CELL_1M.asItem(),
                 MEGAItems.CHEMICAL_CELL_4M.asItem(),
                 MEGAItems.CHEMICAL_CELL_16M.asItem(),
                 MEGAItems.CHEMICAL_CELL_64M.asItem(),
-                MEGAItems.CHEMICAL_CELL_256M.asItem());
+                MEGAItems.CHEMICAL_CELL_256M.asItem())
+                : Collections.emptyList();
     }
 
     @Override
     public List<Item> getPortableCells() {
-        return List.of(
+        return AppMekIntegration.isAppMekLoaded() ? List.of(
                 MEGAItems.PORTABLE_CHEMICAL_CELL_1M.asItem(),
                 MEGAItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
                 MEGAItems.PORTABLE_CHEMICAL_CELL_16M.asItem(),
                 MEGAItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.asItem());
+                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.asItem())
+                : Collections.emptyList();
     }
 }
