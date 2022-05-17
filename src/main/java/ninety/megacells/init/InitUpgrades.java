@@ -2,12 +2,12 @@ package ninety.megacells.init;
 
 import java.util.stream.Stream;
 
-import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.item.util.MEGACellType;
-
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
+
+import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.util.MEGACellType;
 
 public class InitUpgrades {
     public static void init() {

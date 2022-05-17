@@ -9,13 +9,13 @@ import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import appeng.core.AppEng;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
-
-import appeng.core.AppEng;
 
 public class MEGAItemModelProvider extends ItemModelProvider {
 

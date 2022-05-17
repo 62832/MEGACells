@@ -10,16 +10,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.core.definitions.AEItems;
+import appeng.items.tools.powered.PortableCellItem;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
-
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.core.definitions.AEItems;
-import appeng.items.tools.powered.PortableCellItem;
 
 public class MEGAPortableCell extends PortableCellItem {
 

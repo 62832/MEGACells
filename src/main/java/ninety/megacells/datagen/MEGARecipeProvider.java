@@ -12,6 +12,9 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
 
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
@@ -21,9 +24,6 @@ import ninety.megacells.item.MEGAStorageCell;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
-
-import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEItems;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {

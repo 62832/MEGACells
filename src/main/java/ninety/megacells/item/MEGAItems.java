@@ -14,15 +14,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
+import appeng.items.materials.MaterialItem;
+import appeng.items.materials.StorageComponentItem;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.IMEGACellType;
 import ninety.megacells.item.util.MEGACellTier;
 import ninety.megacells.item.util.MEGACellType;
-
-import appeng.items.materials.MaterialItem;
-import appeng.items.materials.StorageComponentItem;
 
 public final class MEGAItems {
 

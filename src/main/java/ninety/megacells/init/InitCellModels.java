@@ -2,12 +2,12 @@ package ninety.megacells.init;
 
 import java.util.stream.Stream;
 
+import appeng.api.client.StorageCellModels;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.util.MEGACellType;
-
-import appeng.api.client.StorageCellModels;
 
 public class InitCellModels {
     public static void init() {

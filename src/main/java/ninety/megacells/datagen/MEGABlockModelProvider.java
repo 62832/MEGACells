@@ -7,11 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import appeng.core.AppEng;
+
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.util.MEGACellType;
-
-import appeng.core.AppEng;
 
 public class MEGABlockModelProvider extends BlockModelProvider {
 
