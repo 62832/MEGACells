@@ -1,7 +1,5 @@
 package ninety.megacells.item.util;
 
-import java.util.List;
-
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
