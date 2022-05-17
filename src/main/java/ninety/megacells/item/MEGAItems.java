@@ -105,13 +105,16 @@ public final class MEGAItems {
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory,
             boolean register) {
-        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
-        T item = factory.apply(p);
+        if (register) {
+            Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+            T item = factory.apply(p);
 
-        ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item, register);
-        ITEMS.add(definition);
+            ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
+            ITEMS.add(definition);
 
-        return definition;
+            return definition;
+        }
+        return null;
     }
 
     public static String getItemPath(Item item) {
@@ -122,21 +125,15 @@ public final class MEGAItems {
 
         private final ResourceLocation id;
         private final T item;
-        private final boolean register;
 
-        ItemDefinition(ResourceLocation id, T item, boolean register) {
+        ItemDefinition(ResourceLocation id, T item) {
             Objects.requireNonNull(id);
             this.id = id;
             this.item = item;
-            this.register = register;
         }
 
         public ResourceLocation getId() {
             return this.id;
-        }
-
-        public boolean register() {
-            return this.register;
         }
 
         @Override

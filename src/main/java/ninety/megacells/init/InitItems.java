@@ -9,11 +9,9 @@ import ninety.megacells.item.MEGAItems;
 public class InitItems {
     public static void init(IForgeRegistry<Item> registry) {
         for (var definition : MEGAItems.getItems()) {
-            if (definition.register()) {
-                var item = definition.asItem();
-                item.setRegistryName(definition.getId());
-                registry.register(item);
-            }
+            var item = definition.asItem();
+            item.setRegistryName(definition.getId());
+            registry.register(item);
         }
     }
 
