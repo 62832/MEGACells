@@ -60,8 +60,8 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         flatSingleLayer(cell, "/cells/portable").texture("layer1", PORTABLE_CELL_LED);
     }
 
-    private ItemModelBuilder flatSingleLayer(Item item) {
-        return flatSingleLayer(item, "");
+    private void flatSingleLayer(Item item) {
+        flatSingleLayer(item, "");
     }
 
     private ItemModelBuilder flatSingleLayer(Item item, String subfolder) {

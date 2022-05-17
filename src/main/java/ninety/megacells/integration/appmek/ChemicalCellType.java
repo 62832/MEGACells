@@ -46,7 +46,6 @@ public enum ChemicalCellType implements IMEGACellType {
         return AMMenus.PORTABLE_CHEMICAL_CELL_TYPE;
     }
 
-    @Override
     public List<Item> getCells() {
         return AppMekIntegration.isAppMekLoaded() ? List.of(
                 MEGAItems.CHEMICAL_CELL_1M.asItem(),
@@ -57,7 +56,6 @@ public enum ChemicalCellType implements IMEGACellType {
                 : Collections.emptyList();
     }
 
-    @Override
     public List<Item> getPortableCells() {
         return AppMekIntegration.isAppMekLoaded() ? List.of(
                 MEGAItems.PORTABLE_CHEMICAL_CELL_1M.asItem(),

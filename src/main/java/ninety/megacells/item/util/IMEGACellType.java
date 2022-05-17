@@ -19,8 +19,4 @@ public interface IMEGACellType {
     TagKey<Item> housingMaterial();
 
     MenuType<MEStorageMenu> portableCellMenu();
-
-    List<Item> getCells();
-
-    List<Item> getPortableCells();
 }

@@ -138,7 +138,7 @@ public final class MEGAItems {
         }
 
         @Override
-        public T asItem() {
+        public final @NotNull T asItem() {
             return item;
         }
     }
