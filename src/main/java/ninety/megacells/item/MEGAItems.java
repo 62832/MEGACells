@@ -62,12 +62,6 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAStorageCell> FLUID_CELL_64M = cell(MEGACellTier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAStorageCell> FLUID_CELL_256M = cell(MEGACellTier._256M, MEGACellType.FLUID);
 
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGACellTier._1M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGACellTier._4M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_16M = cell(MEGACellTier._16M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_64M = cell(MEGACellTier._64M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_256M = cell(MEGACellTier._256M, ChemicalCellType.TYPE);
-
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = portable(MEGACellTier._1M, MEGACellType.ITEM);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = portable(MEGACellTier._4M, MEGACellType.ITEM);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_16M = portable(MEGACellTier._16M, MEGACellType.ITEM);
@@ -79,6 +73,12 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_16M = portable(MEGACellTier._16M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = portable(MEGACellTier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = portable(MEGACellTier._256M, MEGACellType.FLUID);
+
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGACellTier._1M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGACellTier._4M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_16M = cell(MEGACellTier._16M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_64M = cell(MEGACellTier._64M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_256M = cell(MEGACellTier._256M, ChemicalCellType.TYPE);
 
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGACellTier._1M, ChemicalCellType.TYPE);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGACellTier._4M, ChemicalCellType.TYPE);
@@ -105,16 +105,13 @@ public final class MEGAItems {
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory,
             boolean register) {
-        if (register) {
-            Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
-            T item = factory.apply(p);
+        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+        T item = factory.apply(p);
 
-            ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
-            ITEMS.add(definition);
+        ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item, register);
+        ITEMS.add(definition);
 
-            return definition;
-        }
-        return null; // *clueless*
+        return definition;
     }
 
     public static String getItemPath(Item item) {
@@ -125,15 +122,21 @@ public final class MEGAItems {
 
         private final ResourceLocation id;
         private final T item;
+        private final boolean register;
 
-        ItemDefinition(ResourceLocation id, T item) {
+        ItemDefinition(ResourceLocation id, T item, boolean register) {
             Objects.requireNonNull(id);
             this.id = id;
             this.item = item;
+            this.register = register;
         }
 
         public ResourceLocation getId() {
             return this.id;
+        }
+
+        public boolean register() {
+            return this.register;
         }
 
         @Override
