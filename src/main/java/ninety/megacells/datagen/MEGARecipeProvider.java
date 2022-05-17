@@ -74,7 +74,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('c', preceding)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_" + MEGAItems.getItemPath(preceding), has(preceding))
-                .save(consumer, MEGACells.makeId("cells/" + MEGAItems.getItemPath(tier.getComponent())));
+                .save(consumer, MEGACells.makeId(MEGAItems.getItemPath(tier.getComponent())));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {

@@ -52,16 +52,21 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         }
     }
 
-    protected void cell(Item cell) {
-        flatSingleLayer(cell).texture("layer1", STORAGE_CELL_LED);
+    private void cell(Item cell) {
+        flatSingleLayer(cell, "/cells/standard").texture("layer1", STORAGE_CELL_LED);
     }
 
-    protected void portable(Item cell) {
-        flatSingleLayer(cell).texture("layer1", PORTABLE_CELL_LED);
+    private void portable(Item cell) {
+        flatSingleLayer(cell, "/cells/portable").texture("layer1", PORTABLE_CELL_LED);
     }
 
-    protected ItemModelBuilder flatSingleLayer(Item item) {
+    private ItemModelBuilder flatSingleLayer(Item item) {
+        return flatSingleLayer(item, "");
+    }
+
+    private ItemModelBuilder flatSingleLayer(Item item, String subfolder) {
         String path = MEGAItems.getItemPath(item);
-        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + path));
+        return singleTexture(path, mcLoc("item/generated"), "layer0",
+                MEGACells.makeId("item" + subfolder + "/" + path));
     }
 }
