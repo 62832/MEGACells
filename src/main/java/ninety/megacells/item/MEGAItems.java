@@ -42,7 +42,6 @@ public final class MEGAItems {
 
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("mega_item_cell_housing", MaterialItem::new, true);
     public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("mega_fluid_cell_housing", MaterialItem::new, true);
-    public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing", MaterialItem::new, AppMekIntegration.isAppMekLoaded());
 
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_1M = component(MEGACellTier._1M);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_4M = component(MEGACellTier._4M);
@@ -73,6 +72,8 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_16M = portable(MEGACellTier._16M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = portable(MEGACellTier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = portable(MEGACellTier._256M, MEGACellType.FLUID);
+
+    public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing", MaterialItem::new, AppMekIntegration.isAppMekLoaded());
 
     public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGACellTier._1M, ChemicalCellType.TYPE);
     public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGACellTier._4M, ChemicalCellType.TYPE);
