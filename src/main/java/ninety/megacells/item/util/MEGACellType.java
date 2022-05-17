@@ -17,10 +17,10 @@ public enum MEGACellType implements IMEGACellType {
     FLUID(AEKeyType.fluids(), "fluid", ConventionTags.COPPER_INGOT, MEStorageMenu.PORTABLE_FLUID_CELL_TYPE),
     ;
 
-    public final AEKeyType key;
-    public final String affix;
-    public final TagKey<Item> housingMaterial;
-    public final MenuType<MEStorageMenu> portableMenu;
+    private final AEKeyType key;
+    private final String affix;
+    private final TagKey<Item> housingMaterial;
+    private final MenuType<MEStorageMenu> portableMenu;
 
     MEGACellType(AEKeyType key, String affix, TagKey<Item> housingMaterial, MenuType<MEStorageMenu> portableMenu) {
         this.key = key;
