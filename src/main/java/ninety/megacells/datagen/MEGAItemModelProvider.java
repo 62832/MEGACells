@@ -13,9 +13,9 @@ import appeng.core.AppEng;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
-import ninety.megacells.item.util.MEGACellTier;
-import ninety.megacells.item.util.MEGACellType;
+import ninety.megacells.util.MEGATier;
 
 public class MEGAItemModelProvider extends ItemModelProvider {
 
@@ -34,7 +34,7 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
         flatSingleLayer(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
-        for (var tier : MEGACellTier.values()) {
+        for (var tier : MEGATier.values()) {
             flatSingleLayer(tier.getComponent());
         }
 

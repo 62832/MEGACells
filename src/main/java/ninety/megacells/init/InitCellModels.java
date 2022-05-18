@@ -6,8 +6,8 @@ import appeng.api.client.StorageCellModels;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
-import ninety.megacells.item.util.MEGACellType;
 
 public class InitCellModels {
     public static void init() {

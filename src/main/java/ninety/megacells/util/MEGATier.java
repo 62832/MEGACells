@@ -1,10 +1,10 @@
-package ninety.megacells.item.util;
+package ninety.megacells.util;
 
 import net.minecraft.world.item.Item;
 
 import ninety.megacells.item.MEGAItems;
 
-public enum MEGACellTier {
+public enum MEGATier {
     _1M(1, "1m"),
     _4M(2, "4m"),
     _16M(3, "16m"),
@@ -14,7 +14,7 @@ public enum MEGACellTier {
     public final int index;
     public final String affix;
 
-    MEGACellTier(int index, String affix) {
+    MEGATier(int index, String affix) {
         this.index = index;
         this.affix = affix;
     }

@@ -18,12 +18,12 @@ import appeng.core.definitions.AEItems;
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.IMEGACellType;
+import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
-import ninety.megacells.item.util.IMEGACellType;
-import ninety.megacells.item.util.MEGACellTier;
-import ninety.megacells.item.util.MEGACellType;
+import ninety.megacells.util.MEGATier;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {
@@ -33,11 +33,11 @@ public class MEGARecipeProvider extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         // spotless:off
-        component(consumer, MEGACellTier._1M, AEItems.SKY_DUST.asItem());
-        component(consumer, MEGACellTier._4M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGACellTier._16M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGACellTier._64M, AEItems.SINGULARITY.asItem());
-        component(consumer, MEGACellTier._256M, AEItems.SINGULARITY.asItem());
+        component(consumer, MEGATier._1M, AEItems.SKY_DUST.asItem());
+        component(consumer, MEGATier._4M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGATier._16M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGATier._64M, AEItems.SINGULARITY.asItem());
+        component(consumer, MEGATier._256M, AEItems.SINGULARITY.asItem());
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
@@ -61,9 +61,9 @@ public class MEGARecipeProvider extends RecipeProvider {
         // spotless:on
     }
 
-    private void component(Consumer<FinishedRecipe> consumer, MEGACellTier tier, Item binder) {
-        var preceding = tier == MEGACellTier._1M ? AEItems.CELL_COMPONENT_256K.asItem()
-                : MEGACellTier.values()[tier.index - 2].getComponent();
+    private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, Item binder) {
+        var preceding = tier == MEGATier._1M ? AEItems.CELL_COMPONENT_256K.asItem()
+                : MEGATier.values()[tier.index - 2].getComponent();
 
         ShapedRecipeBuilder.shaped(tier.getComponent())
                 .pattern("aba")

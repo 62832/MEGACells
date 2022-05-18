@@ -7,7 +7,7 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
 import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.item.util.MEGACellType;
+import ninety.megacells.item.MEGACellType;
 
 public class InitUpgrades {
     public static void init() {

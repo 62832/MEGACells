@@ -6,9 +6,9 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
-import ninety.megacells.item.util.MEGACellType;
 
 public class InitItemColors {
     public static void initialize() {

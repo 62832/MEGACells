@@ -18,21 +18,20 @@ import appeng.items.tools.powered.PortableCellItem;
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.item.util.IMEGACellType;
-import ninety.megacells.item.util.MEGACellTier;
+import ninety.megacells.util.MEGATier;
 
 public class MEGAPortableCell extends PortableCellItem {
 
-    public final MEGACellTier tier;
+    public final MEGATier tier;
     public final IMEGACellType type;
 
-    public MEGAPortableCell(Properties props, MEGACellTier tier, IMEGACellType type) {
+    public MEGAPortableCell(Properties props, MEGATier tier, IMEGACellType type) {
         super(type.keyType(), type.portableCellMenu(), makePortableTier(tier), props);
         this.tier = tier;
         this.type = type;
     }
 
-    private static StorageTier makePortableTier(MEGACellTier tier) {
+    private static StorageTier makePortableTier(MEGATier tier) {
         return new StorageTier(tier.affix, 512 * tier.kbFactor(), 9 + 9 * tier.index, 2048 * tier.index,
                 tier::getComponent);
     }

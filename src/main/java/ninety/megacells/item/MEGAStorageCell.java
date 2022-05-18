@@ -12,23 +12,21 @@ import appeng.items.storage.BasicStorageCell;
 
 import ninety.megacells.integration.appmek.AppMekIntegration;
 import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.item.util.IMEGACellType;
-import ninety.megacells.item.util.MEGACellTier;
-import ninety.megacells.item.util.MEGACellType;
+import ninety.megacells.util.MEGATier;
 
 public class MEGAStorageCell extends BasicStorageCell {
 
-    private final MEGACellTier tier;
+    private final MEGATier tier;
     private final IMEGACellType type;
 
-    public MEGAStorageCell(Properties properties, MEGACellTier tier, IMEGACellType type) {
+    public MEGAStorageCell(Properties properties, MEGATier tier, IMEGACellType type) {
         super(properties, tier.getComponent(), type.housing(), 2.5f + 0.5f * tier.index, tier.kbFactor(),
                 tier.kbFactor() * 8, type == MEGACellType.ITEM ? 63 : 5, type.keyType());
         this.tier = tier;
         this.type = type;
     }
 
-    public MEGACellTier getTier() {
+    public MEGATier getTier() {
         return this.tier;
     }
 

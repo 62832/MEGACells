@@ -15,8 +15,8 @@ import appeng.menu.me.common.MEStorageMenu;
 import me.ramidzkh.mekae2.AMMenus;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
+import ninety.megacells.item.IMEGACellType;
 import ninety.megacells.item.MEGAItems;
-import ninety.megacells.item.util.IMEGACellType;
 
 public enum ChemicalCellType implements IMEGACellType {
     TYPE;
