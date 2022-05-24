@@ -4,6 +4,7 @@
   "item.megacells.mega_item_cell_housing": "MEGA Item Cell Housing",
   "item.megacells.mega_fluid_cell_housing": "MEGA Fluid Cell Housing",
   "item.megacells.mega_chemical_cell_housing": "MEGA Chemical Cell Housing",
+  "block.megacells.mega_crafting_unit": "MEGA Crafting Unit",
 
   "item.megacells.cell_component_1m": "1M MEGA Storage Component",
   "item.megacells.cell_component_4m": "4M MEGA Storage Component",
@@ -45,5 +46,13 @@
   "item.megacells.portable_chemical_cell_4m": "4M Portable Chemical Cell",
   "item.megacells.portable_chemical_cell_16m": "16M Portable Chemical Cell",
   "item.megacells.portable_chemical_cell_64m": "64M Portable Chemical Cell",
-  "item.megacells.portable_chemical_cell_256m": "256M Portable Chemical Cell"
+  "item.megacells.portable_chemical_cell_256m": "256M Portable Chemical Cell",
+
+  "block.megacells.1m_crafting_storage": "1M MEGA Crafting Storage",
+  "block.megacells.4m_crafting_storage": "4M MEGA Crafting Storage",
+  "block.megacells.16m_crafting_storage": "16M MEGA Crafting Storage",
+  "block.megacells.64m_crafting_storage": "64M MEGA Crafting Storage",
+  "block.megacells.256m_crafting_storage": "256M MEGA Crafting Storage",
+  "block.megacells.mega_crafting_accelerator": "MEGA Crafting Accelerator",
+  "block.megacells.mega_crafting_monitor": "MEGA Crafting Monitor"
 }

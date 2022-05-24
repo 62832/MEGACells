@@ -24,7 +24,7 @@ import ninety.megacells.util.MEGATier;
 
 public final class MEGAItems {
 
-    public static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
+    private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
 
     public static List<ItemDefinition<?>> getItems() {
         return Collections.unmodifiableList(ITEMS);
@@ -137,7 +137,7 @@ public final class MEGAItems {
 
         @Override
         public final @NotNull T asItem() {
-            return item;
+            return this.item;
         }
     }
 }

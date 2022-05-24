@@ -17,7 +17,7 @@ public class MEGADataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         generator.addProvider(new MEGAItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(new MEGABlockStateProvider(generator, existingFileHelper));
+        generator.addProvider(new MEGABlockModelProvider(generator, existingFileHelper));
         generator.addProvider(new MEGARecipeProvider(generator));
     }
 }

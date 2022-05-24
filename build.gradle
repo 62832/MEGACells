@@ -31,7 +31,6 @@ repositories {
         url = uri("https://modmaven.dev/")
 
         content {
-            includeGroup("appeng")
             includeGroup("mekanism")
         }
     }
@@ -56,7 +55,11 @@ repositories {
 
     maven {
         name = "Local"
-        url = file("libs").toURI()
+        url = file("build/libs").toURI()
+
+        content {
+            includeGroup("appeng")
+        }
     }
 }
 
