@@ -2,14 +2,14 @@ package ninety.megacells.client.render.crafting;
 
 import java.util.function.Function;
 
-import appeng.client.render.crafting.LightBakedModel;
-import appeng.client.render.crafting.MonitorBakedModel;
-import appeng.client.render.crafting.UnitBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 
 import appeng.client.render.crafting.AbstractCraftingUnitModelProvider;
+import appeng.client.render.crafting.LightBakedModel;
+import appeng.client.render.crafting.MonitorBakedModel;
+import appeng.client.render.crafting.UnitBakedModel;
 
 import ninety.megacells.block.MEGACraftingUnitType;
 

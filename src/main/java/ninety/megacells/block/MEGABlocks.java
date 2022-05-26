@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
-import appeng.block.crafting.CraftingBlockItem;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 

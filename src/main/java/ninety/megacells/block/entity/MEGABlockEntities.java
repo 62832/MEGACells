@@ -18,6 +18,9 @@ import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
+import appeng.blockentity.crafting.CraftingBlockEntity;
+import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
+import appeng.blockentity.crafting.CraftingStorageBlockEntity;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
@@ -31,9 +34,9 @@ public class MEGABlockEntities {
     }
 
     // spotless:off
-    public static final BlockEntityType<MEGACraftingBlockEntity> MEGA_CRAFTING_UNIT = create("mega_crafting_unit", MEGACraftingBlockEntity.class, MEGACraftingBlockEntity::new, MEGABlocks.MEGA_CRAFTING_UNIT, MEGABlocks.CRAFTING_ACCELERATOR);
-    public static final BlockEntityType<MEGACraftingStorageBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", MEGACraftingStorageBlockEntity.class, MEGACraftingStorageBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
-    public static final BlockEntityType<MEGACraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create("mega_crafting_monitor", MEGACraftingMonitorBlockEntity.class, MEGACraftingMonitorBlockEntity::new, MEGABlocks.CRAFTING_MONITOR);
+    public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_UNIT = create("mega_crafting_unit", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.MEGA_CRAFTING_UNIT, MEGABlocks.CRAFTING_ACCELERATOR);
+    public static final BlockEntityType<CraftingStorageBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", CraftingStorageBlockEntity.class, CraftingStorageBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
+    public static final BlockEntityType<CraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create("mega_crafting_monitor", CraftingMonitorBlockEntity.class, CraftingMonitorBlockEntity::new, MEGABlocks.CRAFTING_MONITOR);
     // spotless:on
 
     @SafeVarargs
