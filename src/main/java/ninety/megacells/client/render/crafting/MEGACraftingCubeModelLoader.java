@@ -13,6 +13,13 @@ import net.minecraftforge.client.model.IModelLoader;
 import ninety.megacells.block.MEGACraftingUnitType;
 
 public class MEGACraftingCubeModelLoader implements IModelLoader<MEGACraftingCubeModel> {
+
+    public static final MEGACraftingCubeModelLoader INSTANCE = new MEGACraftingCubeModelLoader();
+
+    @Override
+    public void onResourceManagerReload(ResourceManager resourceManager) {
+    }
+
     @Override
     public MEGACraftingCubeModel read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         MEGACraftingUnitType unitType = null;
@@ -29,9 +36,5 @@ public class MEGACraftingCubeModelLoader implements IModelLoader<MEGACraftingCub
         }
 
         return new MEGACraftingCubeModel(new MEGACraftingUnitModelProvider(unitType));
-    }
-
-    @Override
-    public void onResourceManagerReload(ResourceManager p_10758_) {
     }
 }
