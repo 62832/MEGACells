@@ -28,8 +28,8 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
     }
 
     @Override
-    public boolean isAccelerator() {
-        return this == ACCELERATOR;
+    public int getAcceleratorThreads() {
+        return this == ACCELERATOR ? 4 : 0;
     }
 
     @Override
