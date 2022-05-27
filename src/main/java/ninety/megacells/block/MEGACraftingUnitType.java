@@ -1,7 +1,6 @@
 package ninety.megacells.block;
 
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 
 import appeng.block.crafting.ICraftingUnitType;
 

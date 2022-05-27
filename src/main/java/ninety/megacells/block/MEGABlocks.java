@@ -9,9 +9,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import appeng.block.crafting.CraftingMonitorBlock;
-import appeng.block.crafting.CraftingStorageBlock;
-import appeng.block.crafting.CraftingUnitBlock;
 import com.google.common.base.Preconditions;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +23,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import appeng.block.crafting.CraftingMonitorBlock;
+import appeng.block.crafting.CraftingStorageBlock;
+import appeng.block.crafting.CraftingUnitBlock;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 

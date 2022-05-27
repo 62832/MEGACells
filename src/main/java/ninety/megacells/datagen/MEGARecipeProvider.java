@@ -11,12 +11,16 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 
+import appeng.api.util.AEColor;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import appeng.core.definitions.AEParts;
+import appeng.datagen.providers.tags.ConventionTags;
 
 import ninety.megacells.MEGACells;
-import ninety.megacells.integration.appmek.AppMekIntegration;
+import ninety.megacells.block.MEGABlocks;
 import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.item.IMEGACellType;
 import ninety.megacells.item.MEGACellType;
@@ -32,7 +36,6 @@ public class MEGARecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        // spotless:off
         component(consumer, MEGATier._1M, AEItems.SKY_DUST.asItem());
         component(consumer, MEGATier._4M, AEItems.MATTER_BALL.asItem());
         component(consumer, MEGATier._16M, AEItems.MATTER_BALL.asItem());
@@ -42,23 +45,36 @@ public class MEGARecipeProvider extends RecipeProvider {
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
 
-        for (var storage : Stream.concat(MEGACellType.ITEM.getCells().stream(), MEGACellType.FLUID.getCells().stream()).toList()) {
+        for (var storage : Stream.of(
+                MEGACellType.ITEM.getCells().stream(),
+                MEGACellType.FLUID.getCells().stream(),
+                ChemicalCellType.TYPE.getCells().stream()).flatMap(s -> s).toList()) {
             cell(consumer, storage);
         }
-        for (var portable : Stream.concat(MEGACellType.ITEM.getPortableCells().stream(), MEGACellType.FLUID.getPortableCells().stream()).toList()) {
+        for (var portable : Stream.of(
+                MEGACellType.ITEM.getPortableCells().stream(),
+                MEGACellType.FLUID.getPortableCells().stream(),
+                ChemicalCellType.TYPE.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(consumer, portable);
         }
 
-        if (AppMekIntegration.isAppMekLoaded()) { // this check doesn't actually do shit lol
-            housing(consumer, ChemicalCellType.TYPE);
-            for (var chemStorage : ChemicalCellType.TYPE.getCells()) {
-                cell(consumer, chemStorage);
-            }
-            for (var chemPortable : ChemicalCellType.TYPE.getPortableCells()) {
-                portable(consumer, chemPortable);
-            }
-        }
-        // spotless:on
+        ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_CRAFTING_UNIT)
+                .pattern("aba")
+                .pattern("cdc")
+                .pattern("aba")
+                .define('a', ConventionTags.IRON_INGOT)
+                .define('b', AEItems.LOGIC_PROCESSOR)
+                .define('c', AEParts.SMART_CABLE.item(AEColor.TRANSPARENT))
+                .define('d', AEItems.ENGINEERING_PROCESSOR)
+                .unlockedBy("has_logic_processor", has(AEItems.LOGIC_PROCESSOR))
+                .save(consumer, MEGACells.makeId("crafting/mega_crafting_unit"));
+        craftingBlock(consumer, MEGABlocks.CRAFTING_ACCELERATOR, AEItems.ENGINEERING_PROCESSOR);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_1M, MEGAItems.CELL_COMPONENT_1M);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_4M, MEGAItems.CELL_COMPONENT_4M);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_16M, MEGAItems.CELL_COMPONENT_16M);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_64M, MEGAItems.CELL_COMPONENT_64M);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_256M, MEGAItems.CELL_COMPONENT_256M);
+        craftingBlock(consumer, MEGABlocks.CRAFTING_MONITOR, AEParts.STORAGE_MONITOR);
     }
 
     private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, Item binder) {
@@ -129,5 +145,13 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('d', type.housingMaterial())
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
                 .save(consumer, MEGACells.makeId("cells/" + MEGAItems.getItemPath(housing)));
+    }
+
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, MEGABlocks.BlockDefinition<?> unit, ItemLike part) {
+        ShapelessRecipeBuilder.shapeless(unit)
+                .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
+                .requires(part)
+                .unlockedBy("has_mega_crafting_unit", has(MEGABlocks.MEGA_CRAFTING_UNIT))
+                .save(consumer, MEGACells.makeId("crafting/" + MEGAItems.getItemPath(unit.asItem())));
     }
 }
