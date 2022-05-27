@@ -14,7 +14,7 @@ import appeng.client.render.crafting.CraftingCubeModel;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGACraftingUnitType;
-import ninety.megacells.client.render.crafting.MEGACraftingUnitModelProvider;
+import ninety.megacells.client.render.MEGACraftingUnitModelProvider;
 
 @OnlyIn(Dist.CLIENT)
 public class InitBuiltInModels {

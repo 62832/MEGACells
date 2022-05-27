@@ -1,4 +1,4 @@
-package ninety.megacells.client.render.crafting;
+package ninety.megacells.client.render;
 
 import java.util.ArrayList;
 import java.util.Collections;
