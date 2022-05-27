@@ -10,10 +10,10 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.client.render.SimpleModelLoader;
+import appeng.client.render.crafting.CraftingCubeModel;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGACraftingUnitType;
-import ninety.megacells.client.render.crafting.MEGACraftingCubeModel;
 import ninety.megacells.client.render.crafting.MEGACraftingUnitModelProvider;
 
 @OnlyIn(Dist.CLIENT)
@@ -32,7 +32,7 @@ public class InitBuiltInModels {
 
     private static void craftingModel(MEGACraftingUnitType type) {
         addBuiltInModel("block/crafting/" + type.getAffix() + "_formed",
-                () -> new MEGACraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
+                () -> new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
     }
 
     private static <T extends IModelGeometry<T>> void addBuiltInModel(String id, Supplier<T> modelFactory) {
