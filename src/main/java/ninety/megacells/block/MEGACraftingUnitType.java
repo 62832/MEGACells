@@ -6,22 +6,20 @@ import net.minecraft.world.item.Items;
 import appeng.block.crafting.ICraftingUnitType;
 
 public enum MEGACraftingUnitType implements ICraftingUnitType {
-    UNIT(0, MEGABlocks.MEGA_CRAFTING_UNIT, "unit"),
-    ACCELERATOR(0, MEGABlocks.CRAFTING_ACCELERATOR, "accelerator"),
-    STORAGE_1M(1, MEGABlocks.CRAFTING_STORAGE_1M, "1m_storage"),
-    STORAGE_4M(4, MEGABlocks.CRAFTING_STORAGE_4M, "4m_storage"),
-    STORAGE_16M(16, MEGABlocks.CRAFTING_STORAGE_16M, "16m_storage"),
-    STORAGE_64M(64, MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage"),
-    STORAGE_256M(256, MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage"),
-    MONITOR(0, MEGABlocks.CRAFTING_MONITOR, "monitor");
+    UNIT(0, "unit"),
+    ACCELERATOR(0, "accelerator"),
+    STORAGE_1M(1, "1m_storage"),
+    STORAGE_4M(4, "4m_storage"),
+    STORAGE_16M(16, "16m_storage"),
+    STORAGE_64M(64, "64m_storage"),
+    STORAGE_256M(256, "256m_storage"),
+    MONITOR(0, "monitor");
 
     private final int storageMb;
-    private final MEGABlocks.BlockDefinition<?> craftingBlock;
     private final String affix;
 
-    MEGACraftingUnitType(int storageMb, MEGABlocks.BlockDefinition<?> craftingBlock, String affix) {
+    MEGACraftingUnitType(int storageMb, String affix) {
         this.storageMb = storageMb;
-        this.craftingBlock = craftingBlock;
         this.affix = affix;
     }
 
@@ -46,8 +44,16 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
 
     @Override
     public Item getItemFromType() {
-        return this.craftingBlock != null
-                ? this.craftingBlock.asItem()
-                : Items.AIR;
+        var definition = switch (this) {
+            case UNIT -> MEGABlocks.MEGA_CRAFTING_UNIT;
+            case ACCELERATOR -> MEGABlocks.CRAFTING_ACCELERATOR;
+            case STORAGE_1M -> MEGABlocks.CRAFTING_STORAGE_1M;
+            case STORAGE_4M -> MEGABlocks.CRAFTING_STORAGE_4M;
+            case STORAGE_16M -> MEGABlocks.CRAFTING_STORAGE_16M;
+            case STORAGE_64M -> MEGABlocks.CRAFTING_STORAGE_64M;
+            case STORAGE_256M -> MEGABlocks.CRAFTING_STORAGE_256M;
+            case MONITOR -> MEGABlocks.CRAFTING_MONITOR;
+        };
+        return definition.asItem();
     }
 }
