@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingStorageBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import com.google.common.base.Preconditions;
@@ -51,7 +52,7 @@ public class MEGABlocks {
     public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_16M = craftingBlock("16m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_16M), () -> MEGAItems.CELL_COMPONENT_16M);
     public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_64M = craftingBlock("64m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_64M), () -> MEGAItems.CELL_COMPONENT_64M);
     public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_256M = craftingBlock("256m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
-    public static final BlockDefinition<MEGACraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("mega_crafting_monitor", () -> new MEGACraftingMonitorBlock(props), () -> AEParts.STORAGE_MONITOR);
+    public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("mega_crafting_monitor", () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR), () -> AEParts.STORAGE_MONITOR);
     // spotless:on
 
     private static <T extends Block> BlockDefinition<T> craftingBlock(String id, Supplier<T> blockSupplier,
