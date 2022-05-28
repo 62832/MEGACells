@@ -13,9 +13,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.datagen.MEGADataGenerators;
 import ninety.megacells.init.*;
-import ninety.megacells.init.client.InitBlockEntityRenderers;
-import ninety.megacells.init.client.InitBuiltInModels;
-import ninety.megacells.init.client.InitItemColors;
+import ninety.megacells.init.client.*;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
@@ -39,8 +37,10 @@ public class MEGACells {
             event.enqueueWork(InitUpgrades::init);
         });
 
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBuiltInModels::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitItemColors::init);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitRenderTypes::init);
     }
 }
