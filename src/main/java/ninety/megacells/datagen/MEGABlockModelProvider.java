@@ -1,6 +1,7 @@
 package ninety.megacells.datagen;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
@@ -12,6 +13,7 @@ import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
 
 public class MEGABlockModelProvider extends BlockStateProvider {
+
     public MEGABlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, MEGACells.MODID, exFileHelper);
     }
@@ -25,7 +27,7 @@ public class MEGABlockModelProvider extends BlockStateProvider {
         craftingModel(MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage");
         craftingModel(MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage");
         craftingModel(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator");
-        craftingModel(MEGABlocks.CRAFTING_MONITOR, "monitor");
+        builtInBlockModel("crafting/monitor_formed");
     }
 
     private void builtInBlockModel(String name) {
@@ -36,6 +38,7 @@ public class MEGABlockModelProvider extends BlockStateProvider {
     }
 
     private void craftingModel(MEGABlocks.BlockDefinition<?> block, String name) {
+        builtInBlockModel("crafting/" + name + "_formed");
         var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
         getVariantBuilder(block.asBlock())
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, false).setModels(
@@ -43,6 +46,5 @@ public class MEGABlockModelProvider extends BlockStateProvider {
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, true).setModels(
                         new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
         simpleBlockItem(block.asBlock(), blockModel);
-        builtInBlockModel("crafting/" + name + "_formed");
     }
 }

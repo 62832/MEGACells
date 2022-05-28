@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "formed=false": {
+      "model": "megacells:block/crafting/monitor"
+    },
+    "formed=true": {
+      "model": "megacells:block/crafting/monitor_formed"
+    }
+  }
+}
