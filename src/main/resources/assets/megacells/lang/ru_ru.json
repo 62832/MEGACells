@@ -1,0 +1,49 @@
+{
+  "itemGroup.megacells": "MEGA Cells",
+
+  "item.megacells.mega_item_cell_housing": "Огромный корпус для предметной ячейки",
+  "item.megacells.mega_fluid_cell_housing": "Огромный корпус для жидкостной ячейки",
+  "item.megacells.mega_chemical_cell_housing": "Огромный корпус для химической ячейки",
+
+  "item.megacells.cell_component_1m": "Огромный компонент хранения 1М",
+  "item.megacells.cell_component_4m": "Огромный компонент хранения 4М",
+  "item.megacells.cell_component_16m": "Огромный компонент хранения 16М",
+  "item.megacells.cell_component_64m": "Огромный компонент хранения 64М",
+  "item.megacells.cell_component_256m": "Огромный компонент хранения 256М",
+
+  "item.megacells.item_storage_cell_1m": Огромная предметная ячейка хранения 1М",
+  "item.megacells.item_storage_cell_4m": "Огромная предметная ячейка хранения 4М",
+  "item.megacells.item_storage_cell_16m": "Огромная предметная ячейка хранения 16М",
+  "item.megacells.item_storage_cell_64m": "Огромная предметная ячейка хранения 64М",
+  "item.megacells.item_storage_cell_256m": "Огромная предметная ячейка хранения 256М",
+
+  "item.megacells.fluid_storage_cell_1m": "Огромная жидкостная ячейка хранения 1М",
+  "item.megacells.fluid_storage_cell_4m": "Огромная жидкостная ячейка хранения 4М",
+  "item.megacells.fluid_storage_cell_16m": "Огромная жидкостная ячейка хранения 16М",
+  "item.megacells.fluid_storage_cell_64m": "Огромная жидкостная ячейка хранения 64М",
+  "item.megacells.fluid_storage_cell_256m": "Огромная жидкостная ячейка хранения 256М",
+
+  "item.megacells.chemical_storage_cell_1m": "Огромная химическая ячейка хранения 1M",
+  "item.megacells.chemical_storage_cell_4m": "Огромная химическая ячейка хранения 4M",
+  "item.megacells.chemical_storage_cell_16m": "Огромная химическая ячейка хранения 16M",
+  "item.megacells.chemical_storage_cell_64m": "Огромная химическая ячейка хранения 64M",
+  "item.megacells.chemical_storage_cell_256m": "Огромная химическая ячейка хранения 256M",
+
+  "item.megacells.portable_item_cell_1m": "Переносная предметная ячейка 1М",
+  "item.megacells.portable_item_cell_4m": "Переносная предметная ячейка 4М",
+  "item.megacells.portable_item_cell_16m": "Переносная предметная ячейка 16М",
+  "item.megacells.portable_item_cell_64m": "Переносная предметная ячейка 64М",
+  "item.megacells.portable_item_cell_256m": "Переносная предметная ячейка 256М",
+
+  "item.megacells.portable_fluid_cell_1m": "Переносная жидкостная ячейка 1М",
+  "item.megacells.portable_fluid_cell_4m": "Переносная жидкостная ячейка 4М",
+  "item.megacells.portable_fluid_cell_16m": "Переносная жидкостная ячейка 16М",
+  "item.megacells.portable_fluid_cell_64m": "Переносная жидкостная ячейка 64М",
+  "item.megacells.portable_fluid_cell_256m": "Переносная жидкостная ячейка 256М",
+
+  "item.megacells.portable_chemical_cell_1m": "Переносная химическая ячейка 1М",
+  "item.megacells.portable_chemical_cell_4m": "Переносная химическая ячейка 4М",
+  "item.megacells.portable_chemical_cell_16m": "Переносная химическая ячейка 16М",
+  "item.megacells.portable_chemical_cell_64m": "Переносная химическая ячейка 64М",
+  "item.megacells.portable_chemical_cell_256m": "Переносная химическая ячейка 256М"
+}
