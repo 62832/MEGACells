@@ -32,11 +32,6 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
         return this == ACCELERATOR ? 4 : 0;
     }
 
-    @Override
-    public boolean isStatus() {
-        return this == MONITOR;
-    }
-
     public String getAffix() {
         return this.affix;
     }

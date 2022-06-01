@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
 import appeng.block.crafting.CraftingMonitorBlock;
-import appeng.block.crafting.CraftingStorageBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
@@ -47,11 +46,11 @@ public class MEGABlocks {
     // spotless:off
     public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT));
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("mega_crafting_accelerator", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);
-    public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_1M = craftingBlock("1m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_1M), () -> MEGAItems.CELL_COMPONENT_1M);
-    public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_4M = craftingBlock("4m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_4M), () -> MEGAItems.CELL_COMPONENT_4M);
-    public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_16M = craftingBlock("16m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_16M), () -> MEGAItems.CELL_COMPONENT_16M);
-    public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_64M = craftingBlock("64m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_64M), () -> MEGAItems.CELL_COMPONENT_64M);
-    public static final BlockDefinition<CraftingStorageBlock> CRAFTING_STORAGE_256M = craftingBlock("256m_crafting_storage", () -> new CraftingStorageBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock("1m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_1M), () -> MEGAItems.CELL_COMPONENT_1M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock("4m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_4M), () -> MEGAItems.CELL_COMPONENT_4M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_16M = craftingBlock("16m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_16M), () -> MEGAItems.CELL_COMPONENT_16M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = craftingBlock("64m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_64M), () -> MEGAItems.CELL_COMPONENT_64M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock("256m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
     public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("mega_crafting_monitor", () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR), () -> AEParts.STORAGE_MONITOR);
     // spotless:on
 

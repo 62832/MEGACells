@@ -20,7 +20,7 @@ import ninety.megacells.block.MEGACraftingUnitType;
 
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
 
-    private static List<Material> MATERIALS = new ArrayList<>();
+    private static final List<Material> MATERIALS = new ArrayList<>();
 
     protected static final Material RING_CORNER = texture("ring_corner");
     protected static final Material RING_SIDE_HOR = texture("ring_side_hor");
@@ -47,7 +47,6 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
         return Collections.unmodifiableList(MATERIALS);
     }
 
-    @Override
     public TextureAtlasSprite getLightMaterial(Function<Material, TextureAtlasSprite> textureGetter) {
         return switch (this.type) {
             case ACCELERATOR -> textureGetter.apply(ACCELERATOR_LIGHT);

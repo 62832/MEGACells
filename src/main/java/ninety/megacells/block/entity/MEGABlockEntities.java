@@ -20,11 +20,11 @@ import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
-import appeng.blockentity.crafting.CraftingStorageBlockEntity;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
 
+@SuppressWarnings("unused")
 public class MEGABlockEntities {
 
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
@@ -35,7 +35,7 @@ public class MEGABlockEntities {
 
     // spotless:off
     public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_UNIT = create("mega_crafting_unit", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.MEGA_CRAFTING_UNIT, MEGABlocks.CRAFTING_ACCELERATOR);
-    public static final BlockEntityType<CraftingStorageBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", CraftingStorageBlockEntity.class, CraftingStorageBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
+    public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
     public static final BlockEntityType<CraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create("mega_crafting_monitor", CraftingMonitorBlockEntity.class, CraftingMonitorBlockEntity::new, MEGABlocks.CRAFTING_MONITOR);
     // spotless:on
 
@@ -63,15 +63,11 @@ public class MEGABlockEntities {
         // as tickers with the blocks that create that entity.
         BlockEntityTicker<T> serverTicker = null;
         if (ServerTickingBlockEntity.class.isAssignableFrom(entityClass)) {
-            serverTicker = (level, pos, state, entity) -> {
-                ((ServerTickingBlockEntity) entity).serverTick();
-            };
+            serverTicker = (level, pos, state, entity) -> ((ServerTickingBlockEntity) entity).serverTick();
         }
         BlockEntityTicker<T> clientTicker = null;
         if (ClientTickingBlockEntity.class.isAssignableFrom(entityClass)) {
-            clientTicker = (level, pos, state, entity) -> {
-                ((ClientTickingBlockEntity) entity).clientTick();
-            };
+            clientTicker = (level, pos, state, entity) -> ((ClientTickingBlockEntity) entity).clientTick();
         }
 
         for (var block : blocks) {
