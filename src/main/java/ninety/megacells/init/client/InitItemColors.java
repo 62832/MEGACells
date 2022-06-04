@@ -11,7 +11,7 @@ import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
 
 public class InitItemColors {
-    public static void initialize() {
+    public static void init() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(InitItemColors::initItemColors);
     }
