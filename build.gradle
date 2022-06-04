@@ -23,7 +23,7 @@ apply(plugin: "net.minecraftforge.gradle")
 apply plugin: 'org.spongepowered.mixin'
 
 group = "ninety"
-version = "1.1.1"
+version = "1.2.0"
 
 repositories {
     maven {
@@ -31,6 +31,7 @@ repositories {
         url = uri("https://modmaven.dev/")
 
         content {
+            includeGroup("appeng")
             includeGroup("mekanism")
         }
     }
@@ -55,11 +56,7 @@ repositories {
 
     maven {
         name = "Local"
-        url = file("build/libs").toURI()
-
-        content {
-            includeGroup("appeng")
-        }
+        url = file("libs").toURI()
     }
 }
 
