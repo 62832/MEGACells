@@ -90,8 +90,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-////////////////////
-// Forge/Minecraft
 minecraft {
     mappings(channel: "official", version: "${minecraft_version}")
 
@@ -171,8 +169,6 @@ jar {
     }
 }
 
-/////////////
-// Spotless
 spotless {
     java {
         target("src/main/java/**/*.java")
@@ -182,7 +178,7 @@ spotless {
         removeUnusedImports()
         toggleOffOn()
         eclipse().configFile("codeformat/codeformat.xml")
-        importOrderFile("codeformat/ae2.importorder")
+        importOrderFile("codeformat/mega.importorder")
     }
 
     format("json") {
@@ -191,38 +187,3 @@ spotless {
         prettier().config(parser: "json")
     }
 }
-
-////////////////
-// CurseForge
-/*
-System.getenv("CURSEFORGE")?.with { String key ->
-    curseforge {
-        apiKey = key
-
-        project {
-            id = "609977"
-            changelogType = "markdown"
-            changelog = "View changelog at [the release page](https://github.com/Technici4n/AE2Things-Forge/releases/tag/${version})"
-
-            if (version.contains("alpha")) {
-                releaseType = "alpha"
-            } else if (version.contains("beta")) {
-                releaseType = "beta"
-            } else {
-                releaseType = "release"
-            }
-
-            addGameVersion("${minecraft_version}")
-            addGameVersion("Forge")
-
-            mainArtifact(jar) {
-                displayName = "AE2 Things v${version}"
-
-                relations {
-                    requiredDependency("applied-energistics-2")
-                }
-            }
-        }
-    }
-}
-*/
