@@ -40,33 +40,4 @@ public class MEGAPortableCell extends PortableCellItem {
     public ResourceLocation getRecipeId() {
         return MEGACells.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
-
-    @Override
-    public double getChargeRate(ItemStack stack) {
-        return super.getChargeRate(stack) * 8;
-    }
-
-    @Override
-    public double getAEMaxPower(ItemStack stack) {
-        return super.getAEMaxPower(stack) * 8;
-    }
-
-    @Override
-    public IUpgradeInventory getUpgrades(ItemStack is) {
-        return UpgradeInventories.forItem(is, 2, this::onUpgradesChanged);
-    }
-
-    private void onUpgradesChanged(ItemStack stack, IUpgradeInventory upgrades) {
-        var energyCards = upgrades.getInstalledUpgrades(AEItems.ENERGY_CARD);
-        setAEMaxPowerMultiplier(stack, 1 + energyCards);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
-        super.appendHoverText(stack, level, lines, advancedTooltips);
-        if (!AppMekIntegration.isAppMekLoaded() && this.type == ChemicalCellType.TYPE) {
-            lines.add(new TextComponent("AppMek not installed."));
-        }
-    }
-
 }
