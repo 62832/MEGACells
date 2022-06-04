@@ -1,23 +1,12 @@
 package ninety.megacells.item;
 
-import java.util.List;
 import java.util.Objects;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.core.definitions.AEItems;
 import appeng.items.tools.powered.PortableCellItem;
 
 import ninety.megacells.MEGACells;
-import ninety.megacells.integration.appmek.AppMekIntegration;
-import ninety.megacells.integration.appmek.ChemicalCellType;
 import ninety.megacells.util.MEGATier;
 
 public class MEGAPortableCell extends PortableCellItem {
