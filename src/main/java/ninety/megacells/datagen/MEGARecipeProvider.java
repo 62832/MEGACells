@@ -44,6 +44,7 @@ public class MEGARecipeProvider extends RecipeProvider {
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
+        housing(consumer, ChemicalCellType.TYPE);
 
         for (var storage : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
