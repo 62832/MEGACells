@@ -33,12 +33,4 @@ public class MEGAStorageCell extends BasicStorageCell {
     public IMEGACellType getType() {
         return this.type;
     }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
-        super.appendHoverText(stack, level, lines, advancedTooltips);
-        if (!AppMekIntegration.isAppMekLoaded() && this.type == ChemicalCellType.TYPE) {
-            lines.add(new TextComponent("AppMek not installed."));
-        }
-    }
 }
