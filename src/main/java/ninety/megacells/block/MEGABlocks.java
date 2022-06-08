@@ -39,7 +39,7 @@ public class MEGABlocks {
         return Collections.unmodifiableList(BLOCKS);
     }
 
-    private static BlockBehaviour.Properties props = BlockBehaviour.Properties.of(Material.METAL)
+    private static final BlockBehaviour.Properties props = BlockBehaviour.Properties.of(Material.METAL)
             .strength(2.2f, 11.0f)
             .sound(SoundType.METAL);
 
