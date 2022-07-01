@@ -42,7 +42,9 @@ public final class MEGABlocks {
             .sound(SoundType.METAL);
 
     // spotless:off
-    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT));
+    public static final BlockDefinition<MEGAEnergyCellBlock> MEGA_ENERGY_CELL = block("mega_energy_cell", MEGAEnergyCellBlock::new, MEGAEnergyCellBlockItem::new);
+
+    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT), null);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("mega_crafting_accelerator", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock("1m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_1M), () -> MEGAItems.CELL_COMPONENT_1M);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock("4m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_4M), () -> MEGAItems.CELL_COMPONENT_4M);
@@ -55,10 +57,6 @@ public final class MEGABlocks {
     private static <T extends Block> BlockDefinition<T> craftingBlock(String id, Supplier<T> blockSupplier,
             Supplier<ItemLike> disassemblyExtra) {
         return block(id, blockSupplier, (block, props) -> new MEGACraftingBlockItem(block, props, disassemblyExtra));
-    }
-
-    private static <T extends Block> BlockDefinition<T> block(String id, Supplier<T> blockSupplier) {
-        return block(id, blockSupplier, null);
     }
 
     private static <T extends Block> BlockDefinition<T> block(

@@ -60,6 +60,16 @@ public class MEGARecipeProvider extends RecipeProvider {
             portable(consumer, portable);
         }
 
+        ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
+                .pattern("aaa")
+                .pattern("aba")
+                .pattern("aaa")
+                .define('a', AEBlocks.DENSE_ENERGY_CELL)
+                .define('b', AEItems.ENGINEERING_PROCESSOR)
+                .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
+                .unlockedBy("has_engineering_processor", has(AEItems.ENGINEERING_PROCESSOR))
+                .save(consumer, MEGACells.makeId("mega_energy_cell"));
+
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .pattern("aba")
                 .pattern("cdc")
