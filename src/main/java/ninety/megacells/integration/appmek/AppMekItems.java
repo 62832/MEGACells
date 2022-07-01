@@ -3,7 +3,6 @@ package ninety.megacells.integration.appmek;
 import java.util.function.Function;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.ModList;
 
 import appeng.items.materials.MaterialItem;
 
@@ -46,7 +45,7 @@ public class AppMekItems {
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
-        if (ModList.get().isLoaded("appmek")) {
+        if (AppMekIntegration.isAppMekLoaded()) {
             Item.Properties p = new Item.Properties().tab(MEGAItems.CREATIVE_TAB);
             T item = factory.apply(p);
 

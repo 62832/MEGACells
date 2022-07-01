@@ -17,8 +17,6 @@ import appeng.items.materials.StorageComponentItem;
 import ninety.megacells.MEGACells;
 import ninety.megacells.core.ItemDefinition;
 import ninety.megacells.core.MEGATier;
-import ninety.megacells.integration.appmek.AppMekCellType;
-import ninety.megacells.integration.appmek.AppMekIntegration;
 
 public final class MEGAItems {
 
@@ -40,8 +38,8 @@ public final class MEGAItems {
         }
     };
 
-    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("mega_item_cell_housing", MaterialItem::new, true);
-    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("mega_fluid_cell_housing", MaterialItem::new, true);
+    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("mega_item_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("mega_fluid_cell_housing", MaterialItem::new);
 
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_1M = component(MEGATier._1M);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_4M = component(MEGATier._4M);
@@ -75,32 +73,26 @@ public final class MEGAItems {
     // spotless:on
 
     private static ItemDefinition<StorageComponentItem> component(MEGATier tier) {
-        return item("cell_component_" + tier.affix, p -> new StorageComponentItem(p, tier.kbFactor()), true);
+        return item("cell_component_" + tier.affix, p -> new StorageComponentItem(p, tier.kbFactor()));
     }
 
     private static ItemDefinition<MEGAStorageCell> cell(MEGATier tier, IMEGACellType type) {
         return item(type.affix() + "_storage_cell_" + tier.affix,
-                p -> new MEGAStorageCell(p.stacksTo(1), tier, type),
-                type != AppMekCellType.CHEMICAL || AppMekIntegration.isAppMekLoaded());
+                p -> new MEGAStorageCell(p.stacksTo(1), tier, type));
     }
 
     private static ItemDefinition<MEGAPortableCell> portable(MEGATier tier, IMEGACellType type) {
         return item("portable_" + type.affix() + "_cell_" + tier.affix,
-                p -> new MEGAPortableCell(p.stacksTo(1), tier, type),
-                type != AppMekCellType.CHEMICAL || AppMekIntegration.isAppMekLoaded());
+                p -> new MEGAPortableCell(p.stacksTo(1), tier, type));
     }
 
-    private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory,
-            boolean register) {
-        if (register) {
-            Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
-            T item = factory.apply(p);
+    private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
+        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+        T item = factory.apply(p);
 
-            ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
-            ITEMS.add(definition);
+        ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
+        ITEMS.add(definition);
 
-            return definition;
-        }
-        return null;
+        return definition;
     }
 }

@@ -1,5 +1,6 @@
 package ninety.megacells.integration.appmek;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
@@ -45,14 +46,16 @@ public enum AppMekCellType implements IMEGACellType {
     }
 
     public List<Item> getCells() {
-        return List.of(AppMekItems.CHEMICAL_CELL_1M.asItem(), AppMekItems.CHEMICAL_CELL_4M.asItem(),
+        return AppMekIntegration.isAppMekLoaded() ? List.of(
+                AppMekItems.CHEMICAL_CELL_1M.asItem(), AppMekItems.CHEMICAL_CELL_4M.asItem(),
                 AppMekItems.CHEMICAL_CELL_16M.asItem(), AppMekItems.CHEMICAL_CELL_64M.asItem(),
-                AppMekItems.CHEMICAL_CELL_256M.asItem());
+                AppMekItems.CHEMICAL_CELL_256M.asItem()) : Collections.emptyList();
     }
 
     public List<Item> getPortableCells() {
-        return List.of(AppMekItems.PORTABLE_CHEMICAL_CELL_1M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
+        return AppMekIntegration.isAppMekLoaded() ? List.of(
+                AppMekItems.PORTABLE_CHEMICAL_CELL_1M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
                 AppMekItems.PORTABLE_CHEMICAL_CELL_16M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
-                AppMekItems.PORTABLE_CHEMICAL_CELL_256M.asItem());
+                AppMekItems.PORTABLE_CHEMICAL_CELL_256M.asItem()) : Collections.emptyList();
     }
 }
