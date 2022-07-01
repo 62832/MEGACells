@@ -25,7 +25,11 @@ import ninety.megacells.MEGACells;
 import ninety.megacells.core.BlockDefinition;
 import ninety.megacells.item.MEGAItems;
 
-public class MEGABlocks {
+public final class MEGABlocks {
+
+    public static void init() {
+        // controls static load order
+    }
 
     private static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
 

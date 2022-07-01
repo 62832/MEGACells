@@ -13,9 +13,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import ninety.megacells.block.MEGABlocks;
+import ninety.megacells.block.entity.MEGABlockEntities;
 import ninety.megacells.datagen.MEGADataGenerators;
 import ninety.megacells.init.*;
 import ninety.megacells.init.client.*;
+import ninety.megacells.integration.appmek.AppMekItems;
+import ninety.megacells.item.MEGAItems;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
@@ -32,6 +36,12 @@ public class MEGACells {
 
     public MEGACells() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        MEGAItems.init();
+        MEGABlocks.init();
+        MEGABlockEntities.init();
+
+        AppMekItems.init();
 
         bus.addGenericListener(Item.class, InitItems::register);
         bus.addGenericListener(Block.class, InitBlocks::register);

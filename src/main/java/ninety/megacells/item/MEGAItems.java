@@ -22,7 +22,11 @@ import ninety.megacells.integration.appmek.AppMekIntegration;
 
 public final class MEGAItems {
 
-    private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
+    public static void init() {
+        // controls static load order
+    }
+
+    public static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
 
     public static List<ItemDefinition<?>> getItems() {
         return Collections.unmodifiableList(ITEMS);
@@ -68,20 +72,6 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_16M = portable(MEGATier._16M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = portable(MEGATier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = portable(MEGATier._256M, MEGACellType.FLUID);
-
-    public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing", MaterialItem::new, AppMekIntegration.isAppMekLoaded());
-
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGATier._1M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGATier._4M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_16M = cell(MEGATier._16M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_64M = cell(MEGATier._64M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_256M = cell(MEGATier._256M, AppMekCellType.CHEMICAL);
-
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGATier._1M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGATier._4M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_16M = portable(MEGATier._16M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGATier._64M, AppMekCellType.CHEMICAL);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGATier._256M, AppMekCellType.CHEMICAL);
     // spotless:on
 
     private static ItemDefinition<StorageComponentItem> component(MEGATier tier) {

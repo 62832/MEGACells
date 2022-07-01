@@ -26,7 +26,11 @@ import ninety.megacells.block.MEGABlocks;
 import ninety.megacells.core.BlockDefinition;
 
 @SuppressWarnings("unused")
-public class MEGABlockEntities {
+public final class MEGABlockEntities {
+
+    public static void init() {
+        // controls static load order
+    }
 
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
 

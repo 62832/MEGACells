@@ -14,6 +14,7 @@ import appeng.core.AppEng;
 import ninety.megacells.MEGACells;
 import ninety.megacells.core.MEGATier;
 import ninety.megacells.integration.appmek.AppMekCellType;
+import ninety.megacells.integration.appmek.AppMekItems;
 import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
 
@@ -32,7 +33,7 @@ public class MEGAItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem());
         flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
-        flatSingleLayer(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
+        flatSingleLayer(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
         for (var tier : MEGATier.values()) {
             flatSingleLayer(tier.getComponent());

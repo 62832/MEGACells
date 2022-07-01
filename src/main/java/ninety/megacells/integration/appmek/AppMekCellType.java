@@ -1,6 +1,5 @@
 package ninety.megacells.integration.appmek;
 
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +15,6 @@ import me.ramidzkh.mekae2.AMMenus;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
 import ninety.megacells.item.IMEGACellType;
-import ninety.megacells.item.MEGAItems;
 
 public enum AppMekCellType implements IMEGACellType {
     CHEMICAL;
@@ -33,7 +31,7 @@ public enum AppMekCellType implements IMEGACellType {
 
     @Override
     public Item housing() {
-        return MEGAItems.MEGA_CHEMICAL_CELL_HOUSING.asItem();
+        return AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem();
     }
 
     @Override
@@ -47,22 +45,14 @@ public enum AppMekCellType implements IMEGACellType {
     }
 
     public List<Item> getCells() {
-        return AppMekIntegration.isAppMekLoaded() ? List.of(
-                MEGAItems.CHEMICAL_CELL_1M.asItem(),
-                MEGAItems.CHEMICAL_CELL_4M.asItem(),
-                MEGAItems.CHEMICAL_CELL_16M.asItem(),
-                MEGAItems.CHEMICAL_CELL_64M.asItem(),
-                MEGAItems.CHEMICAL_CELL_256M.asItem())
-                : Collections.emptyList();
+        return List.of(AppMekItems.CHEMICAL_CELL_1M.asItem(), AppMekItems.CHEMICAL_CELL_4M.asItem(),
+                AppMekItems.CHEMICAL_CELL_16M.asItem(), AppMekItems.CHEMICAL_CELL_64M.asItem(),
+                AppMekItems.CHEMICAL_CELL_256M.asItem());
     }
 
     public List<Item> getPortableCells() {
-        return AppMekIntegration.isAppMekLoaded() ? List.of(
-                MEGAItems.PORTABLE_CHEMICAL_CELL_1M.asItem(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_16M.asItem(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
-                MEGAItems.PORTABLE_CHEMICAL_CELL_256M.asItem())
-                : Collections.emptyList();
+        return List.of(AppMekItems.PORTABLE_CHEMICAL_CELL_1M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
+                AppMekItems.PORTABLE_CHEMICAL_CELL_16M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
+                AppMekItems.PORTABLE_CHEMICAL_CELL_256M.asItem());
     }
 }
