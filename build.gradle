@@ -23,13 +23,12 @@ apply(plugin: "net.minecraftforge.gradle")
 apply plugin: 'org.spongepowered.mixin'
 
 group = "ninety"
-version = "1.2.1"
+version = "1.3.0"
 
 repositories {
+    mavenLocal()
     maven {
-        name = "Modmaven"
         url = uri("https://modmaven.dev/")
-
         content {
             includeGroup("appeng")
             includeGroup("mekanism")
@@ -37,26 +36,17 @@ repositories {
     }
 
     maven {
-        name = "CurseMaven"
         url = uri("https://cursemaven.com")
-
         content {
             includeGroup "curse.maven"
         }
     }
 
     maven {
-        name = "Progwml6 maven"
         url = uri("https://dvs1.progwml6.com/files/maven/")
-
         content {
             includeGroup("mezz.jei")
         }
-    }
-
-    maven {
-        name = "Local"
-        url = file("libs").toURI()
     }
 }
 

@@ -21,13 +21,14 @@ import appeng.datagen.providers.tags.ConventionTags;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
-import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.core.BlockDefinition;
+import ninety.megacells.core.MEGATier;
+import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.item.IMEGACellType;
 import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
-import ninety.megacells.util.MEGATier;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {
@@ -44,18 +45,18 @@ public class MEGARecipeProvider extends RecipeProvider {
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
-        housing(consumer, ChemicalCellType.TYPE);
+        housing(consumer, AppMekCellType.CHEMICAL);
 
         for (var storage : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream(),
-                ChemicalCellType.TYPE.getCells().stream()).flatMap(s -> s).toList()) {
+                AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
             cell(consumer, storage);
         }
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
                 MEGACellType.FLUID.getPortableCells().stream(),
-                ChemicalCellType.TYPE.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(consumer, portable);
         }
 
@@ -90,8 +91,8 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('b', AEItems.CALCULATION_PROCESSOR)
                 .define('c', preceding)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .unlockedBy("has_" + MEGAItems.getItemPath(preceding), has(preceding))
-                .save(consumer, MEGACells.makeId(MEGAItems.getItemPath(tier.getComponent())));
+                .unlockedBy("has_" + MEGACells.getItemPath(preceding), has(preceding))
+                .save(consumer, MEGACells.makeId(MEGACells.getItemPath(tier.getComponent())));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
@@ -101,8 +102,8 @@ public class MEGARecipeProvider extends RecipeProvider {
         var housing = cell.getType().housing();
         var housingMaterial = cell.getType().housingMaterial();
 
-        var componentPath = MEGAItems.getItemPath(component);
-        var cellPath = MEGAItems.getItemPath(cellItem);
+        var componentPath = MEGACells.getItemPath(component);
+        var cellPath = MEGACells.getItemPath(cellItem);
 
         ShapedRecipeBuilder.shaped(cellItem)
                 .pattern("aba")
@@ -118,7 +119,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .requires(housing)
                 .requires(component)
                 .unlockedBy("has_" + componentPath, has(component))
-                .unlockedBy("has_" + MEGAItems.getItemPath(housing), has(housing))
+                .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))
                 .save(consumer, MEGACells.makeId("cells/standard/" + cellPath + "_with_housing"));
     }
 
@@ -130,9 +131,9 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .requires(portableCell.tier.getComponent())
                 .requires(AEBlocks.ENERGY_CELL)
                 .requires(housing)
-                .unlockedBy("has_" + MEGAItems.getItemPath(housing), has(housing))
+                .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))
                 .unlockedBy("has_energy_cell", has(AEBlocks.ENERGY_CELL))
-                .save(consumer, MEGACells.makeId("cells/portable/" + MEGAItems.getItemPath(portableCell)));
+                .save(consumer, MEGACells.makeId("cells/portable/" + MEGACells.getItemPath(portableCell)));
     }
 
     private void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
@@ -145,14 +146,14 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('b', AEItems.SKY_DUST)
                 .define('d', type.housingMaterial())
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
-                .save(consumer, MEGACells.makeId("cells/" + MEGAItems.getItemPath(housing)));
+                .save(consumer, MEGACells.makeId("cells/" + MEGACells.getItemPath(housing)));
     }
 
-    private void craftingBlock(Consumer<FinishedRecipe> consumer, MEGABlocks.BlockDefinition<?> unit, ItemLike part) {
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
         ShapelessRecipeBuilder.shapeless(unit)
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)
                 .unlockedBy("has_mega_crafting_unit", has(MEGABlocks.MEGA_CRAFTING_UNIT))
-                .save(consumer, MEGACells.makeId("crafting/" + MEGAItems.getItemPath(unit.asItem())));
+                .save(consumer, MEGACells.makeId("crafting/" + MEGACells.getItemPath(unit.asItem())));
     }
 }

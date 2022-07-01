@@ -3,20 +3,13 @@ package ninety.megacells.block;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-
-import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -29,6 +22,7 @@ import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.core.BlockDefinition;
 import ninety.megacells.item.MEGAItems;
 
 public class MEGABlocks {
@@ -87,24 +81,5 @@ public class MEGABlocks {
 
         BLOCKS.add(definition);
         return definition;
-    }
-
-    public static class BlockDefinition<T extends Block> extends MEGAItems.ItemDefinition<BlockItem> {
-
-        private final T block;
-
-        public BlockDefinition(ResourceLocation id, T block, BlockItem item) {
-            super(id, item);
-            this.block = Objects.requireNonNull(block, "block");
-        }
-
-        public final @NotNull T asBlock() {
-            return this.block;
-        }
-
-        public final ItemStack stack(int stackSize) {
-            Preconditions.checkArgument(stackSize > 0);
-            return new ItemStack(block, stackSize);
-        }
     }
 }

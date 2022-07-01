@@ -6,7 +6,7 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
-import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.item.MEGACellType;
 
 public class InitUpgrades {
@@ -22,14 +22,14 @@ public class InitUpgrades {
         }
 
         for (var fluidCell : Stream.concat(
-                MEGACellType.FLUID.getCells().stream(), ChemicalCellType.TYPE.getCells().stream()).toList()) {
+                MEGACellType.FLUID.getCells().stream(), AppMekCellType.CHEMICAL.getCells().stream()).toList()) {
             Upgrades.add(AEItems.INVERTER_CARD, fluidCell, 1, storageCellGroup);
         }
 
         for (var portableCell : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
                 MEGACellType.FLUID.getPortableCells().stream(),
-                ChemicalCellType.TYPE.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
             Upgrades.add(AEItems.FUZZY_CARD, portableCell, 1, portableCellGroup);
             Upgrades.add(AEItems.INVERTER_CARD, portableCell, 1, portableCellGroup);
             Upgrades.add(AEItems.ENERGY_CARD, portableCell, 2, portableCellGroup);

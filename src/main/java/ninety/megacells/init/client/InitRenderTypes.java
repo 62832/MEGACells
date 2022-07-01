@@ -8,10 +8,11 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.block.MEGABlocks;
+import ninety.megacells.core.BlockDefinition;
 
 @OnlyIn(Dist.CLIENT)
 public class InitRenderTypes {
-    private static final MEGABlocks.BlockDefinition<?>[] CUTOUT_BLOCKS = {
+    private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR,
             MEGABlocks.CRAFTING_STORAGE_1M,

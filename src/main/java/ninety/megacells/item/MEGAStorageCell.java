@@ -2,7 +2,7 @@ package ninety.megacells.item;
 
 import appeng.items.storage.BasicStorageCell;
 
-import ninety.megacells.util.MEGATier;
+import ninety.megacells.core.MEGATier;
 
 public class MEGAStorageCell extends BasicStorageCell {
 

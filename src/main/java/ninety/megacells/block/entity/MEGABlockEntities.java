@@ -23,6 +23,7 @@ import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
+import ninety.megacells.core.BlockDefinition;
 
 @SuppressWarnings("unused")
 public class MEGABlockEntities {
@@ -42,11 +43,11 @@ public class MEGABlockEntities {
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(String id, Class<T> entityClass,
             BlockEntityFactory<T> factory,
-            MEGABlocks.BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
+            BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
         Preconditions.checkArgument(blockDefinitions.length > 0);
 
         var blocks = Arrays.stream(blockDefinitions)
-                .map(MEGABlocks.BlockDefinition::asBlock)
+                .map(BlockDefinition::asBlock)
                 .toArray(AEBaseEntityBlock[]::new);
 
         AtomicReference<BlockEntityType<T>> typeHolder = new AtomicReference<>();

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import appeng.items.tools.powered.PortableCellItem;
 
 import ninety.megacells.MEGACells;
-import ninety.megacells.util.MEGATier;
+import ninety.megacells.core.MEGATier;
 
 public class MEGAPortableCell extends PortableCellItem {
 

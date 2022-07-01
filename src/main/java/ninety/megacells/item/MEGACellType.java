@@ -11,20 +11,16 @@ import appeng.datagen.providers.tags.ConventionTags;
 import appeng.menu.me.common.MEStorageMenu;
 
 public enum MEGACellType implements IMEGACellType {
-    ITEM(AEKeyType.items(), "item", ConventionTags.IRON_INGOT, MEStorageMenu.PORTABLE_ITEM_CELL_TYPE),
-    FLUID(AEKeyType.fluids(), "fluid", ConventionTags.COPPER_INGOT, MEStorageMenu.PORTABLE_FLUID_CELL_TYPE),
+    ITEM(AEKeyType.items(), "item"),
+    FLUID(AEKeyType.fluids(), "fluid"),
     ;
 
     private final AEKeyType key;
     private final String affix;
-    private final TagKey<Item> housingMaterial;
-    private final MenuType<MEStorageMenu> portableMenu;
 
-    MEGACellType(AEKeyType key, String affix, TagKey<Item> housingMaterial, MenuType<MEStorageMenu> portableMenu) {
+    MEGACellType(AEKeyType key, String affix) {
         this.key = key;
         this.affix = affix;
-        this.housingMaterial = housingMaterial;
-        this.portableMenu = portableMenu;
     }
 
     @Override
@@ -46,12 +42,18 @@ public enum MEGACellType implements IMEGACellType {
 
     @Override
     public TagKey<Item> housingMaterial() {
-        return this.housingMaterial;
+        return switch (this) {
+            case ITEM -> ConventionTags.IRON_INGOT;
+            case FLUID -> ConventionTags.COPPER_INGOT;
+        };
     }
 
     @Override
     public MenuType<MEStorageMenu> portableCellMenu() {
-        return this.portableMenu;
+        return switch (this) {
+            case ITEM -> MEStorageMenu.PORTABLE_ITEM_CELL_TYPE;
+            case FLUID -> MEStorageMenu.PORTABLE_FLUID_CELL_TYPE;
+        };
     }
 
     public List<Item> getCells() {

@@ -3,24 +3,22 @@ package ninety.megacells.item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
 
 import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 
 import ninety.megacells.MEGACells;
+import ninety.megacells.core.ItemDefinition;
+import ninety.megacells.core.MEGATier;
+import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.integration.appmek.AppMekIntegration;
-import ninety.megacells.integration.appmek.ChemicalCellType;
-import ninety.megacells.util.MEGATier;
 
 public final class MEGAItems {
 
@@ -73,17 +71,17 @@ public final class MEGAItems {
 
     public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing", MaterialItem::new, AppMekIntegration.isAppMekLoaded());
 
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGATier._1M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGATier._4M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_16M = cell(MEGATier._16M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_64M = cell(MEGATier._64M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_256M = cell(MEGATier._256M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGATier._1M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGATier._4M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_16M = cell(MEGATier._16M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_64M = cell(MEGATier._64M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_256M = cell(MEGATier._256M, AppMekCellType.CHEMICAL);
 
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGATier._1M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGATier._4M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_16M = portable(MEGATier._16M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGATier._64M, ChemicalCellType.TYPE);
-    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGATier._256M, ChemicalCellType.TYPE);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGATier._1M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGATier._4M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_16M = portable(MEGATier._16M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGATier._64M, AppMekCellType.CHEMICAL);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGATier._256M, AppMekCellType.CHEMICAL);
     // spotless:on
 
     private static ItemDefinition<StorageComponentItem> component(MEGATier tier) {
@@ -93,13 +91,13 @@ public final class MEGAItems {
     private static ItemDefinition<MEGAStorageCell> cell(MEGATier tier, IMEGACellType type) {
         return item(type.affix() + "_storage_cell_" + tier.affix,
                 p -> new MEGAStorageCell(p.stacksTo(1), tier, type),
-                type != ChemicalCellType.TYPE || AppMekIntegration.isAppMekLoaded());
+                type != AppMekCellType.CHEMICAL || AppMekIntegration.isAppMekLoaded());
     }
 
     private static ItemDefinition<MEGAPortableCell> portable(MEGATier tier, IMEGACellType type) {
         return item("portable_" + type.affix() + "_cell_" + tier.affix,
                 p -> new MEGAPortableCell(p.stacksTo(1), tier, type),
-                type != ChemicalCellType.TYPE || AppMekIntegration.isAppMekLoaded());
+                type != AppMekCellType.CHEMICAL || AppMekIntegration.isAppMekLoaded());
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory,
@@ -114,30 +112,5 @@ public final class MEGAItems {
             return definition;
         }
         return null;
-    }
-
-    public static String getItemPath(Item item) {
-        return Objects.requireNonNull(item.getRegistryName()).getPath();
-    }
-
-    public static class ItemDefinition<T extends Item> implements ItemLike {
-
-        private final ResourceLocation id;
-        private final T item;
-
-        public ItemDefinition(ResourceLocation id, T item) {
-            Objects.requireNonNull(id);
-            this.id = id;
-            this.item = item;
-        }
-
-        public ResourceLocation getId() {
-            return this.id;
-        }
-
-        @Override
-        public final @NotNull T asItem() {
-            return this.item;
-        }
     }
 }

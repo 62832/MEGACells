@@ -1,4 +1,4 @@
-package ninety.megacells.util;
+package ninety.megacells.core;
 
 import net.minecraft.world.item.Item;
 

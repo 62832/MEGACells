@@ -21,9 +21,10 @@ import appeng.client.render.model.AutoRotatingBakedModel;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
+import ninety.megacells.core.BlockDefinition;
 
 public class InitAutoRotatingModel {
-    private static final Set<MEGABlocks.BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
+    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR,
             MEGABlocks.CRAFTING_STORAGE_1M,
@@ -57,7 +58,7 @@ public class InitAutoRotatingModel {
         }
     }
 
-    private static void register(MEGABlocks.BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
+    private static void register(BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
         String path = block.getId().getPath();
         CUSTOMIZERS.put(path, customizer);
     }

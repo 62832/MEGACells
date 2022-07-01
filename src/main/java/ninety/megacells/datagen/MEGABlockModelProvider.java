@@ -10,6 +10,7 @@ import appeng.block.crafting.AbstractCraftingUnitBlock;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.block.MEGABlocks;
+import ninety.megacells.core.BlockDefinition;
 
 public class MEGABlockModelProvider extends BlockStateProvider {
 
@@ -36,7 +37,7 @@ public class MEGABlockModelProvider extends BlockStateProvider {
         });
     }
 
-    private void craftingModel(MEGABlocks.BlockDefinition<?> block, String name) {
+    private void craftingModel(BlockDefinition<?> block, String name) {
         builtInBlockModel("crafting/" + name + "_formed");
         var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
         getVariantBuilder(block.asBlock())

@@ -18,8 +18,8 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import ninety.megacells.item.IMEGACellType;
 import ninety.megacells.item.MEGAItems;
 
-public enum ChemicalCellType implements IMEGACellType {
-    TYPE;
+public enum AppMekCellType implements IMEGACellType {
+    CHEMICAL;
 
     @Override
     public AEKeyType keyType() {

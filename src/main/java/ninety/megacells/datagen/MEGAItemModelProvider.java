@@ -12,10 +12,10 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 
 import ninety.megacells.MEGACells;
-import ninety.megacells.integration.appmek.ChemicalCellType;
+import ninety.megacells.core.MEGATier;
+import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
-import ninety.megacells.util.MEGATier;
 
 public class MEGAItemModelProvider extends ItemModelProvider {
 
@@ -41,13 +41,13 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         for (var storage : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream(),
-                ChemicalCellType.TYPE.getCells().stream()).flatMap(s -> s).toList()) {
+                AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
             cell(storage);
         }
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
                 MEGACellType.FLUID.getPortableCells().stream(),
-                ChemicalCellType.TYPE.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(portable);
         }
     }
@@ -65,7 +65,7 @@ public class MEGAItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder flatSingleLayer(Item item, String subfolder) {
-        String path = MEGAItems.getItemPath(item);
+        String path = MEGACells.getItemPath(item);
         return singleTexture(path, mcLoc("item/generated"), "layer0",
                 MEGACells.makeId("item" + subfolder + "/" + path));
     }
