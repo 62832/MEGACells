@@ -38,10 +38,10 @@ public class MEGARecipeProvider extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         component(consumer, MEGATier._1M, AEItems.SKY_DUST.asItem());
-        component(consumer, MEGATier._4M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGATier._16M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGATier._64M, AEItems.SINGULARITY.asItem());
-        component(consumer, MEGATier._256M, AEItems.SINGULARITY.asItem());
+        component(consumer, MEGATier._4M, AEItems.ENDER_DUST.asItem());
+        component(consumer, MEGATier._16M, AEItems.ENDER_DUST.asItem());
+        component(consumer, MEGATier._64M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGATier._256M, AEItems.MATTER_BALL.asItem());
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
@@ -89,7 +89,7 @@ public class MEGARecipeProvider extends RecipeProvider {
         craftingBlock(consumer, MEGABlocks.CRAFTING_MONITOR, AEParts.STORAGE_MONITOR);
     }
 
-    private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, Item binder) {
+    private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, ItemLike binder) {
         var preceding = tier == MEGATier._1M ? AEItems.CELL_COMPONENT_256K.asItem()
                 : MEGATier.values()[tier.index - 2].getComponent();
 
