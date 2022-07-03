@@ -24,12 +24,13 @@ public enum MEGATier {
     }
 
     public Item getComponent() {
-        return switch (this) {
-            case _1M -> MEGAItems.CELL_COMPONENT_1M.asItem();
-            case _4M -> MEGAItems.CELL_COMPONENT_4M.asItem();
-            case _16M -> MEGAItems.CELL_COMPONENT_16M.asItem();
-            case _64M -> MEGAItems.CELL_COMPONENT_64M.asItem();
-            case _256M -> MEGAItems.CELL_COMPONENT_256M.asItem();
+        var definition = switch (this) {
+            case _1M -> MEGAItems.CELL_COMPONENT_1M;
+            case _4M -> MEGAItems.CELL_COMPONENT_4M;
+            case _16M -> MEGAItems.CELL_COMPONENT_16M;
+            case _64M -> MEGAItems.CELL_COMPONENT_64M;
+            case _256M -> MEGAItems.CELL_COMPONENT_256M;
         };
+        return definition.asItem();
     }
 }

@@ -45,6 +45,10 @@ public class MEGAItemModelProvider extends ItemModelProvider {
                 AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
             cell(storage);
         }
+
+        flatSingleLayer(MEGAItems.BULK_CELL_COMPONENT.asItem());
+        cell(MEGAItems.BULK_ITEM_CELL.asItem());
+
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
                 MEGACellType.FLUID.getPortableCells().stream(),

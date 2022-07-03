@@ -26,6 +26,11 @@ public enum AppMekCellType implements IMEGACellType {
     }
 
     @Override
+    public int maxTypes() {
+        return 9;
+    }
+
+    @Override
     public String affix() {
         return "chemical";
     }

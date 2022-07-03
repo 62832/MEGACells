@@ -60,9 +60,7 @@ dependencies {
 
     compileOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
     runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
-
-    compileOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
-    runtimeOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
+    implementation(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

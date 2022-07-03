@@ -7,6 +7,7 @@ import appeng.api.client.StorageCellModels;
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.item.MEGACellType;
+import ninety.megacells.item.MEGAItems;
 
 public class InitCellModels {
     public static void init() {
@@ -17,6 +18,9 @@ public class InitCellModels {
             StorageCellModels.registerModel(cell,
                     MEGACells.makeId("block/drive/cells/" + MEGACells.getItemPath(cell)));
         }
+        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL.asItem(),
+                MEGACells.makeId("block/drive/cells/bulk_item_cell"));
+
         for (var portableItemCell : MEGACellType.ITEM.getPortableCells()) {
             StorageCellModels.registerModel(portableItemCell,
                     MEGACells.makeId("block/drive/cells/portable_mega_item_cell"));

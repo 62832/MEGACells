@@ -11,21 +11,27 @@ import appeng.datagen.providers.tags.ConventionTags;
 import appeng.menu.me.common.MEStorageMenu;
 
 public enum MEGACellType implements IMEGACellType {
-    ITEM(AEKeyType.items(), "item"),
-    FLUID(AEKeyType.fluids(), "fluid"),
-    ;
+    ITEM(AEKeyType.items(), 63, "item"),
+    FLUID(AEKeyType.fluids(), 9, "fluid");
 
     private final AEKeyType key;
+    private final int types;
     private final String affix;
 
-    MEGACellType(AEKeyType key, String affix) {
+    MEGACellType(AEKeyType key, int types, String affix) {
         this.key = key;
+        this.types = types;
         this.affix = affix;
     }
 
     @Override
     public AEKeyType keyType() {
         return this.key;
+    }
+
+    @Override
+    public int maxTypes() {
+        return this.types;
     }
 
     @Override

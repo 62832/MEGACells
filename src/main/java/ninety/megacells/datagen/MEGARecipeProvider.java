@@ -11,6 +11,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.util.AEColor;
@@ -59,6 +60,17 @@ public class MEGARecipeProvider extends RecipeProvider {
                 AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(consumer, portable);
         }
+
+        ShapedRecipeBuilder.shaped(MEGAItems.BULK_ITEM_CELL)
+                .pattern("aba")
+                .pattern("bcb")
+                .pattern("ddd")
+                .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .define('b', AEItems.SKY_DUST)
+                .define('c', MEGAItems.BULK_CELL_COMPONENT)
+                .define('d', Items.NETHERITE_INGOT)
+                .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
+                .save(consumer, MEGACells.makeId("cells/standard/bulk_item_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")

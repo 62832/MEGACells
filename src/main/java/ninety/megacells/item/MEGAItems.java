@@ -59,6 +59,9 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAStorageCell> FLUID_CELL_64M = cell(MEGATier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAStorageCell> FLUID_CELL_256M = cell(MEGATier._256M, MEGACellType.FLUID);
 
+    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("bulk_cell_component", MaterialItem::new);
+    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL = item("bulk_item_cell", p -> new MEGABulkCell(p.stacksTo(1)));
+
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = portable(MEGATier._1M, MEGACellType.ITEM);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = portable(MEGATier._4M, MEGACellType.ITEM);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_16M = portable(MEGATier._16M, MEGACellType.ITEM);

@@ -10,6 +10,8 @@ import appeng.menu.me.common.MEStorageMenu;
 public interface IMEGACellType {
     AEKeyType keyType();
 
+    int maxTypes();
+
     String affix();
 
     Item housing();

@@ -11,7 +11,7 @@ public class MEGAStorageCell extends BasicStorageCell {
 
     public MEGAStorageCell(Properties properties, MEGATier tier, IMEGACellType type) {
         super(properties, tier.getComponent(), type.housing(), 2.5f + 0.5f * tier.index, tier.kbFactor(),
-                tier.kbFactor() * 8, type == MEGACellType.ITEM ? 63 : 9, type.keyType());
+                tier.kbFactor() * 8, type.maxTypes(), type.keyType());
         this.tier = tier;
         this.type = type;
     }
