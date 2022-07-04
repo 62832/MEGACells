@@ -17,6 +17,8 @@ import appeng.items.materials.StorageComponentItem;
 import ninety.megacells.MEGACells;
 import ninety.megacells.core.ItemDefinition;
 import ninety.megacells.core.MEGATier;
+import ninety.megacells.item.core.IMEGACellType;
+import ninety.megacells.item.core.MEGACellType;
 
 public final class MEGAItems {
 

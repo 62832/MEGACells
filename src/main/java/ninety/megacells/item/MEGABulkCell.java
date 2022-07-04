@@ -94,29 +94,4 @@ public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
     @Override
     public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
     }
-
-    public static int getColor(ItemStack is, int tintIndex) {
-        if (tintIndex == 1) {
-            // Determine LED color
-
-            var handler = BasicCellHandler.INSTANCE.getCellInventory(is, null);
-            if (handler == null) {
-                return 0xFFFFFF;
-            }
-
-            double used = handler.getUsedBytes();
-
-            if (used == 0) {
-                return 0xFFFFFF;
-            } else {
-                double p = 1 - used / (double) Integer.MAX_VALUE;
-                int r = (int) (255d * (Math.max(0, Math.min(2 - 2 * p, 1))));
-                int g = (int) (255d * (Math.max(0, Math.min(2 * p, 1))));
-                return 0xFF000000 + (r << 16) + (g << 8);
-            }
-        } else {
-            // White
-            return 0xFFFFFF;
-        }
-    }
 }

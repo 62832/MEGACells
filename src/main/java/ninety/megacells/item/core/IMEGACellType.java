@@ -1,4 +1,4 @@
-package ninety.megacells.item;
+package ninety.megacells.item.core;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;

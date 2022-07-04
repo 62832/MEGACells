@@ -1,4 +1,4 @@
-package ninety.megacells.item;
+package ninety.megacells.item.core;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item;
 import appeng.api.stacks.AEKeyType;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.menu.me.common.MEStorageMenu;
+
+import ninety.megacells.item.MEGAItems;
 
 public enum MEGACellType implements IMEGACellType {
     ITEM(AEKeyType.items(), 63, "item"),

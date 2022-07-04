@@ -8,6 +8,7 @@ import appeng.items.tools.powered.PortableCellItem;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.core.MEGATier;
+import ninety.megacells.item.core.IMEGACellType;
 
 public class MEGAPortableCell extends PortableCellItem {
 

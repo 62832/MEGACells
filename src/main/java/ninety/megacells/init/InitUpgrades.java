@@ -7,8 +7,8 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
 import ninety.megacells.integration.appmek.AppMekCellType;
-import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
+import ninety.megacells.item.core.MEGACellType;
 
 public class InitUpgrades {
     public static void init() {

@@ -25,11 +25,11 @@ import ninety.megacells.block.MEGABlocks;
 import ninety.megacells.core.BlockDefinition;
 import ninety.megacells.core.MEGATier;
 import ninety.megacells.integration.appmek.AppMekCellType;
-import ninety.megacells.item.IMEGACellType;
-import ninety.megacells.item.MEGACellType;
 import ninety.megacells.item.MEGAItems;
 import ninety.megacells.item.MEGAPortableCell;
 import ninety.megacells.item.MEGAStorageCell;
+import ninety.megacells.item.core.IMEGACellType;
+import ninety.megacells.item.core.MEGACellType;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {
