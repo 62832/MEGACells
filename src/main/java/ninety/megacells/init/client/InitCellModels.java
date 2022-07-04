@@ -1,4 +1,4 @@
-package ninety.megacells.init;
+package ninety.megacells.init.client;
 
 import java.util.stream.Stream;
 

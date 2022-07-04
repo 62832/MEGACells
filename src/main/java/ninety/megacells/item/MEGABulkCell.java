@@ -15,8 +15,10 @@ import appeng.api.stacks.AEKeyType;
 import appeng.api.storage.cells.IBasicCellItem;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
+import appeng.core.localization.Tooltips;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
+import appeng.me.cells.BasicCellHandler;
 import appeng.util.ConfigInventory;
 
 public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
@@ -26,8 +28,22 @@ public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
-        addCellInformationToTooltip(stack, lines);
+    public void appendHoverText(ItemStack is, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
+        var handler = BasicCellHandler.INSTANCE.getCellInventory(is, null);
+        if (handler == null) {
+            return;
+        }
+
+        double used = handler.getUsedBytes();
+        lines.add(used == 0 ? Tooltips.of("Empty")
+                : Tooltips.of(Tooltips.of("Capacity Used: "),
+                        Tooltips.ofPercent(used / (double) Integer.MAX_VALUE, false)));
+
+        var containedType = handler.getAvailableStacks().getFirstKey();
+        if (containedType != null) {
+            var item = containedType.wrapForDisplayOrFilter();
+            lines.add(Tooltips.of(Tooltips.of("Contains: "), Tooltips.of(item.getHoverName())));
+        }
     }
 
     @Override
@@ -36,17 +52,17 @@ public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
     }
 
     @Override
-    public int getBytes(ItemStack cellItem) {
+    public int getBytes(ItemStack is) {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int getBytesPerType(ItemStack cellItem) {
+    public int getBytesPerType(ItemStack is) {
         return 1;
     }
 
     @Override
-    public int getTotalTypes(ItemStack cellItem) {
+    public int getTotalTypes(ItemStack is) {
         return 1;
     }
 
@@ -76,5 +92,31 @@ public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {}
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
+    }
+
+    public static int getColor(ItemStack is, int tintIndex) {
+        if (tintIndex == 1) {
+            // Determine LED color
+
+            var handler = BasicCellHandler.INSTANCE.getCellInventory(is, null);
+            if (handler == null) {
+                return 0xFFFFFF;
+            }
+
+            double used = handler.getUsedBytes();
+
+            if (used == 0) {
+                return 0xFFFFFF;
+            } else {
+                double p = 1 - used / (double) Integer.MAX_VALUE;
+                int r = (int) (255d * (Math.max(0, Math.min(2 - 2 * p, 1))));
+                int g = (int) (255d * (Math.max(0, Math.min(2 * p, 1))));
+                return 0xFF000000 + (r << 16) + (g << 8);
+            }
+        } else {
+            // White
+            return 0xFFFFFF;
+        }
+    }
 }
