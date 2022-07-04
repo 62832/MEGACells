@@ -1,13 +1,5 @@
 ![](https://raw.githubusercontent.com/62832/MEGACells/master/img/MEGAinvert.png)
 
-Add-on for Applied Energistics 2 adding higher tiers of ME storage in the range of 1 - 256 megabytes.
-Active work-in-progress.
+Add-on for [Applied Energistics 2](https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2) adding various higher tiers of ME storage. Includes optional integration with [Applied Mekanistics](https://github.com/AppliedEnergistics/Applied-Mekanistics).
 
-## TODO/NYI
-
-- [ ] Fabric port (currently Forge-only)
-- [ ] Further recipe/energy balancing for cells
-- [ ] Potential dedicated crafting ingredients
-- [ ] Potential dedicated blocks/devices for cells (lmao "MEGA Drive")
-
-AE2Things Integration: _never ever_
+Licensed under [LGPLv3](https://spdx.org/licenses/LGPL-3.0-or-later.html). Assets licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
