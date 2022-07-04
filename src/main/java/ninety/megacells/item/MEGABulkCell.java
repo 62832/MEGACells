@@ -34,15 +34,21 @@ public class MEGABulkCell extends AEBaseItem implements IBasicCellItem {
             return;
         }
 
-        double used = handler.getUsedBytes();
-        lines.add(used == 0 ? Tooltips.of("Empty")
-                : Tooltips.of(Tooltips.of("Capacity Used: "),
-                        Tooltips.ofPercent(used / (double) Integer.MAX_VALUE, false)));
-
         var containedType = handler.getAvailableStacks().getFirstKey();
-        if (containedType != null) {
-            var item = containedType.wrapForDisplayOrFilter();
-            lines.add(Tooltips.of(Tooltips.of("Contains: "), Tooltips.of(item.getHoverName())));
+        lines.add(containedType == null ? Tooltips.of("Empty")
+                : Tooltips.of(Tooltips.of("Contains: "),
+                        Tooltips.of(containedType.wrapForDisplayOrFilter().getHoverName())));
+
+        var filterSlots = handler.getConfigInventory().keySet().stream().toList();
+        if (!filterSlots.isEmpty()) {
+            if (filterSlots.size() == 1) {
+                lines.add(Tooltips.of(Tooltips.of("Partitioned for: "), filterSlots.get(0).getDisplayName()));
+            } else {
+                lines.add(Tooltips.of("Partitioned for:"));
+                for (var slot : filterSlots) {
+                    lines.add(slot.getDisplayName());
+                }
+            }
         }
     }
 
