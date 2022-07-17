@@ -1,19 +1,19 @@
 {
-    "type": "lazierae2:etcher",
-    "output": {
-      "item": "megacells:bulk_cell_component"
+  "type": "lazierae2:etcher",
+  "output": {
+    "item": "megacells:bulk_cell_component"
+  },
+  "input": [
+    {
+      "item": "megacells:cell_component_1m"
     },
-    "input": [
-      {
-        "item": "megacells:cell_component_1m"
-      },
-      {
-        "item": "ae2:singularity"
-      },
-      {
-        "item": "ae2:spatial_cell_component_2"
-      }
-    ],
-    "process_time": 120,
-    "energy_cost": 1500
+    {
+      "item": "ae2:singularity"
+    },
+    {
+      "item": "ae2:spatial_cell_component_2"
+    }
+  ],
+  "process_time": 120,
+  "energy_cost": 1500
 }
