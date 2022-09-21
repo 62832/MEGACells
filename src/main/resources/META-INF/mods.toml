@@ -7,7 +7,7 @@ displayURL="https://github.com/62832/MEGACells"
 
 [[mods]]
 modId="megacells"
-version="${version}"
+version="1.3.0-1.19.2"
 displayName="MEGA Cells"
 logoFile="logo.png"
 credits="s/o to Technici4n, Gimpansor, MasterYodA, PrototypeTrousers, ramidzkh, RaVen"
@@ -19,7 +19,7 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId="ae2"
     mandatory=true
-    versionRange = "[11.1.3,12.0.0)"
+    versionRange = "[12.5.1-beta,13.0.0)"
     ordering="AFTER"
     side="BOTH"
 
@@ -33,13 +33,13 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId="forge"
     mandatory=true
-    versionRange="[40,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.megacells]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
