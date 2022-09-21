@@ -2,9 +2,9 @@ package ninety.megacells.datagen;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 import ninety.megacells.MEGACells;
 
@@ -16,8 +16,8 @@ public class MEGADataGenerators {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(new MEGAItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(new MEGABlockModelProvider(generator, existingFileHelper));
-        generator.addProvider(new MEGARecipeProvider(generator));
+        generator.addProvider(true, new MEGAItemModelProvider(generator, existingFileHelper));
+        generator.addProvider(true, new MEGABlockModelProvider(generator, existingFileHelper));
+        generator.addProvider(true, new MEGARecipeProvider(generator));
     }
 }

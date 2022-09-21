@@ -11,8 +11,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.block.AEBaseBlock;
@@ -42,7 +41,7 @@ public class InitAutoRotatingModel {
         bus.addListener(InitAutoRotatingModel::onModelBake);
     }
 
-    public static void initAutoRotatingModels(ModelRegistryEvent event) {
+    public static void initAutoRotatingModels(ModelEvent.BakingCompleted event) {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
         for (var block : MEGABlocks.getBlocks()) {
@@ -71,8 +70,8 @@ public class InitAutoRotatingModel {
         return new AutoRotatingBakedModel(model);
     }
 
-    private static void onModelBake(ModelBakeEvent event) {
-        Map<ResourceLocation, BakedModel> modelRegistry = event.getModelRegistry();
+    private static void onModelBake(ModelEvent.BakingCompleted event) {
+        Map<ResourceLocation, BakedModel> modelRegistry = event.getModels();
         Set<ResourceLocation> keys = Sets.newHashSet(modelRegistry.keySet());
         BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
 

@@ -2,7 +2,7 @@ package ninety.megacells.init.client;
 
 import java.util.stream.Stream;
 
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.integration.appmek.AppMekCellType;
@@ -17,7 +17,7 @@ public class InitItemColors {
         bus.addListener(InitItemColors::initItemColors);
     }
 
-    private static void initItemColors(ColorHandlerEvent.Item event) {
+    private static void initItemColors(RegisterColorHandlersEvent.Item event) {
         for (var cell : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream(),

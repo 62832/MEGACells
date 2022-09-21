@@ -1,5 +1,0 @@
-MEGA Cells Changelog
-1.0
-====
-- 1.0.0 Initial release
-        Add 1M - 256M variants of item/fluid storage cells

@@ -60,9 +60,8 @@ public final class MEGABlockEntities {
         BlockEntityType.BlockEntitySupplier<T> supplier = (blockPos, blockState) -> factory.create(typeHolder.get(),
                 blockPos, blockState);
         var type = BlockEntityType.Builder.of(supplier, blocks).build(null);
-        type.setRegistryName(MEGACells.makeId(id));
         typeHolder.set(type); // Makes it available to the supplier used above
-        BLOCK_ENTITY_TYPES.put(type.getRegistryName(), type);
+        BLOCK_ENTITY_TYPES.put(MEGACells.makeId(id), type);
 
         AEBaseBlockEntity.registerBlockEntityItem(type, blockDefinitions[0].asItem());
 

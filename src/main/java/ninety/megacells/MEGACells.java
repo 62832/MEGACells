@@ -2,6 +2,7 @@ package ninety.megacells;
 
 import java.util.Objects;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -13,6 +14,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import ninety.megacells.block.MEGABlocks;
 import ninety.megacells.block.entity.MEGABlockEntities;
 import ninety.megacells.datagen.MEGADataGenerators;
@@ -31,7 +34,7 @@ public class MEGACells {
     }
 
     public static String getItemPath(Item item) {
-        return Objects.requireNonNull(item.getRegistryName()).getPath();
+        return Objects.requireNonNull(Registry.ITEM.getKey(item)).getPath();
     }
 
     public MEGACells() {
@@ -43,9 +46,11 @@ public class MEGACells {
 
         AppMekItems.init();
 
-        bus.addGenericListener(Item.class, InitItems::register);
-        bus.addGenericListener(Block.class, InitBlocks::register);
-        bus.addGenericListener(BlockEntityType.class, InitBlockEntities::register);
+        bus.addListener((RegisterEvent event) -> {
+            InitBlocks.init(ForgeRegistries.BLOCKS);
+            InitItems.init(ForgeRegistries.ITEMS);
+            InitBlockEntities.init(ForgeRegistries.BLOCK_ENTITY_TYPES);
+        });
 
         bus.addListener(MEGADataGenerators::onGatherData);
         bus.addListener((FMLCommonSetupEvent event) -> {

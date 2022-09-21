@@ -1,5 +1,6 @@
 {
   "parent": "block/cube",
+  "render_type": "cutout",
   "textures": {
     "particle": "megacells:block/crafting/monitor",
     "north": "megacells:block/crafting/monitor",
