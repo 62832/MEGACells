@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import ninety.megacells.block.MEGABlocks;
@@ -28,7 +28,7 @@ public class InitRenderTypes {
         bus.addListener(InitRenderTypes::initRenderTypes);
     }
 
-    private static void initRenderTypes(ModelEvent.RegisterGeometryLoaders event) {
+    private static void initRenderTypes(FMLClientSetupEvent event) {
         for (var definition : CUTOUT_BLOCKS) {
             ItemBlockRenderTypes.setRenderLayer(definition.asBlock(), RenderType.cutout());
         }
