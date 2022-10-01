@@ -6,13 +6,13 @@
   },
   "ingredients": {
     "top": {
-      "item": "megacells:cell_component_1m"
+      "item": "megacells:cell_component_16m"
     },
     "middle": {
       "item": "ae2:singularity"
     },
     "bottom": {
-      "item": "ae2:spatial_cell_component_2"
+      "item": "ae2:spatial_cell_component_16"
     }
   }
 }
