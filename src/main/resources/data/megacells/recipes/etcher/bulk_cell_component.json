@@ -5,13 +5,13 @@
   },
   "input": [
     {
-      "item": "megacells:cell_component_1m"
+      "item": "megacells:cell_component_16m"
     },
     {
       "item": "ae2:singularity"
     },
     {
-      "item": "ae2:spatial_cell_component_2"
+      "item": "ae2:spatial_cell_component_16"
     }
   ],
   "process_time": 120,
