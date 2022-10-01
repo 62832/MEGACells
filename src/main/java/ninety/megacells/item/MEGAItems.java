@@ -62,7 +62,7 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAStorageCell> FLUID_CELL_256M = cell(MEGATier._256M, MEGACellType.FLUID);
 
     public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL = item("bulk_item_cell", p -> new MEGABulkCell(p.stacksTo(1)));
+    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL = item("bulk_item_cell", MEGABulkCell::new);
 
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = portable(MEGATier._1M, MEGACellType.ITEM);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = portable(MEGATier._4M, MEGACellType.ITEM);
@@ -83,12 +83,12 @@ public final class MEGAItems {
 
     private static ItemDefinition<MEGAStorageCell> cell(MEGATier tier, IMEGACellType type) {
         return item(type.affix() + "_storage_cell_" + tier.affix,
-                p -> new MEGAStorageCell(p.stacksTo(1), tier, type));
+                p -> new MEGAStorageCell(p, tier, type));
     }
 
     private static ItemDefinition<MEGAPortableCell> portable(MEGATier tier, IMEGACellType type) {
         return item("portable_" + type.affix() + "_cell_" + tier.affix,
-                p -> new MEGAPortableCell(p.stacksTo(1), tier, type));
+                p -> new MEGAPortableCell(p, tier, type));
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {

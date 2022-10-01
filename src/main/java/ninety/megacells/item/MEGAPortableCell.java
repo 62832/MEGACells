@@ -16,7 +16,7 @@ public class MEGAPortableCell extends PortableCellItem {
     public final IMEGACellType type;
 
     public MEGAPortableCell(Properties props, MEGATier tier, IMEGACellType type) {
-        super(type.keyType(), type.portableCellMenu(), makePortableTier(tier), props);
+        super(type.keyType(), type.portableCellMenu(), makePortableTier(tier), props.stacksTo(1));
         this.tier = tier;
         this.type = type;
     }

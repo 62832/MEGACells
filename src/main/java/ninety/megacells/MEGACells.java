@@ -52,7 +52,7 @@ public class MEGACells {
 
         bus.addListener(MEGADataGenerators::onGatherData);
         bus.addListener((FMLCommonSetupEvent event) -> {
-            event.enqueueWork(InitCellModels::init);
+            event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
         });
 
