@@ -100,9 +100,13 @@ public class BulkCellInventory implements StorageCell {
             }
         }
 
+        if (this.storedItem != null && !this.storedItem.equals(what)) {
+            return 0;
+        }
+
         if (this.itemCount - Long.MAX_VALUE + amount > 0) {
             // overflow
-            return Long.MAX_VALUE - this.itemCount;
+            amount = Long.MAX_VALUE - this.itemCount;
         }
 
         if (mode == Actionable.MODULATE) {
@@ -120,14 +124,15 @@ public class BulkCellInventory implements StorageCell {
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
         var extractAmount = Math.min(Integer.MAX_VALUE, amount);
 
+        var currentCount = this.itemCount;
         if (this.itemCount > 0 && Objects.equals(this.storedItem, what)) {
-            if (extractAmount >= this.itemCount) {
+            if (extractAmount >= currentCount) {
                 if (mode == Actionable.MODULATE) {
                     this.storedItem = null;
                     this.itemCount = 0;
                     this.saveChanges();
                 }
-                return this.itemCount;
+                return currentCount;
             } else {
                 if (mode == Actionable.MODULATE) {
                     this.itemCount -= extractAmount;
@@ -159,7 +164,7 @@ public class BulkCellInventory implements StorageCell {
             this.getTag().remove(KEY);
             this.getTag().remove(COUNT);
         } else {
-            this.getTag().put(KEY, this.storedItem.toTag());
+            this.getTag().put(KEY, this.storedItem.toTagGeneric());
             this.getTag().putLong(COUNT, this.itemCount);
         }
 
