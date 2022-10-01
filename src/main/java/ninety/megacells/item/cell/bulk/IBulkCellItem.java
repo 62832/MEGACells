@@ -18,11 +18,6 @@ public interface IBulkCellItem extends ICellWorkbenchItem {
         return CellConfig.create(AEItemKey.filter(), is);
     }
 
-    default boolean isStorageCell(ItemStack i) {
-        // only accept contents when a filter has been set on the item
-        return !getConfigInventory(i).isEmpty();
-    }
-
     default void addCellInformationToTooltip(ItemStack is, List<Component> lines) {
         Preconditions.checkArgument(is.getItem() == this);
         BulkCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
