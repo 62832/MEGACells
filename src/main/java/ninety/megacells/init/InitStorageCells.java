@@ -1,16 +1,24 @@
-package ninety.megacells.init.client;
+package ninety.megacells.init;
 
 import java.util.stream.Stream;
 
 import appeng.api.client.StorageCellModels;
+import appeng.api.storage.StorageCells;
 
 import ninety.megacells.MEGACells;
 import ninety.megacells.integration.appmek.AppMekCellType;
 import ninety.megacells.item.MEGAItems;
+import ninety.megacells.item.cell.bulk.BulkCellHandler;
 import ninety.megacells.item.core.MEGACellType;
 
-public class InitCellModels {
+public class InitStorageCells {
+
     public static void init() {
+        StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
+        initModels();
+    }
+
+    public static void initModels() {
         for (var cell : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream(),
