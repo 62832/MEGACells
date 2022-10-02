@@ -3,6 +3,7 @@ package ninety.megacells.item.cell.bulk;
 import java.util.Objects;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -37,13 +38,28 @@ public class BulkCellInventory implements StorageCell {
         this.cellType = cellType;
         this.container = container;
 
-        this.storedItem = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
-        this.itemCount = getTag().getLong(COUNT);
+        this.storedItem = getStoredItem();
+        this.itemCount = getItemCount();
 
         var builder = IPartitionList.builder();
         var config = getConfigInventory();
         builder.addAll(config.keySet());
         this.partitionList = builder.build();
+    }
+
+    private AEKey getStoredItem() {
+        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
+        // TODO: remove bulk cell conversion methods in MC 1.20
+        if (getTag().contains("keys")) {
+            return AEKey.fromTagGeneric(getTag().getList("keys", Tag.TAG_COMPOUND).getCompound(0));
+        } else {
+            return getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
+        }
+    }
+
+    private long getItemCount() {
+        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
+        return getTag().contains("ic") ? getTag().getLong("ic") : getTag().getLong(COUNT);
     }
 
     private CompoundTag getTag() {
@@ -167,6 +183,11 @@ public class BulkCellInventory implements StorageCell {
             this.getTag().put(KEY, this.storedItem.toTagGeneric());
             this.getTag().putLong(COUNT, this.itemCount);
         }
+
+        // remove pre-1.4.0 NBT tags
+        getTag().remove("keys");
+        getTag().remove("amts");
+        getTag().remove("ic");
 
         this.isPersisted = true;
     }
