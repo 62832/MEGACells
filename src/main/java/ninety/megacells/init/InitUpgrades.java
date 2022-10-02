@@ -21,7 +21,6 @@ public class InitUpgrades {
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemCell, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, itemCell, 1, storageCellGroup);
         }
-        Upgrades.add(AEItems.VOID_CARD, MEGAItems.BULK_ITEM_CELL.asItem(), 1, storageCellGroup);
 
         for (var fluidCell : Stream.concat(
                 MEGACellType.FLUID.getCells().stream(), AppMekCellType.CHEMICAL.getCells().stream()).toList()) {
