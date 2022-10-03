@@ -132,6 +132,7 @@ dependencies {
 
     implementation(fg.deobf("appeng:appliedenergistics2:${ae2_version}"))
 
+    compileOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
     runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
     implementation(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
 
