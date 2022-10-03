@@ -36,12 +36,12 @@ public class AppMekItems {
 
     private static ItemDefinition<MEGAStorageCell> cell(MEGATier tier) {
         return item(AppMekCellType.CHEMICAL.affix() + "_storage_cell_" + tier.affix,
-                p -> new MEGAStorageCell(p.stacksTo(1), tier, AppMekCellType.CHEMICAL));
+                p -> new MEGAChemicalCell(p.stacksTo(1), tier));
     }
 
     private static ItemDefinition<MEGAPortableCell> portable(MEGATier tier) {
         return item("portable_" + AppMekCellType.CHEMICAL.affix() + "_cell_" + tier.affix,
-                p -> new MEGAPortableCell(p.stacksTo(1), tier, AppMekCellType.CHEMICAL));
+                p -> new MEGAPortableChemicalCell(p.stacksTo(1), tier));
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
