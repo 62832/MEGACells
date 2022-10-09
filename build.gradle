@@ -22,7 +22,7 @@ plugins {
 apply(plugin: "net.minecraftforge.gradle")
 apply plugin: 'org.spongepowered.mixin'
 
-group = "ninety"
+group = "gripe.90"
 version = "1.4.0-${minecraft_version}"
 
 repositories {
