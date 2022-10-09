@@ -12,7 +12,7 @@ import gripe._90.megacells.item.MEGAStorageCell;
 
 public class MEGAChemicalCell extends MEGAStorageCell {
     public MEGAChemicalCell(Properties properties, MEGATier tier) {
-        super(properties, tier, AppMekCellType.CHEMICAL);
+        super(properties.stacksTo(1), tier, AppMekCellType.CHEMICAL);
     }
 
     @Override

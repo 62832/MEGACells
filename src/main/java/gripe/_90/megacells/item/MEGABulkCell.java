@@ -9,11 +9,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import gripe._90.megacells.item.cell.bulk.IBulkCellItem;
-
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.items.AEBaseItem;
+
+import gripe._90.megacells.item.cell.bulk.IBulkCellItem;
 
 public class MEGABulkCell extends AEBaseItem implements IBulkCellItem {
     public MEGABulkCell(Properties properties) {

@@ -12,7 +12,7 @@ import gripe._90.megacells.item.MEGAPortableCell;
 
 public class MEGAPortableChemicalCell extends MEGAPortableCell {
     public MEGAPortableChemicalCell(Properties props, MEGATier tier) {
-        super(props, tier, AppMekCellType.CHEMICAL);
+        super(props.stacksTo(1), tier, AppMekCellType.CHEMICAL);
     }
 
     @Override

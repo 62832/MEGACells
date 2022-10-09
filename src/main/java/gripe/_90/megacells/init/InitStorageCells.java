@@ -2,14 +2,14 @@ package gripe._90.megacells.init;
 
 import java.util.stream.Stream;
 
+import appeng.api.client.StorageCellModels;
+import appeng.api.storage.StorageCells;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 import gripe._90.megacells.item.core.MEGACellType;
-
-import appeng.api.client.StorageCellModels;
-import appeng.api.storage.StorageCells;
 
 public class InitStorageCells {
 
