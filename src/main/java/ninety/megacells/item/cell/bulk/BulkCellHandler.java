@@ -2,6 +2,7 @@ package ninety.megacells.item.cell.bulk;
 
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,7 @@ public class BulkCellHandler implements ICellHandler {
         }
 
         var containedType = handler.getAvailableStacks().getFirstKey();
-        var filterSlots = handler.getConfigInventory().keySet().stream().toList();
+        var filterItem = handler.getFilterItem();
 
         if (containedType != null) {
             lines.add(Tooltips.of(Tooltips.of("Contains: "), containedType.getDisplayName()));
@@ -42,9 +43,13 @@ public class BulkCellHandler implements ICellHandler {
             lines.add(Tooltips.of("Empty"));
         }
 
-        if (!filterSlots.isEmpty()) {
+        if (filterItem != null) {
             if (containedType == null) {
-                lines.add(Tooltips.of(Tooltips.of("Partitioned for: "), filterSlots.get(0).getDisplayName()));
+                lines.add(Tooltips.of(Tooltips.of("Partitioned for: "), filterItem.getDisplayName()));
+            } else {
+                if (!containedType.equals(filterItem)) {
+                    lines.add(Tooltips.of("Mismatched filter!").withStyle(ChatFormatting.DARK_RED));
+                }
             }
         } else {
             lines.add(Tooltips.of("Not Partitioned"));
