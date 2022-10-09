@@ -23,7 +23,7 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.client.InitAutoRotatingModel;
 import gripe._90.megacells.init.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.client.InitBuiltInModels;
-import gripe._90.megacells.init.client.InitCellModels;
+import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.client.InitItemColors;
 import gripe._90.megacells.init.client.InitRenderTypes;
 import gripe._90.megacells.integration.appmek.AppMekItems;
@@ -57,7 +57,7 @@ public class MEGACells {
 
         bus.addListener(MEGADataGenerators::onGatherData);
         bus.addListener((FMLCommonSetupEvent event) -> {
-            event.enqueueWork(InitCellModels::init);
+            event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
         });
 

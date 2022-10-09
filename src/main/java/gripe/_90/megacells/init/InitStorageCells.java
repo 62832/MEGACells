@@ -1,16 +1,24 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init;
 
 import java.util.stream.Stream;
-
-import appeng.api.client.StorageCellModels;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 import gripe._90.megacells.item.core.MEGACellType;
 
-public class InitCellModels {
+import appeng.api.client.StorageCellModels;
+import appeng.api.storage.StorageCells;
+
+public class InitStorageCells {
+
     public static void init() {
+        StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
+        initModels();
+    }
+
+    public static void initModels() {
         for (var cell : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream(),
