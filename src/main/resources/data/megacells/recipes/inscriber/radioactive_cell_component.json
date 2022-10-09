@@ -1,0 +1,18 @@
+{
+  "type": "ae2:inscriber",
+  "mode": "press",
+  "result": {
+    "item": "megacells:radioactive_cell_component"
+  },
+  "ingredients": {
+    "top": {
+      "item": "ae2:cell_component_256k"
+    },
+    "middle": {
+      "item": "ae2:singularity"
+    },
+    "bottom": {
+      "item": "mekanism:radioactive_waste_barrel"
+    }
+  }
+}
