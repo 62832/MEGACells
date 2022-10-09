@@ -38,8 +38,8 @@ public class BulkCellInventory implements StorageCell {
         this.cellType = cellType;
         this.container = container;
 
-        this.storedItem = getStoredItem();
-        this.itemCount = getItemCount();
+        this.storedItem = retrieveStoredItem();
+        this.itemCount = retrieveItemCount();
 
         var builder = IPartitionList.builder();
         var config = getConfigInventory();
@@ -47,7 +47,7 @@ public class BulkCellInventory implements StorageCell {
         this.partitionList = builder.build();
     }
 
-    private AEKey getStoredItem() {
+    private AEKey retrieveStoredItem() {
         // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
         // TODO: remove bulk cell conversion methods in MC 1.20
         if (getTag().contains("keys")) {
@@ -57,7 +57,7 @@ public class BulkCellInventory implements StorageCell {
         }
     }
 
-    private long getItemCount() {
+    private long retrieveItemCount() {
         // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
         return getTag().contains("ic") ? getTag().getLong("ic") : getTag().getLong(COUNT);
     }
@@ -88,10 +88,19 @@ public class BulkCellInventory implements StorageCell {
         if (this.itemCount == 0) {
             return CellState.EMPTY;
         }
-        if (this.itemCount == Long.MAX_VALUE) {
+        if (this.itemCount == Long.MAX_VALUE || !this.storedItem.equals(getFilterItem())) {
             return CellState.FULL;
         }
         return CellState.NOT_EMPTY;
+    }
+
+    protected AEKey getFilterItem() {
+        var config = getConfigInventory().keySet().stream().toList();
+        if (config.isEmpty()) {
+            return null;
+        } else {
+            return config.get(0);
+        }
     }
 
     @Override
