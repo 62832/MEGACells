@@ -24,6 +24,9 @@ public class RadioactiveCellInventory implements StorageCell {
     private static final String KEY = "key";
     private static final String COUNT = "count";
 
+    protected static final int MAX_BYTES = 256;
+    private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
+
     private final ISaveProvider container;
     private final ItemStack i;
     private final IRadioactiveCellItem cellType;
@@ -73,10 +76,23 @@ public class RadioactiveCellInventory implements StorageCell {
         if (this.chemAmount == 0) {
             return CellState.EMPTY;
         }
-        /*
-         * if (this.itemCount == Long.MAX_VALUE || !this.storedItem.equals(getFilterItem())) { return CellState.FULL; }
-         */
+        if (this.chemAmount == MAX_MB || !this.storedChemical.equals(getFilterItem())) {
+            return CellState.FULL;
+        }
         return CellState.NOT_EMPTY;
+    }
+
+    protected AEKey getFilterItem() {
+        var config = getConfigInventory().keySet().stream().toList();
+        if (config.isEmpty()) {
+            return null;
+        } else {
+            return config.get(0);
+        }
+    }
+
+    protected long getUsedBytes() {
+        return this.chemAmount / MekanismKeyType.TYPE.getAmountPerByte();
     }
 
     @Override
@@ -109,8 +125,24 @@ public class RadioactiveCellInventory implements StorageCell {
             return 0;
         }
 
-        // TODO
-        return StorageCell.super.insert(what, amount, mode, source);
+        if (this.chemAmount == MAX_MB) {
+            return 0;
+        }
+
+        long remainingAmount = Math.max(0, MAX_MB - this.chemAmount);
+        if (amount > remainingAmount) {
+            amount = remainingAmount;
+        }
+
+        if (mode == Actionable.MODULATE) {
+            if (this.storedChemical == null) {
+                this.storedChemical = what;
+            }
+            this.chemAmount += amount;
+            saveChanges();
+        }
+
+        return amount;
     }
 
     @Override
