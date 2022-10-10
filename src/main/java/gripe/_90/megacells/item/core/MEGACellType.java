@@ -6,11 +6,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 
-import gripe._90.megacells.item.MEGAItems;
-
 import appeng.api.stacks.AEKeyType;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.menu.me.common.MEStorageMenu;
+
+import gripe._90.megacells.item.MEGAItems;
 
 public enum MEGACellType implements IMEGACellType {
     ITEM(AEKeyType.items(), 63, "item"),

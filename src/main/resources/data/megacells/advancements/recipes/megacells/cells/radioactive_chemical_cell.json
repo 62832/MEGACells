@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "megacells:radioactive_cell_component"
-            ]
+            "items": ["megacells:radioactive_cell_component"]
           }
         ]
       },
@@ -20,15 +18,8 @@
       "trigger": "minecraft:recipe_unlocked"
     }
   },
-  "requirements": [
-    [
-      "has_radioactive_cell_component",
-      "has_the_recipe"
-    ]
-  ],
+  "requirements": [["has_radioactive_cell_component", "has_the_recipe"]],
   "rewards": {
-    "recipes": [
-      "megacells:cells/standard/radioactive_chemical_cell"
-    ]
+    "recipes": ["megacells:cells/standard/radioactive_chemical_cell"]
   }
 }

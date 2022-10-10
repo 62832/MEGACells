@@ -17,11 +17,7 @@
       "item": "mekanism:pellet_polonium"
     }
   },
-  "pattern": [
-    "aba",
-    "bcb",
-    "ded"
-  ],
+  "pattern": ["aba", "bcb", "ded"],
   "result": {
     "item": "megacells:radioactive_chemical_cell"
   }

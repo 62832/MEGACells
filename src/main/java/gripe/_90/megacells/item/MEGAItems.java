@@ -11,14 +11,14 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import appeng.items.materials.MaterialItem;
+import appeng.items.materials.StorageComponentItem;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.ItemDefinition;
 import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.item.core.IMEGACellType;
 import gripe._90.megacells.item.core.MEGACellType;
-
-import appeng.items.materials.MaterialItem;
-import appeng.items.materials.StorageComponentItem;
 
 public final class MEGAItems {
 

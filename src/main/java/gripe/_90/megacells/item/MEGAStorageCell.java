@@ -1,9 +1,9 @@
 package gripe._90.megacells.item;
 
+import appeng.items.storage.BasicStorageCell;
+
 import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.item.core.IMEGACellType;
-
-import appeng.items.storage.BasicStorageCell;
 
 public class MEGAStorageCell extends BasicStorageCell {
 

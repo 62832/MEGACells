@@ -9,13 +9,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 
-import gripe._90.megacells.item.core.IMEGACellType;
-
 import appeng.api.stacks.AEKeyType;
 import appeng.menu.me.common.MEStorageMenu;
 
 import me.ramidzkh.mekae2.AMMenus;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
+
+import gripe._90.megacells.item.core.IMEGACellType;
 
 public enum AppMekCellType implements IMEGACellType {
     CHEMICAL;

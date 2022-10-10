@@ -10,13 +10,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGACraftingUnitType;
-
 import appeng.client.render.crafting.AbstractCraftingUnitModelProvider;
 import appeng.client.render.crafting.LightBakedModel;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.crafting.UnitBakedModel;
+
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.MEGACraftingUnitType;
 
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
 

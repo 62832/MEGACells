@@ -14,16 +14,16 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
-
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
+
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.core.BlockDefinition;
 
 @SuppressWarnings("unused")
 public final class MEGABlockEntities {

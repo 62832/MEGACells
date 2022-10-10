@@ -9,13 +9,13 @@ import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
-
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.init.client.InitItemModelsProperties;
+
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.core.BlockDefinition;
 
 public class MEGABlockModelProvider extends BlockStateProvider {
 

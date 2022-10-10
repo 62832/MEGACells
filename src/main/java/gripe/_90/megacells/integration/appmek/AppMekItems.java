@@ -4,14 +4,17 @@ import java.util.function.Function;
 
 import net.minecraft.world.item.Item;
 
+import appeng.items.materials.MaterialItem;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.ItemDefinition;
 import gripe._90.megacells.core.MEGATier;
+import gripe._90.megacells.integration.appmek.item.MEGAChemicalCell;
+import gripe._90.megacells.integration.appmek.item.MEGAPortableChemicalCell;
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
-
-import appeng.items.materials.MaterialItem;
 
 public class AppMekItems {
 
@@ -19,8 +22,8 @@ public class AppMekItems {
         // controls static load order
     }
 
-    public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing",
-            MaterialItem::new);
+    // spotless:off
+    public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = item("mega_chemical_cell_housing", MaterialItem::new);
 
     public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_1M = cell(MEGATier._1M);
     public static final ItemDefinition<MEGAStorageCell> CHEMICAL_CELL_4M = cell(MEGATier._4M);
@@ -34,14 +37,18 @@ public class AppMekItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGATier._64M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGATier._256M);
 
+    public static final ItemDefinition<MaterialItem> RADIOACTIVE_CELL_COMPONENT = item("radioactive_cell_component", MaterialItem::new);
+    public static final ItemDefinition<MEGARadioactiveCell> RADIOACTIVE_CHEMICAL_CELL = item("radioactive_chemical_cell", MEGARadioactiveCell::new);
+    // spotless:on
+
     private static ItemDefinition<MEGAStorageCell> cell(MEGATier tier) {
         return item(AppMekCellType.CHEMICAL.affix() + "_storage_cell_" + tier.affix,
-                p -> new MEGAChemicalCell(p.stacksTo(1), tier));
+                p -> new MEGAChemicalCell(p, tier));
     }
 
     private static ItemDefinition<MEGAPortableCell> portable(MEGATier tier) {
         return item("portable_" + AppMekCellType.CHEMICAL.affix() + "_cell_" + tier.affix,
-                p -> new MEGAPortableChemicalCell(p.stacksTo(1), tier));
+                p -> new MEGAPortableChemicalCell(p, tier));
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
