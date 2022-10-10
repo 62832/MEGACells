@@ -79,7 +79,10 @@ public class RadioactiveCellInventory implements StorageCell {
         if (this.chemAmount == 0) {
             return CellState.EMPTY;
         }
-        if (this.chemAmount == MAX_MB || !this.storedChemical.equals(getFilterItem())) {
+        if (this.chemAmount == MAX_MB) {
+            return CellState.FULL;
+        }
+        if (!this.storedChemical.equals(getFilterItem()) || isBlackListed(getFilterItem())) {
             return CellState.FULL;
         }
         return CellState.NOT_EMPTY;
@@ -107,8 +110,8 @@ public class RadioactiveCellInventory implements StorageCell {
         return this.cellType.getConfigInventory(this.i);
     }
 
-    private boolean isBlackListed(AEKey what) {
-        if (this.partitionList.isListed(what) && what instanceof MekanismKey key) {
+    protected boolean isBlackListed(AEKey what) {
+        if (what instanceof MekanismKey key) {
             return ChemicalAttributeValidator.DEFAULT.process(key.getStack())
                     || key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical();
         } else {
@@ -118,7 +121,11 @@ public class RadioactiveCellInventory implements StorageCell {
 
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-        if (amount == 0 || !MekanismKeyType.TYPE.contains(what) || isBlackListed(what)) {
+        if (amount == 0 || !MekanismKeyType.TYPE.contains(what)) {
+            return 0;
+        }
+
+        if (!this.partitionList.isListed(what) || isBlackListed(what)) {
             return 0;
         }
 
