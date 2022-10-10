@@ -54,15 +54,15 @@ public class MEGABlockModelProvider extends BlockStateProvider {
     }
 
     private void energyCell() {
-        var blockBuilder = getVariantBuilder(((MEGABlocks.BlockDefinition<?>) MEGABlocks.MEGA_ENERGY_CELL).asBlock());
+        var blockBuilder = getVariantBuilder(MEGABlocks.MEGA_ENERGY_CELL.asBlock());
         var models = new ArrayList<ModelFile>();
         for (var i = 0; i < 5; i++) {
-            var model = models().cubeAll("block/" + MEGABlocks.MEGA_ENERGY_CELL.getId().getPath() + "_" + i,
+            var model = models().cubeAll("block/mega_energy_cell_" + i,
                     MEGACells.makeId("block/mega_energy_cell_" + i));
             blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i).setModels(new ConfiguredModel(model));
             models.add(model);
         }
-        var item = itemModels().withExistingParent("item/" + MEGABlocks.MEGA_ENERGY_CELL.getId().getPath(),
+        var item = itemModels().withExistingParent("item/mega_energy_cell",
                 models.get(0).getLocation());
         for (var i = 1; i < models.size(); i++) {
             float fillFactor = (i - 1) / (float) (models.size() - 1);
