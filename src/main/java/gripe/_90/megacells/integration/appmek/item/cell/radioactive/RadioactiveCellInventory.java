@@ -17,7 +17,10 @@ import appeng.api.storage.cells.StorageCell;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 
+import me.ramidzkh.mekae2.ae2.MekanismKey;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
+import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
+import mekanism.common.registries.MekanismGases;
 
 public class RadioactiveCellInventory implements StorageCell {
 
@@ -104,9 +107,18 @@ public class RadioactiveCellInventory implements StorageCell {
         return this.cellType.getConfigInventory(this.i);
     }
 
+    private boolean isBlackListed(AEKey what) {
+        if (this.partitionList.isListed(what) && what instanceof MekanismKey key) {
+            return ChemicalAttributeValidator.DEFAULT.process(key.getStack())
+                    || key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical();
+        } else {
+            return true;
+        }
+    }
+
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-        if (amount == 0 || !MekanismKeyType.TYPE.contains(what) || !this.partitionList.isListed(what)) {
+        if (amount == 0 || !MekanismKeyType.TYPE.contains(what) || isBlackListed(what)) {
             return 0;
         }
 
@@ -118,10 +130,6 @@ public class RadioactiveCellInventory implements StorageCell {
         }
 
         if (this.storedChemical != null && !this.storedChemical.equals(what)) {
-            return 0;
-        }
-
-        if (this.cellType.isBlackListed(this.i, what)) {
             return 0;
         }
 
