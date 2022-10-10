@@ -1,0 +1,19 @@
+{
+  "type": "lazierae2:etcher",
+  "output": {
+    "item": "megacells:radioactive_cell_component"
+  },
+  "input": [
+    {
+      "item": "ae2:cell_component_256k"
+    },
+    {
+      "item": "ae2:singularity"
+    },
+    {
+      "item": "mekanism:radioactive_waste_barrel"
+    }
+  ],
+  "process_time": 120,
+  "energy_cost": 1500
+}

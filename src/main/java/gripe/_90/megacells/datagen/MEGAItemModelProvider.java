@@ -48,6 +48,8 @@ public class MEGAItemModelProvider extends ItemModelProvider {
 
         flatSingleLayer(MEGAItems.BULK_CELL_COMPONENT.asItem());
         cell(MEGAItems.BULK_ITEM_CELL.asItem());
+        flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT.asItem());
+        cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem());
 
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
