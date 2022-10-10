@@ -17,6 +17,7 @@ import appeng.core.localization.Tooltips;
 public class MEGAEnergyCellBlockItem extends AEBaseBlockItemChargeable {
 
     // TODO: stop being lame and PR a proper energy cell refactor
+    // (EDIT 10/10/22: good job retard you forgot this)
     public MEGAEnergyCellBlockItem(Block block, Properties props) {
         super(block, props);
     }
