@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import appeng.block.AEBaseBlockItemChargeable;
+import appeng.block.networking.EnergyCellBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -42,7 +44,7 @@ public final class MEGABlocks {
             .sound(SoundType.METAL);
 
     // spotless:off
-    public static final BlockDefinition<MEGAEnergyCellBlock> MEGA_ENERGY_CELL = block("mega_energy_cell", MEGAEnergyCellBlock::new, MEGAEnergyCellBlockItem::new);
+    public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block("mega_energy_cell", () -> new EnergyCellBlock(12800000, 12800), MEGAEnergyCellBlockItem::new);
 
     public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT), null);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("mega_crafting_accelerator", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);

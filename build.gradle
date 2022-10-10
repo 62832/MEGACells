@@ -120,6 +120,14 @@ repositories {
     }
 
     maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    maven {
         url = uri("https://dvs1.progwml6.com/files/maven/")
         content {
             includeGroup("mezz.jei")
@@ -130,7 +138,8 @@ repositories {
 dependencies {
     minecraft("net.minecraftforge:forge:1.19.2-${forge_version}")
 
-    implementation(fg.deobf("appeng:appliedenergistics2:${ae2_version}"))
+    // implementation(fg.deobf("appeng:appliedenergistics2:${ae2_version}"))
+    implementation(fg.deobf("maven.modrinth:ae2:forge-${ae2_version}"))
 
     compileOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
     runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
