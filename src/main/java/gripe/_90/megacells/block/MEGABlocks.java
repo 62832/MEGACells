@@ -8,8 +8,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import appeng.block.AEBaseBlockItemChargeable;
-import appeng.block.networking.EnergyCellBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -20,6 +18,7 @@ import net.minecraft.world.level.material.Material;
 
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
+import appeng.block.networking.EnergyCellBlock;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 
