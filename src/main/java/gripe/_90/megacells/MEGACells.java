@@ -2,9 +2,13 @@ package gripe._90.megacells;
 
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -17,16 +21,14 @@ import net.minecraftforge.registries.RegisterEvent;
 import gripe._90.megacells.block.MEGABlocks;
 import gripe._90.megacells.block.entity.MEGABlockEntities;
 import gripe._90.megacells.datagen.MEGADataGenerators;
-import gripe._90.megacells.init.InitBlockEntities;
-import gripe._90.megacells.init.InitBlocks;
-import gripe._90.megacells.init.InitItems;
-import gripe._90.megacells.init.InitStorageCells;
-import gripe._90.megacells.init.InitUpgrades;
-import gripe._90.megacells.init.client.InitAutoRotatingModel;
-import gripe._90.megacells.init.client.InitBlockEntityRenderers;
-import gripe._90.megacells.init.client.InitBuiltInModels;
-import gripe._90.megacells.init.client.InitItemColors;
-import gripe._90.megacells.init.client.InitRenderTypes;
+import gripe._90.megacells.init.ae2.InitStorageCells;
+import gripe._90.megacells.init.ae2.InitUpgrades;
+import gripe._90.megacells.init.loader.Registration;
+import gripe._90.megacells.init.loader.client.InitAutoRotatingModel;
+import gripe._90.megacells.init.loader.client.InitBlockEntityRenderers;
+import gripe._90.megacells.init.loader.client.InitBuiltInModels;
+import gripe._90.megacells.init.loader.client.InitItemColors;
+import gripe._90.megacells.init.loader.client.InitRenderTypes;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
 
@@ -34,6 +36,13 @@ import gripe._90.megacells.item.MEGAItems;
 public class MEGACells {
 
     public static final String MODID = "megacells";
+
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MEGACells.MODID) {
+        @Override
+        public @NotNull ItemStack makeIcon() {
+            return new ItemStack(MEGAItems.ITEM_CELL_256M);
+        }
+    };
 
     public static ResourceLocation makeId(String path) {
         return new ResourceLocation(MEGACells.MODID, path);
@@ -53,9 +62,9 @@ public class MEGACells {
         AppMekItems.init();
 
         bus.addListener((RegisterEvent event) -> {
-            InitBlocks.init(ForgeRegistries.BLOCKS);
-            InitItems.init(ForgeRegistries.ITEMS);
-            InitBlockEntities.init(ForgeRegistries.BLOCK_ENTITY_TYPES);
+            Registration.initBlocks(ForgeRegistries.BLOCKS);
+            Registration.initItems(ForgeRegistries.ITEMS);
+            Registration.initBlockEntities(ForgeRegistries.BLOCK_ENTITY_TYPES);
         });
 
         bus.addListener(MEGADataGenerators::onGatherData);

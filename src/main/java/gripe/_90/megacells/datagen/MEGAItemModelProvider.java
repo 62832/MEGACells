@@ -12,11 +12,11 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.core.MEGACellType;
+import gripe._90.megacells.item.core.MEGATier;
 
 public class MEGAItemModelProvider extends ItemModelProvider {
 

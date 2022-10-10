@@ -1,4 +1,4 @@
-package gripe._90.megacells.init;
+package gripe._90.megacells.init.ae2;
 
 import java.util.stream.Stream;
 

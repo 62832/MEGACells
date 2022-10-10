@@ -24,7 +24,6 @@ import appeng.blockentity.networking.EnergyCellBlockEntity;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
 
 @SuppressWarnings("unused")
 public final class MEGABlockEntities {
@@ -50,11 +49,11 @@ public final class MEGABlockEntities {
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(String id, Class<T> entityClass,
             BlockEntityFactory<T> factory,
-            BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
+            MEGABlocks.BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
         Preconditions.checkArgument(blockDefinitions.length > 0);
 
         var blocks = Arrays.stream(blockDefinitions)
-                .map(BlockDefinition::asBlock)
+                .map(MEGABlocks.BlockDefinition::asBlock)
                 .toArray(AEBaseEntityBlock[]::new);
 
         AtomicReference<BlockEntityType<T>> typeHolder = new AtomicReference<>();

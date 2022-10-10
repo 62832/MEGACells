@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.loader.client;
 
 import java.util.stream.Stream;
 

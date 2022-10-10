@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.loader.client;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;

@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.loader.client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +20,9 @@ import appeng.client.render.model.AutoRotatingBakedModel;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
 
 public class InitAutoRotatingModel {
-    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
+    private static final Set<MEGABlocks.BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR,
             MEGABlocks.CRAFTING_STORAGE_1M,
@@ -57,7 +56,7 @@ public class InitAutoRotatingModel {
         }
     }
 
-    private static void register(BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
+    private static void register(MEGABlocks.BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
         String path = block.getId().getPath();
         CUSTOMIZERS.put(path, customizer);
     }

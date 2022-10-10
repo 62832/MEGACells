@@ -6,8 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.items.AEBaseItem;
 
@@ -18,7 +16,6 @@ public class MEGARadioactiveCell extends AEBaseItem implements IRadioactiveCellI
         super(properties.stacksTo(1));
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack is, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
         addCellInformationToTooltip(is, lines);

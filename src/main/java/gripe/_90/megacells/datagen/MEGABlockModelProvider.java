@@ -15,7 +15,6 @@ import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
 
 public class MEGABlockModelProvider extends BlockStateProvider {
 
@@ -25,7 +24,7 @@ public class MEGABlockModelProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        energyCell(MEGABlocks.MEGA_ENERGY_CELL, "mega_energy_cell");
+        energyCell();
         craftingModel(MEGABlocks.MEGA_CRAFTING_UNIT, "unit");
         craftingModel(MEGABlocks.CRAFTING_STORAGE_1M, "1m_storage");
         craftingModel(MEGABlocks.CRAFTING_STORAGE_4M, "4m_storage");
@@ -43,7 +42,7 @@ public class MEGABlockModelProvider extends BlockStateProvider {
         });
     }
 
-    private void craftingModel(BlockDefinition<?> block, String name) {
+    private void craftingModel(MEGABlocks.BlockDefinition<?> block, String name) {
         builtInBlockModel("crafting/" + name + "_formed");
         var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
         getVariantBuilder(block.asBlock())
@@ -54,16 +53,17 @@ public class MEGABlockModelProvider extends BlockStateProvider {
         simpleBlockItem(block.asBlock(), blockModel);
     }
 
-    private void energyCell(BlockDefinition<?> block, String baseTexture) {
-        var blockBuilder = getVariantBuilder(block.asBlock());
+    private void energyCell() {
+        var blockBuilder = getVariantBuilder(((MEGABlocks.BlockDefinition<?>) MEGABlocks.MEGA_ENERGY_CELL).asBlock());
         var models = new ArrayList<ModelFile>();
         for (var i = 0; i < 5; i++) {
-            var model = models().cubeAll("block/" + block.getId().getPath() + "_" + i,
-                    MEGACells.makeId("block/" + baseTexture + "_" + i));
+            var model = models().cubeAll("block/" + MEGABlocks.MEGA_ENERGY_CELL.getId().getPath() + "_" + i,
+                    MEGACells.makeId("block/mega_energy_cell_" + i));
             blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i).setModels(new ConfiguredModel(model));
             models.add(model);
         }
-        var item = itemModels().withExistingParent("item/" + block.getId().getPath(), models.get(0).getLocation());
+        var item = itemModels().withExistingParent("item/" + MEGABlocks.MEGA_ENERGY_CELL.getId().getPath(),
+                models.get(0).getLocation());
         for (var i = 1; i < models.size(); i++) {
             float fillFactor = (i - 1) / (float) (models.size() - 1);
             item.override().predicate(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID, fillFactor).model(models.get(i));

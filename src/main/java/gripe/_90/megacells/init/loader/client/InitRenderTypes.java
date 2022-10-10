@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.loader.client;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -8,11 +8,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
 
 @OnlyIn(Dist.CLIENT)
 public class InitRenderTypes {
-    private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {
+    private static final MEGABlocks.BlockDefinition<?>[] CUTOUT_BLOCKS = {
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR,
             MEGABlocks.CRAFTING_STORAGE_1M,

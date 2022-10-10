@@ -8,8 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.block.AEBaseBlockItemChargeable;
 import appeng.core.localization.Tooltips;
@@ -23,7 +21,6 @@ public class MEGAEnergyCellBlockItem extends AEBaseBlockItemChargeable {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void addCheckedInformation(ItemStack stack, Level level, List<Component> lines,
             TooltipFlag advancedTooltips) {
         double internalCurrentPower = 0;
