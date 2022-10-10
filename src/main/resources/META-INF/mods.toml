@@ -19,7 +19,7 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId="ae2"
     mandatory=true
-    versionRange = "[11.1.3,12.0.0)"
+    versionRange = "[11.6.1-beta,12.0.0)"
     ordering="AFTER"
     side="BOTH"
 
