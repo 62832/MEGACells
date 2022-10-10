@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import appeng.blockentity.networking.EnergyCellBlockEntity;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
@@ -21,6 +20,7 @@ import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
+import appeng.blockentity.networking.EnergyCellBlockEntity;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
