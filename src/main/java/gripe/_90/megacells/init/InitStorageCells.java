@@ -7,6 +7,7 @@ import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 import gripe._90.megacells.item.core.MEGACellType;
@@ -15,6 +16,7 @@ public class InitStorageCells {
 
     public static void init() {
         StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
+        RadioactiveCellHandler.init();
 
         initModels();
     }
