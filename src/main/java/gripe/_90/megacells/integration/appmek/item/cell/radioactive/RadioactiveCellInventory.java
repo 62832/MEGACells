@@ -79,11 +79,11 @@ public class RadioactiveCellInventory implements StorageCell {
         if (this.chemAmount == 0) {
             return CellState.EMPTY;
         }
-        if (this.chemAmount > MAX_MB / 2) {
-            return CellState.TYPES_FULL;
-        }
         if (this.chemAmount == MAX_MB) {
             return CellState.FULL;
+        }
+        if (this.chemAmount > MAX_MB / 2) {
+            return CellState.TYPES_FULL;
         }
         if (!this.storedChemical.equals(getFilterItem())) {
             return CellState.FULL;
