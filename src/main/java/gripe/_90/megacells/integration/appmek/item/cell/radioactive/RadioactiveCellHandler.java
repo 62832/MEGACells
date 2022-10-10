@@ -60,9 +60,9 @@ public class RadioactiveCellHandler implements ICellHandler {
                 if (!containedType.equals(filterItem)) {
                     lines.add(Tooltips.of("Mismatched filter!").withStyle(ChatFormatting.DARK_RED));
                 }
-                if (handler.isBlackListed(filterItem)) {
-                    lines.add(Tooltips.of("Filter chemical unsupported!").withStyle(ChatFormatting.DARK_RED));
-                }
+            }
+            if (handler.isBlackListed(filterItem)) {
+                lines.add(Tooltips.of("Filter chemical unsupported!").withStyle(ChatFormatting.DARK_RED));
             }
         } else {
             lines.add(Tooltips.of("Not Partitioned"));
