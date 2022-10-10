@@ -2,13 +2,12 @@ package gripe._90.megacells.init.client;
 
 import java.util.stream.Stream;
 
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
