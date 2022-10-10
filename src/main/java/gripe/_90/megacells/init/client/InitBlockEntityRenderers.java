@@ -6,9 +6,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import gripe._90.megacells.block.entity.MEGABlockEntities;
-
 import appeng.client.render.crafting.CraftingMonitorRenderer;
+
+import gripe._90.megacells.block.entity.MEGABlockEntities;
 
 @OnlyIn(Dist.CLIENT)
 public class InitBlockEntityRenderers {

@@ -14,6 +14,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import appeng.api.util.AEColor;
+import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.AEItems;
+import appeng.core.definitions.AEParts;
+import appeng.datagen.providers.tags.ConventionTags;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
 import gripe._90.megacells.core.BlockDefinition;
@@ -24,12 +30,6 @@ import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
 import gripe._90.megacells.item.core.IMEGACellType;
 import gripe._90.megacells.item.core.MEGACellType;
-
-import appeng.api.util.AEColor;
-import appeng.core.definitions.AEBlocks;
-import appeng.core.definitions.AEItems;
-import appeng.core.definitions.AEParts;
-import appeng.datagen.providers.tags.ConventionTags;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {

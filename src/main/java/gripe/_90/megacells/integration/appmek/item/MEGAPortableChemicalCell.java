@@ -1,18 +1,19 @@
-package gripe._90.megacells.integration.appmek;
+package gripe._90.megacells.integration.appmek.item;
 
 import net.minecraft.world.item.ItemStack;
-
-import gripe._90.megacells.core.MEGATier;
-import gripe._90.megacells.item.MEGAStorageCell;
 
 import appeng.api.stacks.AEKey;
 
 import me.ramidzkh.mekae2.ae2.MekanismKey;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 
-public class MEGAChemicalCell extends MEGAStorageCell {
-    public MEGAChemicalCell(Properties properties, MEGATier tier) {
-        super(properties, tier, AppMekCellType.CHEMICAL);
+import gripe._90.megacells.core.MEGATier;
+import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.item.MEGAPortableCell;
+
+public class MEGAPortableChemicalCell extends MEGAPortableCell {
+    public MEGAPortableChemicalCell(Properties props, MEGATier tier) {
+        super(props.stacksTo(1), tier, AppMekCellType.CHEMICAL);
     }
 
     @Override

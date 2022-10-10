@@ -2,12 +2,12 @@ package gripe._90.megacells.init;
 
 import java.util.stream.Stream;
 
-import gripe._90.megacells.integration.appmek.AppMekCellType;
-import gripe._90.megacells.item.core.MEGACellType;
-
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
+
+import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.item.core.MEGACellType;
 
 public class InitUpgrades {
     public static void init() {

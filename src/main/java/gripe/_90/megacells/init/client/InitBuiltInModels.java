@@ -10,11 +10,11 @@ import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import gripe._90.megacells.block.MEGACraftingUnitType;
-import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
-
 import appeng.client.render.SimpleModelLoader;
 import appeng.client.render.crafting.CraftingCubeModel;
+
+import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 
 @OnlyIn(Dist.CLIENT)
 public class InitBuiltInModels {

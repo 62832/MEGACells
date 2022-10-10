@@ -1,4 +1,4 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.integration.appmek.item;
 
 import java.util.List;
 
@@ -9,14 +9,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.UpgradeInventories;
 import appeng.items.AEBaseItem;
 
-import gripe._90.megacells.item.cell.bulk.IBulkCellItem;
+import gripe._90.megacells.integration.appmek.item.cell.radioactive.IRadioactiveCellItem;
 
-public class MEGABulkCell extends AEBaseItem implements IBulkCellItem {
-    public MEGABulkCell(Properties properties) {
+public class MEGARadioactiveCell extends AEBaseItem implements IRadioactiveCellItem {
+    public MEGARadioactiveCell(Properties properties) {
         super(properties.stacksTo(1));
     }
 
@@ -26,9 +24,4 @@ public class MEGABulkCell extends AEBaseItem implements IBulkCellItem {
         addCellInformationToTooltip(is, lines);
     }
 
-    @Override
-    public IUpgradeInventory getUpgrades(ItemStack is) {
-        // placeholder for later
-        return UpgradeInventories.forItem(is, 1);
-    }
 }

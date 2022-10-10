@@ -14,13 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
-
 import appeng.block.AEBaseBlock;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.model.AutoRotatingBakedModel;
+
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.core.BlockDefinition;
 
 public class InitAutoRotatingModel {
     private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(

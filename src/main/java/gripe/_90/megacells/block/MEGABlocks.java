@@ -16,14 +16,14 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.BlockDefinition;
-import gripe._90.megacells.item.MEGAItems;
-
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
+
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.BlockDefinition;
+import gripe._90.megacells.item.MEGAItems;
 
 public final class MEGABlocks {
 
