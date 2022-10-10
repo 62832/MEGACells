@@ -15,7 +15,7 @@ import appeng.util.ConfigInventory;
 
 public interface IBulkCellItem extends ICellWorkbenchItem {
     default ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(AEItemKey.filter(), is);
+        return CellConfig.create(AEItemKey.filter(), is, 1);
     }
 
     default void addCellInformationToTooltip(ItemStack is, List<Component> lines) {

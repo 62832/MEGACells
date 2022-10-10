@@ -16,7 +16,7 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
 public interface IRadioactiveCellItem extends ICellWorkbenchItem {
     default ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(MekanismKeyType.TYPE.filter(), is);
+        return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
     }
 
     default void addCellInformationToTooltip(ItemStack is, List<Component> lines) {
