@@ -2,6 +2,9 @@ package gripe._90.megacells.init.client;
 
 import java.util.stream.Stream;
 
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -25,6 +28,10 @@ public class InitItemColors {
             event.getItemColors().register(MEGAStorageCell::getColor, cell);
         }
         event.getItemColors().register(MEGAStorageCell::getColor, MEGAItems.BULK_ITEM_CELL.asItem());
+
+        if (AppMekIntegration.isAppMekLoaded()) {
+            event.getItemColors().register(MEGAStorageCell::getColor, AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem());
+        }
 
         for (var cell : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
