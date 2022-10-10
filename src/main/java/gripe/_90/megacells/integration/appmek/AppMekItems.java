@@ -7,14 +7,14 @@ import net.minecraft.world.item.Item;
 import appeng.items.materials.MaterialItem;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.ItemDefinition;
-import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.integration.appmek.item.MEGAChemicalCell;
 import gripe._90.megacells.integration.appmek.item.MEGAPortableChemicalCell;
 import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.item.MEGAItems.ItemDefinition;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
+import gripe._90.megacells.item.core.MEGATier;
 
 public class AppMekItems {
 
@@ -53,7 +53,7 @@ public class AppMekItems {
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
         if (AppMekIntegration.isAppMekLoaded()) {
-            Item.Properties p = new Item.Properties().tab(MEGAItems.CREATIVE_TAB);
+            Item.Properties p = new Item.Properties().tab(MEGACells.CREATIVE_TAB);
             T item = factory.apply(p);
 
             ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);

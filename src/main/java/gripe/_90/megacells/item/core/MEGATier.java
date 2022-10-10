@@ -1,4 +1,4 @@
-package gripe._90.megacells.core;
+package gripe._90.megacells.item.core;
 
 import net.minecraft.world.item.Item;
 

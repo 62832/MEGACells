@@ -3,13 +3,20 @@ package gripe._90.megacells.block;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -23,7 +30,6 @@ import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.BlockDefinition;
 import gripe._90.megacells.item.MEGAItems;
 
 public final class MEGABlocks {
@@ -68,7 +74,7 @@ public final class MEGABlocks {
         // Create block and matching item
         T block = blockSupplier.get();
 
-        Item.Properties itemProperties = new Item.Properties().tab(MEGAItems.CREATIVE_TAB);
+        Item.Properties itemProperties = new Item.Properties().tab(MEGACells.CREATIVE_TAB);
 
         BlockItem item;
         if (itemFactory != null) {
@@ -84,5 +90,24 @@ public final class MEGABlocks {
 
         BLOCKS.add(definition);
         return definition;
+    }
+
+    public static class BlockDefinition<T extends Block> extends MEGAItems.ItemDefinition<BlockItem> {
+
+        private final T block;
+
+        public BlockDefinition(ResourceLocation id, T block, BlockItem item) {
+            super(id, item);
+            this.block = Objects.requireNonNull(block, "block");
+        }
+
+        public final @NotNull T asBlock() {
+            return this.block;
+        }
+
+        public final ItemStack stack(int stackSize) {
+            Preconditions.checkArgument(stackSize > 0);
+            return new ItemStack(block, stackSize);
+        }
     }
 }

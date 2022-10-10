@@ -22,14 +22,13 @@ import appeng.datagen.providers.tags.ConventionTags;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.core.BlockDefinition;
-import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
 import gripe._90.megacells.item.core.IMEGACellType;
 import gripe._90.megacells.item.core.MEGACellType;
+import gripe._90.megacells.item.core.MEGATier;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {
@@ -171,7 +170,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACells.makeId("cells/" + MEGACells.getItemPath(housing)));
     }
 
-    private void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, MEGABlocks.BlockDefinition<?> unit, ItemLike part) {
         ShapelessRecipeBuilder.shapeless(unit)
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)

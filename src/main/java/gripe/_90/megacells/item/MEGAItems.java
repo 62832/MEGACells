@@ -3,22 +3,22 @@ package gripe._90.megacells.item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.ItemDefinition;
-import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.item.core.IMEGACellType;
 import gripe._90.megacells.item.core.MEGACellType;
+import gripe._90.megacells.item.core.MEGATier;
 
 public final class MEGAItems {
 
@@ -33,13 +33,6 @@ public final class MEGAItems {
     }
 
     // spotless:off
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MEGACells.MODID) {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(MEGAItems.ITEM_CELL_256M);
-        }
-    };
-
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("mega_item_cell_housing", MaterialItem::new);
     public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("mega_fluid_cell_housing", MaterialItem::new);
 
@@ -90,12 +83,33 @@ public final class MEGAItems {
     }
 
     private static <T extends Item> ItemDefinition<T> item(String id, Function<Item.Properties, T> factory) {
-        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+        Item.Properties p = new Item.Properties().tab(MEGACells.CREATIVE_TAB);
         T item = factory.apply(p);
 
         ItemDefinition<T> definition = new ItemDefinition<>(MEGACells.makeId(id), item);
         ITEMS.add(definition);
 
         return definition;
+    }
+
+    public static class ItemDefinition<T extends Item> implements ItemLike {
+
+        private final ResourceLocation id;
+        private final T item;
+
+        public ItemDefinition(ResourceLocation id, T item) {
+            Objects.requireNonNull(id);
+            this.id = id;
+            this.item = item;
+        }
+
+        public ResourceLocation getId() {
+            return this.id;
+        }
+
+        @Override
+        public final @NotNull T asItem() {
+            return this.item;
+        }
     }
 }

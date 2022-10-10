@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import appeng.items.tools.powered.PortableCellItem;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.core.MEGATier;
 import gripe._90.megacells.item.core.IMEGACellType;
+import gripe._90.megacells.item.core.MEGATier;
 
 public class MEGAPortableCell extends PortableCellItem {
 
