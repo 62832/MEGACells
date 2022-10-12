@@ -11,14 +11,14 @@ import gripe._90.megacells.item.MEGAItems;
 
 public class Registration {
 
-    public static void initBlocks(IForgeRegistry<Block> registry) {
+    public static void registerBlocks(IForgeRegistry<Block> registry) {
         for (var definition : MEGABlocks.getBlocks()) {
             Block block = definition.asBlock();
             registry.register(definition.getId(), block);
         }
     }
 
-    public static void initItems(IForgeRegistry<Item> registry) {
+    public static void registerItems(IForgeRegistry<Item> registry) {
         for (var definition : MEGABlocks.getBlocks()) {
             var item = definition.asItem();
             registry.register(definition.getId(), item);
@@ -29,7 +29,7 @@ public class Registration {
         }
     }
 
-    public static void initBlockEntities(IForgeRegistry<BlockEntityType<?>> registry) {
+    public static void registerBlockEntities(IForgeRegistry<BlockEntityType<?>> registry) {
         for (var be : MEGABlockEntities.getBlockEntityTypes().entrySet()) {
             registry.register(be.getKey(), be.getValue());
         }

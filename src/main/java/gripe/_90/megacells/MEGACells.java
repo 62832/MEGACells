@@ -62,9 +62,15 @@ public class MEGACells {
         AppMekItems.init();
 
         bus.addListener((RegisterEvent event) -> {
-            Registration.initBlocks(ForgeRegistries.BLOCKS);
-            Registration.initItems(ForgeRegistries.ITEMS);
-            Registration.initBlockEntities(ForgeRegistries.BLOCK_ENTITY_TYPES);
+            if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
+                Registration.registerBlocks(ForgeRegistries.BLOCKS);
+            }
+            if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+                Registration.registerItems(ForgeRegistries.ITEMS);
+            }
+            if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
+                Registration.registerBlockEntities(ForgeRegistries.BLOCK_ENTITY_TYPES);
+            }
         });
 
         bus.addListener(MEGADataGenerators::onGatherData);
