@@ -3,8 +3,6 @@ package gripe._90.megacells.init.loader.client;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
@@ -16,7 +14,6 @@ import appeng.client.render.crafting.CraftingCubeModel;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 
-@OnlyIn(Dist.CLIENT)
 public class InitBuiltInModels {
 
     private static BiConsumer<String, IGeometryLoader<?>> register = null;

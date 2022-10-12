@@ -2,14 +2,11 @@ package gripe._90.megacells.init.loader.client;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import gripe._90.megacells.block.MEGABlocks;
 
-@OnlyIn(Dist.CLIENT)
 public class InitRenderTypes {
     private static final MEGABlocks.BlockDefinition<?>[] CUTOUT_BLOCKS = {
             MEGABlocks.MEGA_CRAFTING_UNIT,

@@ -55,8 +55,8 @@ public class MEGACells {
     public MEGACells() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        MEGAItems.init();
         MEGABlocks.init();
+        MEGAItems.init();
         MEGABlockEntities.init();
 
         AppMekItems.init();
