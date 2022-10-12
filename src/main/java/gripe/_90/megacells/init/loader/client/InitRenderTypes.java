@@ -9,7 +9,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import gripe._90.megacells.block.MEGABlocks;
 
-@OnlyIn(Dist.CLIENT)
 public class InitRenderTypes {
     private static final MEGABlocks.BlockDefinition<?>[] CUTOUT_BLOCKS = {
             MEGABlocks.MEGA_CRAFTING_UNIT,

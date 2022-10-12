@@ -10,7 +10,6 @@ import appeng.client.render.crafting.CraftingMonitorRenderer;
 
 import gripe._90.megacells.block.entity.MEGABlockEntities;
 
-@OnlyIn(Dist.CLIENT)
 public class InitBlockEntityRenderers {
 
     public static void init() {

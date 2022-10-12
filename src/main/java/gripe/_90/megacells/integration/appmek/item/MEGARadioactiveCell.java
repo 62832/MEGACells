@@ -18,8 +18,6 @@ public class MEGARadioactiveCell extends AEBaseItem implements IRadioactiveCellI
         super(properties.stacksTo(1));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
     public void appendHoverText(ItemStack is, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
         addCellInformationToTooltip(is, lines);
     }

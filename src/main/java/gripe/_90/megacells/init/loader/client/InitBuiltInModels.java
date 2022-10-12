@@ -16,7 +16,6 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 
-@OnlyIn(Dist.CLIENT)
 public class InitBuiltInModels {
 
     public static void init() {

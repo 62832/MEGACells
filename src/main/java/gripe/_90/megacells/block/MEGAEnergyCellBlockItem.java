@@ -22,7 +22,6 @@ public class MEGAEnergyCellBlockItem extends AEBaseBlockItemChargeable {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void addCheckedInformation(ItemStack stack, Level level, List<Component> lines,
             TooltipFlag advancedTooltips) {
         double internalCurrentPower = 0;
