@@ -7,7 +7,7 @@ displayURL="https://github.com/62832/MEGACells"
 
 [[mods]]
 modId="megacells"
-version="1.4.1-1.19.2"
+version="${version}"
 displayName="MEGA Cells"
 logoFile="logo.png"
 credits="s/o to Technici4n, Gimpansor, MasterYodA, PrototypeTrousers, ramidzkh, RaVen"
