@@ -15,5 +15,11 @@
     }
   ],
   "process_time": 120,
-  "energy_cost": 1500
+  "energy_cost": 1500,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "lazierae2"
+    }
+  ]
 }
