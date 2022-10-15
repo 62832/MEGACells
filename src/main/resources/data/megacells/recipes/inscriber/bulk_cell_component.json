@@ -1,0 +1,18 @@
+{
+  "type": "ae2:inscriber",
+  "mode": "press",
+  "result": {
+    "item": "megacells:bulk_cell_component"
+  },
+  "ingredients": {
+    "top": {
+      "item": "megacells:cell_component_16m"
+    },
+    "middle": {
+      "item": "ae2:singularity"
+    },
+    "bottom": {
+      "item": "ae2:spatial_cell_component_16"
+    }
+  }
+}

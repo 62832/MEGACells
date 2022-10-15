@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "megacells",
+  "version": "1.5.0-1.19.2",
+
+  "name": "MEGA Cells",
+  "description": "ME Greater Accumulation Cells - For when kilobytes just won't do.",
+  "authors": ["90"],
+  "contact": {
+    "homepage": "https://mega.90.gripe",
+    "sources": "https://github.com/62832/MEGACells"
+  },
+
+  "license": "LGPLv3.0",
+  "icon": "assets/megacells/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "ae2": ["gripe._90.megacells.MEGACells"],
+    "ae2:client": ["gripe._90.megacells.MEGACells$Client"],
+
+    "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
+  },
+  "mixins": ["megacells.mixins.json"],
+  "accessWidener": "megacells.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric-api": "*",
+    "minecraft": "~1.19",
+    "java": ">=17",
+    "ae2": ">=12.8.2-beta"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
