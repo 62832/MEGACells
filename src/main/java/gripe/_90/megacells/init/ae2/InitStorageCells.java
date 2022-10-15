@@ -6,6 +6,7 @@ import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 import gripe._90.megacells.item.core.MEGACellType;
@@ -35,5 +36,7 @@ public class InitStorageCells {
             StorageCellModels.registerModel(portableFluidCell,
                     MEGACells.makeId("block/drive/cells/portable_mega_fluid_cell"));
         }
+
+        AppBotIntegration.initCellModels();
     }
 }

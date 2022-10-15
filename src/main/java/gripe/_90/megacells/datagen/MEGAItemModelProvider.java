@@ -12,6 +12,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.integration.appbot.AppBotCellType;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.core.MEGACellType;
 import gripe._90.megacells.item.core.MEGATier;
@@ -32,13 +34,16 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem());
         flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
 
+        flatSingleLayer(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem());
+
         for (var tier : MEGATier.values()) {
             flatSingleLayer(tier.getComponent());
         }
 
         for (var storage : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getCells().stream(),
+                AppBotCellType.MANA.getCells().stream()).flatMap(s -> s).toList()) {
             cell(storage);
         }
 
@@ -47,7 +52,8 @@ public class MEGAItemModelProvider extends ItemModelProvider {
 
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
-                MEGACellType.FLUID.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getPortableCells().stream(),
+                AppBotCellType.MANA.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(portable);
         }
     }

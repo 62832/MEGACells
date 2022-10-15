@@ -43,6 +43,49 @@ repositories {
 			includeGroup("mezz.jei")
 		}
 	}
+
+	maven {
+		url = uri("https://maven.blamejared.com/")
+
+		content {
+			includeGroup("vazkii.botania")
+			includeGroup("vazkii.patchouli")
+		}
+	}
+
+	maven {
+		url = uri("https://ladysnake.jfrog.io/artifactory/mods/")
+
+		content {
+			includeGroup("dev.onyxstudios.cardinal-components-api")
+			includeGroup("io.github.onyxstudios.Cardinal-Components-API")
+		}
+	}
+
+	maven {
+		url = uri("https://maven.terraformersmc.com/")
+
+		content {
+			includeGroup("com.terraformersmc")
+			includeGroup("dev.emi")
+		}
+	}
+
+	maven {
+		url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+
+		content {
+			includeGroup("com.jamieswhiteshirt")
+		}
+	}
+
+	maven {
+		url = uri("https://jitpack.io/")
+
+		content {
+			includeGroup("com.github.emilyploszaj")
+		}
+	}
 }
 
 dependencies {
@@ -59,6 +102,11 @@ dependencies {
 	modImplementation "maven.modrinth:ae2:fabric-${ae2_version}"
 
 	modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+
+	modCompileOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}"
+	modRuntimeOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}"
+	modCompileOnly "curse.maven:appbot-610632:${appbot_fileid}"
+	modRuntimeOnly "curse.maven:appbot-610632:${appbot_fileid}"
 
 	include modLocalRuntime("teamreborn:energy:${tr_energy_version}") {
 		exclude group: "net.fabricmc.fabric-api"

@@ -38,6 +38,20 @@
   "item.megacells.portable_fluid_cell_64m": "64M Portable Fluid Cell",
   "item.megacells.portable_fluid_cell_256m": "256M Portable Fluid Cell",
 
+  "item.megacells.mega_mana_cell_housing": "MEGA Mana Cell Housing",
+
+  "item.megacells.mana_storage_cell_1m": "1M MEGA Mana Storage Cell",
+  "item.megacells.mana_storage_cell_4m": "4M MEGA Mana Storage Cell",
+  "item.megacells.mana_storage_cell_16m": "16M MEGA Mana Storage Cell",
+  "item.megacells.mana_storage_cell_64m": "64M MEGA Mana Storage Cell",
+  "item.megacells.mana_storage_cell_256m": "256M MEGA Mana Storage Cell",
+
+  "item.megacells.portable_mana_cell_1m": "1M Portable Mana Cell",
+  "item.megacells.portable_mana_cell_4m": "4M Portable Mana Cell",
+  "item.megacells.portable_mana_cell_16m": "16M Portable Mana Cell",
+  "item.megacells.portable_mana_cell_64m": "64M Portable Mana Cell",
+  "item.megacells.portable_mana_cell_256m": "256M Portable Mana Cell",
+
   "block.megacells.mega_energy_cell": "Superdense Energy Cell",
 
   "block.megacells.1m_crafting_storage": "1M MEGA Crafting Storage",

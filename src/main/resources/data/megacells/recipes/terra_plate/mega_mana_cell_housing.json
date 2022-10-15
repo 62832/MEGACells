@@ -1,0 +1,18 @@
+{
+  "type": "botania:terra_plate",
+  "mana": 1000000,
+  "ingredients": [
+    {
+      "item": "appbot:mana_cell_housing"
+    },
+    {
+      "item": "ae2:sky_dust"
+    },
+    {
+      "item": "ae2:quartz_vibrant_glass"
+    }
+  ],
+  "result": {
+    "item": "megacells:mega_mana_cell_housing"
+  }
+}

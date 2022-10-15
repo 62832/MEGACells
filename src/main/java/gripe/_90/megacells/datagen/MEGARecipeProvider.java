@@ -29,6 +29,8 @@ import appeng.datagen.providers.tags.ConventionTags;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.integration.appbot.AppBotCellType;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
@@ -82,9 +84,14 @@ public class MEGARecipeProvider extends RecipeProvider {
                 MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
             cell(consumer, storage);
         }
+        for (var manaCell : AppBotCellType.MANA.getCells()) {
+            manaCell(consumer, manaCell);
+        }
+
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
-                MEGACellType.FLUID.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getPortableCells().stream(),
+                AppBotCellType.MANA.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(consumer, portable);
         }
 
@@ -170,6 +177,23 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))
                 .save(consumer, MEGACells.makeId("cells/standard/" + cellPath + "_with_housing"));
+    }
+
+    private void manaCell(Consumer<FinishedRecipe> consumer, Item cellItem) {
+        var cell = (MEGAStorageCell) cellItem;
+
+        var component = cell.getTier().getComponent();
+        var housing = AppBotItems.MEGA_MANA_CELL_HOUSING.asItem();
+
+        var componentPath = MEGACells.getItemPath(component);
+        var cellPath = MEGACells.getItemPath(cellItem);
+
+        ShapelessRecipeBuilder.shapeless(cellItem)
+                .requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
+                .requires(component)
+                .unlockedBy("has_" + componentPath, has(component))
+                .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))
+                .save(consumer, MEGACells.makeId("cells/standard/" + cellPath));
     }
 
     private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {

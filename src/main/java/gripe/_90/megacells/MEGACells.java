@@ -25,6 +25,7 @@ import gripe._90.megacells.init.loader.client.InitBuiltInModels;
 import gripe._90.megacells.init.loader.client.InitItemColors;
 import gripe._90.megacells.init.loader.client.InitItemModelsProperties;
 import gripe._90.megacells.init.loader.client.InitRenderTypes;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGAItems;
 
 public class MEGACells implements IAEAddonEntrypoint {
@@ -47,6 +48,8 @@ public class MEGACells implements IAEAddonEntrypoint {
         MEGABlocks.init();
         MEGAItems.init();
         MEGABlockEntities.init();
+
+        AppBotItems.init();
 
         Registration.registerBlocks(Registry.BLOCK);
         Registration.registerItems(Registry.ITEM);
