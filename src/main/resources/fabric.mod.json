@@ -19,7 +19,9 @@
     "ae2": ["gripe._90.megacells.MEGACells"],
     "ae2:client": ["gripe._90.megacells.MEGACells$Client"],
 
-    "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
+    "fabric-datagen": [
+      "gripe._90.megacells.datagen.MEGADataGenerators$Entrypoint"
+    ]
   },
   "mixins": ["megacells.mixins.json"],
   "accessWidener": "megacells.accesswidener",

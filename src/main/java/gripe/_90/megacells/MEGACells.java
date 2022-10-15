@@ -2,7 +2,6 @@ package gripe._90.megacells;
 
 import java.util.Objects;
 
-import gripe._90.megacells.init.loader.client.InitItemModelsProperties;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -24,6 +23,7 @@ import gripe._90.megacells.init.loader.client.InitAutoRotatingModel;
 import gripe._90.megacells.init.loader.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.loader.client.InitBuiltInModels;
 import gripe._90.megacells.init.loader.client.InitItemColors;
+import gripe._90.megacells.init.loader.client.InitItemModelsProperties;
 import gripe._90.megacells.init.loader.client.InitRenderTypes;
 import gripe._90.megacells.item.MEGAItems;
 

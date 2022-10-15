@@ -69,14 +69,17 @@ loom {
 	accessWidenerPath = file("src/main/resources/megacells.accesswidener")
 
 	runs {
-		datagenClient {
+		datagen {
 			inherit client
 			name "Minecraft Datagen"
 			vmArg "-Dfabric-api.datagen"
 			vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated")}"
 			vmArg "-Dfabric-api.datagen.strict-validation"
+			source "main"
 
-			runDir "build/datagen"
+			property "megacells.generateData", "true"
+			property "megacells.generateData.outputPath", file("src/generated/resources").absolutePath
+			property "megacells.generateData.existingData", file("src/main/resources").absolutePath
 		}
 	}
 }
@@ -99,11 +102,18 @@ jar {
 }
 
 sourceSets {
+	portaforgy
 	main {
+		compileClasspath += sourceSets.portaforgy.output
+		runtimeClasspath += sourceSets.portaforgy.output
 		resources {
 			srcDir 'src/generated/resources'
 		}
 	}
+}
+
+configurations {
+	portaforgyImplementation.extendsFrom(compileClasspath)
 }
 
 publishing {
@@ -124,7 +134,7 @@ publishing {
 
 spotless {
 	java {
-		target("src/main/java/**/*.java")
+		target("src/**/java/**/*.java")
 
 		endWithNewline()
 		indentWithSpaces()

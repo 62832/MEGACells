@@ -1,13 +1,22 @@
 package gripe._90.megacells.datagen;
 
+import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonObject;
+
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -27,13 +36,38 @@ import gripe._90.megacells.item.core.IMEGACellType;
 import gripe._90.megacells.item.core.MEGACellType;
 import gripe._90.megacells.item.core.MEGATier;
 
-public class MEGARecipeProvider extends FabricRecipeProvider {
-    protected MEGARecipeProvider(FabricDataGenerator generator) {
+public class MEGARecipeProvider extends RecipeProvider {
+
+    private final Path outputFolder;
+
+    public MEGARecipeProvider(DataGenerator generator) {
         super(generator);
+        this.outputFolder = generator.getOutputFolder();
     }
 
-    @Override
-    protected void generateRecipes(Consumer<FinishedRecipe> consumer) {
+    public void run(CachedOutput cache) {
+        Path path = outputFolder;
+        Set<ResourceLocation> set = Sets.newHashSet();
+        buildMEGACraftingRecipes((finishedRecipe) -> {
+            if (!set.add(finishedRecipe.getId())) {
+                throw new IllegalStateException("Duplicate recipe " + finishedRecipe.getId());
+            } else {
+                JsonObject json = finishedRecipe.serializeRecipe();
+                String modId = finishedRecipe.getId().getNamespace();
+                saveRecipe(cache, json,
+                        path.resolve("data/" + modId + "/recipes/" + finishedRecipe.getId().getPath() + ".json"));
+                JsonObject jsonObject = finishedRecipe.serializeAdvancement();
+                if (jsonObject != null) {
+                    modId = finishedRecipe.getId().getNamespace();
+                    saveAdvancement(cache, jsonObject, path.resolve("data/" + modId + "/advancements/"
+                            + finishedRecipe.getAdvancementId().getPath() + ".json"));
+                }
+
+            }
+        });
+    }
+
+    protected void buildMEGACraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         component(consumer, MEGATier._1M, AEItems.SKY_DUST.asItem());
         component(consumer, MEGATier._4M, AEItems.ENDER_DUST.asItem());
         component(consumer, MEGATier._16M, AEItems.ENDER_DUST.asItem());
