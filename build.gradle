@@ -22,6 +22,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 version = "${mega_version}-${minecraft_version}"
 group = 'gripe.90'
+archivesBaseName = 'megacells-forge'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
