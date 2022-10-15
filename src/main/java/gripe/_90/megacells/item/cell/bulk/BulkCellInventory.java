@@ -40,28 +40,13 @@ public class BulkCellInventory implements StorageCell {
         this.cellType = cellType;
         this.container = container;
 
-        this.storedItem = retrieveStoredItem();
-        this.itemCount = retrieveItemCount();
+        this.storedItem = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
+        this.itemCount = getTag().getLong(COUNT);
 
         var builder = IPartitionList.builder();
         var config = getConfigInventory();
         builder.addAll(config.keySet());
         this.partitionList = builder.build();
-    }
-
-    private AEKey retrieveStoredItem() {
-        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
-        // TODO: remove bulk cell conversion methods in MC 1.20
-        if (getTag().contains("keys")) {
-            return AEKey.fromTagGeneric(getTag().getList("keys", Tag.TAG_COMPOUND).getCompound(0));
-        } else {
-            return getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
-        }
-    }
-
-    private long retrieveItemCount() {
-        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
-        return getTag().contains("ic") ? getTag().getLong("ic") : getTag().getLong(COUNT);
     }
 
     private CompoundTag getTag() {
@@ -194,11 +179,6 @@ public class BulkCellInventory implements StorageCell {
             this.getTag().put(KEY, this.storedItem.toTagGeneric());
             this.getTag().putLong(COUNT, this.itemCount);
         }
-
-        // remove pre-1.4.0 NBT tags
-        getTag().remove("keys");
-        getTag().remove("amts");
-        getTag().remove("ic");
 
         this.isPersisted = true;
     }
