@@ -23,8 +23,8 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
     }
 
     @Override
-    public long getStorageBytes() {
-        return 1024L * 1024 * storageMb;
+    public int getStorageBytes() {
+        return 1024 * 1024 * storageMb;
     }
 
     @Override

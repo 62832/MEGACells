@@ -20,16 +20,15 @@ public class MEGADataGenerators {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static void onGatherData(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        generator.addProvider(true, new MEGAItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(true, new MEGABlockModelProvider(generator, existingFileHelper));
-        generator.addProvider(true, new MEGARecipeProvider(generator));
+        generator.addProvider(new MEGAItemModelProvider(generator, existingFileHelper));
+        generator.addProvider(new MEGABlockModelProvider(generator, existingFileHelper));
+        generator.addProvider(new MEGARecipeProvider(generator));
     }
 
     public static void dump(Path outputPath, List<Path> existingDataPaths) throws Exception {
         LOGGER.info("Writing generated resources to {}", outputPath.toAbsolutePath());
 
-        DataGenerator generator = new DataGenerator(outputPath, Collections.emptyList(),
-                SharedConstants.getCurrentVersion(), true);
+        DataGenerator generator = new DataGenerator(outputPath, Collections.emptyList());
         var existingFileHelper = new ExistingFileHelper(existingDataPaths, Collections.emptySet(),
                 true, null, null);
         onGatherData(generator, existingFileHelper);

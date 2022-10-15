@@ -149,7 +149,7 @@ public class ExistingFileHelper {
         if (!enable) {
             return true;
         }
-        return generated.get(packType).contains(loc) || getManager(packType).getResource(loc).isPresent();
+        return generated.get(packType).contains(loc) || getManager(packType).hasResource(loc);
     }
 
     /**
@@ -183,7 +183,7 @@ public class ExistingFileHelper {
      * instead use the common definitions in {@link ResourceType}, or a custom {@link IResourceType} definition.
      * <p>
      * This should be called by data providers immediately when a new data object is created, i.e. not during
-     * {@link DataProvider#run(net.minecraft.data.CachedOutput) run} but instead when the "builder" (or whatever
+     * {@link DataProvider#run(net.minecraft.data.HashCache) run} but instead when the "builder" (or whatever
      * intermediate object) is created, such as a {@link ModelBuilder}.
      * <p>
      * This represents a <em>promise</em> to generate the file later, since other datagen may rely on this file
@@ -200,7 +200,7 @@ public class ExistingFileHelper {
      * Track the existence of a generated file.
      * <p>
      * This should be called by data providers immediately when a new data object is created, i.e. not during
-     * {@link DataProvider#run(net.minecraft.data.CachedOutput) run} but instead when the "builder" (or whatever
+     * {@link DataProvider#run(net.minecraft.data.HashCache) run} but instead when the "builder" (or whatever
      * intermediate object) is created, such as a {@link ModelBuilder}.
      * <p>
      * This represents a <em>promise</em> to generate the file later, since other datagen may rely on this file

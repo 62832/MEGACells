@@ -10,8 +10,8 @@ import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -45,7 +45,7 @@ public class MEGARecipeProvider extends RecipeProvider {
         this.outputFolder = generator.getOutputFolder();
     }
 
-    public void run(CachedOutput cache) {
+    public void run(HashCache cache) {
         Path path = outputFolder;
         Set<ResourceLocation> set = Sets.newHashSet();
         buildMEGACraftingRecipes((finishedRecipe) -> {

@@ -1,5 +1,8 @@
 accessWidener   v1  named
 
+### BE Registration
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
+
 ### Datagen
 accessible class net/minecraft/client/renderer/block/model/ItemTransform$Deserializer
 accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deserializer DEFAULT_ROTATION Lcom/mojang/math/Vector3f;
