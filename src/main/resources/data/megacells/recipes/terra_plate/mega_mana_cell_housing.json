@@ -1,7 +1,13 @@
 {
   "type": "botania:terra_plate",
-  "mana": 1000000,
+  "mana": 2000000,
   "ingredients": [
+    {
+      "item": "botania:mana_pearl"
+    },
+    {
+      "item": "botania:mana_diamond"
+    },
     {
       "item": "appbot:mana_cell_housing"
     },
