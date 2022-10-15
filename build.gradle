@@ -24,6 +24,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 group = "gripe.90"
 version = "${mega_version}-${minecraft_version}"
+archivesBaseName = "megacells-forge"
 
 repositories {
     mavenLocal()
