@@ -5,6 +5,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.level.ItemLike;
 
+import gripe._90.megacells.integration.appbot.AppBotIntegration;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.MEGAStorageCell;
@@ -21,6 +23,14 @@ public class InitItemColors {
                 MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.PORTABLE_FLUID_CELL_1M, MEGAItems.PORTABLE_FLUID_CELL_4M,
                 MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.PORTABLE_FLUID_CELL_64M,
                 MEGAItems.PORTABLE_FLUID_CELL_256M);
+
+        if (AppBotIntegration.isAppBotLoaded()) {
+            itemColors.register(MEGAStorageCell::getColor, AppBotItems.MANA_CELL_1M, AppBotItems.MANA_CELL_4M,
+                    AppBotItems.MANA_CELL_16M, AppBotItems.MANA_CELL_64M, AppBotItems.MANA_CELL_256M);
+            itemColors.register(MEGAPortableCell::getColor, AppBotItems.PORTABLE_MANA_CELL_1M,
+                    AppBotItems.PORTABLE_MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_16M,
+                    AppBotItems.PORTABLE_MANA_CELL_64M, AppBotItems.PORTABLE_MANA_CELL_256M);
+        }
     }
 
     @FunctionalInterface

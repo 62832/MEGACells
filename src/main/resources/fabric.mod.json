@@ -34,6 +34,6 @@
     "ae2": ">=11.6.1-beta"
   },
   "suggests": {
-    "another-mod": "*"
+    "appbot": ">=1.3.4"
   }
 }
