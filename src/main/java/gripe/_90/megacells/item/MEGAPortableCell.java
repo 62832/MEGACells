@@ -3,6 +3,7 @@ package gripe._90.megacells.item;
 import java.util.Objects;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.items.tools.powered.PortableCellItem;
 
@@ -29,5 +30,15 @@ public class MEGAPortableCell extends PortableCellItem {
     @Override
     public ResourceLocation getRecipeId() {
         return MEGACells.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
+    }
+
+    @Override
+    public double getChargeRate(ItemStack stack) {
+        return super.getChargeRate(stack) * 2;
+    }
+
+    @Override
+    public double getAEMaxPower(ItemStack stack) {
+        return super.getAEMaxPower(stack) * 8;
     }
 }
