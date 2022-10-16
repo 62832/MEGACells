@@ -3,7 +3,6 @@ package gripe._90.megacells.item.cell.bulk;
 import java.util.Objects;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
