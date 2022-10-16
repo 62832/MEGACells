@@ -105,6 +105,12 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
                 .unlockedBy("has_mega_energy_cell", has(MEGABlocks.MEGA_ENERGY_CELL))
                 .save(consumer, MEGACells.makeId("crafting/greater_energy_card"));
+        ShapelessRecipeBuilder.shapeless(MEGAItems.GREATER_ENERGY_CARD)
+                .requires(AEItems.ENERGY_CARD)
+                .requires(MEGABlocks.MEGA_ENERGY_CELL)
+                .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
+                .unlockedBy("has_mega_energy_cell", has(MEGABlocks.MEGA_ENERGY_CELL))
+                .save(consumer, MEGACells.makeId("crafting/greater_energy_card_upgraded"));
     }
 
     private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, ItemLike binder) {
