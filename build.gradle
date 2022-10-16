@@ -133,6 +133,21 @@ repositories {
             includeGroup("mezz.jei")
         }
     }
+
+    maven {
+        url "https://maven.shedaniel.me/"
+        content {
+            includeGroup "me.shedaniel.cloth"
+            includeGroup "dev.architectury"
+        }
+    }
+
+    maven {
+        url = "https://maven.theillusivec4.top/"
+        content {
+            includeGroup "top.theillusivec4.curios"
+        }
+    }
 }
 
 dependencies {
@@ -145,6 +160,13 @@ dependencies {
     runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
     compileOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
     runtimeOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
+
+    compileOnly(fg.deobf("curse.maven:ae2wtlib-459929:${ae2wt_fileid}"))
+    runtimeOnly(fg.deobf("curse.maven:ae2wtlib-459929:${ae2wt_fileid}"))
+
+    runtimeOnly(fg.deobf("dev.architectury:architectury-forge:${architectury_version}"))
+    runtimeOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_version}"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"))
 
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 

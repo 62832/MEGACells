@@ -7,6 +7,7 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.item.MEGAItems;
@@ -54,5 +55,6 @@ public class InitUpgrades {
         }
 
         AppMekIntegration.initEnergyUpgrades();
+        AE2WTIntegration.initEnergyUpgrades();
     }
 }
