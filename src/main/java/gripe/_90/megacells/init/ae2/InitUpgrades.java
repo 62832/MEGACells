@@ -8,6 +8,7 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
 import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.core.MEGACellType;
 
@@ -51,5 +52,7 @@ public class InitUpgrades {
                 AEItems.PORTABLE_FLUID_CELL64K, AEItems.PORTABLE_FLUID_CELL256K)) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
+
+        AppMekIntegration.initEnergyUpgrades();
     }
 }
