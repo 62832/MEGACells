@@ -157,10 +157,10 @@ public class MEGARecipeProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(portableCell)
                 .requires(AEBlocks.CHEST)
                 .requires(portableCell.tier.getComponent())
-                .requires(AEBlocks.ENERGY_CELL)
+                .requires(AEBlocks.DENSE_ENERGY_CELL)
                 .requires(housing)
                 .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))
-                .unlockedBy("has_energy_cell", has(AEBlocks.ENERGY_CELL))
+                .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .save(consumer, MEGACells.makeId("cells/portable/" + MEGACells.getItemPath(portableCell)));
     }
 
