@@ -31,6 +31,13 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
     side="BOTH"
 
 [[dependencies.megacells]]
+    modId="ae2wtlib"
+    mandatory=false
+    versionRange = "(,13.0.0)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.megacells]]
     modId="forge"
     mandatory=true
     versionRange="[43,)"
