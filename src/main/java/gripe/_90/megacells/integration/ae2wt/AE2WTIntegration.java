@@ -3,6 +3,7 @@ package gripe._90.megacells.integration.ae2wt;
 import net.minecraftforge.fml.ModList;
 
 import de.mari_023.ae2wtlib.AE2wtlib;
+import de.mari_023.ae2wtlib.wut.WUTHandler;
 
 import appeng.api.upgrades.Upgrades;
 import appeng.core.localization.GuiText;
@@ -19,7 +20,7 @@ public final class AE2WTIntegration {
             var terminals = GuiText.WirelessTerminals.getTranslationKey();
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AE2wtlib.PATTERN_ENCODING_TERMINAL, 2, terminals);
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AE2wtlib.PATTERN_ACCESS_TERMINAL, 2, terminals);
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AE2wtlib.UNIVERSAL_TERMINAL, 6, terminals);
+            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AE2wtlib.UNIVERSAL_TERMINAL, WUTHandler.getUpgradeCardCount());
         }
     }
 }
