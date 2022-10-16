@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/62832/MEGACells/master/img/MEGAinvert.png)
+![](https://raw.githubusercontent.com/62832/MEGACells/forge/1.19/img/MEGA.png)
 
 Add-on for [Applied Energistics 2](https://www.curseforge.com/minecraft/mc-mods/applied-energistics-2) adding various higher tiers of ME storage. Includes optional integration with [Applied Mekanistics](https://github.com/AppliedEnergistics/Applied-Mekanistics).
 
