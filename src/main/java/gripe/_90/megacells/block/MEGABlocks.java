@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import appeng.block.EnergyCellBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
@@ -49,7 +50,7 @@ public final class MEGABlocks {
             .sound(SoundType.METAL);
 
     // spotless:off
-    public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block("mega_energy_cell", () -> new EnergyCellBlock(12800000, 12800), MEGAEnergyCellBlockItem::new);
+    public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block("mega_energy_cell", () -> new EnergyCellBlock(12800000, 3200, 12800), EnergyCellBlockItem::new);
 
     public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT), null);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("mega_crafting_accelerator", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);
