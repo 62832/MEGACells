@@ -173,6 +173,16 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
+processResources {
+    inputs.property("version", project.version)
+
+    exclude(".cache")
+
+    filesMatching("META-INF/mods.toml") {
+        expand("version": project.version)
+    }
+}
+
 jar {
     manifest {
         attributes([
