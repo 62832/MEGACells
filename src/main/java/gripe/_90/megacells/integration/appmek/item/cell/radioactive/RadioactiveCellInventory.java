@@ -22,6 +22,8 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
+
 public class RadioactiveCellInventory implements StorageCell {
 
     private static final String KEY = "key";
@@ -32,14 +34,14 @@ public class RadioactiveCellInventory implements StorageCell {
 
     private final ISaveProvider container;
     private final ItemStack i;
-    private final IRadioactiveCellItem cellType;
+    private final MEGARadioactiveCell cellType;
 
     private AEKey storedChemical;
     private long chemAmount;
     private IPartitionList partitionList;
     private boolean isPersisted = true;
 
-    public RadioactiveCellInventory(IRadioactiveCellItem cellType, ItemStack o, ISaveProvider container) {
+    public RadioactiveCellInventory(MEGARadioactiveCell cellType, ItemStack o, ISaveProvider container) {
         this.i = o;
         this.cellType = cellType;
         this.container = container;
@@ -60,7 +62,7 @@ public class RadioactiveCellInventory implements StorageCell {
     public static RadioactiveCellInventory createInventory(ItemStack o, ISaveProvider container) {
         Objects.requireNonNull(o, "Cannot create cell inventory for null itemstack");
 
-        if (!(o.getItem()instanceof IRadioactiveCellItem cellType)) {
+        if (!(o.getItem()instanceof MEGARadioactiveCell cellType)) {
             return null;
         }
 

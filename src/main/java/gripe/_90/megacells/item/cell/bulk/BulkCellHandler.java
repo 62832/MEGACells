@@ -12,12 +12,14 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.core.localization.Tooltips;
 
+import gripe._90.megacells.item.MEGABulkCell;
+
 public class BulkCellHandler implements ICellHandler {
     public static final BulkCellHandler INSTANCE = new BulkCellHandler();
 
     @Override
     public boolean isCell(ItemStack is) {
-        return is != null && is.getItem() instanceof IBulkCellItem;
+        return is != null && is.getItem() instanceof MEGABulkCell;
     }
 
     @Nullable

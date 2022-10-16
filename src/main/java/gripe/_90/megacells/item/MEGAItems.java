@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 
+import appeng.items.materials.EnergyCardItem;
 import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 
@@ -68,6 +69,8 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_16M = portable(MEGATier._16M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = portable(MEGATier._64M, MEGACellType.FLUID);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = portable(MEGATier._256M, MEGACellType.FLUID);
+
+    public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD = item("greater_energy_card", p -> new EnergyCardItem(p, 8));
     // spotless:on
 
     private static ItemDefinition<StorageComponentItem> component(MEGATier tier) {

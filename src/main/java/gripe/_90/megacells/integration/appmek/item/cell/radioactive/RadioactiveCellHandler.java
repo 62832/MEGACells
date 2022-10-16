@@ -17,6 +17,7 @@ import appeng.core.localization.Tooltips;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();
@@ -31,7 +32,7 @@ public class RadioactiveCellHandler implements ICellHandler {
 
     @Override
     public boolean isCell(ItemStack is) {
-        return is != null && is.getItem() instanceof IRadioactiveCellItem;
+        return is != null && is.getItem() instanceof MEGARadioactiveCell;
     }
 
     @Nullable

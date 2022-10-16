@@ -19,6 +19,8 @@ import appeng.api.storage.cells.StorageCell;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 
+import gripe._90.megacells.item.MEGABulkCell;
+
 public class BulkCellInventory implements StorageCell {
 
     private static final String KEY = "key";
@@ -26,14 +28,14 @@ public class BulkCellInventory implements StorageCell {
 
     private final ISaveProvider container;
     private final ItemStack i;
-    private final IBulkCellItem cellType;
+    private final MEGABulkCell cellType;
 
     private AEKey storedItem;
     private long itemCount;
     private IPartitionList partitionList;
     private boolean isPersisted = true;
 
-    public BulkCellInventory(IBulkCellItem cellType, ItemStack o, ISaveProvider container) {
+    public BulkCellInventory(MEGABulkCell cellType, ItemStack o, ISaveProvider container) {
         this.i = o;
         this.cellType = cellType;
         this.container = container;
@@ -69,7 +71,7 @@ public class BulkCellInventory implements StorageCell {
     public static BulkCellInventory createInventory(ItemStack o, ISaveProvider container) {
         Objects.requireNonNull(o, "Cannot create cell inventory for null itemstack");
 
-        if (!(o.getItem()instanceof IBulkCellItem cellType)) {
+        if (!(o.getItem()instanceof MEGABulkCell cellType)) {
             return null;
         }
 

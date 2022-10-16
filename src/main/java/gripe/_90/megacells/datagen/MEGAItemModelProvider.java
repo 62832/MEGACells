@@ -57,6 +57,8 @@ public class MEGAItemModelProvider extends ItemModelProvider {
                 AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(portable);
         }
+
+        flatSingleLayer(MEGAItems.GREATER_ENERGY_CARD.asItem());
     }
 
     private void cell(Item cell) {
