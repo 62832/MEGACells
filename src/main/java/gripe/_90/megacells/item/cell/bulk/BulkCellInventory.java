@@ -19,8 +19,6 @@ import appeng.api.storage.cells.StorageCell;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 
-import gripe._90.megacells.item.MEGABulkCell;
-
 public class BulkCellInventory implements StorageCell {
 
     private static final String KEY = "key";

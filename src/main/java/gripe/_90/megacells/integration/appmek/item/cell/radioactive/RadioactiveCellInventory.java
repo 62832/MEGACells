@@ -22,8 +22,6 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
-
 public class RadioactiveCellInventory implements StorageCell {
 
     private static final String KEY = "key";

@@ -1,4 +1,4 @@
-package gripe._90.megacells.item.core;
+package gripe._90.megacells.item.cell;
 
 import java.util.List;
 

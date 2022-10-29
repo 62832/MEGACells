@@ -29,7 +29,7 @@ import gripe._90.megacells.init.loader.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.loader.client.InitBuiltInModels;
 import gripe._90.megacells.init.loader.client.InitItemColors;
 import gripe._90.megacells.init.loader.client.InitRenderTypes;
-import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
 
 @Mod(MEGACells.MODID)

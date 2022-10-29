@@ -6,11 +6,11 @@ import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
 import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.item.cell.MEGACellType;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
-import gripe._90.megacells.item.core.MEGACellType;
 
 public class InitStorageCells {
 

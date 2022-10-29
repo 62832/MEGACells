@@ -5,13 +5,13 @@ import java.util.stream.Stream;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.item.MEGAPortableCell;
-import gripe._90.megacells.item.MEGAStorageCell;
-import gripe._90.megacells.item.core.MEGACellType;
+import gripe._90.megacells.item.cell.MEGACellType;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
+import gripe._90.megacells.item.cell.MEGAStorageCell;
 
 public class InitItemColors {
     public static void init() {

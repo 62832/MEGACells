@@ -1,4 +1,4 @@
-package gripe._90.megacells.integration.appmek.item;
+package gripe._90.megacells.integration.appmek.item.cell.radioactive;
 
 import java.util.List;
 
@@ -16,8 +16,6 @@ import appeng.items.contents.CellConfig;
 import appeng.util.ConfigInventory;
 
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
-
-import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
 
 public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchItem {
     public MEGARadioactiveCell(Properties properties) {

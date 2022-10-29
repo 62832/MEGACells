@@ -1,4 +1,4 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.item.cell.bulk;
 
 import java.util.List;
 
@@ -17,8 +17,6 @@ import appeng.api.upgrades.UpgradeInventories;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.util.ConfigInventory;
-
-import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 
 public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     public MEGABulkCell(Properties properties) {

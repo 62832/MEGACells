@@ -16,8 +16,7 @@ import appeng.core.localization.Tooltips;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
+import gripe._90.megacells.integration.appmek.item.AppMekItems;
 
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();

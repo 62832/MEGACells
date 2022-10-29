@@ -1,4 +1,4 @@
-package gripe._90.megacells.integration.appmek;
+package gripe._90.megacells.integration.appmek.item.cell;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,9 @@ import appeng.menu.me.common.MEStorageMenu;
 import me.ramidzkh.mekae2.AMMenus;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
-import gripe._90.megacells.item.core.IMEGACellType;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.item.AppMekItems;
+import gripe._90.megacells.item.cell.IMEGACellType;
 
 public enum AppMekCellType implements IMEGACellType {
     CHEMICAL;

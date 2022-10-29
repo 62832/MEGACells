@@ -19,16 +19,16 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.datagen.providers.tags.ConventionTags;
+import appeng.items.storage.StorageTier;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.integration.appmek.AppMekCellType;
+import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.item.MEGAPortableCell;
-import gripe._90.megacells.item.MEGAStorageCell;
-import gripe._90.megacells.item.core.IMEGACellType;
-import gripe._90.megacells.item.core.MEGACellType;
-import gripe._90.megacells.item.core.MEGATier;
+import gripe._90.megacells.item.cell.IMEGACellType;
+import gripe._90.megacells.item.cell.MEGACellType;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
+import gripe._90.megacells.item.cell.MEGAStorageCell;
 
 public class MEGARecipeProvider extends RecipeProvider {
     public MEGARecipeProvider(DataGenerator generator) {
@@ -37,11 +37,11 @@ public class MEGARecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        component(consumer, MEGATier._1M, AEItems.SKY_DUST.asItem());
-        component(consumer, MEGATier._4M, AEItems.ENDER_DUST.asItem());
-        component(consumer, MEGATier._16M, AEItems.ENDER_DUST.asItem());
-        component(consumer, MEGATier._64M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGATier._256M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGAItems.TIER_1M, AEItems.SKY_DUST.asItem());
+        component(consumer, MEGAItems.TIER_4M, AEItems.ENDER_DUST.asItem());
+        component(consumer, MEGAItems.TIER_16M, AEItems.ENDER_DUST.asItem());
+        component(consumer, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGAItems.TIER_256M, AEItems.MATTER_BALL.asItem());
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
@@ -113,11 +113,11 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(consumer, MEGACells.makeId("crafting/greater_energy_card_upgraded"));
     }
 
-    private void component(Consumer<FinishedRecipe> consumer, MEGATier tier, ItemLike binder) {
-        var preceding = tier == MEGATier._1M ? AEItems.CELL_COMPONENT_256K.asItem()
-                : MEGATier.values()[tier.index - 2].getComponent();
+    private void component(Consumer<FinishedRecipe> consumer, StorageTier tier, ItemLike binder) {
+        var preceding = tier == MEGAItems.TIER_1M ? AEItems.CELL_COMPONENT_256K.asItem()
+                : MEGAItems.getTiers().get(tier.index() - 2).componentSupplier().get();
 
-        ShapedRecipeBuilder.shaped(tier.getComponent())
+        ShapedRecipeBuilder.shaped(tier.componentSupplier().get())
                 .pattern("aba")
                 .pattern("cdc")
                 .pattern("aca")
@@ -126,13 +126,13 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('c', preceding)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_" + MEGACells.getItemPath(preceding), has(preceding))
-                .save(consumer, MEGACells.makeId(MEGACells.getItemPath(tier.getComponent())));
+                .save(consumer, MEGACells.makeId(MEGACells.getItemPath(tier.componentSupplier().get())));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
         var cell = (MEGAStorageCell) cellItem;
 
-        var component = cell.getTier().getComponent();
+        var component = cell.getTier().componentSupplier().get();
         var housing = cell.getType().housing();
         var housingMaterial = cell.getType().housingMaterial();
 
@@ -159,10 +159,10 @@ public class MEGARecipeProvider extends RecipeProvider {
 
     private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
         var portableCell = (MEGAPortableCell) portableCellItem;
-        var housing = portableCell.type.housing();
+        var housing = portableCell.getType().housing();
         ShapelessRecipeBuilder.shapeless(portableCell)
                 .requires(AEBlocks.CHEST)
-                .requires(portableCell.tier.getComponent())
+                .requires(portableCell.getTier().componentSupplier().get())
                 .requires(AEBlocks.DENSE_ENERGY_CELL)
                 .requires(housing)
                 .unlockedBy("has_" + MEGACells.getItemPath(housing), has(housing))

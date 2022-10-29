@@ -8,10 +8,10 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appmek.AppMekCellType;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.item.core.MEGACellType;
+import gripe._90.megacells.item.cell.MEGACellType;
 
 public class InitUpgrades {
     public static void init() {

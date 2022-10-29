@@ -12,11 +12,10 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.integration.appmek.AppMekCellType;
-import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.item.core.MEGACellType;
-import gripe._90.megacells.item.core.MEGATier;
+import gripe._90.megacells.item.cell.MEGACellType;
 
 public class MEGAItemModelProvider extends ItemModelProvider {
 
@@ -35,8 +34,8 @@ public class MEGAItemModelProvider extends ItemModelProvider {
         flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
         flatSingleLayer(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
-        for (var tier : MEGATier.values()) {
-            flatSingleLayer(tier.getComponent());
+        for (var tier : MEGAItems.getTiers()) {
+            flatSingleLayer(tier.componentSupplier().get());
         }
 
         for (var storage : Stream.of(

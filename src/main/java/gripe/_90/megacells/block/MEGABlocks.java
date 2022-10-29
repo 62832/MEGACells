@@ -23,10 +23,10 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
-import appeng.block.EnergyCellBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
+import appeng.block.networking.EnergyCellBlockItem;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 

@@ -1,4 +1,4 @@
-package gripe._90.megacells.item.core;
+package gripe._90.megacells.item.cell;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
