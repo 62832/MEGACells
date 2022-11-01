@@ -83,7 +83,8 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
                 .define('d', MekanismItems.HDPE_SHEET)
                 .define('e', MekanismItems.POLONIUM_PELLET)
-                .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT));
+                .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT))
+                .save(consumer, MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")
