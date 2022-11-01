@@ -12,14 +12,17 @@ loom {
 
     runs {
         data {
-            client()
+            inherit client
             name "Minecraft Data"
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated")}"
             vmArg "-Dfabric-api.datagen.strict-validation"
 
-            ideConfigGenerated = true
-            runDir "build/datagen"
+            property "megacells.generateData", "true"
+            property "megacells.generateData.outputPath", file("src/generated/resources").absolutePath
+            property "megacells.generateData.existingData",
+                    "${project(":common").file("src/main/resources").absolutePath};" +
+                            "${file("src/main/resources").absolutePath}"
         }
     }
 }

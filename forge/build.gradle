@@ -11,6 +11,7 @@ loom {
     runs {
         data {
             data()
+            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
         }
     }
 
