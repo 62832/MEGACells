@@ -91,6 +91,7 @@ sourceSets {
         runtimeClasspath += sourceSets.portaforgy.output
         resources {
             srcDir 'src/generated/resources'
+            exclude '**/.cache'
         }
     }
 }
@@ -132,7 +133,7 @@ components.java {
 publishing {
     publications {
         mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = rootProject.mod_id + "-" + project.name
             from components.java
         }
     }

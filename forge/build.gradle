@@ -94,6 +94,14 @@ processResources {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            exclude '**/.cache'
+        }
+    }
+}
+
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
@@ -127,7 +135,7 @@ components.java {
 publishing {
     publications {
         mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = rootProject.mod_id + "-" + project.name
             from components.java
         }
     }

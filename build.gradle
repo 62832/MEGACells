@@ -13,8 +13,15 @@ subprojects {
     apply plugin: "dev.architectury.loom"
     apply plugin: "io.github.juuxel.loom-quiltflower"
 
+    archivesBaseName = rootProject.mod_id + "-" + project.name
+    version = rootProject.mod_version + "-" + rootProject.minecraft_version
+    group = rootProject.maven_group
+
     loom {
         silentMojangMappingsLicense()
+        mixin {
+            defaultRefmapName.set(archivesBaseName + "-refmap.json")
+        }
     }
 
     sourceCompatibility = JavaVersion.VERSION_17
@@ -35,10 +42,6 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
     apply plugin: "com.diffplug.spotless"
-
-    archivesBaseName = rootProject.archives_base_name
-    version = "${rootProject.mod_version}-${rootProject.minecraft_version}"
-    group = rootProject.maven_group
 
     repositories {
         maven {
@@ -82,6 +85,12 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    jar {
+        from("LICENSE") {
+            rename { "${it}_${rootProject.archivesBaseName}"}
+        }
     }
 
     spotless {
