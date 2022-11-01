@@ -2,8 +2,6 @@ package gripe._90.megacells.integration.forge.appmek;
 
 import java.util.List;
 
-import net.minecraftforge.fml.ModList;
-
 import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
@@ -17,14 +15,12 @@ import gripe._90.megacells.integration.forge.appmek.item.AppMekItems;
 import gripe._90.megacells.integration.forge.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.integration.forge.appmek.item.cell.radioactive.RadioactiveCellHandler;
 import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.platform.Services;
 
 public final class AppMekIntegration {
-    public static boolean isAppMekLoaded() {
-        return ModList.get().isLoaded("appmek");
-    }
 
     public static void initIntegration() {
-        if (isAppMekLoaded()) {
+        if (Services.PLATFORM.isModLoaded("appmek")) {
             initUpgrades();
             initStorageCells();
         }

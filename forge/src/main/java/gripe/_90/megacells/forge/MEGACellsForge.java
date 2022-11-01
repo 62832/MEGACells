@@ -1,10 +1,6 @@
 package gripe._90.megacells.forge;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.core.Registry;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -33,14 +29,6 @@ import gripe._90.megacells.item.MEGAItems;
 
 @Mod(MEGACells.MODID)
 public class MEGACellsForge {
-
-    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(MEGACells.MODID) {
-        @Override
-        public @NotNull ItemStack makeIcon() {
-            return new ItemStack(MEGAItems.ITEM_CELL_256M);
-        }
-    };
-
     public MEGACellsForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
