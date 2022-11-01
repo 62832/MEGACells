@@ -7,9 +7,6 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
-import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 
@@ -27,18 +24,20 @@ public class InitUpgrades {
             Upgrades.add(AEItems.VOID_CARD, itemCell, 1, storageCellGroup);
         }
 
-        for (var fluidCell : Stream.concat(
-                MEGACellType.FLUID.getCells().stream(), AppMekCellType.CHEMICAL.getCells().stream()).toList()) {
+        for (var fluidCell : MEGACellType.FLUID.getCells()) {
             Upgrades.add(AEItems.INVERTER_CARD, fluidCell, 1, storageCellGroup);
+            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidCell, 1, storageCellGroup);
+            Upgrades.add(AEItems.VOID_CARD, fluidCell, 1, storageCellGroup);
         }
 
         for (var portableCell : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
-                MEGACellType.FLUID.getPortableCells().stream(),
-                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getPortableCells().stream()).flatMap(s -> s).toList()) {
             Upgrades.add(AEItems.FUZZY_CARD, portableCell, 1, portableCellGroup);
             Upgrades.add(AEItems.INVERTER_CARD, portableCell, 1, portableCellGroup);
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
+            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, portableCell, 1, storageCellGroup);
+            Upgrades.add(AEItems.VOID_CARD, portableCell, 1, storageCellGroup);
         }
 
         Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_TERMINAL, 2, wirelessTerminalGroup);
@@ -53,8 +52,5 @@ public class InitUpgrades {
                 AEItems.PORTABLE_FLUID_CELL64K, AEItems.PORTABLE_FLUID_CELL256K)) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
-
-        AppMekIntegration.initEnergyUpgrades();
-        AE2WTIntegration.initEnergyUpgrades();
     }
 }

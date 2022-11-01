@@ -26,6 +26,8 @@ import gripe._90.megacells.init.client.forge.InitBuiltInModels;
 import gripe._90.megacells.init.client.forge.InitItemColors;
 import gripe._90.megacells.init.client.forge.InitRenderTypes;
 import gripe._90.megacells.init.forge.Registration;
+import gripe._90.megacells.integration.forge.ae2wt.AE2WTIntegrationForge;
+import gripe._90.megacells.integration.forge.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.forge.appmek.item.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
 
@@ -64,6 +66,9 @@ public class MEGACellsForge {
         bus.addListener((FMLCommonSetupEvent event) -> {
             event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
+
+            event.enqueueWork(AE2WTIntegrationForge::initIntegration);
+            event.enqueueWork(AppMekIntegration::initIntegration);
         });
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);

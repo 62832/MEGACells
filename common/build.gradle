@@ -14,6 +14,9 @@ dependencies {
     // modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 
     modImplementation "appeng:appliedenergistics2-fabric:${ae2_version}"
+
+    modCompileOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
+    modRuntimeOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
 }
 
 publishing {

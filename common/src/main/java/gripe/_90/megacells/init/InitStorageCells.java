@@ -6,8 +6,6 @@ import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
-import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
@@ -16,16 +14,13 @@ public class InitStorageCells {
 
     public static void init() {
         StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
-        RadioactiveCellHandler.init();
-
         initModels();
     }
 
-    public static void initModels() {
+    private static void initModels() {
         for (var cell : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream(),
-                AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
             StorageCellModels.registerModel(cell,
                     MEGACells.makeId("block/drive/cells/" + MEGACells.getItemPath(cell)));
         }
@@ -39,10 +34,6 @@ public class InitStorageCells {
         for (var portableFluidCell : MEGACellType.FLUID.getPortableCells()) {
             StorageCellModels.registerModel(portableFluidCell,
                     MEGACells.makeId("block/drive/cells/portable_mega_fluid_cell"));
-        }
-        for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
-            StorageCellModels.registerModel(portable,
-                    MEGACells.makeId("block/drive/cells/portable_mega_item_cell"));
         }
     }
 }
