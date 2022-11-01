@@ -1,227 +1,105 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/maven' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
-    id 'idea'
-    id 'maven-publish'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'com.diffplug.spotless' version '6.4.1'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id "com.diffplug.spotless" version "6.4.1"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
+architectury {
+    minecraft = rootProject.minecraft_version
+}
 
-version = "${mega_version}-${minecraft_version}"
-group = 'gripe.90'
-archivesBaseName = 'megacells-forge'
+subprojects {
+    apply plugin: "dev.architectury.loom"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    loom {
+        silentMojangMappingsLicense()
+    }
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    mappings channel: 'official', version: '1.19.2'
-
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'megacells'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            mods {
-                megacells {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'megacells'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            mods {
-                megacells {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        gameTestServer {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'megacells'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            mods {
-                megacells {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            args '--mod', 'megacells', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                megacells {
-                    source sourceSets.main
-                }
-            }
-        }
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+    apply plugin: "com.diffplug.spotless"
 
-repositories {
-    mavenLocal()
-    maven {
-        url = uri("https://modmaven.dev/")
-        content {
-            includeGroup("appeng")
-            includeGroup("mekanism")
-        }
-    }
+    archivesBaseName = rootProject.archives_base_name
+    version = "${rootProject.mod_version}-${rootProject.minecraft_version}"
+    group = rootProject.maven_group
 
-    maven {
-        url = uri("https://cursemaven.com")
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-
-    maven {
-        url = uri("https://dvs1.progwml6.com/files/maven/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
-
-    maven {
-        url "https://maven.shedaniel.me/"
-        content {
-            includeGroup "me.shedaniel.cloth"
-            includeGroup "dev.architectury"
-        }
-    }
-
-    maven {
-        url = "https://maven.theillusivec4.top/"
-        content {
-            includeGroup "top.theillusivec4.curios"
-        }
-    }
-}
-
-dependencies {
-    minecraft("net.minecraftforge:forge:1.19.2-${forge_version}")
-
-    implementation(fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}"))
-
-    compileOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
-    runtimeOnly(fg.deobf("mekanism:Mekanism:${minecraft_version}-${mekanism_version}"))
-    compileOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
-    runtimeOnly(fg.deobf("curse.maven:appmek-574300:${appmek_fileid}"))
-
-    compileOnly(fg.deobf("curse.maven:ae2wtlib-459929:${ae2wt_fileid}"))
-    runtimeOnly(fg.deobf("curse.maven:ae2wtlib-459929:${ae2wt_fileid}"))
-
-    runtimeOnly(fg.deobf("dev.architectury:architectury-forge:${architectury_version}"))
-    runtimeOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_version}"))
-    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"))
-
-    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-}
-
-processResources {
-    inputs.property("version", project.version)
-
-    exclude(".cache")
-
-    filesMatching("META-INF/mods.toml") {
-        expand("version": project.version)
-    }
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "MEGA Cells",
-                "Specification-Vendor"    : "90",
-                "Specification-Version"   : project.version,
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "90",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            name = 'ModMaven (K4U-NL)'
+            url = 'https://modmaven.dev/'
+            content {
+                includeGroup "appeng"
+            }
+        }
+
+        maven {
+            name = 'CurseMaven'
+            url = 'https://cursemaven.com'
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+
+        maven {
+            name = 'Progwml6'
+            url = 'https://dvs1.progwml6.com/files/maven/'
+            content {
+                includeGroup "mezz.jei"
+            }
+        }
+
+        maven {
+            name = 'Shedaniel'
+            url 'https://maven.shedaniel.me/'
+            content {
+                includeGroup "me.shedaniel.cloth"
+                includeGroup "dev.architectury"
+            }
         }
     }
-}
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-spotless {
-    java {
-        target("src/main/java/**/*.java")
-
-        endWithNewline()
-        indentWithSpaces()
-        removeUnusedImports()
-        toggleOffOn()
-        eclipse().configFile("codeformat/codeformat.xml")
-        importOrderFile("codeformat/mega.importorder")
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.release = 17
     }
 
-    format("json") {
-        target("src/*/resources/**/*.json")
-        targetExclude("src/generated/resources/**")
-        prettier().config(parser: "json")
+    java {
+        withSourcesJar()
+    }
+
+    spotless {
+        java {
+            target("src/**/java/**/*.java")
+
+            endWithNewline()
+            indentWithSpaces()
+            removeUnusedImports()
+            toggleOffOn()
+            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
+            importOrderFile(rootProject.file("codeformat/mega.importorder"))
+
+            // courtesy of diffplug/spotless#240
+            // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
+            custom 'noWildcardImports', {
+                if (it.contains('*;\n')) {
+                    throw new Error('No wildcard imports allowed')
+                }
+            }
+            bumpThisNumberIfACustomStepChanges(1)
+        }
+
+        format("json") {
+            target("src/*/resources/**/*.json")
+            targetExclude("src/generated/resources/**")
+            prettier().config(parser: "json")
+        }
     }
 }

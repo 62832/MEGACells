@@ -1,0 +1,130 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+repositories {
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/'
+        content {
+            includeGroup "com.terraformersmc"
+            includeGroup "dev.emi"
+        }
+    }
+
+    maven {
+        name = 'LadySnake Libs'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        content {
+            includeGroup "dev.onyxstudios.cardinal-components-api"
+        }
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}+${rootProject.minecraft_version}"
+    // Remove the next line if you don't want to depend on the API
+    // modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+    modImplementation "appeng:appliedenergistics2-fabric:${ae2_version}"
+
+    modCompileOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
+    modRuntimeOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
+
+    modRuntimeOnly "dev.architectury:architectury-fabric:${architectury_version}"
+    modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${cloth_version}"
+    modRuntimeOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
+    modRuntimeOnly "dev.emi:trinkets:${trinkets_version}"
+
+    modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
+    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+    modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+sourceSets {
+    portaforgy
+    main {
+        compileClasspath += sourceSets.portaforgy.output
+        runtimeClasspath += sourceSets.portaforgy.output
+        resources {
+            srcDir 'src/generated/resources'
+        }
+    }
+}
+
+configurations {
+    portaforgyImplementation.extendsFrom(compileClasspath)
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    injectAccessWidener = true
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier null
+}
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+    }
+}

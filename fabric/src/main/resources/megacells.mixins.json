@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "gripe._90.megacells.mixin.fabric",
+  "compatibilityLevel": "JAVA_17",
+  "client": [],
+  "mixins": ["AE2WTLibEntrypointMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
