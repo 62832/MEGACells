@@ -21,8 +21,12 @@ import appeng.core.definitions.AEParts;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
 
+import mekanism.common.registries.MekanismItems;
+import mekanism.generators.common.registries.GeneratorsBlocks;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.integration.forge.appmek.item.AppMekItems;
 import gripe._90.megacells.integration.forge.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.IMEGACellType;
@@ -70,6 +74,16 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('d', Items.NETHERITE_INGOT)
                 .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
                 .save(consumer, MEGACells.makeId("cells/standard/bulk_item_cell"));
+        ShapedRecipeBuilder.shaped(AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
+                .pattern("aba")
+                .pattern("bcb")
+                .pattern("ded")
+                .define('a', GeneratorsBlocks.REACTOR_GLASS)
+                .define('b', AEItems.SKY_DUST)
+                .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
+                .define('d', MekanismItems.HDPE_SHEET)
+                .define('e', MekanismItems.POLONIUM_PELLET)
+                .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")

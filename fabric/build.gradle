@@ -11,7 +11,7 @@ loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
     runs {
-        datagenClient {
+        data {
             client()
             name "Minecraft Data"
             vmArg "-Dfabric-api.datagen"

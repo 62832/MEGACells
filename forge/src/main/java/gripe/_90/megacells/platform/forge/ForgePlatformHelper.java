@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.platform.service.IPlatformHelper;
 

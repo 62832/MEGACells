@@ -8,15 +8,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
-import appeng.api.client.StorageCellModels;
-import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.core.localization.Tooltips;
-
-import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.integration.forge.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.forge.appmek.item.AppMekItems;
 
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();

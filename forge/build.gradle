@@ -63,10 +63,13 @@ dependencies {
 
     modImplementation "appeng:appliedenergistics2-forge:${ae2_version}"
 
-    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
-    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
     modCompileOnly "curse.maven:appmek-574300:${appmek_fileid}"
     modRuntimeOnly "curse.maven:appmek-574300:${appmek_fileid}"
+
+    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
+    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
+    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
+    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
 
     modCompileOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
     modRuntimeOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
@@ -75,7 +78,7 @@ dependencies {
     modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_version}"
     modRuntimeOnly "top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"
 
-    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
     modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
