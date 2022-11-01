@@ -12,7 +12,7 @@ import gripe._90.megacells.platform.Services;
 public final class MEGACells {
     public static final String MODID = "megacells";
 
-    public static CreativeModeTab CREATIVE_TAB = Services.PLATFORM.getCreativeTab();
+    public static final CreativeModeTab CREATIVE_TAB = Services.PLATFORM.getCreativeTab();
 
     public static ResourceLocation makeId(String path) {
         return new ResourceLocation(MODID, path);

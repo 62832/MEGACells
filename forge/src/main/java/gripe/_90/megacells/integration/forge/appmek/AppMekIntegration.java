@@ -19,8 +19,12 @@ import gripe._90.megacells.platform.Services;
 
 public final class AppMekIntegration {
 
+    public static boolean isAppMekLoaded() {
+        return Services.PLATFORM.isModLoaded("appmek");
+    }
+
     public static void initIntegration() {
-        if (Services.PLATFORM.isModLoaded("appmek")) {
+        if (isAppMekLoaded()) {
             initUpgrades();
             initStorageCells();
         }

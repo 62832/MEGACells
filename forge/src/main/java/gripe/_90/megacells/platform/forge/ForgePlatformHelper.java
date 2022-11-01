@@ -1,4 +1,4 @@
-package gripe._90.megacells.forge;
+package gripe._90.megacells.platform.forge;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public CreativeModeTab getCreativeTab() {
-        return new CreativeModeTab(MEGACells.MODID) {
+        return new CreativeModeTab("megacells.megacells") {
             @Override
             public @NotNull ItemStack makeIcon() {
                 return new ItemStack(MEGAItems.ITEM_CELL_256M);

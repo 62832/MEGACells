@@ -1,4 +1,4 @@
-package gripe._90.megacells.fabric;
+package gripe._90.megacells.platform.fabric;
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;

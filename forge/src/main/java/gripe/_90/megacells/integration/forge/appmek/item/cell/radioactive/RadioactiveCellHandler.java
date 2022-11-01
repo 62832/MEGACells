@@ -21,14 +21,6 @@ import gripe._90.megacells.integration.forge.appmek.item.AppMekItems;
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();
 
-    public static void init() {
-        if (AppMekIntegration.isAppMekLoaded()) {
-            StorageCells.addCellHandler(INSTANCE);
-            StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
-                    MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
-        }
-    }
-
     @Override
     public boolean isCell(ItemStack is) {
         return is != null && is.getItem() instanceof MEGARadioactiveCell;

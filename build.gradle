@@ -15,9 +15,16 @@ subprojects {
         silentMojangMappingsLicense()
     }
 
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings loom.officialMojangMappings()
+    }
+
+    architectury {
+        injectInjectables = false
     }
 }
 
