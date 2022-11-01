@@ -16,9 +16,9 @@ import appeng.init.client.InitItemModelsProperties;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
 
-public class MEGABlockModelProvider extends BlockStateProvider {
+public class BlockModelProvider extends BlockStateProvider {
 
-    public MEGABlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
+    public BlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, MEGACells.MODID, exFileHelper);
     }
 

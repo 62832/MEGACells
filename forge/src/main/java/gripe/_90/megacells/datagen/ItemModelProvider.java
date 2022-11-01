@@ -6,7 +6,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.core.AppEng;
@@ -17,12 +16,12 @@ import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 
-public class MEGAItemModelProvider extends ItemModelProvider {
+public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
 
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
 
-    public MEGAItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public ItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, MEGACells.MODID, existingFileHelper);
         existingFileHelper.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         existingFileHelper.trackGenerated(PORTABLE_CELL_LED, TEXTURE);

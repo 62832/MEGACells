@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -36,11 +35,11 @@ import gripe._90.megacells.item.cell.MEGACellType;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.MEGAStorageCell;
 
-public class MEGARecipeProvider extends RecipeProvider {
+public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     private final Path outputFolder;
 
-    public MEGARecipeProvider(DataGenerator generator) {
+    public RecipeProvider(DataGenerator generator) {
         super(generator);
         this.outputFolder = generator.getOutputFolder();
     }

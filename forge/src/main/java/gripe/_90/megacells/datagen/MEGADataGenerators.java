@@ -16,8 +16,12 @@ public class MEGADataGenerators {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(true, new MEGAItemModelProvider(generator, existingFileHelper));
-        generator.addProvider(true, new MEGABlockModelProvider(generator, existingFileHelper));
-        generator.addProvider(true, new MEGARecipeProvider(generator));
+        generator.addProvider(true, new BlockDropProvider(generator.getOutputFolder()));
+
+        generator.addProvider(true, new BlockModelProvider(generator, existingFileHelper));
+        generator.addProvider(true, new ItemModelProvider(generator, existingFileHelper));
+
+        generator.addProvider(true, new RecipeProvider(generator));
+        generator.addProvider(true, new BlockTagsProvider(generator));
     }
 }
