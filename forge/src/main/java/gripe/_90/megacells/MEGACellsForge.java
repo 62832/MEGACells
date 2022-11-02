@@ -21,7 +21,6 @@ import gripe._90.megacells.init.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.client.InitBuiltInModels;
 import gripe._90.megacells.init.client.InitItemColors;
 import gripe._90.megacells.init.client.InitRenderTypes;
-import gripe._90.megacells.integration.ae2wt.AE2WTIntegrationForge;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.item.AppMekItems;
 import gripe._90.megacells.item.MEGAItems;
@@ -54,7 +53,6 @@ public class MEGACellsForge {
             event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
 
-            event.enqueueWork(AE2WTIntegrationForge::initIntegration);
             event.enqueueWork(AppMekIntegration::initIntegration);
         });
 

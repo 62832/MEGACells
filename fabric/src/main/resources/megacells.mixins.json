@@ -4,7 +4,7 @@
   "package": "gripe._90.megacells.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [],
-  "mixins": ["AE2WTLibEntrypointMixin"],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   }

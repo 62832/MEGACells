@@ -7,6 +7,7 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 
@@ -52,5 +53,7 @@ public class InitUpgrades {
                 AEItems.PORTABLE_FLUID_CELL64K, AEItems.PORTABLE_FLUID_CELL256K)) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
+
+        AE2WTIntegration.initEnergyUpgrades();
     }
 }

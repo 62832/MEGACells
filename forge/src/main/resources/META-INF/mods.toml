@@ -33,7 +33,7 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId="ae2wtlib"
     mandatory=false
-    versionRange = "(,13.0.0)"
+    versionRange = "[12.8.4,13.0.0)"
     ordering="AFTER"
     side="BOTH"
 
