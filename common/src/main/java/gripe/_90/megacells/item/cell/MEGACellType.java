@@ -13,8 +13,8 @@ import appeng.menu.me.common.MEStorageMenu;
 import gripe._90.megacells.item.MEGAItems;
 
 public enum MEGACellType implements IMEGACellType {
-    ITEM(AEKeyType.items(), 63, "item"),
-    FLUID(AEKeyType.fluids(), 9, "fluid");
+    ITEM(AEKeyType.items(), 63, "Item"),
+    FLUID(AEKeyType.fluids(), 9, "Fluid");
 
     private final AEKeyType key;
     private final int types;

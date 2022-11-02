@@ -1,5 +1,7 @@
 package gripe._90.megacells.datagen.forge;
 
+import java.util.List;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -27,6 +29,10 @@ public class MEGADataGenerators {
 
         generator.addProvider(true, new RecipeProvider(generator));
         generator.addProvider(true, new BlockTagsProvider(generator, existingFileHelper));
+
+        for (var en : List.of("en_us", "en_gb", "en_au", "en_ca", "en_nz")) {
+            generator.addProvider(true, new LocalisationProvider(generator, en));
+        }
 
         generator.addProvider(true, new AppMekItemModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new AppMekRecipeProvider(generator));

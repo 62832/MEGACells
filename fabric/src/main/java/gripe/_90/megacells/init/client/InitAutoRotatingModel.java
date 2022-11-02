@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import appeng.block.AEBaseBlock;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.model.AutoRotatingBakedModel;
+import appeng.core.definitions.BlockDefinition;
 import appeng.hooks.ModelsReloadCallback;
 
 import gripe._90.megacells.MEGACells;
@@ -24,7 +25,7 @@ import gripe._90.megacells.block.MEGABlocks;
 
 @Environment(EnvType.CLIENT)
 public class InitAutoRotatingModel {
-    private static final Set<MEGABlocks.BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
+    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR,
             MEGABlocks.CRAFTING_STORAGE_1M,
@@ -39,12 +40,12 @@ public class InitAutoRotatingModel {
     public static void init() {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
-        for (var block : MEGABlocks.getBlocks()) {
+        for (var block : MEGABlocks.BLOCKS) {
             if (NO_AUTO_ROTATION.contains(block)) {
                 continue;
             }
 
-            if (block.asBlock() instanceof AEBaseBlock) {
+            if (block.block() instanceof AEBaseBlock) {
                 // This is a default rotating model if the base-block uses an AE block entity
                 // which exposes UP/FRONT as extended props
                 register(block, AutoRotatingBakedModel::new);
@@ -54,8 +55,8 @@ public class InitAutoRotatingModel {
         ModelsReloadCallback.EVENT.register(InitAutoRotatingModel::onModelBake);
     }
 
-    private static void register(MEGABlocks.BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
-        String path = block.getId().getPath();
+    private static void register(BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
+        String path = block.id().getPath();
         CUSTOMIZERS.put(path, customizer);
     }
 

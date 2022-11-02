@@ -12,20 +12,20 @@ import gripe._90.megacells.item.MEGAItems;
 public class Registration {
 
     public static void registerBlocks(Registry<Block> registry) {
-        for (var definition : MEGABlocks.getBlocks()) {
-            Block block = definition.asBlock();
-            Registry.register(registry, definition.getId(), block);
+        for (var definition : MEGABlocks.BLOCKS) {
+            Block block = definition.block();
+            Registry.register(registry, definition.id(), block);
         }
     }
 
     public static void registerItems(Registry<Item> registry) {
-        for (var definition : MEGABlocks.getBlocks()) {
+        for (var definition : MEGABlocks.BLOCKS) {
             var item = definition.asItem();
-            Registry.register(registry, definition.getId(), item);
+            Registry.register(registry, definition.id(), item);
         }
-        for (var definition : MEGAItems.getItems()) {
+        for (var definition : MEGAItems.ITEMS) {
             var item = definition.asItem();
-            Registry.register(registry, definition.getId(), item);
+            Registry.register(registry, definition.id(), item);
         }
     }
 

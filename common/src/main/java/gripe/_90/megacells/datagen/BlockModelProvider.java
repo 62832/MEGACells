@@ -11,6 +11,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
+import appeng.core.definitions.BlockDefinition;
 import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
@@ -42,19 +43,19 @@ public class BlockModelProvider extends BlockStateProvider {
         });
     }
 
-    private void craftingModel(MEGABlocks.BlockDefinition<?> block, String name) {
+    private void craftingModel(BlockDefinition<?> block, String name) {
         builtInBlockModel("crafting/" + name + "_formed");
         var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
-        getVariantBuilder(block.asBlock())
+        getVariantBuilder(block.block())
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, false).setModels(
                         new ConfiguredModel(blockModel))
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, true).setModels(
                         new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
-        simpleBlockItem(block.asBlock(), blockModel);
+        simpleBlockItem(block.block(), blockModel);
     }
 
     private void energyCell() {
-        var blockBuilder = getVariantBuilder(MEGABlocks.MEGA_ENERGY_CELL.asBlock());
+        var blockBuilder = getVariantBuilder(MEGABlocks.MEGA_ENERGY_CELL.block());
         var models = new ArrayList<ModelFile>();
         for (var i = 0; i < 5; i++) {
             var model = models().cubeAll("block/mega_energy_cell_" + i,

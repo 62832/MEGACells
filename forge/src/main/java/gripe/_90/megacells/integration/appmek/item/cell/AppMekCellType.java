@@ -34,7 +34,7 @@ public enum AppMekCellType implements IMEGACellType {
 
     @Override
     public String affix() {
-        return "chemical";
+        return "Chemical";
     }
 
     @Override

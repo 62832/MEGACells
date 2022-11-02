@@ -14,8 +14,8 @@ public class BlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider
 
     @Override
     protected void addTags() {
-        for (var block : MEGABlocks.getBlocks()) {
-            tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.asBlock());
+        for (var block : MEGABlocks.BLOCKS) {
+            tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
         }
     }
 }

@@ -18,6 +18,7 @@ import appeng.api.util.AEColor;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
+import appeng.core.definitions.BlockDefinition;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
 
@@ -180,7 +181,7 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, MEGACells.makeId("cells/" + MEGACells.getItemPath(housing)));
     }
 
-    private void craftingBlock(Consumer<FinishedRecipe> consumer, MEGABlocks.BlockDefinition<?> unit, ItemLike part) {
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
         ShapelessRecipeBuilder.shapeless(unit)
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)

@@ -22,8 +22,8 @@ public class LootTableProvider extends SimpleFabricLootTableProvider {
 
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        for (var block : MEGABlocks.getBlocks()) {
-            consumer.accept(MEGACells.makeId("blocks/" + block.getId().getPath()),
+        for (var block : MEGABlocks.BLOCKS) {
+            consumer.accept(MEGACells.makeId("blocks/" + block.id().getPath()),
                     LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                             .add(LootItem.lootTableItem(block)).when(ExplosionCondition.survivesExplosion())));
         }

@@ -21,6 +21,7 @@ import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
+import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
@@ -49,11 +50,11 @@ public final class MEGABlockEntities {
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(String id, Class<T> entityClass,
             BlockEntityFactory<T> factory,
-            MEGABlocks.BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
+            BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
         Preconditions.checkArgument(blockDefinitions.length > 0);
 
         var blocks = Arrays.stream(blockDefinitions)
-                .map(MEGABlocks.BlockDefinition::asBlock)
+                .map(BlockDefinition::block)
                 .toArray(AEBaseEntityBlock[]::new);
 
         AtomicReference<BlockEntityType<T>> typeHolder = new AtomicReference<>();
