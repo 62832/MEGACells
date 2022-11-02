@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.BlockModelProvider;
-import gripe._90.megacells.datagen.ItemModelProvider;
 import gripe._90.megacells.integration.appmek.datagen.AppMekItemModelProvider;
 import gripe._90.megacells.integration.appmek.datagen.AppMekRecipeProvider;
 

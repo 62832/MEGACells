@@ -51,7 +51,7 @@ public class BlockModelProvider extends BlockStateProvider {
                         new ConfiguredModel(blockModel))
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, true).setModels(
                         new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
-        simpleBlockItem(block.block(), blockModel);
+        itemModels().getBuilder("item/block/" + block.id().getPath()).parent(blockModel);
     }
 
     private void energyCell() {
@@ -63,7 +63,7 @@ public class BlockModelProvider extends BlockStateProvider {
             blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i).setModels(new ConfiguredModel(model));
             models.add(model);
         }
-        var item = itemModels().withExistingParent("item/mega_energy_cell",
+        var item = itemModels().withExistingParent("item/block/mega_energy_cell",
                 models.get(0).getLocation());
         for (var i = 1; i < models.size(); i++) {
             float fillFactor = (i - 1) / (float) (models.size() - 1);

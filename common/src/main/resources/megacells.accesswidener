@@ -8,3 +8,4 @@ accessible field net/minecraft/client/renderer/block/model/ItemTransform$Deseria
 accessible field net/minecraft/client/renderer/block/model/BlockModel$GuiLight name Ljava/lang/String;
 accessible field net/minecraft/client/resources/ClientPackSource BUILT_IN Lnet/minecraft/server/packs/metadata/pack/PackMetadataSection;
 accessible method net/minecraft/client/renderer/block/model/BlockElement uvsByFace (Lnet/minecraft/core/Direction;)[F
+accessible field net/minecraft/data/models/ItemModelGenerators output Ljava/util/function/BiConsumer;

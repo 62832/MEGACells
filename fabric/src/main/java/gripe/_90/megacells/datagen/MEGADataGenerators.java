@@ -11,12 +11,13 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         generator.addProvider(BlockTagsProvider::new);
         generator.addProvider(LootTableProvider::new);
+        generator.addProvider(ModelProvider::new);
         generator.addProvider(RecipeProvider::new);
 
         for (var en : List.of("en_us", "en_gb", "en_au", "en_ca", "en_nz")) {
             generator.addProvider(new LocalisationProvider(generator, en));
         }
 
-        ForgePortedGenerators.runIfEnabled();
+        // ForgePortedGenerators.runIfEnabled();
     }
 }
