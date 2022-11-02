@@ -1,4 +1,4 @@
-package gripe._90.megacells.datagen;
+package gripe._90.megacells.datagen.forge;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -20,13 +20,8 @@ import appeng.core.definitions.AEParts;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
 
-import mekanism.common.registries.MekanismItems;
-import mekanism.generators.common.registries.GeneratorsBlocks;
-
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.integration.appmek.item.AppMekItems;
-import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.IMEGACellType;
 import gripe._90.megacells.item.cell.MEGACellType;
@@ -48,18 +43,15 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
         housing(consumer, MEGACellType.ITEM);
         housing(consumer, MEGACellType.FLUID);
-        housing(consumer, AppMekCellType.CHEMICAL);
 
         for (var storage : Stream.of(
                 MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream(),
-                AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
             cell(consumer, storage);
         }
         for (var portable : Stream.of(
                 MEGACellType.ITEM.getPortableCells().stream(),
-                MEGACellType.FLUID.getPortableCells().stream(),
-                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
+                MEGACellType.FLUID.getPortableCells().stream()).flatMap(s -> s).toList()) {
             portable(consumer, portable);
         }
 
@@ -73,17 +65,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .define('d', Items.NETHERITE_INGOT)
                 .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
                 .save(consumer, MEGACells.makeId("cells/standard/bulk_item_cell"));
-        ShapedRecipeBuilder.shaped(AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
-                .pattern("aba")
-                .pattern("bcb")
-                .pattern("ded")
-                .define('a', GeneratorsBlocks.REACTOR_GLASS)
-                .define('b', AEItems.SKY_DUST)
-                .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
-                .define('d', MekanismItems.HDPE_SHEET)
-                .define('e', MekanismItems.POLONIUM_PELLET)
-                .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT))
-                .save(consumer, MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")

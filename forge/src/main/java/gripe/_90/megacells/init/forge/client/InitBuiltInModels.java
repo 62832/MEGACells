@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.forge.client;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;

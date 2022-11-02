@@ -1,6 +1,6 @@
-package gripe._90.megacells.datagen;
+package gripe._90.megacells.integration.appmek.datagen;
 
-import java.util.stream.Stream;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -13,15 +13,13 @@ import appeng.core.AppEng;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.item.AppMekItems;
 import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
-import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.item.cell.MEGACellType;
 
-public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
+public class AppMekItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
 
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
 
-    public ItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public AppMekItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, MEGACells.MODID, existingFileHelper);
         existingFileHelper.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         existingFileHelper.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
@@ -29,34 +27,17 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
 
     @Override
     protected void registerModels() {
-        flatSingleLayer(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem());
-        flatSingleLayer(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
         flatSingleLayer(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
-        for (var tier : MEGAItems.getTiers()) {
-            flatSingleLayer(tier.componentSupplier().get());
-        }
-
-        for (var storage : Stream.of(
-                MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream(),
-                AppMekCellType.CHEMICAL.getCells().stream()).flatMap(s -> s).toList()) {
+        for (var storage : AppMekCellType.CHEMICAL.getCells()) {
             cell(storage);
         }
-
-        flatSingleLayer(MEGAItems.BULK_CELL_COMPONENT.asItem());
-        cell(MEGAItems.BULK_ITEM_CELL.asItem());
         flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT.asItem());
         cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem());
 
-        for (var portable : Stream.of(
-                MEGACellType.ITEM.getPortableCells().stream(),
-                MEGACellType.FLUID.getPortableCells().stream(),
-                AppMekCellType.CHEMICAL.getPortableCells().stream()).flatMap(s -> s).toList()) {
+        for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
             portable(portable);
         }
-
-        flatSingleLayer(MEGAItems.GREATER_ENERGY_CARD.asItem());
     }
 
     private void cell(Item cell) {
@@ -75,5 +56,10 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         String path = MEGACells.getItemPath(item);
         return singleTexture(path, mcLoc("item/generated"), "layer0",
                 MEGACells.makeId("item" + subfolder + "/" + path));
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return super.getName() + "/appmek";
     }
 }

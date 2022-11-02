@@ -15,7 +15,7 @@ loom {
             inherit client
             name "Minecraft Data"
             vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated")}"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
             vmArg "-Dfabric-api.datagen.strict-validation"
 
             property "megacells.generateData", "true"
@@ -74,6 +74,9 @@ dependencies {
     modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
     modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
+
+    compileClasspath project(":common").sourceSets.portaforgy.output
+    runtimeClasspath project(":common").sourceSets.portaforgy.output
 }
 
 processResources {
@@ -85,19 +88,12 @@ processResources {
 }
 
 sourceSets {
-    portaforgy
     main {
-        compileClasspath += sourceSets.portaforgy.output
-        runtimeClasspath += sourceSets.portaforgy.output
         resources {
             srcDir 'src/generated/resources'
             exclude '**/.cache'
         }
     }
-}
-
-configurations {
-    portaforgyImplementation.extendsFrom(compileClasspath)
 }
 
 shadowJar {

@@ -1,4 +1,4 @@
-package gripe._90.megacells.platform;
+package gripe._90.megacells.platform.forge;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package gripe._90.megacells.init;
+package gripe._90.megacells.init.forge;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
