@@ -10,16 +10,19 @@ import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.CommonModelSupplier;
+import gripe._90.megacells.item.cell.MEGACellType;
 
 public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
 
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
+    static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
-    public ItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, MEGACells.MODID, existingFileHelper);
-        existingFileHelper.trackGenerated(STORAGE_CELL_LED, TEXTURE);
-        existingFileHelper.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
+    public ItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
+        super(gen, MEGACells.MODID, efh);
+        efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
+        efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
+        efh.trackGenerated(DRIVE_CELL, MODEL);
     }
 
     @Override
@@ -30,10 +33,24 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
 
         for (var item : CommonModelSupplier.STORAGE_CELLS) {
             cell(item);
+            var driveCellPath = "block/drive/cells/standard/" + item.id().getPath();
+            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", MEGACells.makeId(driveCellPath));
         }
 
         for (var item : CommonModelSupplier.PORTABLE_CELLS) {
             portable(item);
+        }
+
+        for (var item : MEGACellType.ITEM.getPortableCells()) {
+            var path = "block/drive/cells/portable/" + item.id().getPath();
+            withExistingParent(path, DRIVE_CELL).texture("cell",
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
+        }
+
+        for (var item : MEGACellType.FLUID.getPortableCells()) {
+            var path = "block/drive/cells/portable/" + item.id().getPath();
+            withExistingParent(path, DRIVE_CELL).texture("cell",
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
         }
     }
 

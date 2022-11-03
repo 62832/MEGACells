@@ -20,10 +20,12 @@ import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.item.cell.MEGACellType;
 
 public class ModelProvider extends FabricModelProvider {
 
     static final TextureSlot LAYER1 = TextureSlot.create("layer1");
+    static final TextureSlot CELL = TextureSlot.create("cell");
 
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
@@ -45,21 +47,44 @@ public class ModelProvider extends FabricModelProvider {
 
         for (var item : CommonModelSupplier.STORAGE_CELLS) {
             cell(item, STORAGE_CELL_LED, "standard", generator.output);
+            driveCell(item, generator.output);
         }
 
         for (var item : CommonModelSupplier.PORTABLE_CELLS) {
             cell(item, PORTABLE_CELL_LED, "portable", generator.output);
         }
+
+        for (var item : MEGACellType.ITEM.getPortableCells()) {
+            driveCell(item, "portable_mega_item_cell", "portable", generator.output);
+        }
+
+        for (var item : MEGACellType.FLUID.getPortableCells()) {
+            driveCell(item, "portable_mega_fluid_cell", "portable", generator.output);
+        }
     }
 
     private void cell(ItemDefinition<?> item, ResourceLocation led, String subfolder,
             BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
-        var template = new ModelTemplate(Optional.of(new ResourceLocation("minecraft", "item/generated")),
+        var loc = MEGACells.makeId("item/cell/" + subfolder + "/" + item.id().getPath());
+        var template = new ModelTemplate(Optional.of(new ResourceLocation("item/generated")),
                 Optional.empty(), TextureSlot.LAYER0, LAYER1);
         var mapping = new TextureMapping()
-                .put(TextureSlot.LAYER0, TextureMapping.getItemTexture(item.asItem()))
+                .put(TextureSlot.LAYER0, loc)
                 .put(LAYER1, led);
 
-        template.create(MEGACells.makeId("item/cell/" + subfolder + "/" + item.id().getPath()), mapping, output);
+        template.create(loc, mapping, output);
+    }
+
+    private void driveCell(ItemDefinition<?> cell, BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
+        driveCell(cell, "standard", cell.id().getPath(), output);
+    }
+
+    private void driveCell(ItemDefinition<?> cell, String driveCellTexture, String subfolder,
+            BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
+        var texture = MEGACells.makeId("block/drive/cells/" + subfolder + "/" + driveCellTexture);
+        var template = new ModelTemplate(Optional.of(AppEng.makeId("block/drive/drive_cell")), Optional.empty(), CELL);
+        var mapping = new TextureMapping().put(CELL, texture);
+
+        template.create(cell.id(), mapping, output);
     }
 }

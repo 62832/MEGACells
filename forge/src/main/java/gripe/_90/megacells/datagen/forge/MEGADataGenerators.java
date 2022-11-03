@@ -9,7 +9,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.integration.appmek.datagen.AppMekBlockModelProvider;
 import gripe._90.megacells.integration.appmek.datagen.AppMekItemModelProvider;
 import gripe._90.megacells.integration.appmek.datagen.AppMekRecipeProvider;
 
@@ -23,7 +22,6 @@ public class MEGADataGenerators {
 
         generator.addProvider(true, new LootTableProvider(generator));
 
-        generator.addProvider(true, new BlockModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new BlockStateProvider(generator, existingFileHelper));
         generator.addProvider(true, new ItemModelProvider(generator, existingFileHelper));
 
@@ -34,7 +32,6 @@ public class MEGADataGenerators {
             generator.addProvider(true, new LocalisationProvider(generator, en));
         }
 
-        generator.addProvider(true, new AppMekBlockModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new AppMekItemModelProvider(generator, existingFileHelper));
         generator.addProvider(true, new AppMekRecipeProvider(generator));
     }

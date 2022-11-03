@@ -18,11 +18,13 @@ public class AppMekItemModelProvider extends net.minecraftforge.client.model.gen
 
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
+    static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
-    public AppMekItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, MEGACells.MODID, existingFileHelper);
-        existingFileHelper.trackGenerated(STORAGE_CELL_LED, TEXTURE);
-        existingFileHelper.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
+    public AppMekItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
+        super(gen, MEGACells.MODID, efh);
+        efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
+        efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
+        efh.trackGenerated(DRIVE_CELL, MODEL);
     }
 
     @Override
@@ -31,13 +33,21 @@ public class AppMekItemModelProvider extends net.minecraftforge.client.model.gen
 
         for (var storage : AppMekCellType.CHEMICAL.getCells()) {
             cell(storage);
+            var driveCellPath = "block/drive/cells/standard/" + storage.id().getPath();
+            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", MEGACells.makeId(driveCellPath));
         }
-        flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
-        cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
 
         for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
             portable(portable);
+            var driveCellPath = "block/drive/cells/portable/" + portable.id().getPath();
+            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell",
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_chemical_cell"));
         }
+
+        flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
+        cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
+        withExistingParent("block/drive/cells/standard/radioactive_chemical_cell", DRIVE_CELL)
+                .texture("cell", MEGACells.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
     }
 
     private void cell(ItemDefinition<?> cell) {

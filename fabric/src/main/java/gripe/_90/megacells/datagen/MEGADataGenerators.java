@@ -17,7 +17,5 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
         for (var en : List.of("en_us", "en_gb", "en_au", "en_ca", "en_nz")) {
             generator.addProvider(new LocalisationProvider(generator, en));
         }
-
-        // ForgePortedGenerators.runIfEnabled();
     }
 }
