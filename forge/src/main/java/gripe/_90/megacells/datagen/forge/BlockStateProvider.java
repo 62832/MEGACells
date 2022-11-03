@@ -32,7 +32,7 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         craftingModel(MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage");
         craftingModel(MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage");
         craftingModel(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator");
-        builtInBlockModel("crafting/monitor_formed");
+        craftingMonitorModel();
     }
 
     private void builtInBlockModel(String name) {
@@ -50,7 +50,21 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
                         new ConfiguredModel(blockModel))
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, true).setModels(
                         new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
-        itemModels().getBuilder("item/block/" + block.id().getPath()).parent(blockModel);
+        itemModels().getBuilder("item/" + block.id().getPath()).parent(blockModel);
+    }
+
+    private void craftingMonitorModel() {
+        var unitTexture = MEGACells.makeId("block/crafting/unit");
+        var monitorTexture = MEGACells.makeId("block/crafting/monitor");
+        var blockModel = models().cube("block/crafting/monitor", unitTexture, unitTexture, monitorTexture, unitTexture,
+                unitTexture, unitTexture).texture("particle", monitorTexture);
+
+        builtInBlockModel("crafting/monitor_formed");
+        getVariantBuilder(MEGABlocks.CRAFTING_MONITOR.block()).partialState()
+                .with(AbstractCraftingUnitBlock.FORMED, false).setModels(new ConfiguredModel(blockModel)).partialState()
+                .with(AbstractCraftingUnitBlock.FORMED, true)
+                .setModels(new ConfiguredModel(models().getBuilder("block/crafting/monitor_formed")));
+        itemModels().getBuilder("item/mega_crafting_monitor").parent(blockModel);
     }
 
     private void energyCell() {
@@ -62,7 +76,7 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
             blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i).setModels(new ConfiguredModel(model));
             models.add(model);
         }
-        var item = itemModels().withExistingParent("item/block/mega_energy_cell",
+        var item = itemModels().withExistingParent("item/mega_energy_cell",
                 models.get(0).getLocation());
         for (var i = 1; i < models.size(); i++) {
             float fillFactor = (i - 1) / (float) (models.size() - 1);

@@ -36,18 +36,17 @@ public class AppMekItemModelProvider extends net.minecraftforge.client.model.gen
             var driveCellPath = "block/drive/cells/standard/" + storage.id().getPath();
             withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", MEGACells.makeId(driveCellPath));
         }
-
         for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
             portable(portable);
-            var driveCellPath = "block/drive/cells/portable/" + portable.id().getPath();
-            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell",
-                    MEGACells.makeId("block/drive/cells/portable/portable_mega_chemical_cell"));
         }
+
+        withExistingParent("block/drive/cells/portable/portable_mega_chemical_cell", DRIVE_CELL).texture("cell",
+                MEGACells.makeId("block/drive/cells/portable/portable_mega_chemical_cell"));
 
         flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
         cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
-        withExistingParent("block/drive/cells/standard/radioactive_chemical_cell", DRIVE_CELL)
-                .texture("cell", MEGACells.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
+        withExistingParent("block/drive/cells/standard/radioactive_chemical_cell", DRIVE_CELL).texture("cell",
+                MEGACells.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
     }
 
     private void cell(ItemDefinition<?> cell) {
@@ -63,8 +62,8 @@ public class AppMekItemModelProvider extends net.minecraftforge.client.model.gen
     }
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String subfolder) {
-        String path = "item/" + subfolder + item.id().getPath();
-        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId(path));
+        String path = item.id().getPath();
+        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + subfolder + path));
     }
 
     @Override

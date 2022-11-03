@@ -22,18 +22,18 @@ public class InitStorageCells {
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
             StorageCellModels.registerModel(cell,
-                    MEGACells.makeId("block/drive/cells/" + cell.id().getPath()));
+                    MEGACells.makeId("block/drive/cells/standard/" + cell.id().getPath()));
         }
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL.asItem(),
-                MEGACells.makeId("block/drive/cells/bulk_item_cell"));
+                MEGACells.makeId("block/drive/cells/standard/bulk_item_cell"));
 
         for (var portableItemCell : MEGACellType.ITEM.getPortableCells()) {
             StorageCellModels.registerModel(portableItemCell,
-                    MEGACells.makeId("block/drive/cells/portable_mega_item_cell"));
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
         }
         for (var portableFluidCell : MEGACellType.FLUID.getPortableCells()) {
             StorageCellModels.registerModel(portableFluidCell,
-                    MEGACells.makeId("block/drive/cells/portable_mega_fluid_cell"));
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
         }
     }
 }

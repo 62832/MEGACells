@@ -10,7 +10,6 @@ import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.CommonModelSupplier;
-import gripe._90.megacells.item.cell.MEGACellType;
 
 public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
 
@@ -40,18 +39,10 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         for (var item : CommonModelSupplier.PORTABLE_CELLS) {
             portable(item);
         }
-
-        for (var item : MEGACellType.ITEM.getPortableCells()) {
-            var path = "block/drive/cells/portable/" + item.id().getPath();
-            withExistingParent(path, DRIVE_CELL).texture("cell",
-                    MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
-        }
-
-        for (var item : MEGACellType.FLUID.getPortableCells()) {
-            var path = "block/drive/cells/portable/" + item.id().getPath();
-            withExistingParent(path, DRIVE_CELL).texture("cell",
-                    MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
-        }
+        withExistingParent("block/drive/cells/portable/portable_mega_item_cell", DRIVE_CELL).texture("cell",
+                MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
+        withExistingParent("block/drive/cells/portable/portable_mega_fluid_cell", DRIVE_CELL).texture("cell",
+                MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
     }
 
     public void cell(ItemDefinition<?> cell) {
@@ -67,7 +58,7 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
     }
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String subfolder) {
-        String path = "item/" + subfolder + item.id().getPath();
-        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId(path));
+        String path = item.id().getPath();
+        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + subfolder + path));
     }
 }
