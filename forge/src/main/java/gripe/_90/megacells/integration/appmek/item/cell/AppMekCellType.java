@@ -10,6 +10,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 
 import appeng.api.stacks.AEKeyType;
+import appeng.core.definitions.ItemDefinition;
+import appeng.items.materials.MaterialItem;
 import appeng.menu.me.common.MEStorageMenu;
 
 import me.ramidzkh.mekae2.AMMenus;
@@ -34,12 +36,12 @@ public enum AppMekCellType implements IMEGACellType {
 
     @Override
     public String affix() {
-        return "chemical";
+        return "Chemical";
     }
 
     @Override
-    public Item housing() {
-        return AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem();
+    public ItemDefinition<MaterialItem> housing() {
+        return AppMekItems.MEGA_CHEMICAL_CELL_HOUSING;
     }
 
     @Override
@@ -52,17 +54,17 @@ public enum AppMekCellType implements IMEGACellType {
         return AMMenus.PORTABLE_CHEMICAL_CELL_TYPE;
     }
 
-    public List<Item> getCells() {
+    public List<ItemDefinition<?>> getCells() {
         return AppMekIntegration.isAppMekLoaded() ? List.of(
-                AppMekItems.CHEMICAL_CELL_1M.asItem(), AppMekItems.CHEMICAL_CELL_4M.asItem(),
-                AppMekItems.CHEMICAL_CELL_16M.asItem(), AppMekItems.CHEMICAL_CELL_64M.asItem(),
-                AppMekItems.CHEMICAL_CELL_256M.asItem()) : Collections.emptyList();
+                AppMekItems.CHEMICAL_CELL_1M, AppMekItems.CHEMICAL_CELL_4M,
+                AppMekItems.CHEMICAL_CELL_16M, AppMekItems.CHEMICAL_CELL_64M,
+                AppMekItems.CHEMICAL_CELL_256M) : Collections.emptyList();
     }
 
-    public List<Item> getPortableCells() {
+    public List<ItemDefinition<?>> getPortableCells() {
         return AppMekIntegration.isAppMekLoaded() ? List.of(
-                AppMekItems.PORTABLE_CHEMICAL_CELL_1M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_4M.asItem(),
-                AppMekItems.PORTABLE_CHEMICAL_CELL_16M.asItem(), AppMekItems.PORTABLE_CHEMICAL_CELL_64M.asItem(),
-                AppMekItems.PORTABLE_CHEMICAL_CELL_256M.asItem()) : Collections.emptyList();
+                AppMekItems.PORTABLE_CHEMICAL_CELL_1M, AppMekItems.PORTABLE_CHEMICAL_CELL_4M,
+                AppMekItems.PORTABLE_CHEMICAL_CELL_16M, AppMekItems.PORTABLE_CHEMICAL_CELL_64M,
+                AppMekItems.PORTABLE_CHEMICAL_CELL_256M) : Collections.emptyList();
     }
 }

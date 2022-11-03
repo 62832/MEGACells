@@ -2,6 +2,8 @@ package gripe._90.megacells.integration.appmek;
 
 import java.util.List;
 
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+
 import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
@@ -15,6 +17,8 @@ import gripe._90.megacells.integration.appmek.item.AppMekItems;
 import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
 import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
+import gripe._90.megacells.item.cell.MEGAStorageCell;
 import gripe._90.megacells.platform.Services;
 
 public final class AppMekIntegration {
@@ -62,7 +66,7 @@ public final class AppMekIntegration {
 
     private static void initCellModels() {
         for (var cell : AppMekCellType.CHEMICAL.getCells()) {
-            StorageCellModels.registerModel(cell, MEGACells.makeId("block/drive/cells/" + MEGACells.getItemPath(cell)));
+            StorageCellModels.registerModel(cell, MEGACells.makeId("block/drive/cells/" + cell.id().getPath()));
         }
         for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
             StorageCellModels.registerModel(portable, MEGACells.makeId("block/drive/cells/portable_mega_item_cell"));
@@ -70,5 +74,15 @@ public final class AppMekIntegration {
 
         StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
                 MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
+    }
+
+    public static void initItemColors(RegisterColorHandlersEvent.Item event) {
+        for (var cell : AppMekCellType.CHEMICAL.getCells()) {
+            event.getItemColors().register(MEGAStorageCell::getColor, cell);
+        }
+        for (var cell : AppMekCellType.CHEMICAL.getPortableCells()) {
+            event.getItemColors().register(MEGAPortableCell::getColor, cell);
+        }
+        event.getItemColors().register(MEGAStorageCell::getColor, AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem());
     }
 }

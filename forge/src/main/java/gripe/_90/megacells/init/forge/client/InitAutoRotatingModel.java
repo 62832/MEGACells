@@ -1,4 +1,4 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.forge.client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,22 +8,20 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.block.AEBaseBlock;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.model.AutoRotatingBakedModel;
 import appeng.core.definitions.BlockDefinition;
-import appeng.hooks.ModelsReloadCallback;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
 
-@Environment(EnvType.CLIENT)
 public class InitAutoRotatingModel {
     private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
             MEGABlocks.MEGA_CRAFTING_UNIT,
@@ -38,6 +36,12 @@ public class InitAutoRotatingModel {
     private static final Map<String, Function<BakedModel, BakedModel>> CUSTOMIZERS = new HashMap<>();
 
     public static void init() {
+        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(InitAutoRotatingModel::initAutoRotatingModels);
+        bus.addListener(InitAutoRotatingModel::onModelBake);
+    }
+
+    public static void initAutoRotatingModels(ModelEvent.BakingCompleted event) {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
         for (var block : MEGABlocks.BLOCKS) {
@@ -51,8 +55,6 @@ public class InitAutoRotatingModel {
                 register(block, AutoRotatingBakedModel::new);
             }
         }
-
-        ModelsReloadCallback.EVENT.register(InitAutoRotatingModel::onModelBake);
     }
 
     private static void register(BlockDefinition<?> block, Function<BakedModel, BakedModel> customizer) {
@@ -68,7 +70,8 @@ public class InitAutoRotatingModel {
         return new AutoRotatingBakedModel(model);
     }
 
-    private static void onModelBake(Map<ResourceLocation, BakedModel> modelRegistry) {
+    private static void onModelBake(ModelEvent.BakingCompleted event) {
+        Map<ResourceLocation, BakedModel> modelRegistry = event.getModels();
         Set<ResourceLocation> keys = Sets.newHashSet(modelRegistry.keySet());
         BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
 

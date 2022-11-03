@@ -1,15 +1,14 @@
-package gripe._90.megacells.init.client;
+package gripe._90.megacells.init.forge.client;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.block.MEGABlocks;
 
-@Environment(EnvType.CLIENT)
 public class InitRenderTypes {
     private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {
             MEGABlocks.MEGA_CRAFTING_UNIT,
@@ -23,8 +22,13 @@ public class InitRenderTypes {
     };
 
     public static void init() {
+        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(InitRenderTypes::initRenderTypes);
+    }
+
+    private static void initRenderTypes(FMLClientSetupEvent event) {
         for (var definition : CUTOUT_BLOCKS) {
-            BlockRenderLayerMap.INSTANCE.putBlock(definition.block(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(definition.block(), RenderType.cutout());
         }
     }
 }
