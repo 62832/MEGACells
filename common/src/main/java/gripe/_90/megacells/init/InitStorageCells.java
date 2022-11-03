@@ -22,7 +22,7 @@ public class InitStorageCells {
                 MEGACellType.ITEM.getCells().stream(),
                 MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
             StorageCellModels.registerModel(cell,
-                    MEGACells.makeId("block/drive/cells/" + MEGACells.getItemPath(cell)));
+                    MEGACells.makeId("block/drive/cells/" + cell.id().getPath()));
         }
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL.asItem(),
                 MEGACells.makeId("block/drive/cells/bulk_item_cell"));

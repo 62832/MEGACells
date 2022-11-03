@@ -4,16 +4,17 @@ import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Item;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import appeng.core.definitions.ItemDefinition;
 
 import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
@@ -61,14 +62,14 @@ public class AppMekRecipeProvider extends net.minecraft.data.recipes.RecipeProvi
                 .save(consumer, MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
     }
 
-    private void cell(Consumer<FinishedRecipe> consumer, Item cellItem) {
-        var cell = (MEGAStorageCell) cellItem;
+    private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
+        var cell = (MEGAStorageCell) cellDefinition.asItem();
         var component = cell.getTier().componentSupplier().get();
 
-        var componentPath = MEGACells.getItemPath(component);
-        var cellPath = MEGACells.getItemPath(cellItem);
+        var componentPath = Registry.ITEM.getKey(component).getPath();
+        var cellPath = cellDefinition.id().getPath();
 
-        ShapedRecipeBuilder.shaped(cellItem)
+        ShapedRecipeBuilder.shaped(cellDefinition)
                 .pattern("aba")
                 .pattern("bcb")
                 .pattern("ddd")
@@ -78,7 +79,7 @@ public class AppMekRecipeProvider extends net.minecraft.data.recipes.RecipeProvi
                 .define('d', ItemTags.create(new ResourceLocation("forge", "ingots/osmium")))
                 .unlockedBy("has_" + componentPath, has(component))
                 .save(consumer, MEGACells.makeId("cells/standard/" + cellPath));
-        ShapelessRecipeBuilder.shapeless(cellItem)
+        ShapelessRecipeBuilder.shapeless(cellDefinition)
                 .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                 .requires(component)
                 .unlockedBy("has_" + componentPath, has(component))
@@ -86,8 +87,8 @@ public class AppMekRecipeProvider extends net.minecraft.data.recipes.RecipeProvi
                 .save(consumer, MEGACells.makeId("cells/standard/" + cellPath + "_with_housing"));
     }
 
-    private void portable(Consumer<FinishedRecipe> consumer, Item portableCellItem) {
-        var portableCell = (MEGAPortableCell) portableCellItem;
+    private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
+        var portableCell = (MEGAPortableCell) cellDefinition.asItem();
         ShapelessRecipeBuilder.shapeless(portableCell)
                 .requires(AEBlocks.CHEST)
                 .requires(portableCell.getTier().componentSupplier().get())
@@ -95,7 +96,7 @@ public class AppMekRecipeProvider extends net.minecraft.data.recipes.RecipeProvi
                 .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                 .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-                .save(consumer, MEGACells.makeId("cells/portable/" + MEGACells.getItemPath(portableCell)));
+                .save(consumer, MEGACells.makeId("cells/portable/" + cellDefinition.id().getPath()));
     }
 
     @Override

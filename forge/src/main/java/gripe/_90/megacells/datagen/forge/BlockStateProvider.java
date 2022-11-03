@@ -1,9 +1,8 @@
-package gripe._90.megacells.datagen;
+package gripe._90.megacells.datagen.forge;
 
 import java.util.ArrayList;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -17,10 +16,10 @@ import appeng.init.client.InitItemModelsProperties;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
 
-public class BlockModelProvider extends BlockStateProvider {
+public class BlockStateProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
 
-    public BlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, MEGACells.MODID, exFileHelper);
+    public BlockStateProvider(DataGenerator gen, ExistingFileHelper efh) {
+        super(gen, MEGACells.MODID, efh);
     }
 
     @Override

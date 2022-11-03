@@ -5,6 +5,8 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 
 import appeng.api.stacks.AEKeyType;
+import appeng.core.definitions.ItemDefinition;
+import appeng.items.materials.MaterialItem;
 import appeng.menu.me.common.MEStorageMenu;
 
 public interface IMEGACellType {
@@ -14,7 +16,7 @@ public interface IMEGACellType {
 
     String affix();
 
-    Item housing();
+    ItemDefinition<MaterialItem> housing();
 
     TagKey<Item> housingMaterial();
 
