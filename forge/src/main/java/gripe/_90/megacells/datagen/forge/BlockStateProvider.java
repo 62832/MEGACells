@@ -15,6 +15,7 @@ import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.datagen.CommonModelSupplier;
 
 public class BlockStateProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
 
@@ -25,13 +26,10 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
     @Override
     protected void registerStatesAndModels() {
         energyCell();
-        craftingModel(MEGABlocks.MEGA_CRAFTING_UNIT, "unit");
-        craftingModel(MEGABlocks.CRAFTING_STORAGE_1M, "1m_storage");
-        craftingModel(MEGABlocks.CRAFTING_STORAGE_4M, "4m_storage");
-        craftingModel(MEGABlocks.CRAFTING_STORAGE_16M, "16m_storage");
-        craftingModel(MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage");
-        craftingModel(MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage");
-        craftingModel(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator");
+
+        for (var block : CommonModelSupplier.CRAFTING_UNITS) {
+            craftingModel(block.first, block.second);
+        }
         craftingMonitorModel();
     }
 

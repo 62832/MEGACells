@@ -51,13 +51,10 @@ public class ModelProvider extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
         energyCell(generator);
-        craftingBlock(MEGABlocks.MEGA_CRAFTING_UNIT, "unit", generator);
-        craftingBlock(MEGABlocks.CRAFTING_STORAGE_1M, "1m_storage", generator);
-        craftingBlock(MEGABlocks.CRAFTING_STORAGE_4M, "4m_storage", generator);
-        craftingBlock(MEGABlocks.CRAFTING_STORAGE_16M, "16m_storage", generator);
-        craftingBlock(MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage", generator);
-        craftingBlock(MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage", generator);
-        craftingBlock(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator", generator);
+
+        for (var block : CommonModelSupplier.CRAFTING_UNITS) {
+            craftingBlock(block.first, block.second, generator);
+        }
         craftingMonitor(generator);
     }
 
