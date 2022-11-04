@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:chest"
+    },
+    {
+      "item": "megacells:cell_component_1m"
+    },
+    {
+      "item": "ae2:dense_energy_cell"
+    },
+    {
+      "item": "megacells:mega_item_cell_housing"
+    }
+  ],
+  "result": {
+    "item": "megacells:portable_item_cell_1m"
+  }
+}

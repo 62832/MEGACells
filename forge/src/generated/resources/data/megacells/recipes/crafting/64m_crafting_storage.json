@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "megacells:mega_crafting_unit"
+    },
+    {
+      "item": "megacells:cell_component_64m"
+    }
+  ],
+  "result": {
+    "item": "megacells:64m_crafting_storage"
+  }
+}

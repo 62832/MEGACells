@@ -35,7 +35,9 @@ public class MEGACellsForge {
         MEGAItems.init();
         MEGABlockEntities.init();
 
-        AppMekItems.init();
+        if (AppMekIntegration.isAppMekLoaded()) {
+            AppMekItems.init();
+        }
 
         bus.addListener((RegisterEvent event) -> {
             if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {

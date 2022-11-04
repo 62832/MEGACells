@@ -1,0 +1,6 @@
+{
+  "parent": "ae2:block/drive/drive_cell",
+  "textures": {
+    "cell": "megacells:block/drive/cells/standard/fluid_storage_cell_16m"
+  }
+}
