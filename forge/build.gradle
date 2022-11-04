@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
@@ -28,6 +30,13 @@ loom {
 
         mixinConfig "megacells-common.mixins.json"
         mixinConfig "megacells.mixins.json"
+    }
+}
+
+// temporary workaround for Forge datagen hanging without exiting on Architectury
+project.afterEvaluate {
+    tasks.findByName("runData").configure {
+        timeout = Duration.ofMinutes(1)
     }
 }
 
@@ -69,9 +78,8 @@ dependencies {
     modRuntimeOnly "curse.maven:appmek-574300:${appmek_fileid}"
 
     modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
-    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
     modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
-    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
+    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all"
 
     modCompileOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
     modRuntimeOnly "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
