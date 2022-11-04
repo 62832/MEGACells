@@ -16,14 +16,16 @@ jobs:
           java-version: 17
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Generate data
+        run: ./gradlew downloadAssets :fabric:runData --max-workers 1
+      - name: Build release files
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
-        run: ./gradlew build
+        run: ./gradlew build --max-workers 1
       - name: Upload to mod repositories
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
           CHANGELOG: ${{ github.event.release.body }}
           CF_TOKEN: ${{ secrets.CURSEFORGE_API_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_API_KEY }}
-        run: ./gradlew :fabric:publishUnified :forge:publishUnified
+        run: ./gradlew :fabric:publishUnified :forge:publishUnified --max-workers 1
