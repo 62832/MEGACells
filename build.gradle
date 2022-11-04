@@ -2,6 +2,7 @@ plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
     id 'io.github.juuxel.loom-quiltflower' version '1.7.1' apply false
+    id "me.shedaniel.unified-publishing" version "0.1.+" apply false
     id "com.diffplug.spotless" version "6.4.1"
 }
 
@@ -12,9 +13,10 @@ architectury {
 subprojects {
     apply plugin: "dev.architectury.loom"
     apply plugin: "io.github.juuxel.loom-quiltflower"
+    apply plugin: "me.shedaniel.unified-publishing"
 
     archivesBaseName = rootProject.mod_id + "-" + project.name
-    version = rootProject.mod_version + "-" + rootProject.minecraft_version
+    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
     group = rootProject.maven_group
 
     loom {
@@ -90,6 +92,65 @@ allprojects {
     jar {
         from("LICENSE") {
             rename { "${it}_${rootProject.archivesBaseName}"}
+        }
+    }
+
+    if ((project.name == "fabric" || project.name == "forge") && project.version != "0.0.0") {
+        unifiedPublishing {
+            project {
+                gameVersions = [rootProject.minecraft_version]
+                gameLoaders = [project.name]
+
+                def loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
+                def releaseChannel = "release"
+                def changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
+                if (project.version.toLowerCase().contains("alpha")) {
+                    releaseChannel = "alpha"
+                    changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n" + changes
+                } else if (project.version.toLowerCase().contains("beta")) {
+                    releaseChannel = "beta"
+                    changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n" + changes
+                }
+
+                releaseType = releaseChannel
+                changelog = changes
+                displayName = String.format("%s (%s %s)", project.version, loader, rootProject.minecraft_version)
+
+                mainPublication remapJar // Declares the publicated jar
+
+                relations {
+                    depends {
+                        curseforge = "applied-energistics-2"
+                        modrinth = "ae2"
+                    }
+                    optional {
+                        curseforge = "applied-energistics-2-wireless-terminals"
+                        modrinth = "applied-energistics-2-wireless-terminals"
+                    }
+                    if (project.name == "forge") {
+                        optional {
+                            curseforge = "applied-mekanistics"
+                            modrinth = "applied-mekanistics"
+                        }
+                    }
+                }
+
+                var cfToken = System.getenv("CF_TOKEN")
+                if (cfToken != null) {
+                    curseforge {
+                        token = cfToken
+                        id = "622112" // Required, must be a string, ID of CurseForge project
+                    }
+                }
+
+                var mrToken = System.getenv("MODRINTH_TOKEN")
+                if (mrToken != null) {
+                    modrinth {
+                        token = mrToken
+                        id = "7QZJE3uU" // Required, must be a string, ID of Modrinth project
+                    }
+                }
+            }
         }
     }
 

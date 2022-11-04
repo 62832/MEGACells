@@ -131,13 +131,13 @@ public class ModelProvider extends FabricModelProvider {
                 .with(PropertyDispatch.property(AbstractCraftingUnitBlock.FORMED)
                         .select(false, Variant.variant().with(VariantProperties.MODEL,
                                 ModelTemplates.CUBE.create(unformed, new TextureMapping()
-                                                .put(TextureSlot.NORTH, unformed)
-                                                .put(TextureSlot.EAST, unit)
-                                                .put(TextureSlot.SOUTH, unit)
-                                                .put(TextureSlot.WEST, unit)
-                                                .put(TextureSlot.DOWN, unit)
-                                                .put(TextureSlot.UP, unit)
-                                                .put(TextureSlot.PARTICLE, unformed), generator.modelOutput)))
+                                        .put(TextureSlot.NORTH, unformed)
+                                        .put(TextureSlot.EAST, unit)
+                                        .put(TextureSlot.SOUTH, unit)
+                                        .put(TextureSlot.WEST, unit)
+                                        .put(TextureSlot.DOWN, unit)
+                                        .put(TextureSlot.UP, unit)
+                                        .put(TextureSlot.PARTICLE, unformed), generator.modelOutput)))
                         .select(true, Variant.variant().with(VariantProperties.MODEL, formed))));
         generator.modelOutput.accept(formed, () -> customModelLoader(formed));
         generator.delegateItemModel(MEGABlocks.CRAFTING_MONITOR.block(), unformed);
@@ -156,7 +156,8 @@ public class ModelProvider extends FabricModelProvider {
 
         for (var i = 0; i < 5; i++) {
             fillStage.select(i, Variant.variant().with(VariantProperties.MODEL,
-                    generator.createSuffixedVariant(cell.block(), "_" + i, ModelTemplates.CUBE_ALL, TextureMapping::cube)));
+                    generator.createSuffixedVariant(cell.block(), "_" + i, ModelTemplates.CUBE_ALL,
+                            TextureMapping::cube)));
             if (i < 4) {
                 var fillPredicate = new JsonObject();
                 fillPredicate.addProperty(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID.toString(), 0.25 * i);

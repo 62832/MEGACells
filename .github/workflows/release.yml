@@ -1,0 +1,29 @@
+name: 'Release'
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        env:
+          MEGA_VERSION: ${{ github.event.release.tag_name }}
+        run: ./gradlew build
+      - name: Upload to Curseforge
+        env:
+          MEGA_VERSION: ${{ github.event.release.tag_name }}
+          CHANGELOG: ${{ github.event.release.body }}
+          CF_TOKEN: ${{ secrets.CURSEFORGE_API_KEY }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_API_KEY }}
+        run: ./gradlew :fabric:publishUnified :forge:publishUnified
