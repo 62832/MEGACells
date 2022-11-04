@@ -100,6 +100,7 @@ allprojects {
             project {
                 gameVersions = [rootProject.minecraft_version]
                 gameLoaders = [project.name]
+                version = project.name + "-" + project.version + "-" + rootProject.minecraft_version
 
                 def loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
                 def releaseChannel = "release"
