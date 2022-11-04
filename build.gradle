@@ -16,7 +16,7 @@ subprojects {
     apply plugin: "me.shedaniel.unified-publishing"
 
     archivesBaseName = rootProject.mod_id + "-" + project.name
-    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
+    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1) + "-" + rootProject.minecraft_version
     group = rootProject.maven_group
 
     loom {
@@ -100,7 +100,7 @@ allprojects {
             project {
                 gameVersions = [rootProject.minecraft_version]
                 gameLoaders = [project.name]
-                version = project.name + "-" + project.version + "-" + rootProject.minecraft_version
+                version = project.name + "-" + project.version
 
                 def loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
                 def releaseChannel = "release"
@@ -115,7 +115,7 @@ allprojects {
 
                 releaseType = releaseChannel
                 changelog = changes
-                displayName = String.format("%s (%s %s)", project.version, loader, rootProject.minecraft_version)
+                displayName = String.format("%s (%s %s)", project.version.substring(0, 5), loader, rootProject.minecraft_version)
 
                 mainPublication remapJar // Declares the publicated jar
 
