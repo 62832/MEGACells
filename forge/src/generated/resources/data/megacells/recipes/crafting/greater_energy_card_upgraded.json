@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2:energy_card"
+    },
+    {
+      "item": "megacells:mega_energy_cell"
+    }
+  ],
+  "result": {
+    "item": "megacells:greater_energy_card"
+  }
+}

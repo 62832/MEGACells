@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "megacells:item/cell/portable/portable_fluid_cell_1m",
+    "layer1": "ae2:item/portable_cell_led"
+  }
+}

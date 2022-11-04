@@ -20,7 +20,7 @@ jobs:
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build
-      - name: Upload to Curseforge
+      - name: Upload to mod repositories
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
           CHANGELOG: ${{ github.event.release.body }}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "megacells:mega_crafting_unit"
+    },
+    {
+      "item": "ae2:storage_monitor"
+    }
+  ],
+  "result": {
+    "item": "megacells:mega_crafting_monitor"
+  }
+}

@@ -1,5 +1,3 @@
-import java.time.Duration
-
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
@@ -30,13 +28,6 @@ loom {
 
         mixinConfig "megacells-common.mixins.json"
         mixinConfig "megacells.mixins.json"
-    }
-}
-
-// temporary workaround for Forge datagen hanging without exiting on Architectury
-project.afterEvaluate {
-    tasks.findByName("runData").configure {
-        timeout = Duration.ofMinutes(1)
     }
 }
 

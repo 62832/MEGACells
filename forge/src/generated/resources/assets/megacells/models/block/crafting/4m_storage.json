@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "megacells:block/crafting/4m_storage"
+  }
+}
