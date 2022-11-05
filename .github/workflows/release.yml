@@ -17,7 +17,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Generate data
-        run: ./gradlew downloadAssets :fabric:runData --max-workers 1
+        run: ./gradlew downloadAssets runData --max-workers 1
       - name: Build release files
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
