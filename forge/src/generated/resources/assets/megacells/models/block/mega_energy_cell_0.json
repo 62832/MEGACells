@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "megacells:block/mega_energy_cell_0"
-  }
-}

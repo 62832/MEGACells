@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "megacells:item/cell/portable/portable_item_cell_16m",
-    "layer1": "ae2:item/portable_cell_led"
-  }
-}

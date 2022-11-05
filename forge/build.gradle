@@ -82,6 +82,8 @@ dependencies {
     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
     modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
 
+    modRuntimeOnly "curse.maven:allthecompressed-514045:4068231"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

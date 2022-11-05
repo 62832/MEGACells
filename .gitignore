@@ -20,5 +20,5 @@ build
 # other
 eclipse
 run
-fabric/src/generated
+**/src/generated
 .architectury-transformer
