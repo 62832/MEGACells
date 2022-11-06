@@ -5,13 +5,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.data.Main;
+
 /**
  * Temporary dirty fix for the <code>:forge:runData</code> Gradle task hanging without exiting on Architectury.
  */
-@Mixin(targets = "net/minecraftforge/data/event/GatherDataEvent$DataGeneratorConfig")
-public class GatherDataEventMixin {
-    @Inject(method = "runAll", at = @At("TAIL"), remap = false)
-    private void exit(CallbackInfo ci) {
+@Mixin(Main.class)
+public class MainMixin {
+    @Inject(method = "main", at = @At("TAIL"), remap = false)
+    private static void exit(String[] strings, CallbackInfo ci) {
         System.exit(0);
     }
 }
