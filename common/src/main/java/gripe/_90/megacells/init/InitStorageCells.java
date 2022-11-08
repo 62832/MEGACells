@@ -6,7 +6,7 @@ import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
 

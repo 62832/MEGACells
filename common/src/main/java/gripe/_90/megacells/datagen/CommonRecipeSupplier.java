@@ -24,8 +24,8 @@ import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.IMEGACellType;
 import gripe._90.megacells.item.cell.MEGACellType;
 import gripe._90.megacells.item.cell.MEGAPortableCell;

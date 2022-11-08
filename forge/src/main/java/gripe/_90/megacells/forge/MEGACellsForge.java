@@ -11,9 +11,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.block.entity.MEGABlockEntities;
 import gripe._90.megacells.datagen.forge.MEGADataGenerators;
+import gripe._90.megacells.definition.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.forge.Registration;
@@ -24,7 +25,6 @@ import gripe._90.megacells.init.forge.client.InitItemColors;
 import gripe._90.megacells.init.forge.client.InitRenderTypes;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.item.AppMekItems;
-import gripe._90.megacells.item.MEGAItems;
 
 @Mod(MEGACells.MODID)
 public class MEGACellsForge {

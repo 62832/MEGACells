@@ -7,8 +7,8 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGACellType;
 
 public class InitUpgrades {

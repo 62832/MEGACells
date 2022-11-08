@@ -20,7 +20,7 @@ import appeng.client.render.model.AutoRotatingBakedModel;
 import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 
 public class InitAutoRotatingModel {
     private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
@@ -44,7 +44,7 @@ public class InitAutoRotatingModel {
     public static void initAutoRotatingModels(ModelEvent.BakingCompleted event) {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
-        for (var block : MEGABlocks.BLOCKS) {
+        for (var block : MEGABlocks.getBlocks()) {
             if (NO_AUTO_ROTATION.contains(block)) {
                 continue;
             }

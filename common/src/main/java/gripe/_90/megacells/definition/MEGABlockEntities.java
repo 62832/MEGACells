@@ -1,4 +1,4 @@
-package gripe._90.megacells.block.entity;
+package gripe._90.megacells.definition;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +24,6 @@ import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
 
 @SuppressWarnings("unused")
 public final class MEGABlockEntities {

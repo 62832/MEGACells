@@ -21,7 +21,7 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.hooks.ModelsReloadCallback;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 
 @Environment(EnvType.CLIENT)
 public class InitAutoRotatingModel {
@@ -40,7 +40,7 @@ public class InitAutoRotatingModel {
     public static void init() {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
-        for (var block : MEGABlocks.BLOCKS) {
+        for (var block : MEGABlocks.getBlocks()) {
             if (NO_AUTO_ROTATION.contains(block)) {
                 continue;
             }

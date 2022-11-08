@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 
 import appeng.core.definitions.BlockDefinition;
 
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 
 @Environment(EnvType.CLIENT)
 public class InitRenderTypes {

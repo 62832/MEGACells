@@ -7,7 +7,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.core.definitions.BlockDefinition;
 
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 
 public class InitRenderTypes {
     private static final BlockDefinition<?>[] CUTOUT_BLOCKS = {

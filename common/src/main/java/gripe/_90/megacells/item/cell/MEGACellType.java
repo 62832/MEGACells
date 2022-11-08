@@ -12,7 +12,7 @@ import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.materials.MaterialItem;
 import appeng.menu.me.common.MEStorageMenu;
 
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGAItems;
 
 public enum MEGACellType implements IMEGACellType {
     ITEM(AEKeyType.items(), 63, "Item"),

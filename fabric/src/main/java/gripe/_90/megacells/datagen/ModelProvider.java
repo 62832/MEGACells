@@ -32,7 +32,7 @@ import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.init.client.InitItemModelsProperties;
 
 public class ModelProvider extends FabricModelProvider {

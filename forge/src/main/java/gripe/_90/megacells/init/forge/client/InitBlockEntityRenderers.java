@@ -6,7 +6,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.client.render.crafting.CraftingMonitorRenderer;
 
-import gripe._90.megacells.block.entity.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlockEntities;
 
 public class InitBlockEntityRenderers {
 

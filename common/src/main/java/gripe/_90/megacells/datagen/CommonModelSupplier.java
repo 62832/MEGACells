@@ -7,8 +7,8 @@ import com.ibm.icu.impl.Pair;
 import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
 
 public class CommonModelSupplier {
     public static final List<ItemDefinition<?>> FLAT_ITEMS = List.of(MEGAItems.MEGA_ITEM_CELL_HOUSING,

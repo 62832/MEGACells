@@ -4,6 +4,8 @@ import net.minecraft.world.item.Item;
 
 import appeng.block.crafting.ICraftingUnitType;
 
+import gripe._90.megacells.definition.MEGABlocks;
+
 public enum MEGACraftingUnitType implements ICraftingUnitType {
     UNIT(0, "unit"),
     ACCELERATOR(0, "accelerator"),

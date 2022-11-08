@@ -14,8 +14,8 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
 import gripe._90.megacells.datagen.CommonModelSupplier;
+import gripe._90.megacells.definition.MEGABlocks;
 
 public class BlockStateProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
 

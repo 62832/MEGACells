@@ -13,10 +13,10 @@ import appeng.core.localization.GuiText;
 import me.ramidzkh.mekae2.AMItems;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.item.AppMekItems;
 import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveCellHandler;
-import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.MEGAStorageCell;
 import gripe._90.megacells.util.Services;

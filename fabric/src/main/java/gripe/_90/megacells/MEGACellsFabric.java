@@ -4,12 +4,12 @@ import net.minecraft.core.Registry;
 
 import appeng.api.IAEAddonEntrypoint;
 
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.block.entity.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.Registration;
-import gripe._90.megacells.item.MEGAItems;
 
 public class MEGACellsFabric implements IAEAddonEntrypoint {
     @Override

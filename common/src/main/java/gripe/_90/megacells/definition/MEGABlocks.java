@@ -1,6 +1,7 @@
-package gripe._90.megacells.block;
+package gripe._90.megacells.definition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -24,7 +25,8 @@ import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.block.MEGACraftingBlockItem;
+import gripe._90.megacells.block.MEGACraftingUnitType;
 
 public final class MEGABlocks {
 
@@ -32,7 +34,11 @@ public final class MEGABlocks {
         // controls static load order
     }
 
-    public static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
+    private static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
+
+    public static List<BlockDefinition<?>> getBlocks() {
+        return Collections.unmodifiableList(BLOCKS);
+    }
 
     private static final BlockBehaviour.Properties props = BlockBehaviour.Properties.of(Material.METAL)
             .strength(2.2f, 11.0f)

@@ -7,7 +7,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.service.IPlatformHelper;
 
 public class FabricPlatformHelper implements IPlatformHelper {

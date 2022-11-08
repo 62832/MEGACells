@@ -18,6 +18,8 @@ import appeng.core.AEConfig;
 import appeng.core.localization.Tooltips;
 import appeng.util.InteractionUtil;
 
+import gripe._90.megacells.definition.MEGABlocks;
+
 public class MEGACraftingBlockItem extends CraftingBlockItem {
     public MEGACraftingBlockItem(Block id, Properties props, Supplier<ItemLike> disassemblyExtra) {
         super(id, props, disassemblyExtra);

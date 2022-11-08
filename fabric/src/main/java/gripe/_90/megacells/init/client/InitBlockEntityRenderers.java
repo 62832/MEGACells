@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 
 import appeng.client.render.crafting.CraftingMonitorRenderer;
 
-import gripe._90.megacells.block.entity.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlockEntities;
 
 @Environment(EnvType.CLIENT)
 public class InitBlockEntityRenderers {

@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.level.ItemLike;
 
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.MEGAStorageCell;
 

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.loading.LoadingModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.service.IPlatformHelper;
 
 public class ForgePlatformHelper implements IPlatformHelper {

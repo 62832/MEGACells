@@ -3,9 +3,9 @@ package gripe._90.megacells.integration.appmek.item;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.item.cell.AppMekCellType;
 import gripe._90.megacells.integration.appmek.item.cell.radioactive.MEGARadioactiveCell;
-import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.MEGAStorageCell;
 

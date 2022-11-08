@@ -1,6 +1,7 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.definition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -26,7 +27,11 @@ public final class MEGAItems {
         // controls static load order
     }
 
-    public static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
+    private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
+
+    public static List<ItemDefinition<?>> getItems() {
+        return Collections.unmodifiableList(ITEMS);
+    }
 
     // spotless:off
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = housing(MEGACellType.ITEM);

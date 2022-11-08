@@ -4,8 +4,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGABlocks;
-import gripe._90.megacells.item.MEGAItems;
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
 
 public class LocalisationProvider extends LanguageProvider {
     public LocalisationProvider(DataGenerator gen, String locale) {
@@ -16,11 +16,11 @@ public class LocalisationProvider extends LanguageProvider {
     protected void addTranslations() {
         add("itemGroup.megacells", "MEGA Cells");
 
-        for (var item : MEGAItems.ITEMS) {
+        for (var item : MEGAItems.getItems()) {
             add(item.asItem(), item.getEnglishName());
         }
 
-        for (var block : MEGABlocks.BLOCKS) {
+        for (var block : MEGABlocks.getBlocks()) {
             add(block.block(), block.getEnglishName());
         }
     }

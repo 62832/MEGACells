@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import appeng.core.definitions.BlockDefinition;
 
-import gripe._90.megacells.block.MEGABlocks;
+import gripe._90.megacells.definition.MEGABlocks;
 
 public class LootTableProvider extends net.minecraft.data.loot.LootTableProvider {
     public LootTableProvider(DataGenerator gen) {
@@ -55,7 +55,7 @@ public class LootTableProvider extends net.minecraft.data.loot.LootTableProvider
 
         @Override
         protected @NotNull Iterable<Block> getKnownBlocks() {
-            return MEGABlocks.BLOCKS.stream().map(BlockDefinition::block)
+            return MEGABlocks.getBlocks().stream().map(BlockDefinition::block)
                     .map(Block.class::cast)::iterator;
         }
     }
