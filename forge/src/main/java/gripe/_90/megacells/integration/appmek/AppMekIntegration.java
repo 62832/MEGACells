@@ -19,7 +19,7 @@ import gripe._90.megacells.integration.appmek.item.cell.radioactive.RadioactiveC
 import gripe._90.megacells.item.MEGAItems;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.MEGAStorageCell;
-import gripe._90.megacells.platform.Services;
+import gripe._90.megacells.util.Services;
 
 public final class AppMekIntegration {
 

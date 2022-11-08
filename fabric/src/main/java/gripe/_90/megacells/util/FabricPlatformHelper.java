@@ -1,4 +1,4 @@
-package gripe._90.megacells.platform;
+package gripe._90.megacells.util;
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.item.MEGAItems;
-import gripe._90.megacells.platform.service.IPlatformHelper;
+import gripe._90.megacells.util.service.IPlatformHelper;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     @Override

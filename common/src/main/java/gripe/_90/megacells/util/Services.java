@@ -1,8 +1,8 @@
-package gripe._90.megacells.platform;
+package gripe._90.megacells.util;
 
 import java.util.ServiceLoader;
 
-import gripe._90.megacells.platform.service.IPlatformHelper;
+import gripe._90.megacells.util.service.IPlatformHelper;
 
 public class Services {
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);

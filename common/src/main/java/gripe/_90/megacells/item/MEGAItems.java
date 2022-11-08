@@ -1,7 +1,6 @@
 package gripe._90.megacells.item;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -28,11 +27,6 @@ public final class MEGAItems {
     }
 
     public static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
-    private static final List<StorageTier> TIERS = new ArrayList<>();
-
-    public static List<StorageTier> getTiers() {
-        return Collections.unmodifiableList(TIERS);
-    }
 
     // spotless:off
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = housing(MEGACellType.ITEM);
@@ -87,11 +81,8 @@ public final class MEGAItems {
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
-        StorageTier tier = new StorageTier(index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier,
+        return new StorageTier(index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier,
                 () -> Registry.ITEM.get(component.id()));
-
-        TIERS.add(tier);
-        return tier;
     }
 
     private static ItemDefinition<StorageComponentItem> component(int mb) {

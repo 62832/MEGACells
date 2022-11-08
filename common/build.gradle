@@ -11,10 +11,8 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-    modImplementation "appeng:appliedenergistics2-fabric:${ae2_version}"
-
+    modCompileOnly "appeng:appliedenergistics2-fabric:${ae2_version}"
     modCompileOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
-    modRuntimeOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
 }
 
 publishing {
