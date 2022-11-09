@@ -11,7 +11,7 @@ import appeng.items.parts.PartModelsHelper;
 
 import gripe._90.megacells.part.MEGAPatternProviderPart;
 
-public class MEGAParts {
+public final class MEGAParts {
 
     public static void init() {
         // controls static load order

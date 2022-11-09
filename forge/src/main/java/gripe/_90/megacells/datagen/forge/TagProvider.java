@@ -8,8 +8,12 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import appeng.api.features.P2PTunnelAttunement;
+
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.definition.MEGATags;
 
 public class TagProvider {
     static class Items extends ItemTagsProvider {
@@ -19,7 +23,11 @@ public class TagProvider {
 
         @Override
         protected void addTags() {
-
+            tag(P2PTunnelAttunement.getAttunementTag(P2PTunnelAttunement.ENERGY_TUNNEL))
+                    .add(MEGABlocks.MEGA_ENERGY_CELL.asItem());
+            tag(MEGATags.MEGA_PATTERN_PROVIDER)
+                    .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem())
+                    .add(MEGAParts.MEGA_PATTERN_PROVIDER.asItem());
         }
     }
 
