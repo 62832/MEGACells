@@ -9,7 +9,7 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
-        generator.addProvider(BlockTagsProvider::new);
+        generator.addProvider(TagProvider::new);
         generator.addProvider(LootTableProvider::new);
         generator.addProvider(ModelProvider::new);
         generator.addProvider(RecipeProvider::new);
