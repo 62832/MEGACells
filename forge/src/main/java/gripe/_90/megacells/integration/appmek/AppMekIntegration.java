@@ -45,7 +45,6 @@ public final class AppMekIntegration {
         }
 
         for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
-            Upgrades.add(AEItems.FUZZY_CARD, portable, 1, portableCellGroup);
             Upgrades.add(AEItems.INVERTER_CARD, portable, 1, portableCellGroup);
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portable, 2, portableCellGroup);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, portable, 1, storageCellGroup);
@@ -66,14 +65,16 @@ public final class AppMekIntegration {
 
     private static void initCellModels() {
         for (var cell : AppMekCellType.CHEMICAL.getCells()) {
-            StorageCellModels.registerModel(cell, MEGACells.makeId("block/drive/cells/" + cell.id().getPath()));
+            StorageCellModels.registerModel(cell,
+                    MEGACells.makeId("block/drive/cells/standard/" + cell.id().getPath()));
         }
         for (var portable : AppMekCellType.CHEMICAL.getPortableCells()) {
-            StorageCellModels.registerModel(portable, MEGACells.makeId("block/drive/cells/portable_mega_item_cell"));
+            StorageCellModels.registerModel(portable,
+                    MEGACells.makeId("block/drive/cells/portable/portable_mega_chemical_cell"));
         }
 
         StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
-                MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
+                MEGACells.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
     }
 
     public static void initItemColors(RegisterColorHandlersEvent.Item event) {
