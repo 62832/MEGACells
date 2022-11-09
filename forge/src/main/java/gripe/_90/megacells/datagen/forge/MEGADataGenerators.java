@@ -20,13 +20,15 @@ public class MEGADataGenerators {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
+        var blockTags = new TagProvider.Blocks(generator, existingFileHelper);
+        generator.addProvider(true, blockTags);
+        generator.addProvider(true, new TagProvider.Items(generator, blockTags, existingFileHelper));
+
         generator.addProvider(true, new LootTableProvider(generator));
+        generator.addProvider(true, new RecipeProvider(generator));
 
         generator.addProvider(true, new BlockStateProvider(generator, existingFileHelper));
         generator.addProvider(true, new ItemModelProvider(generator, existingFileHelper));
-
-        generator.addProvider(true, new RecipeProvider(generator));
-        generator.addProvider(true, new TagProvider(generator, existingFileHelper));
 
         for (var en : List.of("en_us", "en_gb", "en_au", "en_ca", "en_nz")) {
             generator.addProvider(true, new LocalisationProvider(generator, en));
