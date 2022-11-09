@@ -16,6 +16,7 @@ import net.minecraft.world.level.material.Material;
 
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
+import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.block.networking.EnergyCellBlockItem;
 import appeng.core.definitions.AEItems;
@@ -53,6 +54,8 @@ public final class MEGABlocks {
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = craftingBlock("64M MEGA Crafting Storage", "64m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_64M), () -> MEGAItems.CELL_COMPONENT_64M);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock("256M MEGA Crafting Storage", "256m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
     public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("MEGA Crafting Monitor", "mega_crafting_monitor", () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR), () -> AEParts.STORAGE_MONITOR);
+
+    public static final BlockDefinition<PatternProviderBlock> MEGA_PATTERN_PROVIDER = block("MEGA Pattern Provider", "mega_pattern_provider", PatternProviderBlock::new, null);
     // spotless:on
 
     private static <T extends Block> BlockDefinition<T> craftingBlock(String englishName, String id,

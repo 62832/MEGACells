@@ -18,6 +18,7 @@ import gripe._90.megacells.datagen.forge.MEGADataGenerators;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.forge.client.InitAutoRotatingModel;
@@ -37,6 +38,7 @@ public class MEGACellsForge {
 
         MEGABlocks.init();
         MEGAItems.init();
+        MEGAParts.init();
         MEGABlockEntities.init();
 
         if (Utils.PLATFORM.isModLoaded("appmek")) {

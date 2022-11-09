@@ -147,6 +147,15 @@ public class CommonRecipeSupplier {
                 .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
                 .save(consumer, Utils.makeId("crafting/compression_card"));
 
+        ShapelessRecipeBuilder.shapeless(MEGAParts.MEGA_PATTERN_PROVIDER)
+                .requires(MEGABlocks.MEGA_PATTERN_PROVIDER)
+                .unlockedBy("has_mega_pattern_provider", has(MEGABlocks.MEGA_PATTERN_PROVIDER))
+                .save(consumer, Utils.makeId("network/mega_pattern_provider_part"));
+        ShapelessRecipeBuilder.shapeless(MEGABlocks.MEGA_PATTERN_PROVIDER)
+                .requires(MEGAParts.MEGA_PATTERN_PROVIDER)
+                .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
+                .save(consumer, Utils.makeId("network/mega_pattern_provider_block"));
+
         manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
         manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
         manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);

@@ -12,6 +12,7 @@ import appeng.init.client.InitItemModelsProperties;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.client.InitAutoRotatingModel;
@@ -28,6 +29,7 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
     public void onAe2Initialized() {
         MEGABlocks.init();
         MEGAItems.init();
+        MEGAParts.init();
         MEGABlockEntities.init();
 
         if (Utils.PLATFORM.isModLoaded("appbot")) {

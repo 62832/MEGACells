@@ -3,6 +3,7 @@ package gripe._90.megacells.datagen.forge;
 import java.util.ArrayList;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -29,7 +30,8 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         for (var block : CommonModelSupplier.CRAFTING_UNITS) {
             craftingModel(block.first, block.second);
         }
-        craftingMonitorModel();
+        craftingMonitor();
+        patternProvider();
     }
 
     private void builtInBlockModel(String name) {
@@ -50,16 +52,17 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         itemModels().getBuilder("item/" + block.id().getPath()).parent(blockModel);
     }
 
-    private void craftingMonitorModel() {
+    private void craftingMonitor() {
         var unitTexture = Utils.makeId("block/crafting/unit");
         var monitorTexture = Utils.makeId("block/crafting/monitor");
         var blockModel = models().cube("block/crafting/monitor", unitTexture, unitTexture, monitorTexture, unitTexture,
                 unitTexture, unitTexture).texture("particle", monitorTexture);
 
         builtInBlockModel("crafting/monitor_formed");
-        getVariantBuilder(MEGABlocks.CRAFTING_MONITOR.block()).partialState()
-                .with(AbstractCraftingUnitBlock.FORMED, false).setModels(new ConfiguredModel(blockModel)).partialState()
-                .with(AbstractCraftingUnitBlock.FORMED, true)
+        getVariantBuilder(MEGABlocks.CRAFTING_MONITOR.block())
+                .partialState().with(AbstractCraftingUnitBlock.FORMED, false)
+                .setModels(new ConfiguredModel(blockModel))
+                .partialState().with(AbstractCraftingUnitBlock.FORMED, true)
                 .setModels(new ConfiguredModel(models().getBuilder("block/crafting/monitor_formed")));
         itemModels().getBuilder("item/mega_crafting_monitor").parent(blockModel);
     }
@@ -79,5 +82,26 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
             float fillFactor = (i - 1) / (float) (models.size() - 1);
             item.override().predicate(AppEng.makeId("fill_level"), fillFactor).model(models.get(i));
         }
+    }
+
+    private void patternProvider() {
+        var definition = MEGABlocks.MEGA_PATTERN_PROVIDER;
+
+        var texture = Utils.makeId("block/mega_pattern_provider");
+        var textureAlt = Utils.makeId("block/mega_pattern_provider_alternate");
+        var textureArrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
+
+        var modelNormal = cubeAll(definition.block());
+        var modelOriented = models().cube("block/mega_pattern_provider_oriented", textureAlt, texture, textureArrow,
+                textureArrow, textureArrow, textureArrow).texture("particle", texture);
+
+        var omnidirectional = BooleanProperty.create("omnidirectional");
+
+        getVariantBuilder(definition.block())
+                .partialState().with(omnidirectional, true)
+                .setModels(new ConfiguredModel(modelNormal))
+                .partialState().with(omnidirectional, false)
+                .setModels(new ConfiguredModel(modelOriented, 90, 0, false));
+        simpleBlockItem(definition.block(), modelNormal);
     }
 }
