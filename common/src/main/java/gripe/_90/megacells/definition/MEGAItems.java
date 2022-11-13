@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
 
 import appeng.core.definitions.ItemDefinition;
@@ -87,7 +86,7 @@ public final class MEGAItems {
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
         return new StorageTier(index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier,
-                () -> Registry.ITEM.get(component.id()));
+                component::asItem);
     }
 
     private static ItemDefinition<StorageComponentItem> component(int mb) {
