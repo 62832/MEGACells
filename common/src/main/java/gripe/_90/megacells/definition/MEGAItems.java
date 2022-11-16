@@ -94,13 +94,13 @@ public final class MEGAItems {
                 p -> new StorageComponentItem(p, mb * 1024));
     }
 
-    public static ItemDefinition<MEGAStorageCell> cell(StorageTier tier, IMEGACellType type) {
+    private static ItemDefinition<MEGAStorageCell> cell(StorageTier tier, IMEGACellType type) {
         return item(tier.namePrefix().toUpperCase() + " MEGA " + type.affix() + " Storage Cell",
                 type.affix().toLowerCase() + "_storage_cell_" + tier.namePrefix(),
                 p -> new MEGAStorageCell(p, tier, type));
     }
 
-    public static ItemDefinition<MEGAPortableCell> portable(StorageTier tier, IMEGACellType type) {
+    private static ItemDefinition<MEGAPortableCell> portable(StorageTier tier, IMEGACellType type) {
         return item(tier.namePrefix().toUpperCase() + " Portable " + type.affix() + " Cell",
                 "portable_" + type.affix().toLowerCase() + "_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, type));
