@@ -17,7 +17,7 @@
   "environment": "*",
   "entrypoints": {
     "ae2": ["gripe._90.megacells.MEGACellsFabric"],
-    "ae2:client": ["gripe._90.megacells.MEGACellsFabricClient"],
+    "ae2:client": ["gripe._90.megacells.MEGACellsFabric<%='$'%>Client"],
 
     "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
   },
