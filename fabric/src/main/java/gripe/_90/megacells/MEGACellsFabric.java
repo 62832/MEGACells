@@ -4,6 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.core.Registry;
 
 import appeng.api.IAEAddonEntrypoint;
@@ -23,6 +25,7 @@ import gripe._90.megacells.init.client.InitRenderTypes;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.cell.CompressionHandler;
 import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.init.client.InitScreens;
 
 public class MEGACellsFabric implements IAEAddonEntrypoint {
     @Override
@@ -69,6 +72,8 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
 
             // re-init AE2 props for MEGA energy cell
             InitItemModelsProperties.init();
+
+            ClientLifecycleEvents.CLIENT_STARTED.register(InitScreens::init);
         }
     }
 }

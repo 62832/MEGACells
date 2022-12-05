@@ -26,6 +26,8 @@ import gripe._90.megacells.init.forge.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.forge.client.InitBuiltInModels;
 import gripe._90.megacells.init.forge.client.InitItemColors;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.init.forge.client.InitRenderTypes;
+import gripe._90.megacells.init.forge.client.InitScreens;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.item.cell.CompressionHandler;
@@ -64,6 +66,10 @@ public class MEGACellsForge {
             if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
                 MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
             }
+
+            if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
+                Registration.registerMenuTypes(ForgeRegistries.MENU_TYPES);
+            }
         });
 
         bus.addListener(MEGADataGenerators::onGatherData);
@@ -87,5 +93,7 @@ public class MEGACellsForge {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBuiltInModels::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitItemColors::init);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitRenderTypes::init);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitScreens::init);
     }
 }

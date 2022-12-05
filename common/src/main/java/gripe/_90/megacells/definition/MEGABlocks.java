@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 
+import appeng.block.AEBaseBlock;
+import appeng.block.AEBaseBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.crafting.PatternProviderBlock;
@@ -25,6 +27,8 @@ import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
+import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 import gripe._90.megacells.util.Utils;
 
 public final class MEGABlocks {
@@ -55,7 +59,7 @@ public final class MEGABlocks {
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock("256M MEGA Crafting Storage", "256m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
     public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("MEGA Crafting Monitor", "mega_crafting_monitor", () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR), () -> AEParts.STORAGE_MONITOR);
 
-    public static final BlockDefinition<PatternProviderBlock> MEGA_PATTERN_PROVIDER = block("MEGA Pattern Provider", "mega_pattern_provider", PatternProviderBlock::new, null);
+    public static final BlockDefinition<PatternProviderBlock<MEGAPatternProviderBlockEntity>> MEGA_PATTERN_PROVIDER = block("MEGA Pattern Provider", "mega_pattern_provider", PatternProviderBlock::new, MEGAPatternProviderBlockItem::new);
     // spotless:on
 
     private static <T extends Block> BlockDefinition<T> craftingBlock(String englishName, String id,
@@ -79,12 +83,13 @@ public final class MEGABlocks {
             if (item == null) {
                 throw new IllegalArgumentException("BlockItem factory for " + id + " returned null");
             }
+        } else if (block instanceof AEBaseBlock) {
+            item = new AEBaseBlockItem(block, itemProperties);
         } else {
             item = new BlockItem(block, itemProperties);
         }
 
-        BlockDefinition<T> definition = new BlockDefinition<>(englishName, Utils.makeId(id), block, item);
-
+        BlockDefinition<T> definition = new BlockDefinition<>(englishName, MEGACells.makeId(id), block, item);
         BLOCKS.add(definition);
         return definition;
     }

@@ -17,7 +17,6 @@ import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
-import appeng.blockentity.crafting.PatternProviderBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
@@ -43,7 +42,7 @@ public final class MEGABlockEntities {
     public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
     public static final BlockEntityType<CraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create("mega_crafting_monitor", CraftingMonitorBlockEntity.class, CraftingMonitorBlockEntity::new, MEGABlocks.CRAFTING_MONITOR);
 
-    public static final BlockEntityType<PatternProviderBlockEntity> MEGA_PATTERN_PROVIDER = create("mega_pattern_provider", PatternProviderBlockEntity.class, PatternProviderBlockEntity::new, MEGABlocks.MEGA_PATTERN_PROVIDER);
+    public static final BlockEntityType<MEGAPatternProviderBlockEntity> MEGA_PATTERN_PROVIDER = create("mega_pattern_provider", MEGAPatternProviderBlockEntity.class, MEGAPatternProviderBlockEntity::new, MEGABlocks.MEGA_PATTERN_PROVIDER);
     // spotless:on
 
     @SafeVarargs

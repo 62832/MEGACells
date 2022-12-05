@@ -28,9 +28,9 @@ import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
+import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
@@ -72,7 +72,7 @@ class ModelProvider extends FabricModelProvider {
             createCraftingUnit(block.first.block(), block.second, generator);
         }
         createCraftingMonitor(generator);
-        // createPatternProviderBlock(generator);
+        createPatternProviderBlock(generator);
     }
 
     @Override
@@ -175,7 +175,7 @@ class ModelProvider extends FabricModelProvider {
         var alternate = Utils.makeId("block/mega_pattern_provider_alternate");
         var arrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
-                .with(PropertyDispatch.property(BooleanProperty.create("omnidirectional"))
+                .with(PropertyDispatch.property(PatternProviderBlock.OMNIDIRECTIONAL)
                         .select(true, Variant.variant().with(VariantProperties.MODEL,
                                 ModelTemplates.CUBE_ALL.create(normal, TextureMapping.cube(normal),
                                         generator.modelOutput)))
@@ -237,6 +237,7 @@ class ModelProvider extends FabricModelProvider {
 
         @NotNull
         @Override
+        @NotNull
         public JsonElement get() {
             JsonObject json = super.get().getAsJsonObject();
 

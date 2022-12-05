@@ -3,13 +3,13 @@ package gripe._90.megacells.datagen.forge;
 import java.util.ArrayList;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
+import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 import appeng.core.definitions.BlockDefinition;
@@ -95,12 +95,10 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         var modelOriented = models().cube("block/mega_pattern_provider_oriented", textureAlt, texture, textureArrow,
                 textureArrow, textureArrow, textureArrow).texture("particle", texture);
 
-        var omnidirectional = BooleanProperty.create("omnidirectional");
-
         getVariantBuilder(definition.block())
-                .partialState().with(omnidirectional, true)
+                .partialState().with(PatternProviderBlock.OMNIDIRECTIONAL, true)
                 .setModels(new ConfiguredModel(modelNormal))
-                .partialState().with(omnidirectional, false)
+                .partialState().with(PatternProviderBlock.OMNIDIRECTIONAL, false)
                 .setModels(new ConfiguredModel(modelOriented, 90, 0, false));
         simpleBlockItem(definition.block(), modelNormal);
     }

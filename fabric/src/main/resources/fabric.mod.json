@@ -28,7 +28,7 @@
     "fabric-api": "*",
     "minecraft": "~1.19",
     "java": ">=17",
-    "ae2": ">=12.8.4"
+    "ae2": ">=12.9.1"
   },
   "suggests": {
     "ae2wtlib": ">=12.8.4",
