@@ -12,6 +12,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.util.AEColor;
@@ -22,6 +23,8 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
+import appeng.recipes.handlers.InscriberProcessType;
+import appeng.recipes.handlers.InscriberRecipeBuilder;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -33,7 +36,12 @@ import gripe._90.megacells.item.cell.MEGAStorageCell;
 
 public class CommonRecipeSupplier {
 
-    public static void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    public static final CommonRecipeSupplier INSTANCE = new CommonRecipeSupplier();
+
+    private CommonRecipeSupplier() {
+    }
+
+    public void buildRecipes(Consumer<FinishedRecipe> consumer) {
         component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem());
         component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, AEItems.ENDER_DUST.asItem());
         component(consumer, MEGAItems.TIER_16M, MEGAItems.TIER_4M, AEItems.ENDER_DUST.asItem());
@@ -54,6 +62,8 @@ public class CommonRecipeSupplier {
             portable(consumer, portable);
         }
 
+        specialisedComponent(consumer, MEGAItems.CELL_COMPONENT_16M, AEItems.SPATIAL_16_CELL_COMPONENT,
+                MEGAItems.BULK_CELL_COMPONENT);
         ShapedRecipeBuilder.shaped(MEGAItems.BULK_ITEM_CELL)
                 .pattern("aba")
                 .pattern("bcb")
@@ -73,7 +83,7 @@ public class CommonRecipeSupplier {
                 .define('b', AEItems.ENGINEERING_PROCESSOR)
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .unlockedBy("has_engineering_processor", has(AEItems.ENGINEERING_PROCESSOR))
-                .save(consumer, MEGACells.makeId("mega_energy_cell"));
+                .save(consumer, MEGACells.makeId("crafting/mega_energy_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .pattern("aba")
@@ -107,7 +117,7 @@ public class CommonRecipeSupplier {
                 .save(consumer, MEGACells.makeId("crafting/greater_energy_card_upgraded"));
     }
 
-    private static void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
+    private void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
             ItemLike binder) {
         var precedingComponent = preceding.componentSupplier().get();
         ShapedRecipeBuilder.shaped(tier.componentSupplier().get())
@@ -119,10 +129,19 @@ public class CommonRecipeSupplier {
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_" + Registry.ITEM.getKey(precedingComponent).getPath(), has(precedingComponent))
-                .save(consumer, Registry.ITEM.getKey(tier.componentSupplier().get()).getPath());
+                .save(consumer,
+                        MEGACells.makeId("cells/" + Registry.ITEM.getKey(tier.componentSupplier().get()).getPath()));
     }
 
-    private static void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
+    private void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
+            ItemDefinition<?> output) {
+        InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, output, 1)
+                .setMode(InscriberProcessType.PRESS)
+                .setTop(Ingredient.of(top)).setBottom(Ingredient.of(bottom))
+                .save(consumer, MEGACells.makeId("inscriber/" + output.id().getPath()));
+    }
+
+    private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
         var cell = (MEGAStorageCell) cellDefinition.asItem();
 
         var component = cell.getTier().componentSupplier().get();
@@ -150,7 +169,7 @@ public class CommonRecipeSupplier {
                 .save(consumer, MEGACells.makeId("cells/standard/" + cellPath + "_with_housing"));
     }
 
-    private static void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
+    private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cellDefinition) {
         var cell = (MEGAPortableCell) cellDefinition.asItem();
         var housing = cell.getType().housing();
         ShapelessRecipeBuilder.shapeless(cell)
@@ -163,7 +182,7 @@ public class CommonRecipeSupplier {
                 .save(consumer, MEGACells.makeId("cells/portable/" + cellDefinition.id().getPath()));
     }
 
-    private static void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
+    private void housing(Consumer<FinishedRecipe> consumer, IMEGACellType type) {
         var housing = type.housing();
         ShapedRecipeBuilder.shaped(type.housing())
                 .pattern("aba")
@@ -176,7 +195,7 @@ public class CommonRecipeSupplier {
                 .save(consumer, MEGACells.makeId("cells/" + housing.id().getPath()));
     }
 
-    private static void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
         ShapelessRecipeBuilder.shapeless(unit)
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)
@@ -184,11 +203,11 @@ public class CommonRecipeSupplier {
                 .save(consumer, MEGACells.makeId("crafting/" + unit.id().getPath()));
     }
 
-    private static InventoryChangeTrigger.TriggerInstance has(ItemLike item) {
+    private InventoryChangeTrigger.TriggerInstance has(ItemLike item) {
         return trigger(ItemPredicate.Builder.item().of(item).build());
     }
 
-    private static InventoryChangeTrigger.TriggerInstance trigger(ItemPredicate... predicates) {
+    private InventoryChangeTrigger.TriggerInstance trigger(ItemPredicate... predicates) {
         return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY,
                 MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, predicates);
     }

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -65,7 +63,7 @@ public final class MEGABlocks {
     }
 
     private static <T extends Block> BlockDefinition<T> block(String englishName, String id, Supplier<T> blockSupplier,
-            @Nullable BiFunction<Block, Item.Properties, BlockItem> itemFactory) {
+            BiFunction<Block, Item.Properties, BlockItem> itemFactory) {
 
         // Create block and matching item
         T block = blockSupplier.get();

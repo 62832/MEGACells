@@ -16,6 +16,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        CommonRecipeSupplier.buildRecipes(consumer);
+        CommonRecipeSupplier.INSTANCE.buildRecipes(consumer);
     }
 }

@@ -40,10 +40,9 @@ public class MEGACraftingBlockItem extends CraftingBlockItem {
     }
 
     @Override
-    public void addCheckedInformation(ItemStack itemStack, Level level, List<Component> toolTip,
-            TooltipFlag advancedTooltips) {
+    public void addCheckedInformation(ItemStack itemStack, Level level, List<Component> lines, TooltipFlag flag) {
         if (this.getBlock().equals(MEGABlocks.CRAFTING_ACCELERATOR.block())) {
-            toolTip.add(Tooltips.of("Provides 4 co-processing threads per block."));
+            lines.add(Tooltips.of("Provides 4 co-processing threads per block."));
         }
     }
 }

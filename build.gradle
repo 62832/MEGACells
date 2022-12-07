@@ -46,6 +46,9 @@ allprojects {
     apply plugin: "com.diffplug.spotless"
 
     repositories {
+        mavenLocal()
+        mavenCentral()
+
         maven {
             name = 'ModMaven (K4U-NL)'
             url = 'https://modmaven.dev/'

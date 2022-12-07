@@ -11,11 +11,15 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
+import appeng.recipes.handlers.InscriberProcessType;
+import appeng.recipes.handlers.InscriberRecipeBuilder;
 
+import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
@@ -49,6 +53,11 @@ public class AppMekRecipeProvider extends net.minecraft.data.recipes.RecipeProvi
             portable(consumer, portable);
         }
 
+        InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, AppMekItems.RADIOACTIVE_CELL_COMPONENT, 1)
+                .setMode(InscriberProcessType.PRESS)
+                .setTop(Ingredient.of(AEItems.CELL_COMPONENT_256K))
+                .setBottom(Ingredient.of(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
+                .save(consumer, MEGACells.makeId("inscriber/radioactive_cell_component"));
         ShapedRecipeBuilder.shaped(AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
                 .pattern("aba")
                 .pattern("bcb")
