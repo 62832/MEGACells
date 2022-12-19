@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import net.minecraft.server.MinecraftServer;
@@ -118,26 +120,26 @@ public class CompressionHandler {
         return 1;
     }
 
-    public List<Pair<AEItemKey, Integer>> getCompressedVariants(AEKey key) {
+    public Object2IntMap<AEItemKey> getCompressedVariants(AEKey key) {
         return getVariants(key, getCompressionRecipes(this.validRecipes));
     }
 
-    public List<Pair<AEItemKey, Integer>> getDecompressedVariants(AEKey key) {
+    public Object2IntMap<AEItemKey> getDecompressedVariants(AEKey key) {
         return getVariants(key, getDecompressionRecipes(this.validRecipes));
     }
 
-    public List<Pair<AEItemKey, Integer>> getVariants(AEKey key, List<CraftingRecipe> recipes) {
+    public Object2IntMap<AEItemKey> getVariants(AEKey key, List<CraftingRecipe> recipes) {
+        var variants = new Object2IntLinkedOpenHashMap<AEItemKey>();
+
         if (!(key instanceof AEItemKey item)) {
-            return Collections.emptyList();
+            return variants;
         }
 
-        List<Pair<AEItemKey, Integer>> variants = new ObjectArrayList<>();
-        var newVariant = getSubsequentVariant(item.getItem(), recipes);
-
-        while (newVariant != null) {
-            variants.add(Pair.of(AEItemKey.of(newVariant.first()), newVariant.second()));
+        for (var newVariant = getSubsequentVariant(item.getItem(), recipes); newVariant != null;) {
+            variants.put(AEItemKey.of(newVariant.first()), (int) newVariant.second());
             newVariant = getSubsequentVariant(newVariant.first(), recipes);
         }
+
         return variants;
     }
 }

@@ -13,7 +13,6 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.core.localization.Tooltips;
 
-import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.MEGABulkCell;
 
@@ -71,9 +70,8 @@ public class BulkCellHandler implements ICellHandler {
             lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
         }
 
-        lines.add(Tooltips.of(MEGATranslations.Compression.text(
-                handler.getUpgrades().isInstalled(MEGAItems.COMPRESSION_CARD)
-                        ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
-                        : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
+        lines.add(Tooltips.of(MEGATranslations.Compression.text(handler.compressionEnabled
+                ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
+                : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
     }
 }
