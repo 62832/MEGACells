@@ -22,7 +22,8 @@ public class CommonModelSupplier {
     public static final List<ItemDefinition<?>> FLAT_ITEMS = Lists.newArrayList(MEGAItems.MEGA_ITEM_CELL_HOUSING,
             MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGAItems.CELL_COMPONENT_1M, MEGAItems.CELL_COMPONENT_4M,
             MEGAItems.CELL_COMPONENT_16M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.CELL_COMPONENT_256M,
-            MEGAItems.BULK_CELL_COMPONENT, MEGAItems.GREATER_ENERGY_CARD, AppBotItems.MEGA_MANA_CELL_HOUSING);
+            MEGAItems.BULK_CELL_COMPONENT, MEGAItems.GREATER_ENERGY_CARD, MEGAItems.COMPRESSION_CARD,
+            AppBotItems.MEGA_MANA_CELL_HOUSING);
 
     public static final List<ItemDefinition<?>> STORAGE_CELLS = Stream.concat(
             Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells(), AppBotItems.getCells())

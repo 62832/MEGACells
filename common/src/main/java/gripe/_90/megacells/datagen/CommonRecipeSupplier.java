@@ -143,13 +143,18 @@ public class CommonRecipeSupplier {
                 .unlockedBy("has_mega_energy_cell", has(MEGABlocks.MEGA_ENERGY_CELL))
                 .save(consumer, Utils.makeId("crafting/greater_energy_card_upgraded"));
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
-            manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
-            manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
-            manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);
-            manaCells(consumer, AppBotItems.MANA_CELL_64M, AppBotItems.PORTABLE_MANA_CELL_64M, MEGAItems.TIER_64M);
-            manaCells(consumer, AppBotItems.MANA_CELL_256M, AppBotItems.PORTABLE_MANA_CELL_256M, MEGAItems.TIER_256M);
-        }
+        ShapelessRecipeBuilder.shapeless(MEGAItems.COMPRESSION_CARD)
+                .requires(AEItems.ADVANCED_CARD)
+                .requires(AEItems.MATTER_BALL)
+                .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
+                .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
+                .save(consumer, Utils.makeId("crafting/compression_card"));
+
+        manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
+        manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
+        manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);
+        manaCells(consumer, AppBotItems.MANA_CELL_64M, AppBotItems.PORTABLE_MANA_CELL_64M, MEGAItems.TIER_64M);
+        manaCells(consumer, AppBotItems.MANA_CELL_256M, AppBotItems.PORTABLE_MANA_CELL_256M, MEGAItems.TIER_256M);
     }
 
     private static void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
