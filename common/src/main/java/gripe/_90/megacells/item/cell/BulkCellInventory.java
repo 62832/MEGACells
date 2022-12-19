@@ -56,7 +56,7 @@ public class BulkCellInventory implements StorageCell {
 
         this.compressed = CompressionHandler.INSTANCE.getCompressedVariants(filterItem);
         this.decompressed = CompressionHandler.INSTANCE.getDecompressedVariants(filterItem);
-        this.unitFactor = decompressed.values().intStream().reduce(1, Math::multiplyExact);
+        this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
 
         this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
         this.unitCount = retrieveUnitCount();
@@ -172,18 +172,24 @@ public class BulkCellInventory implements StorageCell {
     }
 
     private BigInteger compressedTransferFactor(AEItemKey what) {
-        // FIXME: this currently throws int overflows due to fastutil's default iterator implementation
         if (compressed.getInt(what) > 0) {
             var variantKeys = new ArrayList<>(compressed.keySet());
             var toDecompress = new Object2IntLinkedOpenHashMap<>(compressed);
             toDecompress.keySet().retainAll(variantKeys.subList(0, variantKeys.indexOf(what) + 1));
-            return BigInteger.valueOf(toDecompress.values().intStream().reduce(1, Math::multiplyExact))
-                    .multiply(BigInteger.valueOf(unitFactor));
+            var factor = unitFactor;
+            for (var i : toDecompress.values()) {
+                factor *= i;
+            }
+            return BigInteger.valueOf(factor);
         } else if (decompressed.getInt(what) > 0) {
             var variantKeys = new ArrayList<>(decompressed.keySet());
             var toCompress = new Object2IntLinkedOpenHashMap<>(decompressed);
             toCompress.keySet().retainAll(variantKeys.subList(variantKeys.indexOf(what) + 1, variantKeys.size()));
-            return BigInteger.valueOf(toCompress.values().intStream().reduce(1, Math::multiplyExact));
+            var factor = 1L;
+            for (var i : toCompress.values()) {
+                factor *= i;
+            }
+            return BigInteger.valueOf(factor);
         } else {
             return BigInteger.valueOf(unitFactor);
         }
