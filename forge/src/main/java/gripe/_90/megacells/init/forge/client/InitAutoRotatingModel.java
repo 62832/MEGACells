@@ -19,20 +19,10 @@ import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.model.AutoRotatingBakedModel;
 import appeng.core.definitions.BlockDefinition;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.util.Utils;
 
 public class InitAutoRotatingModel {
-    private static final Set<BlockDefinition<?>> NO_AUTO_ROTATION = ImmutableSet.of(
-            MEGABlocks.MEGA_CRAFTING_UNIT,
-            MEGABlocks.CRAFTING_ACCELERATOR,
-            MEGABlocks.CRAFTING_STORAGE_1M,
-            MEGABlocks.CRAFTING_STORAGE_4M,
-            MEGABlocks.CRAFTING_STORAGE_16M,
-            MEGABlocks.CRAFTING_STORAGE_64M,
-            MEGABlocks.CRAFTING_STORAGE_256M,
-            MEGABlocks.CRAFTING_MONITOR);
-
     private static final Map<String, Function<BakedModel, BakedModel>> CUSTOMIZERS = new HashMap<>();
 
     public static void init() {
@@ -41,11 +31,21 @@ public class InitAutoRotatingModel {
         bus.addListener(InitAutoRotatingModel::onModelBake);
     }
 
-    public static void initAutoRotatingModels(ModelEvent.BakingCompleted event) {
+    public static void initAutoRotatingModels(ModelEvent.BakingCompleted ignoredEvent) {
         register(MEGABlocks.CRAFTING_MONITOR, InitAutoRotatingModel::customizeCraftingMonitorModel);
 
+        var noAutoRotation = ImmutableSet.of(
+                MEGABlocks.MEGA_CRAFTING_UNIT,
+                MEGABlocks.CRAFTING_ACCELERATOR,
+                MEGABlocks.CRAFTING_STORAGE_1M,
+                MEGABlocks.CRAFTING_STORAGE_4M,
+                MEGABlocks.CRAFTING_STORAGE_16M,
+                MEGABlocks.CRAFTING_STORAGE_64M,
+                MEGABlocks.CRAFTING_STORAGE_256M,
+                MEGABlocks.CRAFTING_MONITOR);
+
         for (var block : MEGABlocks.getBlocks()) {
-            if (NO_AUTO_ROTATION.contains(block)) {
+            if (noAutoRotation.contains(block)) {
                 continue;
             }
 
@@ -76,7 +76,7 @@ public class InitAutoRotatingModel {
         BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
 
         for (ResourceLocation location : keys) {
-            if (!location.getNamespace().equals(MEGACells.MODID)) {
+            if (!location.getNamespace().equals(Utils.MODID)) {
                 continue;
             }
 

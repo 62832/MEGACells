@@ -8,8 +8,9 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.CommonModelSupplier;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.util.Utils;
 
 public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
 
@@ -18,7 +19,7 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
     static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
     public ItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
-        super(gen, MEGACells.MODID, efh);
+        super(gen, Utils.MODID, efh);
         efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
         efh.trackGenerated(DRIVE_CELL, MODEL);
@@ -26,23 +27,25 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
 
     @Override
     protected void registerModels() {
-        for (var item : CommonModelSupplier.FLAT_ITEMS) {
-            flatSingleLayer(item);
-        }
+        CommonModelSupplier.FLAT_ITEMS.forEach(this::flatSingleLayer);
 
-        for (var item : CommonModelSupplier.STORAGE_CELLS) {
+        CommonModelSupplier.STORAGE_CELLS.forEach(item -> {
             cell(item);
-            var driveCellPath = "block/drive/cells/standard/" + item.id().getPath();
-            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", MEGACells.makeId(driveCellPath));
-        }
+            if (!AppBotItems.getCells().contains(item)) {
+                var driveCellPath = "block/drive/cells/standard/" + item.id().getPath();
+                withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", Utils.makeId(driveCellPath));
+            }
+        });
 
-        for (var item : CommonModelSupplier.PORTABLE_CELLS) {
-            portable(item);
-        }
+        CommonModelSupplier.PORTABLE_CELLS.forEach(this::portable);
+
         withExistingParent("block/drive/cells/portable/portable_mega_item_cell", DRIVE_CELL).texture("cell",
-                MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
+                Utils.makeId("block/drive/cells/portable/portable_mega_item_cell"));
         withExistingParent("block/drive/cells/portable/portable_mega_fluid_cell", DRIVE_CELL).texture("cell",
-                MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
+                Utils.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
+
+        withExistingParent("block/drive/cells/mega_mana_cell", DRIVE_CELL).texture("cell",
+                Utils.makeId("block/drive/cells/mega_mana_cell"));
     }
 
     public void cell(ItemDefinition<?> cell) {
@@ -59,6 +62,6 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String subfolder) {
         String path = item.id().getPath();
-        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + subfolder + path));
+        return singleTexture(path, mcLoc("item/generated"), "layer0", Utils.makeId("item/" + subfolder + path));
     }
 }

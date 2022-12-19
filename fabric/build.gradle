@@ -14,9 +14,10 @@ loom {
         data {
             inherit client
             name "Minecraft Data"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
-            vmArg "-Dfabric-api.datagen.strict-validation"
+            property "fabric-api.datagen"
+            property "fabric-api.datagen.modid", mod_id
+            property "fabric-api.datagen.output-dir", file("src/generated/resources").absolutePath
+            property "fabric-api.datagen.strict-validation"
         }
     }
 }
@@ -29,25 +30,6 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-repositories {
-    maven {
-        name = 'TerraformersMC'
-        url = 'https://maven.terraformersmc.com/'
-        content {
-            includeGroup "com.terraformersmc"
-            includeGroup "dev.emi"
-        }
-    }
-
-    maven {
-        name = 'LadySnake Libs'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
-        content {
-            includeGroup "dev.onyxstudios.cardinal-components-api"
-        }
-    }
-}
-
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}+${minecraft_version}"
@@ -57,11 +39,14 @@ dependencies {
 
     modImplementation "appeng:appliedenergistics2-fabric:${ae2_version}"
     modImplementation "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
+    modImplementation("curse.maven:applied-botanics-addon-610632:${appbot_fileid}") {
+        exclude group: "dev.emi", module: "emi"
+    }
 
-    modRuntimeOnly "dev.architectury:architectury-fabric:${architectury_version}"
+    modRuntimeOnly("vazkii.botania:Botania:${minecraft_version}-${botania_version}-FABRIC") {
+        exclude group: "dev.emi", module: "emi"
+    }
     modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${cloth_version}"
-    modRuntimeOnly "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
-    modRuntimeOnly "dev.emi:trinkets:${trinkets_version}"
 
     modRuntimeOnly "com.terraformersmc:modmenu:${mod_menu_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"

@@ -3,10 +3,13 @@ package gripe._90.megacells.init.forge.client;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import appeng.items.storage.BasicStorageCell;
+import appeng.items.tools.powered.PortableCellItem;
+
 import gripe._90.megacells.datagen.CommonModelSupplier;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.item.cell.MEGAPortableCell;
-import gripe._90.megacells.item.cell.MEGAStorageCell;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.util.Utils;
 
 public class InitItemColors {
     public static void init() {
@@ -15,14 +18,18 @@ public class InitItemColors {
     }
 
     private static void initItemColors(RegisterColorHandlersEvent.Item event) {
-        for (var cell : CommonModelSupplier.STORAGE_CELLS) {
-            event.getItemColors().register(MEGAStorageCell::getColor, cell);
+        CommonModelSupplier.STORAGE_CELLS.forEach(c -> event.register(BasicStorageCell::getColor, c));
+        CommonModelSupplier.PORTABLE_CELLS.forEach(c -> event.register(PortableCellItem::getColor, c));
+
+        if (Utils.PLATFORM.isModLoaded("appmek")) {
+            AppMekItems.getCells().forEach(c -> event.register(BasicStorageCell::getColor, c));
+            AppMekItems.getPortables().forEach(c -> event.register(PortableCellItem::getColor, c));
+            event.register(BasicStorageCell::getColor, AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem());
         }
-        for (var cell : CommonModelSupplier.PORTABLE_CELLS) {
-            event.getItemColors().register(MEGAPortableCell::getColor, cell);
-        }
-        if (AppMekIntegration.isAppMekLoaded()) {
-            AppMekIntegration.initItemColors(event);
+
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            AppBotItems.getCells().forEach(c -> event.register(BasicStorageCell::getColor, c));
+            AppBotItems.getPortables().forEach(c -> event.register(PortableCellItem::getColor, c));
         }
     }
 }

@@ -1,4 +1,4 @@
-package gripe._90.megacells.integration.appmek.item.cell.radioactive;
+package gripe._90.megacells.integration.appmek.item.cell;
 
 import java.util.List;
 
@@ -12,8 +12,14 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.core.localization.Tooltips;
 
+import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
+
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();
+
+    private RadioactiveCellHandler() {
+    }
 
     @Override
     public boolean isCell(ItemStack is) {
@@ -36,22 +42,22 @@ public class RadioactiveCellHandler implements ICellHandler {
         var filterItem = handler.getFilterItem();
 
         lines.add(Tooltips.bytesUsed(handler.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
-        lines.add(containedType != null ? Tooltips.of(Tooltips.of("Contains: "), containedType.getDisplayName())
-                : Tooltips.of("Empty"));
+        lines.add(Tooltips.of(containedType != null ? MEGATranslations.Contains.text(containedType.getDisplayName())
+                : MEGATranslations.Empty.text()));
 
         if (filterItem != null) {
             if (containedType == null) {
-                lines.add(Tooltips.of(Tooltips.of("Partitioned for: "), filterItem.getDisplayName()));
+                lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
             } else {
                 if (!containedType.equals(filterItem)) {
-                    lines.add(Tooltips.of("Mismatched filter!").withStyle(ChatFormatting.DARK_RED));
+                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
             }
             if (handler.isBlackListed(filterItem)) {
-                lines.add(Tooltips.of("Filter chemical unsupported!").withStyle(ChatFormatting.DARK_RED));
+                lines.add(MEGATranslations.FilterChemicalUnsupported.text().withStyle(ChatFormatting.DARK_RED));
             }
         } else {
-            lines.add(Tooltips.of("Not Partitioned"));
+            lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
         }
     }
 }

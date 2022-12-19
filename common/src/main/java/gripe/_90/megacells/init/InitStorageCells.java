@@ -1,39 +1,37 @@
 package gripe._90.megacells.init;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.item.cell.MEGACellType;
-import gripe._90.megacells.item.cell.bulk.BulkCellHandler;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.item.cell.BulkCellHandler;
+import gripe._90.megacells.util.Utils;
 
 public class InitStorageCells {
 
     public static void init() {
         StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
-        initModels();
-    }
 
-    private static void initModels() {
-        for (var cell : Stream.of(
-                MEGACellType.ITEM.getCells().stream(),
-                MEGACellType.FLUID.getCells().stream()).flatMap(s -> s).toList()) {
-            StorageCellModels.registerModel(cell,
-                    MEGACells.makeId("block/drive/cells/standard/" + cell.id().getPath()));
-        }
-        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL.asItem(),
-                MEGACells.makeId("block/drive/cells/standard/bulk_item_cell"));
+        MEGAItems.getItemCells().forEach(c -> StorageCellModels.registerModel(c,
+                Utils.makeId("block/drive/cells/standard/" + c.id().getPath())));
+        MEGAItems.getFluidCells().forEach(c -> StorageCellModels.registerModel(c,
+                Utils.makeId("block/drive/cells/standard/" + c.id().getPath())));
 
-        for (var portableItemCell : MEGACellType.ITEM.getPortableCells()) {
-            StorageCellModels.registerModel(portableItemCell,
-                    MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"));
-        }
-        for (var portableFluidCell : MEGACellType.FLUID.getPortableCells()) {
-            StorageCellModels.registerModel(portableFluidCell,
-                    MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
+        MEGAItems.getItemPortables().forEach(c -> StorageCellModels.registerModel(c,
+                Utils.makeId("block/drive/cells/portable/portable_mega_item_cell")));
+        MEGAItems.getFluidPortables().forEach(c -> StorageCellModels.registerModel(c,
+                Utils.makeId("block/drive/cells/portable/portable_mega_fluid_cell")));
+
+        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL,
+                Utils.makeId("block/drive/cells/standard/bulk_item_cell"));
+
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            Stream.of(AppBotItems.getCells(), AppBotItems.getPortables()).flatMap(Collection::stream)
+                    .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_mana_cell")));
         }
     }
 }

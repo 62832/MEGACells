@@ -1,5 +1,9 @@
 package gripe._90.megacells.block;
 
+import static gripe._90.megacells.definition.MEGABlocks.CRAFTING_ACCELERATOR;
+import static gripe._90.megacells.definition.MEGABlocks.MEGA_CRAFTING_UNIT;
+import static gripe._90.megacells.definition.MEGATranslations.AcceleratorThreads;
+
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -18,8 +22,6 @@ import appeng.core.AEConfig;
 import appeng.core.localization.Tooltips;
 import appeng.util.InteractionUtil;
 
-import gripe._90.megacells.definition.MEGABlocks;
-
 public class MEGACraftingBlockItem extends CraftingBlockItem {
     public MEGACraftingBlockItem(Block id, Properties props, Supplier<ItemLike> disassemblyExtra) {
         super(id, props, disassemblyExtra);
@@ -31,7 +33,7 @@ public class MEGACraftingBlockItem extends CraftingBlockItem {
             int itemCount = player.getItemInHand(hand).getCount();
             player.setItemInHand(hand, ItemStack.EMPTY);
 
-            player.getInventory().placeItemBackInInventory(MEGABlocks.MEGA_CRAFTING_UNIT.stack(itemCount));
+            player.getInventory().placeItemBackInInventory(MEGA_CRAFTING_UNIT.stack(itemCount));
             player.getInventory().placeItemBackInInventory(new ItemStack(disassemblyExtra.get(), itemCount));
 
             return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
@@ -41,8 +43,8 @@ public class MEGACraftingBlockItem extends CraftingBlockItem {
 
     @Override
     public void addCheckedInformation(ItemStack itemStack, Level level, List<Component> lines, TooltipFlag flag) {
-        if (this.getBlock().equals(MEGABlocks.CRAFTING_ACCELERATOR.block())) {
-            lines.add(Tooltips.of("Provides 4 co-processing threads per block."));
+        if (this.getBlock().equals(CRAFTING_ACCELERATOR.block())) {
+            lines.add(Tooltips.of(AcceleratorThreads.text()));
         }
     }
 }

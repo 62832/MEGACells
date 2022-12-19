@@ -39,46 +39,30 @@ configurations {
     developmentForge.extendsFrom common
 }
 
-repositories {
-    maven {
-        name = 'ModMaven (K4U-NL)'
-        url = 'https://modmaven.dev/'
-        content {
-            includeGroup "mekanism"
-        }
-    }
-
-    maven {
-        name = 'TheIllusiveC4'
-        url = 'https://maven.theillusivec4.top/'
-        content {
-            includeGroup "top.theillusivec4.curios"
-        }
-    }
-}
-
 dependencies {
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     modImplementation "appeng:appliedenergistics2-forge:${ae2_version}"
-
     modImplementation "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
+    modImplementation "curse.maven:appmek-574300:${appmek_fileid}"
+    modImplementation "curse.maven:applied-botanics-addon-610632:${appbot_fileid}"
+
+    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
+    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
+    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all"
+    modRuntimeOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}-FORGE"
+    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}"
+
     modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
     modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_version}"
     modRuntimeOnly "top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"
 
-    modImplementation "curse.maven:appmek-574300:${appmek_fileid}"
-    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
-    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
-    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all"
-
     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
     modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 processResources {

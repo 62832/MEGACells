@@ -8,11 +8,11 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.datagen.AppMekItemModelProvider;
 import gripe._90.megacells.integration.appmek.datagen.AppMekRecipeProvider;
+import gripe._90.megacells.util.Utils;
 
-@Mod.EventBusSubscriber(modid = MEGACells.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Utils.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MEGADataGenerators {
 
     @SubscribeEvent

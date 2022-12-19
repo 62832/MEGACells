@@ -20,8 +20,8 @@ import appeng.client.render.model.AutoRotatingBakedModel;
 import appeng.core.definitions.BlockDefinition;
 import appeng.hooks.ModelsReloadCallback;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.util.Utils;
 
 @Environment(EnvType.CLIENT)
 public class InitAutoRotatingModel {
@@ -73,7 +73,7 @@ public class InitAutoRotatingModel {
         BakedModel missingModel = modelRegistry.get(ModelBakery.MISSING_MODEL_LOCATION);
 
         for (ResourceLocation location : keys) {
-            if (!location.getNamespace().equals(MEGACells.MODID)) {
+            if (!location.getNamespace().equals(Utils.MODID)) {
                 continue;
             }
 

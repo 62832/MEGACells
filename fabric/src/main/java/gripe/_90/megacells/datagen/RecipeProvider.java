@@ -16,6 +16,6 @@ public class RecipeProvider extends FabricRecipeProvider {
 
     @Override
     protected void generateRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        CommonRecipeSupplier.INSTANCE.buildRecipes(consumer);
+        CommonRecipeSupplier.buildRecipes(consumer);
     }
 }

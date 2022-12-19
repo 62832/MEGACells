@@ -11,6 +11,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ibm.icu.impl.Pair;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.models.BlockModelGenerators;
@@ -31,9 +33,9 @@ import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.init.client.InitItemModelsProperties;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.util.Utils;
 
 public class ModelProvider extends FabricModelProvider {
 
@@ -70,20 +72,22 @@ public class ModelProvider extends FabricModelProvider {
 
         for (var cell : CommonModelSupplier.STORAGE_CELLS) {
             createCellItem(
-                    MEGACells.makeId("item/cell/standard/" + cell.id().getPath()),
-                    MEGACells.makeId("item/" + cell.id().getPath()), STORAGE_CELL_LED, generator.output);
-            createDriveCellModel(
-                    MEGACells.makeId("block/drive/cells/standard/" + cell.id().getPath()), generator.output);
+                    Utils.makeId("item/cell/standard/" + cell.id().getPath()),
+                    Utils.makeId("item/" + cell.id().getPath()), STORAGE_CELL_LED, generator.output);
+            if (!AppBotItems.getCells().contains(cell)) {
+                createDriveCellModel("standard/" + cell.id().getPath(), generator.output);
+            }
         }
 
         for (var cell : CommonModelSupplier.PORTABLE_CELLS) {
             createCellItem(
-                    MEGACells.makeId("item/cell/portable/" + cell.id().getPath()),
-                    MEGACells.makeId("item/" + cell.id().getPath()), PORTABLE_CELL_LED, generator.output);
+                    Utils.makeId("item/cell/portable/" + cell.id().getPath()),
+                    Utils.makeId("item/" + cell.id().getPath()), PORTABLE_CELL_LED, generator.output);
         }
 
-        createDriveCellModel(MEGACells.makeId("block/drive/cells/portable/portable_mega_item_cell"), generator.output);
-        createDriveCellModel(MEGACells.makeId("block/drive/cells/portable/portable_mega_fluid_cell"), generator.output);
+        createDriveCellModel("portable/portable_mega_item_cell", generator.output);
+        createDriveCellModel("portable/portable_mega_fluid_cell", generator.output);
+        createDriveCellModel("mega_mana_cell", generator.output);
     }
 
     private TextureMapping cell(ResourceLocation cell, ResourceLocation led) {
@@ -99,15 +103,16 @@ public class ModelProvider extends FabricModelProvider {
         CELL.create(cellModel, cell(cellTexture, led), output);
     }
 
-    private void createDriveCellModel(ResourceLocation cell,
+    private void createDriveCellModel(String texture,
             BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
-        DRIVE_CELL.create(cell, driveCell(cell), output);
+        var path = Utils.makeId("block/drive/cells/" + texture);
+        DRIVE_CELL.create(path, driveCell(path), output);
     }
 
     private MultiVariantGenerator craftingUnit(Block block, String texture,
             BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
-        var formed = MEGACells.makeId("block/crafting/" + texture + "_formed");
-        var unformed = MEGACells.makeId("block/crafting/" + texture);
+        var formed = Utils.makeId("block/crafting/" + texture + "_formed");
+        var unformed = Utils.makeId("block/crafting/" + texture);
         return MultiVariantGenerator.multiVariant(block)
                 .with(PropertyDispatch.property(AbstractCraftingUnitBlock.FORMED)
                         .select(false, Variant.variant().with(VariantProperties.MODEL,
@@ -116,17 +121,17 @@ public class ModelProvider extends FabricModelProvider {
     }
 
     private void createCraftingUnit(Block block, String texture, BlockModelGenerators generator) {
-        var formed = MEGACells.makeId("block/crafting/" + texture + "_formed");
-        var unformed = MEGACells.makeId("block/crafting/" + texture);
+        var formed = Utils.makeId("block/crafting/" + texture + "_formed");
+        var unformed = Utils.makeId("block/crafting/" + texture);
         generator.blockStateOutput.accept(craftingUnit(block, texture, generator.modelOutput));
         generator.modelOutput.accept(formed, () -> customModelLoader(formed));
         generator.delegateItemModel(block, unformed);
     }
 
     private void createCraftingMonitor(BlockModelGenerators generator) {
-        var formed = MEGACells.makeId("block/crafting/monitor_formed");
-        var unformed = MEGACells.makeId("block/crafting/monitor");
-        var unit = MEGACells.makeId("block/crafting/unit");
+        var formed = Utils.makeId("block/crafting/monitor_formed");
+        var unformed = Utils.makeId("block/crafting/monitor");
+        var unit = Utils.makeId("block/crafting/unit");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.CRAFTING_MONITOR.block())
                 .with(PropertyDispatch.property(AbstractCraftingUnitBlock.FORMED)
                         .select(false, Variant.variant().with(VariantProperties.MODEL,
@@ -160,14 +165,14 @@ public class ModelProvider extends FabricModelProvider {
                             TextureMapping::cube)));
             if (i < 4) {
                 var fillPredicate = new JsonObject();
-                fillPredicate.addProperty(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID.toString(), 0.25 * i);
+                fillPredicate.addProperty("ae2:fill_level", 0.25 * i);
                 itemModelOverrides.add(
-                        Pair.of(MEGACells.makeId("block/" + cell.id().getPath() + "_" + (i + 1)), fillPredicate));
+                        Pair.of(Utils.makeId("block/" + cell.id().getPath() + "_" + (i + 1)), fillPredicate));
             }
         }
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(cell.block()).with(fillStage));
-        generator.modelOutput.accept(MEGACells.makeId("item/" + cell.id().getPath()), new OverrideableDelegatedModel(
-                MEGACells.makeId("block/" + cell.id().getPath() + "_0"), itemModelOverrides));
+        generator.modelOutput.accept(Utils.makeId("item/" + cell.id().getPath()), new OverrideableDelegatedModel(
+                Utils.makeId("block/" + cell.id().getPath() + "_0"), itemModelOverrides));
     }
 
     static class OverrideableDelegatedModel extends DelegatedModel {
@@ -180,6 +185,7 @@ public class ModelProvider extends FabricModelProvider {
             this.overrides = overrides;
         }
 
+        @NotNull
         @Override
         public JsonElement get() {
             JsonObject json = super.get().getAsJsonObject();

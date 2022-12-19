@@ -5,18 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.world.inventory.InventoryMenu;
 
 import appeng.client.render.crafting.AbstractCraftingUnitModelProvider;
 import appeng.client.render.crafting.LightBakedModel;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.crafting.UnitBakedModel;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.util.Utils;
 
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
 
@@ -82,7 +82,7 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     }
 
     private static Material texture(String name) {
-        var material = new Material(TextureAtlas.LOCATION_BLOCKS, MEGACells.makeId("block/crafting/" + name));
+        var material = new Material(InventoryMenu.BLOCK_ATLAS, Utils.makeId("block/crafting/" + name));
         MATERIALS.add(material);
         return material;
     }

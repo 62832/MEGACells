@@ -1,24 +1,25 @@
-package gripe._90.megacells.item.cell;
+package gripe._90.megacells.item;
 
 import java.util.Objects;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
+import appeng.api.stacks.AEKeyType;
 import appeng.items.storage.StorageTier;
 import appeng.items.tools.powered.PortableCellItem;
+import appeng.menu.me.common.MEStorageMenu;
 
-import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.util.Utils;
 
 public class MEGAPortableCell extends PortableCellItem {
 
     private final StorageTier tier;
-    private final IMEGACellType type;
 
-    public MEGAPortableCell(Properties props, StorageTier tier, IMEGACellType type) {
-        super(type.keyType(), type.portableCellMenu(), tier, props.stacksTo(1));
+    public MEGAPortableCell(Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu) {
+        super(keyType, menu, tier, props.stacksTo(1));
         this.tier = tier;
-        this.type = type;
     }
 
     @Override
@@ -36,13 +37,9 @@ public class MEGAPortableCell extends PortableCellItem {
         return this.tier;
     }
 
-    public IMEGACellType getType() {
-        return this.type;
-    }
-
     @Override
     public ResourceLocation getRecipeId() {
-        return MEGACells.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
+        return Utils.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
 
     @Override

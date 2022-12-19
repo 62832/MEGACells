@@ -1,4 +1,4 @@
-package gripe._90.megacells.item.cell.bulk;
+package gripe._90.megacells.item.cell;
 
 import java.util.List;
 
@@ -12,8 +12,14 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.core.localization.Tooltips;
 
+import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.item.MEGABulkCell;
+
 public class BulkCellHandler implements ICellHandler {
     public static final BulkCellHandler INSTANCE = new BulkCellHandler();
+
+    private BulkCellHandler() {
+    }
 
     @Override
     public boolean isCell(ItemStack is) {
@@ -36,23 +42,23 @@ public class BulkCellHandler implements ICellHandler {
         var filterItem = handler.getFilterItem();
 
         if (containedType != null) {
-            lines.add(Tooltips.of(Tooltips.of("Contains: "), containedType.getDisplayName()));
+            lines.add(Tooltips.of(MEGATranslations.Contains.text(containedType.getDisplayName())));
             var quantity = handler.getAvailableStacks().get(containedType);
-            lines.add(Tooltips.of(Tooltips.of("Quantity: "), Tooltips.ofNumber(quantity)));
+            lines.add(Tooltips.of(MEGATranslations.Quantity.text(Tooltips.ofNumber(quantity))));
         } else {
-            lines.add(Tooltips.of("Empty"));
+            lines.add(Tooltips.of(MEGATranslations.Empty.text()));
         }
 
         if (filterItem != null) {
             if (containedType == null) {
-                lines.add(Tooltips.of(Tooltips.of("Partitioned for: "), filterItem.getDisplayName()));
+                lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
             } else {
                 if (!containedType.equals(filterItem)) {
-                    lines.add(Tooltips.of("Mismatched filter!").withStyle(ChatFormatting.DARK_RED));
+                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
             }
         } else {
-            lines.add(Tooltips.of("Not Partitioned"));
+            lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
         }
     }
 }

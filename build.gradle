@@ -54,6 +54,7 @@ allprojects {
             url = 'https://modmaven.dev/'
             content {
                 includeGroup "appeng"
+                includeGroup "mekanism"
             }
         }
 
@@ -62,6 +63,14 @@ allprojects {
             url = 'https://cursemaven.com'
             content {
                 includeGroup "curse.maven"
+            }
+        }
+
+        maven {
+            name = 'Modrinth Maven'
+            url = 'https://api.modrinth.com/maven'
+            content {
+                includeGroup "maven.modrinth"
             }
         }
 
@@ -81,9 +90,59 @@ allprojects {
                 includeGroup "dev.architectury"
             }
         }
+
+        maven {
+            name = 'BlameJared'
+            url 'https://maven.blamejared.com'
+            content {
+                includeGroup "vazkii.botania"
+                includeGroup "vazkii.patchouli"
+            }
+        }
+
+        maven {
+            name = 'TheIllusiveC4'
+            url = 'https://maven.theillusivec4.top/'
+            content {
+                includeGroup "top.theillusivec4.curios"
+            }
+        }
+
+        maven {
+            name = 'TerraformersMC'
+            url = 'https://maven.terraformersmc.com/'
+            content {
+                includeGroup "com.terraformersmc"
+                includeGroup "dev.emi"
+            }
+        }
+
+        maven {
+            name = 'LadySnake Libs'
+            url = 'https://ladysnake.jfrog.io/artifactory/mods'
+            content {
+                includeGroup "dev.onyxstudios.cardinal-components-api"
+            }
+        }
+
+        maven {
+            name = "JamiesWhiteShirt"
+            url = "https://maven.jamieswhiteshirt.com/libs-release/"
+            content {
+                includeGroup "com.jamieswhiteshirt"
+            }
+        }
+
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io/"
+            content {
+                includeGroup("com.github.emilyploszaj")
+            }
+        }
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
         options.release = 17
     }

@@ -15,7 +15,7 @@ public class InitBlockEntityRenderers {
         bus.addListener(InitBlockEntityRenderers::initBERenderers);
     }
 
-    private static void initBERenderers(ModelEvent.RegisterGeometryLoaders event) {
+    private static void initBERenderers(ModelEvent.RegisterGeometryLoaders ignoredEvent) {
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
     }
 }

@@ -10,23 +10,22 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.forge.MEGADataGenerators;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
-import gripe._90.megacells.init.forge.Registration;
 import gripe._90.megacells.init.forge.client.InitAutoRotatingModel;
 import gripe._90.megacells.init.forge.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.forge.client.InitBuiltInModels;
 import gripe._90.megacells.init.forge.client.InitItemColors;
-import gripe._90.megacells.init.forge.client.InitRenderTypes;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.item.AppMekItems;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.util.Utils;
 
-@Mod(MEGACells.MODID)
+@Mod(Utils.MODID)
 public class MEGACellsForge {
     public MEGACellsForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -35,19 +34,25 @@ public class MEGACellsForge {
         MEGAItems.init();
         MEGABlockEntities.init();
 
-        if (AppMekIntegration.isAppMekLoaded()) {
+        if (Utils.PLATFORM.isModLoaded("appmek")) {
             AppMekItems.init();
+        }
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            AppBotItems.init();
         }
 
         bus.addListener((RegisterEvent event) -> {
             if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
-                Registration.registerBlocks(ForgeRegistries.BLOCKS);
+                MEGABlocks.getBlocks().forEach(b -> {
+                    ForgeRegistries.BLOCKS.register(b.id(), b.block());
+                    ForgeRegistries.ITEMS.register(b.id(), b.asItem());
+                });
             }
             if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
-                Registration.registerItems(ForgeRegistries.ITEMS);
+                MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
             }
             if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
-                Registration.registerBlockEntities(ForgeRegistries.BLOCK_ENTITY_TYPES);
+                MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
             }
         });
 
@@ -56,13 +61,17 @@ public class MEGACellsForge {
             event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
 
-            event.enqueueWork(AppMekIntegration::initIntegration);
+            event.enqueueWork(() -> {
+                if (Utils.PLATFORM.isModLoaded("appmek")) {
+                    AppMekIntegration.initUpgrades();
+                    AppMekIntegration.initStorageCells();
+                }
+            });
         });
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBuiltInModels::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitItemColors::init);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitRenderTypes::init);
     }
 }

@@ -1,8 +1,10 @@
-package gripe._90.megacells.integration.appmek.item.cell.radioactive;
+package gripe._90.megacells.item;
 
 import java.util.List;
 
 import com.google.common.base.Preconditions;
+
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -10,15 +12,18 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
+import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.cells.ICellWorkbenchItem;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.util.ConfigInventory;
 
-import me.ramidzkh.mekae2.ae2.MekanismKeyType;
+import gripe._90.megacells.item.cell.BulkCellHandler;
 
-public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchItem {
-    public MEGARadioactiveCell(Properties properties) {
+public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
+    public MEGABulkCell(Properties properties) {
         super(properties.stacksTo(1));
     }
 
@@ -27,8 +32,9 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
         return true;
     }
 
+    @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
+        return CellConfig.create(AEItemKey.filter(), is, 1);
     }
 
     @Override
@@ -41,9 +47,15 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
     }
 
     @Override
-    public void appendHoverText(ItemStack is, Level level, List<Component> lines, TooltipFlag advancedTooltips) {
+    public void appendHoverText(ItemStack is, Level level, @NotNull List<Component> lines,
+            @NotNull TooltipFlag advancedTooltips) {
         Preconditions.checkArgument(is.getItem() == this);
-        RadioactiveCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
+        BulkCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
     }
 
+    @Override
+    public IUpgradeInventory getUpgrades(ItemStack is) {
+        // placeholder for later
+        return UpgradeInventories.forItem(is, 1);
+    }
 }

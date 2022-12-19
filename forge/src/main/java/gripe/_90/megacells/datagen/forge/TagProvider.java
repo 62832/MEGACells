@@ -8,13 +8,13 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.util.Utils;
 
 public class TagProvider {
     static class Items extends ItemTagsProvider {
         public Items(DataGenerator gen, BlockTagsProvider block, ExistingFileHelper efh) {
-            super(gen, block, MEGACells.MODID, efh);
+            super(gen, block, Utils.MODID, efh);
         }
 
         @Override
@@ -25,14 +25,12 @@ public class TagProvider {
 
     static class Blocks extends BlockTagsProvider {
         public Blocks(DataGenerator gen, @Nullable ExistingFileHelper efh) {
-            super(gen, MEGACells.MODID, efh);
+            super(gen, Utils.MODID, efh);
         }
 
         @Override
         protected void addTags() {
-            for (var block : MEGABlocks.getBlocks()) {
-                tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
-            }
+            MEGABlocks.getBlocks().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block()));
         }
     }
 }

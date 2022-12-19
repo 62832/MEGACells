@@ -13,6 +13,8 @@ dependencies {
 
     modCompileOnly "appeng:appliedenergistics2-fabric:${ae2_version}"
     modCompileOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
+    modCompileOnly "curse.maven:applied-botanics-addon-610632:${project(":fabric").appbot_fileid}"
+    modCompileOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}-FABRIC"
 }
 
 publishing {

@@ -3,9 +3,9 @@ package gripe._90.megacells.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGATranslations;
 
 public class LocalisationProvider extends FabricLanguageProvider {
     protected LocalisationProvider(FabricDataGenerator gen, String locale) {
@@ -14,14 +14,12 @@ public class LocalisationProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(TranslationBuilder builder) {
-        builder.add(MEGACells.CREATIVE_TAB, "MEGA Cells");
+        builder.add(MEGAItems.CREATIVE_TAB, "MEGA Cells");
+        MEGAItems.getItems().forEach(item -> builder.add(item.asItem(), item.getEnglishName()));
+        MEGABlocks.getBlocks().forEach(block -> builder.add(block.block(), block.getEnglishName()));
 
-        for (var item : MEGAItems.getItems()) {
-            builder.add(item.asItem(), item.getEnglishName());
-        }
-
-        for (var block : MEGABlocks.getBlocks()) {
-            builder.add(block.block(), block.getEnglishName());
+        for (var t : MEGATranslations.values()) {
+            builder.add(t.getTranslationKey(), t.getEnglishText());
         }
     }
 }

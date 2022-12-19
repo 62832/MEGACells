@@ -1,14 +1,20 @@
 package gripe._90.megacells.integration.ae2wt;
 
+import static gripe._90.megacells.definition.MEGAItems.GREATER_ENERGY_CARD;
+
 import de.mari_023.ae2wtlib.UpgradeHelper;
 
-import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.util.Services;
+import gripe._90.megacells.util.Utils;
 
-public class AE2WTIntegration {
-    public static void initEnergyUpgrades() {
-        if (Services.PLATFORM.isModLoaded("ae2wtlib")) {
-            UpgradeHelper.addUpgradeToAllTerminals(MEGAItems.GREATER_ENERGY_CARD, 0);
+public final class AE2WTIntegration {
+    private AE2WTIntegration() {
+    }
+
+    public static void initUpgrades() {
+        if (Utils.PLATFORM.isModLoaded("ae2wtlib")) {
+            UpgradeHelper.addUpgradeToAllTerminals(GREATER_ENERGY_CARD, 0);
         }
+
+        Utils.LOGGER.info("Initialised AE2WT integration.");
     }
 }

@@ -10,17 +10,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
+import appeng.core.AppEng;
 import appeng.core.definitions.BlockDefinition;
-import appeng.init.client.InitItemModelsProperties;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.CommonModelSupplier;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.util.Utils;
 
 public class BlockStateProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
 
     public BlockStateProvider(DataGenerator gen, ExistingFileHelper efh) {
-        super(gen, MEGACells.MODID, efh);
+        super(gen, Utils.MODID, efh);
     }
 
     @Override
@@ -35,14 +35,14 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
 
     private void builtInBlockModel(String name) {
         var model = models().getBuilder("block/" + name);
-        var loaderId = MEGACells.makeId("block/" + name);
+        var loaderId = Utils.makeId("block/" + name);
         model.customLoader((bmb, efh) -> new CustomLoaderBuilder<>(loaderId, bmb, efh) {
         });
     }
 
     private void craftingModel(BlockDefinition<?> block, String name) {
         builtInBlockModel("crafting/" + name + "_formed");
-        var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
+        var blockModel = models().cubeAll("block/crafting/" + name, Utils.makeId("block/crafting/" + name));
         getVariantBuilder(block.block())
                 .partialState().with(AbstractCraftingUnitBlock.FORMED, false).setModels(
                         new ConfiguredModel(blockModel))
@@ -52,8 +52,8 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
     }
 
     private void craftingMonitorModel() {
-        var unitTexture = MEGACells.makeId("block/crafting/unit");
-        var monitorTexture = MEGACells.makeId("block/crafting/monitor");
+        var unitTexture = Utils.makeId("block/crafting/unit");
+        var monitorTexture = Utils.makeId("block/crafting/monitor");
         var blockModel = models().cube("block/crafting/monitor", unitTexture, unitTexture, monitorTexture, unitTexture,
                 unitTexture, unitTexture).texture("particle", monitorTexture);
 
@@ -70,7 +70,7 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         var models = new ArrayList<ModelFile>();
         for (var i = 0; i < 5; i++) {
             var model = models().cubeAll("block/mega_energy_cell_" + i,
-                    MEGACells.makeId("block/mega_energy_cell_" + i));
+                    Utils.makeId("block/mega_energy_cell_" + i));
             blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i).setModels(new ConfiguredModel(model));
             models.add(model);
         }
@@ -78,7 +78,7 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
                 models.get(0).getLocation());
         for (var i = 1; i < models.size(); i++) {
             float fillFactor = (i - 1) / (float) (models.size() - 1);
-            item.override().predicate(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID, fillFactor).model(models.get(i));
+            item.override().predicate(AppEng.makeId("fill_level"), fillFactor).model(models.get(i));
         }
     }
 }
