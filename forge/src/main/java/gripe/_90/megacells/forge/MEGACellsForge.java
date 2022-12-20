@@ -2,6 +2,10 @@ package gripe._90.megacells.forge;
 
 import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +27,7 @@ import gripe._90.megacells.init.forge.client.InitItemColors;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.item.cell.CompressionHandler;
 import gripe._90.megacells.util.Utils;
 
 @Mod(Utils.MODID)
@@ -68,6 +73,10 @@ public class MEGACellsForge {
                 }
             });
         });
+
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionHandler.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionHandler.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionHandler.INSTANCE.load());
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);

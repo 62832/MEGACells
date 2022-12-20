@@ -1,9 +1,14 @@
 package gripe._90.megacells.item.cell;
 
-import java.util.Objects;
+import static gripe._90.megacells.definition.MEGAItems.COMPRESSION_CARD;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,98 +16,90 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
-import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 
 import gripe._90.megacells.item.MEGABulkCell;
 
 public class BulkCellInventory implements StorageCell {
-
     private static final String KEY = "key";
-    private static final String COUNT = "count";
+    private static final String UNIT_COUNT = "smallestUnitCount";
 
     private final ISaveProvider container;
     private final ItemStack i;
-    private final MEGABulkCell cellType;
 
-    private AEKey storedItem;
-    private long itemCount;
+    private AEItemKey storedItem;
+    private final AEItemKey filterItem;
     private final IPartitionList partitionList;
+
+    private final Object2IntMap<AEItemKey> compressed;
+    private final Object2IntMap<AEItemKey> decompressed;
+    private BigInteger unitCount;
+    private final long unitFactor;
+    protected final boolean compressionEnabled;
+
     private boolean isPersisted = true;
 
-    public BulkCellInventory(MEGABulkCell cellType, ItemStack o, ISaveProvider container) {
+    public BulkCellInventory(MEGABulkCell cell, ItemStack o, ISaveProvider container) {
         this.i = o;
-        this.cellType = cellType;
         this.container = container;
 
-        this.storedItem = retrieveStoredItem();
-        this.itemCount = retrieveItemCount();
+        var config = cell.getConfigInventory(i);
+        this.filterItem = (AEItemKey) config.getKey(0);
 
         var builder = IPartitionList.builder();
-        var config = getConfigInventory();
         builder.addAll(config.keySet());
         this.partitionList = builder.build();
+
+        this.compressed = CompressionHandler.INSTANCE.getCompressedVariants(filterItem);
+        this.decompressed = CompressionHandler.INSTANCE.getDecompressedVariants(filterItem);
+        this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
+
+        this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
+        this.unitCount = retrieveUnitCount();
+
+        this.compressionEnabled = cell.getUpgrades(i).isInstalled(COMPRESSION_CARD);
     }
 
-    private AEKey retrieveStoredItem() {
-        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
-        // TODO: remove bulk cell conversion methods in MC 1.20
-        if (getTag().contains("keys")) {
-            return AEKey.fromTagGeneric(getTag().getList("keys", Tag.TAG_COMPOUND).getCompound(0));
+    private BigInteger retrieveUnitCount() {
+        // TODO 1.19.3 / 1.20.0: Remove pre-2.0.0 bulk cell conversion (again)
+        if (getTag().contains("count")) {
+            return BigInteger.valueOf(getTag().getLong("count")).multiply(BigInteger.valueOf(unitFactor));
         } else {
-            return getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
+            return !getTag().getString(UNIT_COUNT).equals("")
+                    ? new BigInteger(getTag().getString(UNIT_COUNT))
+                    : BigInteger.ZERO;
         }
     }
 
-    private long retrieveItemCount() {
-        // convert pre-1.4.0 bulk cells to use new inventory while retaining old contents
-        return getTag().contains("ic") ? getTag().getLong("ic") : getTag().getLong(COUNT);
+    private long clampedLong(BigInteger toClamp, long limit) {
+        return toClamp.min(BigInteger.valueOf(limit)).longValue();
     }
 
     private CompoundTag getTag() {
-        return this.i.getOrCreateTag();
-    }
-
-    public static BulkCellInventory createInventory(ItemStack o, ISaveProvider container) {
-        Objects.requireNonNull(o, "Cannot create cell inventory for null itemstack");
-
-        if (!(o.getItem()instanceof MEGABulkCell cellType)) {
-            return null;
-        }
-
-        return new BulkCellInventory(cellType, o, container);
-    }
-
-    private static boolean isCellEmpty(BulkCellInventory inv) {
-        if (inv != null) {
-            return inv.getAvailableStacks().isEmpty();
-        }
-        return true;
+        return i.getOrCreateTag();
     }
 
     @Override
     public CellState getStatus() {
-        if (this.itemCount == 0) {
+        if (unitCount.signum() == 0) {
             return CellState.EMPTY;
         }
-        if (this.itemCount == Long.MAX_VALUE || !this.storedItem.equals(getFilterItem())) {
+        if (!storedItem.equals(filterItem)) {
             return CellState.FULL;
         }
         return CellState.NOT_EMPTY;
     }
 
+    protected AEKey getStoredItem() {
+        return storedItem;
+    }
+
     protected AEKey getFilterItem() {
-        var config = getConfigInventory().keySet().stream().toList();
-        if (config.isEmpty()) {
-            return null;
-        } else {
-            return config.get(0);
-        }
+        return filterItem;
     }
 
     @Override
@@ -110,37 +107,28 @@ public class BulkCellInventory implements StorageCell {
         return 10.0f;
     }
 
-    public ConfigInventory getConfigInventory() {
-        return this.cellType.getConfigInventory(this.i);
-    }
-
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-        if (amount == 0 || !AEKeyType.items().contains(what) || !this.partitionList.isListed(what)) {
+        if (amount == 0 || !(what instanceof AEItemKey item)) {
             return 0;
         }
 
-        if (what instanceof AEItemKey itemKey) {
-            var meInventory = createInventory(itemKey.toStack(), null);
-            if (!isCellEmpty(meInventory)) {
-                return 0;
-            }
-        }
-
-        if (this.storedItem != null && !this.storedItem.equals(what)) {
+        if (!compressionEnabled && (!partitionList.isListed(what) || storedItem != null && !storedItem.equals(what))) {
             return 0;
         }
 
-        if (this.itemCount - Long.MAX_VALUE + amount > 0) {
-            // overflow
-            amount = Long.MAX_VALUE - this.itemCount;
+        if (compressionEnabled && !partitionList.isListed(what)
+                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+            return 0;
         }
+
+        var units = BigInteger.valueOf(amount).multiply(compressedTransferFactor(item));
 
         if (mode == Actionable.MODULATE) {
-            if (this.storedItem == null) {
-                this.storedItem = what;
+            if (storedItem == null) {
+                storedItem = filterItem;
             }
-            this.itemCount += amount;
+            unitCount = unitCount.add(units);
             saveChanges();
         }
 
@@ -149,70 +137,137 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
-        var extractAmount = Math.min(Integer.MAX_VALUE, amount);
-
-        var currentCount = this.itemCount;
-        if (this.itemCount > 0 && Objects.equals(this.storedItem, what)) {
-            if (extractAmount >= currentCount) {
-                if (mode == Actionable.MODULATE) {
-                    this.storedItem = null;
-                    this.itemCount = 0;
-                    saveChanges();
-                }
-                return currentCount;
-            } else {
-                if (mode == Actionable.MODULATE) {
-                    this.itemCount -= extractAmount;
-                    saveChanges();
-                }
-                return extractAmount;
-            }
+        if (unitCount.signum() < 1 || !(what instanceof AEItemKey item)) {
+            return 0;
         }
-        return 0;
+
+        var itemCount = unitCount.divide(BigInteger.valueOf(unitFactor));
+        if (!compressionEnabled && (itemCount.signum() < 1 || !storedItem.equals(what))) {
+            return 0;
+        }
+
+        if (compressionEnabled && !storedItem.equals(what)
+                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+            return 0;
+        }
+
+        var extractionFactor = compressedTransferFactor(item);
+        var units = BigInteger.valueOf(amount).multiply(extractionFactor);
+        var currentUnitCount = unitCount;
+
+        if (currentUnitCount.compareTo(units) <= 0) {
+            if (mode == Actionable.MODULATE) {
+                storedItem = null;
+                unitCount = BigInteger.ZERO;
+                saveChanges();
+            }
+            return clampedLong(currentUnitCount.divide(extractionFactor), Long.MAX_VALUE);
+        } else {
+            if (mode == Actionable.MODULATE) {
+                unitCount = unitCount.subtract(units);
+                saveChanges();
+            }
+            return clampedLong(units.divide(extractionFactor), Long.MAX_VALUE);
+        }
     }
 
-    protected void saveChanges() {
-        this.isPersisted = false;
-        if (this.container != null) {
-            this.container.saveChanges();
+    private BigInteger compressedTransferFactor(AEItemKey what) {
+        if (compressed.getInt(what) > 0) {
+            var variantKeys = new ArrayList<>(compressed.keySet());
+            var toDecompress = new Object2IntLinkedOpenHashMap<>(compressed);
+            toDecompress.keySet().retainAll(variantKeys.subList(0, variantKeys.indexOf(what) + 1));
+            var factor = unitFactor;
+            for (var i : toDecompress.values()) {
+                factor *= i;
+            }
+            return BigInteger.valueOf(factor);
+        } else if (decompressed.getInt(what) > 0) {
+            var variantKeys = new ArrayList<>(decompressed.keySet());
+            var toCompress = new Object2IntLinkedOpenHashMap<>(decompressed);
+            toCompress.keySet().retainAll(variantKeys.subList(variantKeys.indexOf(what) + 1, variantKeys.size()));
+            var factor = 1L;
+            for (var i : toCompress.values()) {
+                factor *= i;
+            }
+            return BigInteger.valueOf(factor);
+        } else {
+            return BigInteger.valueOf(unitFactor);
+        }
+    }
+
+    private void saveChanges() {
+        isPersisted = false;
+        if (container != null) {
+            container.saveChanges();
         } else {
             // if there is no ISaveProvider, store to NBT immediately
-            this.persist();
+            persist();
         }
     }
 
     @Override
     public void persist() {
-        if (this.isPersisted) {
+        if (isPersisted) {
             return;
         }
 
-        if (this.storedItem == null || this.itemCount < 0) {
-            this.getTag().remove(KEY);
-            this.getTag().remove(COUNT);
+        if (storedItem == null || unitCount.signum() == -1) {
+            getTag().remove(KEY);
+            getTag().remove(UNIT_COUNT);
         } else {
-            this.getTag().put(KEY, this.storedItem.toTagGeneric());
-            this.getTag().putLong(COUNT, this.itemCount);
+            getTag().put(KEY, storedItem.toTagGeneric());
+            getTag().putString(UNIT_COUNT, unitCount.toString());
         }
 
-        // remove pre-1.4.0 NBT tags
-        getTag().remove("keys");
-        getTag().remove("amts");
-        getTag().remove("ic");
+        // remove pre-2.0.0 count tag
+        getTag().remove("count");
 
-        this.isPersisted = true;
+        isPersisted = true;
     }
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (this.storedItem != null && this.itemCount > 0) {
-            out.add(this.storedItem, this.itemCount);
+        var stackLimit = (long) Math.pow(2, 42);
+        if (storedItem != null) {
+            out.add(storedItem, clampedLong(unitCount.divide(BigInteger.valueOf(unitFactor)), stackLimit));
+            getVariantStacks(out);
+        }
+    }
+
+    public void getVariantStacks(KeyCounter out) {
+        var stackLimit = (long) Math.pow(2, 42);
+        if (compressionEnabled && storedItem.equals(filterItem)) {
+            var compressionFactor = unitFactor;
+            for (var variant : compressed.keySet()) {
+                compressionFactor *= compressed.getInt(variant);
+                var count = unitCount.divide(BigInteger.valueOf(compressionFactor));
+
+                if (count.signum() == 1) {
+                    out.add(variant, clampedLong(count, stackLimit));
+                }
+            }
+
+            if (!decompressed.isEmpty()) {
+                var keys = new ArrayList<>(decompressed.keySet());
+                var baseUnit = keys.get(keys.size() - 1);
+                out.add(baseUnit, clampedLong(unitCount, stackLimit));
+
+                var decompressionFactor = 1;
+                for (var variant : keys) {
+                    decompressionFactor *= decompressed.getInt(variant);
+                    var count = unitCount.divide(BigInteger.valueOf(decompressionFactor));
+                    out.add(variant, clampedLong(count, stackLimit));
+                }
+            }
         }
     }
 
     @Override
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
-        return Objects.equals(what, this.storedItem) || this.partitionList.isListed(what);
+        if (!(what instanceof AEItemKey item)) {
+            return false;
+        }
+        return partitionList.isListed(item) || compressed.containsKey(item) || decompressed.containsKey(item);
     }
 
     @Override

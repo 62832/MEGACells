@@ -3,6 +3,8 @@ package gripe._90.megacells;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.Registry;
 
 import appeng.api.IAEAddonEntrypoint;
@@ -19,6 +21,7 @@ import gripe._90.megacells.init.client.InitBuiltInModels;
 import gripe._90.megacells.init.client.InitItemColors;
 import gripe._90.megacells.init.client.InitRenderTypes;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.item.cell.CompressionHandler;
 import gripe._90.megacells.util.Utils;
 
 public class MEGACellsFabric implements IAEAddonEntrypoint {
@@ -41,6 +44,16 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
 
         InitStorageCells.init();
         InitUpgrades.init();
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionHandler.INSTANCE.load());
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
+            if (success)
+                CompressionHandler.INSTANCE.load();
+        });
+        CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
+            if (client)
+                CompressionHandler.INSTANCE.load();
+        });
     }
 
     @Environment(EnvType.CLIENT)

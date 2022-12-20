@@ -1,6 +1,7 @@
 package gripe._90.megacells.item.cell;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,7 @@ import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.MEGABulkCell;
 
 public class BulkCellHandler implements ICellHandler {
+
     public static final BulkCellHandler INSTANCE = new BulkCellHandler();
 
     private BulkCellHandler() {
@@ -29,7 +31,14 @@ public class BulkCellHandler implements ICellHandler {
     @Nullable
     @Override
     public BulkCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider container) {
-        return BulkCellInventory.createInventory(is, container);
+        Objects.requireNonNull(is, "Cannot create cell inventory for null itemstack");
+
+        var item = is.getItem();
+        if (!(item instanceof MEGABulkCell cell)) {
+            return null;
+        }
+
+        return new BulkCellInventory(cell, is, container);
     }
 
     public void addCellInformationToTooltip(ItemStack is, List<Component> lines) {
@@ -38,27 +47,31 @@ public class BulkCellHandler implements ICellHandler {
             return;
         }
 
-        var containedType = handler.getAvailableStacks().getFirstKey();
+        var storedItem = handler.getStoredItem();
         var filterItem = handler.getFilterItem();
 
-        if (containedType != null) {
-            lines.add(Tooltips.of(MEGATranslations.Contains.text(containedType.getDisplayName())));
-            var quantity = handler.getAvailableStacks().get(containedType);
+        if (storedItem != null) {
+            lines.add(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
+            var quantity = handler.getAvailableStacks().get(storedItem);
             lines.add(Tooltips.of(MEGATranslations.Quantity.text(Tooltips.ofNumber(quantity))));
         } else {
             lines.add(Tooltips.of(MEGATranslations.Empty.text()));
         }
 
         if (filterItem != null) {
-            if (containedType == null) {
+            if (storedItem == null) {
                 lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
             } else {
-                if (!containedType.equals(filterItem)) {
+                if (!storedItem.equals(filterItem)) {
                     lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
             }
         } else {
             lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
         }
+
+        lines.add(Tooltips.of(MEGATranslations.Compression.text(handler.compressionEnabled
+                ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
+                : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
     }
 }
