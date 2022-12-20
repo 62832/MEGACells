@@ -7,7 +7,7 @@ plugins {
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = minecraft_version
 }
 
 subprojects {
@@ -15,9 +15,9 @@ subprojects {
     apply plugin: "io.github.juuxel.loom-quiltflower"
     apply plugin: "me.shedaniel.unified-publishing"
 
-    archivesBaseName = rootProject.mod_id + "-" + project.name
-    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1) + "-" + rootProject.minecraft_version
-    group = rootProject.maven_group
+    archivesBaseName = mod_id + "-" + project.name
+    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
+    group = maven_group + "-" + mod_id
 
     loom {
         silentMojangMappingsLicense()
@@ -30,7 +30,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_17
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
     }
 
@@ -153,16 +153,16 @@ allprojects {
 
     jar {
         from("LICENSE") {
-            rename { "${it}_${rootProject.archivesBaseName}"}
+            rename { "${it}_${archivesBaseName}"}
         }
     }
 
     if ((project.name == "fabric" || project.name == "forge") && project.version != "0.0.0") {
         unifiedPublishing {
             project {
-                gameVersions = [rootProject.minecraft_version]
+                gameVersions = [minecraft_version]
                 gameLoaders = [project.name]
-                version = project.name + "-" + project.version
+                version = project.name + "-" + project.version + "-" + minecraft_version
 
                 def loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
                 def releaseChannel = "release"
@@ -177,7 +177,7 @@ allprojects {
 
                 releaseType = releaseChannel
                 changelog = changes
-                displayName = String.format("%s (%s %s)", project.version.substring(0, 5), loader, rootProject.minecraft_version)
+                displayName = String.format("%s (%s %s)", project.version, loader, minecraft_version)
 
                 mainPublication remapJar // Declares the publicated jar
 

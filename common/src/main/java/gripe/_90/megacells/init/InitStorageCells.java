@@ -14,20 +14,13 @@ import gripe._90.megacells.util.Utils;
 public class InitStorageCells {
 
     public static void init() {
+        Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables()).flatMap(Collection::stream)
+                .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_item_cell")));
+        Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables()).flatMap(Collection::stream)
+                .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_fluid_cell")));
+
         StorageCells.addCellHandler(BulkCellHandler.INSTANCE);
-
-        MEGAItems.getItemCells().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/standard/" + c.id().getPath())));
-        MEGAItems.getFluidCells().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/standard/" + c.id().getPath())));
-
-        MEGAItems.getItemPortables().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/portable/portable_mega_item_cell")));
-        MEGAItems.getFluidPortables().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/portable/portable_mega_fluid_cell")));
-
-        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL,
-                Utils.makeId("block/drive/cells/standard/bulk_item_cell"));
+        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, Utils.makeId("block/drive/cells/bulk_item_cell"));
 
         if (Utils.PLATFORM.isModLoaded("appbot")) {
             Stream.of(AppBotItems.getCells(), AppBotItems.getPortables()).flatMap(Collection::stream)

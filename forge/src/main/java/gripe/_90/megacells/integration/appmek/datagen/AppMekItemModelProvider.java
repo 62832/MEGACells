@@ -33,20 +33,22 @@ public class AppMekItemModelProvider extends ItemModelProvider {
 
         for (var storage : AppMekItems.getCells()) {
             cell(storage);
-            var driveCellPath = "block/drive/cells/standard/" + storage.id().getPath();
-            withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", Utils.makeId(driveCellPath));
         }
+
         for (var portable : AppMekItems.getPortables()) {
             portable(portable);
         }
 
-        withExistingParent("block/drive/cells/portable/portable_mega_chemical_cell", DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/portable/portable_mega_chemical_cell"));
-
         flatSingleLayer(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
         cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
-        withExistingParent("block/drive/cells/standard/radioactive_chemical_cell", DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
+
+        driveCell("mega_chemical_cell");
+        driveCell("radioactive_chemical_cell");
+    }
+
+    private void driveCell(String texture) {
+        withExistingParent("block/drive/cells/" + texture, DRIVE_CELL).texture("cell",
+                Utils.makeId("block/drive/cells/" + texture));
     }
 
     private void cell(ItemDefinition<?> cell) {
@@ -66,8 +68,9 @@ public class AppMekItemModelProvider extends ItemModelProvider {
         return singleTexture(path, mcLoc("item/generated"), "layer0", Utils.makeId("item/" + subfolder + path));
     }
 
+    @NotNull
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return super.getName() + "/appmek";
     }
 }

@@ -1,6 +1,8 @@
 package gripe._90.megacells.integration.appmek;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
@@ -43,14 +45,11 @@ public final class AppMekIntegration {
     }
 
     public static void initStorageCells() {
+        Stream.of(AppMekItems.getCells(), AppMekItems.getPortables()).flatMap(Collection::stream)
+                .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_chemical_cell")));
+
         StorageCells.addCellHandler(RadioactiveCellHandler.INSTANCE);
-
-        AppMekItems.getCells().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/standard/" + c.id().getPath())));
-        AppMekItems.getPortables().forEach(c -> StorageCellModels.registerModel(c,
-                Utils.makeId("block/drive/cells/portable/portable_mega_chemical_cell")));
-
         StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
-                Utils.makeId("block/drive/cells/standard/radioactive_chemical_cell"));
+                Utils.makeId("block/drive/cells/radioactive_chemical_cell"));
     }
 }

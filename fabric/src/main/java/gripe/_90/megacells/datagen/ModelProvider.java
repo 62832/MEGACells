@@ -34,7 +34,6 @@ import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 public class ModelProvider extends FabricModelProvider {
@@ -74,9 +73,6 @@ public class ModelProvider extends FabricModelProvider {
             createCellItem(
                     Utils.makeId("item/cell/standard/" + cell.id().getPath()),
                     Utils.makeId("item/" + cell.id().getPath()), STORAGE_CELL_LED, generator.output);
-            if (!AppBotItems.getCells().contains(cell)) {
-                createDriveCellModel("standard/" + cell.id().getPath(), generator.output);
-            }
         }
 
         for (var cell : CommonModelSupplier.PORTABLE_CELLS) {
@@ -85,9 +81,10 @@ public class ModelProvider extends FabricModelProvider {
                     Utils.makeId("item/" + cell.id().getPath()), PORTABLE_CELL_LED, generator.output);
         }
 
-        createDriveCellModel("portable/portable_mega_item_cell", generator.output);
-        createDriveCellModel("portable/portable_mega_fluid_cell", generator.output);
+        createDriveCellModel("mega_item_cell", generator.output);
+        createDriveCellModel("mega_fluid_cell", generator.output);
         createDriveCellModel("mega_mana_cell", generator.output);
+        createDriveCellModel("bulk_item_cell", generator.output);
     }
 
     private TextureMapping cell(ResourceLocation cell, ResourceLocation led) {

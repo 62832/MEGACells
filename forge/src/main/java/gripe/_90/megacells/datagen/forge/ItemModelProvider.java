@@ -9,7 +9,6 @@ import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.datagen.CommonModelSupplier;
-import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
@@ -28,35 +27,28 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
     @Override
     protected void registerModels() {
         CommonModelSupplier.FLAT_ITEMS.forEach(this::flatSingleLayer);
-
-        CommonModelSupplier.STORAGE_CELLS.forEach(item -> {
-            cell(item);
-            if (!AppBotItems.getCells().contains(item)) {
-                var driveCellPath = "block/drive/cells/standard/" + item.id().getPath();
-                withExistingParent(driveCellPath, DRIVE_CELL).texture("cell", Utils.makeId(driveCellPath));
-            }
-        });
-
+        CommonModelSupplier.STORAGE_CELLS.forEach(this::cell);
         CommonModelSupplier.PORTABLE_CELLS.forEach(this::portable);
-
-        withExistingParent("block/drive/cells/portable/portable_mega_item_cell", DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/portable/portable_mega_item_cell"));
-        withExistingParent("block/drive/cells/portable/portable_mega_fluid_cell", DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/portable/portable_mega_fluid_cell"));
-
-        withExistingParent("block/drive/cells/mega_mana_cell", DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/mega_mana_cell"));
+        driveCell("mega_item_cell");
+        driveCell("mega_fluid_cell");
+        driveCell("mega_mana_cell");
+        driveCell("bulk_item_cell");
     }
 
-    public void cell(ItemDefinition<?> cell) {
+    private void driveCell(String texture) {
+        withExistingParent("block/drive/cells/" + texture, DRIVE_CELL).texture("cell",
+                Utils.makeId("block/drive/cells/" + texture));
+    }
+
+    private void cell(ItemDefinition<?> cell) {
         flatSingleLayer(cell, "cell/standard/").texture("layer1", STORAGE_CELL_LED);
     }
 
-    public void portable(ItemDefinition<?> cell) {
+    private void portable(ItemDefinition<?> cell) {
         flatSingleLayer(cell, "cell/portable/").texture("layer1", PORTABLE_CELL_LED);
     }
 
-    public void flatSingleLayer(ItemDefinition<?> item) {
+    private void flatSingleLayer(ItemDefinition<?> item) {
         flatSingleLayer(item, "");
     }
 
