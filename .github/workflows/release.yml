@@ -22,6 +22,11 @@ jobs:
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build --max-workers 1
+      - name: Upload Release Artifact
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/libs/megacells-*.jar
+          tag_name: ${{ github.event.release.tag_name }}
       - name: Upload to mod repositories
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}

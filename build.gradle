@@ -16,7 +16,7 @@ subprojects {
     apply plugin: "me.shedaniel.unified-publishing"
 
     archivesBaseName = mod_id + "-" + project.name
-    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
+    version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1) + "-" + minecraft_version
     group = maven_group + "-" + mod_id
 
     loom {
@@ -193,6 +193,7 @@ allprojects {
                     if (project.name == "forge") {
                         optional {
                             curseforge = "applied-mekanistics"
+                            curseforge = "applied-botanics-addon"
                             modrinth = "applied-mekanistics"
                         }
                     }
