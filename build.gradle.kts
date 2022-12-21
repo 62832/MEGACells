@@ -3,7 +3,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 plugins {
     base
     id("architectury-plugin") version "3.4-SNAPSHOT"
-    id("dev.architectury.loom") version "1.0-SNAPSHOT"
+    id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
     id("me.shedaniel.unified-publishing") version "0.1.+" apply false
     id("com.diffplug.spotless") version "6.4.1"
@@ -19,6 +19,7 @@ architectury {
 subprojects {
     apply(plugin = "io.github.juuxel.loom-quiltflower")
     apply(plugin = "me.shedaniel.unified-publishing")
+    apply(plugin = "dev.architectury.loom")
 
     repositories {
         mavenLocal()
