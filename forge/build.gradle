@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 architectury {
@@ -11,8 +11,8 @@ loom {
     runs {
         data {
             data()
-            programArgs "--existing", project(":common").file("src/main/resources").absolutePath
-            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+            programArgs("--existing", file("src/main/resources").absolutePath)
         }
     }
 
@@ -20,89 +20,89 @@ loom {
 
     forge {
         dataGen {
-            mod "megacells"
+            mod(mod_id)
         }
 
         convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+        extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
-        mixinConfig "megacells-common.mixins.json"
-        mixinConfig "megacells.mixins.json"
+        mixinConfig("${mod_id}-common.mixins.json")
+        mixinConfig("${mod_id}.mixins.json")
     }
 }
 
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-    compileClasspath.extendsFrom common
-    runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    compileClasspath.extendsFrom(common)
+    runtimeClasspath.extendsFrom(common)
+    developmentForge.extendsFrom(common)
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    forge("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-    modImplementation "appeng:appliedenergistics2-forge:${ae2_version}"
-    modImplementation "curse.maven:ae2wtlib-459929:${ae2wt_fileid}"
-    modImplementation "curse.maven:appmek-574300:${appmek_fileid}"
-    modImplementation "curse.maven:applied-botanics-addon-610632:${appbot_fileid}"
+    modImplementation("appeng:appliedenergistics2-forge:${ae2_version}")
+    modImplementation("curse.maven:ae2wtlib-459929:${ae2wt_fileid}")
+    modImplementation("curse.maven:appmek-574300:${appmek_fileid}")
+    modImplementation("curse.maven:applied-botanics-addon-610632:${appbot_fileid}")
 
-    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}"
-    modCompileOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators"
-    modRuntimeOnly "mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all"
-    modRuntimeOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}-FORGE"
-    modRuntimeOnly "vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}"
+    modCompileOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}")
+    modCompileOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:generators")
+    modRuntimeOnly("mekanism:Mekanism:${minecraft_version}-${mekanism_version}:all")
+    modRuntimeOnly("vazkii.botania:Botania:${minecraft_version}-${botania_version}-FORGE")
+    modRuntimeOnly("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}")
 
-    modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
-    modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_version}"
-    modRuntimeOnly "top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}"
+    modRuntimeOnly("dev.architectury:architectury-forge:${architectury_version}")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${cloth_version}")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}")
 
     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") { transitive = false }
-    modRuntimeOnly "curse.maven:jade-324717:${jade_fileid}"
+    modRuntimeOnly("curse.maven:jade-324717:${jade_fileid}")
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property("version", project.version)
 
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.version
+        expand("version": project.version)
     }
 }
 
 sourceSets {
     main {
         resources {
-            exclude '**/.cache'
+            exclude("**/.cache")
         }
     }
 }
 
 shadowJar {
-    exclude "fabric.mod.json"
-    exclude "architectury.common.json"
+    exclude("fabric.mod.json")
+    exclude("architectury.common.json")
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    classifier("dev-shadow")
 }
 
 remapJar {
-    inputFile.set shadowJar.archiveFile
-    dependsOn shadowJar
-    classifier null
+    inputFile.set(shadowJar.archiveFile)
+    dependsOn(shadowJar)
+    classifier(null)
 }
 
 jar {
-    classifier "dev"
+    classifier("dev")
 }
 
 sourcesJar {
     def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
+    dependsOn(commonSources)
+    from(commonSources.archiveFile.map { zipTree(it) })
 }
 
 components.java {
@@ -115,7 +115,7 @@ publishing {
     publications {
         mavenForge(MavenPublication) {
             artifactId = rootProject.mod_id + "-" + project.name
-            from components.java
+            from(components.java)
         }
     }
 

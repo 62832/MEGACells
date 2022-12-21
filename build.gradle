@@ -1,9 +1,9 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
-    id 'io.github.juuxel.loom-quiltflower' version '1.7.1' apply false
-    id "me.shedaniel.unified-publishing" version "0.1.+" apply false
-    id "com.diffplug.spotless" version "6.4.1"
+    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
+    id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
+    id("me.shedaniel.unified-publishing") version "0.1.+" apply false
+    id("com.diffplug.spotless") version "6.4.1"
 }
 
 architectury {
@@ -11,9 +11,9 @@ architectury {
 }
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
-    apply plugin: "io.github.juuxel.loom-quiltflower"
-    apply plugin: "me.shedaniel.unified-publishing"
+    apply(plugin: "dev.architectury.loom")
+    apply(plugin: "io.github.juuxel.loom-quiltflower")
+    apply(plugin: "me.shedaniel.unified-publishing")
 
     archivesBaseName = mod_id + "-" + project.name
     version = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1) + "-" + minecraft_version
@@ -39,7 +39,7 @@ subprojects {
     }
 }
 
-tasks.register('collectJars', Copy) {
+tasks.register("collectJars", Copy) {
     def tasks = [project("fabric").tasks.remapJar, project(":forge").tasks.remapJar]
     dependsOn tasks
 
@@ -58,92 +58,92 @@ allprojects {
         mavenCentral()
 
         maven {
-            name = 'ModMaven (K4U-NL)'
-            url = 'https://modmaven.dev/'
+            name = "ModMaven (K4U-NL)"
+            url = uri("https://modmaven.dev/")
             content {
-                includeGroup "appeng"
-                includeGroup "mekanism"
+                includeGroup("appeng")
+                includeGroup("mekanism")
             }
         }
 
         maven {
-            name = 'CurseMaven'
-            url = 'https://cursemaven.com'
+            name = "CurseMaven"
+            url = uri("https://cursemaven.com")
             content {
-                includeGroup "curse.maven"
+                includeGroup("curse.maven")
             }
         }
 
         maven {
-            name = 'Modrinth Maven'
-            url = 'https://api.modrinth.com/maven'
+            name = "Modrinth Maven"
+            url = uri("https://api.modrinth.com/maven")
             content {
-                includeGroup "maven.modrinth"
+                includeGroup("maven.modrinth")
             }
         }
 
         maven {
-            name = 'Progwml6'
-            url = 'https://dvs1.progwml6.com/files/maven/'
+            name = "Progwml6"
+            url = uri("https://dvs1.progwml6.com/files/maven/")
             content {
-                includeGroup "mezz.jei"
+                includeGroup("mezz.jei")
             }
         }
 
         maven {
-            name = 'Shedaniel'
-            url 'https://maven.shedaniel.me/'
+            name = "Shedaniel"
+            url = uri("https://maven.shedaniel.me/")
             content {
-                includeGroup "me.shedaniel.cloth"
-                includeGroup "dev.architectury"
+                includeGroup("me.shedaniel.cloth")
+                includeGroup("dev.architectury")
             }
         }
 
         maven {
-            name = 'BlameJared'
-            url 'https://maven.blamejared.com'
+            name = "BlameJared"
+            url = uri("https://maven.blamejared.com")
             content {
-                includeGroup "vazkii.botania"
-                includeGroup "vazkii.patchouli"
+                includeGroup("vazkii.botania")
+                includeGroup("vazkii.patchouli")
             }
         }
 
         maven {
-            name = 'TheIllusiveC4'
-            url = 'https://maven.theillusivec4.top/'
+            name = "TheIllusiveC4"
+            url = uri("https://maven.theillusivec4.top/")
             content {
-                includeGroup "top.theillusivec4.curios"
+                includeGroup("top.theillusivec4.curios")
             }
         }
 
         maven {
-            name = 'TerraformersMC'
-            url = 'https://maven.terraformersmc.com/'
+            name = "TerraformersMC"
+            url = uri("https://maven.terraformersmc.com/")
             content {
-                includeGroup "com.terraformersmc"
-                includeGroup "dev.emi"
+                includeGroup("com.terraformersmc")
+                includeGroup("dev.emi")
             }
         }
 
         maven {
-            name = 'LadySnake Libs'
-            url = 'https://ladysnake.jfrog.io/artifactory/mods'
+            name = "LadySnake Libs"
+            url = uri("https://ladysnake.jfrog.io/artifactory/mods")
             content {
-                includeGroup "dev.onyxstudios.cardinal-components-api"
+                includeGroup("dev.onyxstudios.cardinal-components-api")
             }
         }
 
         maven {
             name = "JamiesWhiteShirt"
-            url = "https://maven.jamieswhiteshirt.com/libs-release/"
+            url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
             content {
-                includeGroup "com.jamieswhiteshirt"
+                includeGroup("com.jamieswhiteshirt")
             }
         }
 
         maven {
             name = "Jitpack"
-            url = "https://jitpack.io/"
+            url = uri("https://jitpack.io/")
             content {
                 includeGroup("com.github.emilyploszaj")
             }
@@ -156,7 +156,7 @@ allprojects {
     }
 
     assemble {
-        dependsOn collectJars
+        dependsOn(collectJars)
     }
 
     java {
@@ -191,7 +191,7 @@ allprojects {
                 changelog = changes
                 displayName = String.format("%s (%s %s)", project.version.substring(0, project.version.lastIndexOf("-")), loader, minecraft_version)
 
-                mainPublication remapJar // Declares the publicated jar
+                mainPublication(remapJar) // Declares the publicated jar
 
                 relations {
                     depends {
@@ -243,11 +243,11 @@ allprojects {
 
             // courtesy of diffplug/spotless#240
             // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
-            custom 'noWildcardImports', {
-                if (it.contains('*;\n')) {
-                    throw new Error('No wildcard imports allowed')
+            custom("noWildcardImports", {
+                if (it.contains("*;\n")) {
+                    throw new Error("No wildcard imports allowed")
                 }
-            }
+            })
             bumpThisNumberIfACustomStepChanges(1)
         }
 

@@ -9,19 +9,18 @@ loom {
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
 
-    modCompileOnly "appeng:appliedenergistics2-fabric:${ae2_version}"
-    modCompileOnly "curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}"
-    modCompileOnly "curse.maven:applied-botanics-addon-610632:${project(":fabric").appbot_fileid}"
-    modCompileOnly "vazkii.botania:Botania:${minecraft_version}-${botania_version}-FABRIC"
+    modCompileOnly("appeng:appliedenergistics2-fabric:${ae2_version}")
+    modCompileOnly("curse.maven:ae2wtlib-459929:${project(":fabric").ae2wt_fileid}")
+    modCompileOnly("curse.maven:applied-botanics-addon-610632:${project(":fabric").appbot_fileid}")
 }
 
 publishing {
     publications {
         mavenCommon(MavenPublication) {
             artifactId = rootProject.mod_id
-            from components.java
+            from(components.java)
         }
     }
 
