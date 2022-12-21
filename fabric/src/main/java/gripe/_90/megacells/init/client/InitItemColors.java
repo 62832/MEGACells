@@ -20,15 +20,13 @@ import gripe._90.megacells.util.Utils;
 public class InitItemColors {
     public static void init(Registry itemColors) {
         var cells = new ArrayList<ItemDefinition<?>>(List.of(
-                MEGAItems.ITEM_CELL_1M, MEGAItems.ITEM_CELL_4M,
-                MEGAItems.ITEM_CELL_16M, MEGAItems.ITEM_CELL_64M, MEGAItems.ITEM_CELL_256M, MEGAItems.FLUID_CELL_1M,
-                MEGAItems.FLUID_CELL_4M, MEGAItems.FLUID_CELL_16M, MEGAItems.FLUID_CELL_64M, MEGAItems.FLUID_CELL_256M,
-                MEGAItems.BULK_ITEM_CELL));
+                MEGAItems.ITEM_CELL_1M, MEGAItems.ITEM_CELL_4M, MEGAItems.ITEM_CELL_16M, MEGAItems.ITEM_CELL_64M,
+                MEGAItems.ITEM_CELL_256M, MEGAItems.FLUID_CELL_1M, MEGAItems.FLUID_CELL_4M, MEGAItems.FLUID_CELL_16M,
+                MEGAItems.FLUID_CELL_64M, MEGAItems.FLUID_CELL_256M, MEGAItems.BULK_ITEM_CELL));
         var portables = new ArrayList<ItemDefinition<?>>(List.of(
-                MEGAItems.PORTABLE_ITEM_CELL_1M,
-                MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.PORTABLE_ITEM_CELL_64M,
-                MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.PORTABLE_FLUID_CELL_1M, MEGAItems.PORTABLE_FLUID_CELL_4M,
-                MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.PORTABLE_FLUID_CELL_64M,
+                MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.PORTABLE_ITEM_CELL_16M,
+                MEGAItems.PORTABLE_ITEM_CELL_64M, MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.PORTABLE_FLUID_CELL_1M,
+                MEGAItems.PORTABLE_FLUID_CELL_4M, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.PORTABLE_FLUID_CELL_64M,
                 MEGAItems.PORTABLE_FLUID_CELL_256M));
 
         if (Utils.PLATFORM.isModLoaded("appbot")) {
