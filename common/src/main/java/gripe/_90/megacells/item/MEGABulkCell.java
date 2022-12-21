@@ -28,11 +28,6 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     }
 
     @Override
-    public boolean isEditable(ItemStack itemStack) {
-        return true;
-    }
-
-    @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(AEItemKey.filter(), is, 1);
     }

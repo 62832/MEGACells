@@ -12,7 +12,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.Utils;
 import gripe._90.megacells.util.service.IPlatformHelper;
 
-public class ForgePlatformHelper implements IPlatformHelper {
+public final class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public CreativeModeTab getCreativeTab() {
         return new CreativeModeTab(Utils.MODID + ".tab") {
