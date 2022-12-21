@@ -2,6 +2,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     base
+    java
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
@@ -16,10 +17,57 @@ architectury {
     minecraft = mcVersion
 }
 
+tasks {
+    val collectJars by registering(Copy::class) {
+        val tasks = subprojects.filter { it.path != ":common" }.map { it.tasks.named("remapJar") }
+        dependsOn(tasks)
+        from(tasks)
+        into(buildDir.resolve("libs"))
+    }
+
+    assemble {
+        dependsOn(collectJars)
+    }
+}
+
+allprojects {
+    apply(plugin = "architectury-plugin")
+    apply(plugin = "maven-publish")
+    apply(plugin = "com.diffplug.spotless")
+
+    spotless {
+        java {
+            target("src/**/java/**/*.java")
+            endWithNewline()
+            indentWithSpaces()
+            removeUnusedImports()
+            toggleOffOn()
+            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
+            importOrderFile(rootProject.file("codeformat/mega.importorder"))
+
+            // courtesy of diffplug/spotless#240
+            // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
+            custom("noWildcardImports") {
+                if (it.contains("*;\n")) {
+                    throw Error("No wildcard imports allowed")
+                }
+                it
+            }
+            bumpThisNumberIfACustomStepChanges(1)
+        }
+
+        json {
+            target("src/*/resources/**/*.json")
+            targetExclude("src/generated/resources/**")
+            prettier().config(mapOf("parser" to "json"))
+        }
+    }
+}
+
 subprojects {
+    apply(plugin = "dev.architectury.loom")
     apply(plugin = "io.github.juuxel.loom-quiltflower")
     apply(plugin = "me.shedaniel.unified-publishing")
-    apply(plugin = "dev.architectury.loom")
 
     repositories {
         mavenLocal()
@@ -131,73 +179,27 @@ subprojects {
 
     dependencies {
         "minecraft"("com.mojang:minecraft:$mcVersion")
-        "mappings"(extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
+        "mappings"(project.extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
     }
 
     architectury {
         injectInjectables = false
     }
-}
-
-allprojects {
-    apply(plugin = "java")
-    apply(plugin = "architectury-plugin")
-    apply(plugin = "maven-publish")
-    apply(plugin = "com.diffplug.spotless")
 
     tasks {
-        withType<JavaCompile>().configureEach {
-            options.encoding = "UTF-8"
-            options.release.set(17)
-        }
-
-        val collectJars by registering(Copy::class) {
-            val tasks = subprojects.filter { it.path != ":common" }.map { it.tasks.named("remapJar") }
-            dependsOn(tasks)
-            from(tasks)
-            into(buildDir.resolve("libs"))
-        }
-
-        assemble {
-            dependsOn(collectJars)
-        }
-
-        configure<Jar> {
+        jar {
             from("LICENSE") {
                 rename { "${it}_${base.archivesName}"}
             }
         }
+
+        withType<JavaCompile>().configureEach {
+            options.encoding = "UTF-8"
+            options.release.set(17)
+        }
     }
 
-    configure<JavaPluginExtension> {
+    java {
         withSourcesJar()
-    }
-
-    spotless {
-        java {
-            target("src/**/java/**/*.java")
-            endWithNewline()
-            indentWithSpaces()
-            removeUnusedImports()
-            toggleOffOn()
-            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
-            importOrderFile(rootProject.file("codeformat/mega.importorder"))
-
-            // courtesy of diffplug/spotless#240
-            // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
-            custom("noWildcardImports") {
-                if (it.contains("*;\n")) {
-                    throw Error("No wildcard imports allowed")
-                }
-                it
-            }
-            bumpThisNumberIfACustomStepChanges(1)
-        }
-
-        json {
-            target("src/*/resources/**/*.json")
-            targetExclude("src/generated/resources/**")
-            prettier().config(mapOf("parser" to "json"))
-        }
     }
 }
