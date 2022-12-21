@@ -39,6 +39,14 @@ subprojects {
     }
 }
 
+tasks.register('collectJars', Copy) {
+    def tasks = [project("fabric").tasks.remapJar, project(":forge").tasks.remapJar]
+    dependsOn tasks
+
+    from tasks
+    into file("${buildDir}/libs").absolutePath
+}
+
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
@@ -147,6 +155,10 @@ allprojects {
         options.release = 17
     }
 
+    assemble {
+        dependsOn collectJars
+    }
+
     java {
         withSourcesJar()
     }
@@ -162,7 +174,7 @@ allprojects {
             project {
                 gameVersions = [minecraft_version]
                 gameLoaders = [project.name]
-                version = project.name + "-" + project.version + "-" + minecraft_version
+                version = project.name + "-" + project.version
 
                 def loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
                 def releaseChannel = "release"
@@ -177,7 +189,7 @@ allprojects {
 
                 releaseType = releaseChannel
                 changelog = changes
-                displayName = String.format("%s (%s %s)", project.version, loader, minecraft_version)
+                displayName = String.format("%s (%s %s)", project.version.substring(0, project.version.indexOf("-")), loader, minecraft_version)
 
                 mainPublication remapJar // Declares the publicated jar
 
@@ -188,12 +200,12 @@ allprojects {
                     }
                     optional {
                         curseforge = "applied-energistics-2-wireless-terminals"
+                        curseforge = "applied-botanics-addon"
                         modrinth = "applied-energistics-2-wireless-terminals"
                     }
                     if (project.name == "forge") {
                         optional {
                             curseforge = "applied-mekanistics"
-                            curseforge = "applied-botanics-addon"
                             modrinth = "applied-mekanistics"
                         }
                     }
@@ -203,7 +215,7 @@ allprojects {
                 if (cfToken != null) {
                     curseforge {
                         token = cfToken
-                        id = "622112" // Required, must be a string, ID of CurseForge project
+                        id = "622112"
                     }
                 }
 
@@ -211,7 +223,7 @@ allprojects {
                 if (mrToken != null) {
                     modrinth {
                         token = mrToken
-                        id = "7QZJE3uU" // Required, must be a string, ID of Modrinth project
+                        id = "7QZJE3uU"
                     }
                 }
             }
