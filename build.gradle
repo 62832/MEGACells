@@ -189,7 +189,7 @@ allprojects {
 
                 releaseType = releaseChannel
                 changelog = changes
-                displayName = String.format("%s (%s %s)", project.version.substring(0, project.version.indexOf("-")), loader, minecraft_version)
+                displayName = String.format("%s (%s %s)", project.version.substring(0, project.version.lastIndexOf("-")), loader, minecraft_version)
 
                 mainPublication remapJar // Declares the publicated jar
 
