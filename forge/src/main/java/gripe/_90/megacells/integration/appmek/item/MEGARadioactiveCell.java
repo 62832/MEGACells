@@ -26,11 +26,6 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
         super(properties.stacksTo(1));
     }
 
-    @Override
-    public boolean isEditable(ItemStack itemStack) {
-        return true;
-    }
-
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
     }
