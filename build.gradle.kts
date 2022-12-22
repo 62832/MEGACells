@@ -1,3 +1,4 @@
+import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
@@ -170,6 +171,13 @@ subprojects {
     version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
     group = "${property("maven_group")}-$modId"
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+
+        withSourcesJar()
+    }
+
     configure<LoomGradleExtensionAPI> {
         silentMojangMappingsLicense()
         mixin {
@@ -199,7 +207,66 @@ subprojects {
         }
     }
 
-    java {
-        withSourcesJar()
+    if ((project.name == "fabric" || project.name == "forge") && project.version != "0.0.0") {
+        configure<UnifiedPublishingExtension> {
+            project {
+                val modVersion = project.version.toString()
+
+                gameVersions.set(listOf(mcVersion))
+                gameLoaders.set(listOf(project.name))
+                version.set("${project.name}-$modVersion")
+
+                val loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
+                var releaseChannel = "release"
+                var changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
+                if (modVersion.toLowerCase().contains("alpha")) {
+                    releaseChannel = "alpha"
+                    changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n$changes"
+                } else if (modVersion.toLowerCase().contains("beta")) {
+                    releaseChannel = "beta"
+                    changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n$changes"
+                }
+
+                releaseType.set(releaseChannel)
+                changelog.set(changes)
+                displayName.set(String.format("%s (%s %s)", modVersion.substring(0, modVersion.lastIndexOf("-")), loader, mcVersion))
+
+                mainPublication(project.tasks.getByName("remapJar")) // Declares the publicated jar
+
+                relations {
+                    depends {
+                        curseforge.set("applied-energistics-2")
+                        modrinth.set("ae2")
+                    }
+                    optional {
+                        curseforge.set("applied-energistics-2-wireless-terminals")
+                        curseforge.set("applied-botanics-addon")
+                        modrinth.set("applied-energistics-2-wireless-terminals")
+                    }
+                    if (project.name == "forge") {
+                        optional {
+                            curseforge.set("applied-mekanistics")
+                            modrinth.set("applied-mekanistics")
+                        }
+                    }
+                }
+
+                val cfToken = System.getenv("CF_TOKEN")
+                if (cfToken != null) {
+                    curseforge {
+                        token.set(cfToken)
+                        id.set("622112")
+                    }
+                }
+
+                val mrToken = System.getenv("MODRINTH_TOKEN")
+                if (mrToken != null) {
+                    modrinth {
+                        token.set(mrToken)
+                        id.set("7QZJE3uU")
+                    }
+                }
+            }
+        }
     }
 }

@@ -83,7 +83,7 @@ tasks {
         injectAccessWidener.set(true)
         inputFile.set(shadowJar.get().archiveFile)
         dependsOn(shadowJar)
-        archiveClassifier.set("")
+        archiveClassifier.set(null as String?)
     }
 
     jar {
