@@ -37,7 +37,7 @@ allprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "com.diffplug.spotless")
 
-    base.archivesName.set("$modId-$project.name")
+    base.archivesName.set("$modId-${project.name}")
     version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
     group = "${property("maven_group")}.$modId"
 

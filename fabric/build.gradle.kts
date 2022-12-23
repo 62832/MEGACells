@@ -12,7 +12,7 @@ loom {
 
     runs {
         create("data") {
-            data()
+            client()
             name("Minecraft Data")
             property("fabric-api.datagen")
             property("fabric-api.datagen.modid", property("mod_id").toString())
