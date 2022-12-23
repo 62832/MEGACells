@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -98,7 +96,6 @@ public class CompressionHandler {
         Utils.LOGGER.info("Loaded bulk cell compression recipes.");
     }
 
-    @Nullable
     private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes) {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
