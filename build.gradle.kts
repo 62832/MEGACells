@@ -1,14 +1,14 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
 import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
-    base
     java
     id("architectury-plugin") version "3.4-SNAPSHOT"
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
     id("me.shedaniel.unified-publishing") version "0.1.+" apply false
-    id("com.diffplug.spotless") version "6.4.1"
+    id("com.diffplug.spotless") version "6.4.1" apply false
 }
 
 val mcVersion = property("minecraft_version").toString()
@@ -32,43 +32,14 @@ tasks {
 }
 
 allprojects {
+    apply(plugin = "java")
     apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")
     apply(plugin = "com.diffplug.spotless")
 
-    spotless {
-        java {
-            target("src/**/java/**/*.java")
-            endWithNewline()
-            indentWithSpaces()
-            removeUnusedImports()
-            toggleOffOn()
-            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
-            importOrderFile(rootProject.file("codeformat/mega.importorder"))
-
-            // courtesy of diffplug/spotless#240
-            // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
-            custom("noWildcardImports") {
-                if (it.contains("*;\n")) {
-                    throw Error("No wildcard imports allowed")
-                }
-                it
-            }
-            bumpThisNumberIfACustomStepChanges(1)
-        }
-
-        json {
-            target("src/*/resources/**/*.json")
-            targetExclude("src/generated/resources/**")
-            prettier().config(mapOf("parser" to "json"))
-        }
-    }
-}
-
-subprojects {
-    apply(plugin = "dev.architectury.loom")
-    apply(plugin = "io.github.juuxel.loom-quiltflower")
-    apply(plugin = "me.shedaniel.unified-publishing")
+    base.archivesName.set("$modId-$project.name")
+    version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
+    group = "${property("maven_group")}.$modId"
 
     repositories {
         mavenLocal()
@@ -167,9 +138,18 @@ subprojects {
         }
     }
 
-    base.archivesName.set("$modId-$project.name")
-    version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
-    group = "${property("maven_group")}-$modId"
+    tasks {
+        jar {
+            from("LICENSE") {
+                rename { "${it}_${base.archivesName}"}
+            }
+        }
+
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.release.set(17)
+        }
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -177,6 +157,40 @@ subprojects {
 
         withSourcesJar()
     }
+
+    configure<SpotlessExtension> {
+        java {
+            target("src/**/java/**/*.java")
+            endWithNewline()
+            indentWithSpaces()
+            removeUnusedImports()
+            toggleOffOn()
+            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
+            importOrderFile(rootProject.file("codeformat/mega.importorder"))
+
+            // courtesy of diffplug/spotless#240
+            // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
+            custom("noWildcardImports") {
+                if (it.contains("*;\n")) {
+                    throw Error("No wildcard imports allowed")
+                }
+                it
+            }
+            bumpThisNumberIfACustomStepChanges(1)
+        }
+
+        json {
+            target("src/*/resources/**/*.json")
+            targetExclude("src/generated/resources/**")
+            prettier().config(mapOf("parser" to "json"))
+        }
+    }
+}
+
+subprojects {
+    apply(plugin = "dev.architectury.loom")
+    apply(plugin = "io.github.juuxel.loom-quiltflower")
+    apply(plugin = "me.shedaniel.unified-publishing")
 
     configure<LoomGradleExtensionAPI> {
         silentMojangMappingsLicense()
@@ -192,19 +206,6 @@ subprojects {
 
     architectury {
         injectInjectables = false
-    }
-
-    tasks {
-        jar {
-            from("LICENSE") {
-                rename { "${it}_${base.archivesName}"}
-            }
-        }
-
-        withType<JavaCompile>().configureEach {
-            options.encoding = "UTF-8"
-            options.release.set(17)
-        }
     }
 
     if ((project.name == "fabric" || project.name == "forge") && project.version != "0.0.0") {
@@ -251,7 +252,7 @@ subprojects {
                     }
                 }
 
-                val cfToken = System.getenv("CF_TOKEN")
+                val cfToken = System.getenv("CURSEFORGE_TOKEN")
                 if (cfToken != null) {
                     curseforge {
                         token.set(cfToken)

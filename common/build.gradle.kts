@@ -1,5 +1,5 @@
 architectury {
-    common("fabric", "forge")
+    common(property("enabled_platforms").toString().split(','))
 }
 
 loom {
