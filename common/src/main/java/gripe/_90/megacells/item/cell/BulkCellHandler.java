@@ -17,7 +17,6 @@ import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.MEGABulkCell;
 
 public class BulkCellHandler implements ICellHandler {
-
     public static final BulkCellHandler INSTANCE = new BulkCellHandler();
 
     private BulkCellHandler() {

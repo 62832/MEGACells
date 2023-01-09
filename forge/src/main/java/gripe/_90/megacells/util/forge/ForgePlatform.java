@@ -10,9 +10,9 @@ import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.Utils;
-import gripe._90.megacells.util.service.IPlatformHelper;
+import gripe._90.megacells.util.service.Platform;
 
-public final class ForgePlatformHelper implements IPlatformHelper {
+public final class ForgePlatform implements Platform {
     @Override
     public CreativeModeTab getCreativeTab() {
         return new CreativeModeTab(Utils.MODID + ".tab") {

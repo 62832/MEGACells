@@ -7,8 +7,8 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 
-public class LocalisationProvider extends FabricLanguageProvider {
-    protected LocalisationProvider(FabricDataGenerator gen, String locale) {
+class LocalisationProvider extends FabricLanguageProvider {
+    LocalisationProvider(FabricDataGenerator gen, String locale) {
         super(gen, locale);
     }
 

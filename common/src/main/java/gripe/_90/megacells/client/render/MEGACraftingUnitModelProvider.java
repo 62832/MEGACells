@@ -19,7 +19,6 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.util.Utils;
 
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
-
     private static final List<Material> MATERIALS = new ArrayList<>();
 
     protected static final Material RING_CORNER = texture("ring_corner");

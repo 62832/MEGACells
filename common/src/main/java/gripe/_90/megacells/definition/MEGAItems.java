@@ -23,9 +23,6 @@ import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.util.Utils;
 
 public final class MEGAItems {
-    private MEGAItems() {
-    }
-
     public static void init() {
         // controls static load order
         Utils.LOGGER.info("Initialised items.");

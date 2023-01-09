@@ -8,9 +8,9 @@ import net.minecraft.tags.BlockTags;
 
 import gripe._90.megacells.definition.MEGABlocks;
 
-public class TagProvider {
+class TagProvider {
     static class Items extends FabricTagProvider.ItemTagProvider {
-        public Items(FabricDataGenerator gen, @Nullable BlockTagProvider block) {
+        Items(FabricDataGenerator gen, @Nullable BlockTagProvider block) {
             super(gen, block);
         }
 
@@ -21,7 +21,7 @@ public class TagProvider {
     }
 
     static class Blocks extends FabricTagProvider.BlockTagProvider {
-        public Blocks(FabricDataGenerator gen) {
+        Blocks(FabricDataGenerator gen) {
             super(gen);
         }
 

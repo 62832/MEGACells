@@ -21,12 +21,12 @@ import appeng.core.AppEng;
 import gripe._90.megacells.util.Utils;
 
 public class CompressionHandler {
-    private CompressionHandler() {
-    }
-
     public static final CompressionHandler INSTANCE = new CompressionHandler();
 
     private final List<CraftingRecipe> validRecipes = new ObjectArrayList<>();
+
+    private CompressionHandler() {
+    }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe) {
         return (recipe.getIngredients().size() == 4 || recipe.getIngredients().size() == 9)

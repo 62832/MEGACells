@@ -14,7 +14,6 @@ import appeng.menu.me.common.MEStorageMenu;
 import gripe._90.megacells.util.Utils;
 
 public class MEGAPortableCell extends PortableCellItem {
-
     private final StorageTier tier;
 
     public MEGAPortableCell(Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu) {

@@ -18,7 +18,6 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
 
 public class BlockStateProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
-
     public BlockStateProvider(DataGenerator gen, ExistingFileHelper efh) {
         super(gen, Utils.MODID, efh);
     }

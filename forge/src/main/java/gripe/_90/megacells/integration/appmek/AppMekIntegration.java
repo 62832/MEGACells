@@ -17,9 +17,6 @@ import gripe._90.megacells.integration.appmek.item.cell.RadioactiveCellHandler;
 import gripe._90.megacells.util.Utils;
 
 public final class AppMekIntegration {
-    private AppMekIntegration() {
-    }
-
     public static void initUpgrades() {
         var storageCellGroup = GuiText.StorageCells.getTranslationKey();
         var portableCellGroup = GuiText.PortableCells.getTranslationKey();

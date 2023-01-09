@@ -12,7 +12,6 @@ import gripe._90.megacells.datagen.CommonModelSupplier;
 import gripe._90.megacells.util.Utils;
 
 public class ItemModelProvider extends net.minecraftforge.client.model.generators.ItemModelProvider {
-
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
     static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");

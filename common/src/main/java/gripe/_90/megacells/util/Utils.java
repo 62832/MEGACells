@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import net.minecraft.resources.ResourceLocation;
 
-import gripe._90.megacells.util.service.IPlatformHelper;
+import gripe._90.megacells.util.service.Platform;
 
 public final class Utils {
     private Utils() {
@@ -17,7 +17,7 @@ public final class Utils {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("MEGA Cells");
 
-    public static final IPlatformHelper PLATFORM = ServiceLoader.load(IPlatformHelper.class).findFirst().orElseThrow();
+    public static final Platform PLATFORM = ServiceLoader.load(Platform.class).findFirst().orElseThrow();
 
     public static ResourceLocation makeId(String path) {
         return new ResourceLocation(MODID, path);

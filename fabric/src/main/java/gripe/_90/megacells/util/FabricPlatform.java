@@ -6,9 +6,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.util.service.IPlatformHelper;
+import gripe._90.megacells.util.service.Platform;
 
-public final class FabricPlatformHelper implements IPlatformHelper {
+public final class FabricPlatform implements Platform {
     @Override
     public CreativeModeTab getCreativeTab() {
         return FabricItemGroupBuilder.build(Utils.makeId("tab"),

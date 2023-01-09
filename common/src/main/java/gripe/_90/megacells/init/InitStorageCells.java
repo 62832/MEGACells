@@ -12,7 +12,6 @@ import gripe._90.megacells.item.cell.BulkCellHandler;
 import gripe._90.megacells.util.Utils;
 
 public class InitStorageCells {
-
     public static void init() {
         Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables()).flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_item_cell")));

@@ -14,7 +14,6 @@ import gripe._90.megacells.util.Utils;
 
 @Mod.EventBusSubscriber(modid = Utils.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MEGADataGenerators {
-
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();

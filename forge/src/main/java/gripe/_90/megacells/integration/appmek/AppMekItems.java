@@ -14,9 +14,6 @@ import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import gripe._90.megacells.util.Utils;
 
 public final class AppMekItems {
-    private AppMekItems() {
-    }
-
     public static void init() {
         // controls static load order
         Utils.LOGGER.info("Initialised Applied Mekanistics integration.");

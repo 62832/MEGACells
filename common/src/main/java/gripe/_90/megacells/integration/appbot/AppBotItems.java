@@ -13,9 +13,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.Utils;
 
 public final class AppBotItems {
-    private AppBotItems() {
-    }
-
     public static void init() {
         // controls static load order
         Utils.LOGGER.info("Initialised Applied Botanics integration.");

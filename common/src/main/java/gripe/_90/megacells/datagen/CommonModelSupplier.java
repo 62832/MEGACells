@@ -16,9 +16,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 
 public class CommonModelSupplier {
-    private CommonModelSupplier() {
-    }
-
     public static final List<ItemDefinition<?>> FLAT_ITEMS = Lists.newArrayList(MEGAItems.MEGA_ITEM_CELL_HOUSING,
             MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGAItems.CELL_COMPONENT_1M, MEGAItems.CELL_COMPONENT_4M,
             MEGAItems.CELL_COMPONENT_16M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.CELL_COMPONENT_256M,

@@ -15,8 +15,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
 
-public class LootTableProvider extends SimpleFabricLootTableProvider {
-    public LootTableProvider(FabricDataGenerator dataGenerator) {
+class LootTableProvider extends SimpleFabricLootTableProvider {
+    LootTableProvider(FabricDataGenerator dataGenerator) {
         super(dataGenerator, LootContextParamSets.BLOCK);
     }
 

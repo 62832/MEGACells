@@ -27,9 +27,6 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.util.Utils;
 
 public final class MEGABlocks {
-    private MEGABlocks() {
-    }
-
     public static void init() {
         // controls static load order
         Utils.LOGGER.info("Initialised blocks.");

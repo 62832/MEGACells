@@ -42,6 +42,7 @@ public class MEGACellsForge {
         if (Utils.PLATFORM.isModLoaded("appmek")) {
             AppMekItems.init();
         }
+
         if (Utils.PLATFORM.isModLoaded("appbot")) {
             AppBotItems.init();
         }
@@ -53,9 +54,11 @@ public class MEGACellsForge {
                     ForgeRegistries.ITEMS.register(b.id(), b.asItem());
                 });
             }
+
             if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
                 MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
             }
+
             if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
                 MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
             }

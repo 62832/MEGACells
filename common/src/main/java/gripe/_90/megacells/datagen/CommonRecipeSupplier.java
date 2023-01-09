@@ -33,9 +33,6 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 public class CommonRecipeSupplier {
-    private CommonRecipeSupplier() {
-    }
-
     public static void buildRecipes(Consumer<FinishedRecipe> consumer) {
         // spotless:off
         component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem());

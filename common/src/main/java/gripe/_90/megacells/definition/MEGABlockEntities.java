@@ -10,14 +10,11 @@ import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
-import appeng.blockentity.ClientTickingBlockEntity;
-import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
@@ -27,9 +24,6 @@ import gripe._90.megacells.util.Utils;
 
 @SuppressWarnings({ "unused", "unchecked" })
 public final class MEGABlockEntities {
-    private MEGABlockEntities() {
-    }
-
     public static void init() {
         // controls static load order
         Utils.LOGGER.info("Initialised block entities.");
@@ -68,20 +62,9 @@ public final class MEGABlockEntities {
 
         AEBaseBlockEntity.registerBlockEntityItem(type, blockDefinitions[0].asItem());
 
-        // If the block entity classes implement specific interfaces, automatically register them
-        // as tickers with the blocks that create that entity.
-        BlockEntityTicker<T> serverTicker = null;
-        if (ServerTickingBlockEntity.class.isAssignableFrom(entityClass)) {
-            serverTicker = (level, pos, state, entity) -> ((ServerTickingBlockEntity) entity).serverTick();
-        }
-        BlockEntityTicker<T> clientTicker = null;
-        if (ClientTickingBlockEntity.class.isAssignableFrom(entityClass)) {
-            clientTicker = (level, pos, state, entity) -> ((ClientTickingBlockEntity) entity).clientTick();
-        }
-
         for (var block : blocks) {
             AEBaseEntityBlock<T> baseBlock = (AEBaseEntityBlock<T>) block;
-            baseBlock.setBlockEntity(entityClass, type, clientTicker, serverTicker);
+            baseBlock.setBlockEntity(entityClass, type, null, null);
         }
 
         return type;

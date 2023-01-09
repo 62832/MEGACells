@@ -8,9 +8,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 
-public class RecipeProvider extends FabricRecipeProvider {
-
-    public RecipeProvider(FabricDataGenerator gen) {
+class RecipeProvider extends FabricRecipeProvider {
+    RecipeProvider(FabricDataGenerator gen) {
         super(gen);
     }
 

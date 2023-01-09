@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.color.item.ItemColor;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.core.definitions.ItemDefinition;
@@ -18,7 +18,7 @@ import gripe._90.megacells.util.Utils;
 
 @Environment(EnvType.CLIENT)
 public class InitItemColors {
-    public static void init(Registry itemColors) {
+    public static void init() {
         var cells = new ArrayList<ItemDefinition<?>>(List.of(
                 MEGAItems.ITEM_CELL_1M, MEGAItems.ITEM_CELL_4M, MEGAItems.ITEM_CELL_16M, MEGAItems.ITEM_CELL_64M,
                 MEGAItems.ITEM_CELL_256M, MEGAItems.FLUID_CELL_1M, MEGAItems.FLUID_CELL_4M, MEGAItems.FLUID_CELL_16M,
@@ -34,12 +34,7 @@ public class InitItemColors {
             portables.addAll(AppBotItems.getPortables());
         }
 
-        itemColors.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
-        itemColors.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
-    }
-
-    @FunctionalInterface
-    public interface Registry {
-        void register(ItemColor itemColor, ItemLike... itemLikes);
+        ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
+        ColorProviderRegistry.ITEM.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
     }
 }

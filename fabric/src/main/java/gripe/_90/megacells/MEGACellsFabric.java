@@ -2,7 +2,6 @@ package gripe._90.megacells;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.Registry;
@@ -63,12 +62,11 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
             InitAutoRotatingModel.init();
             InitBlockEntityRenderers.init();
             InitBuiltInModels.init();
+            InitItemColors.init();
             InitRenderTypes.init();
 
             // re-init AE2 props for MEGA energy cell
             InitItemModelsProperties.init();
-
-            InitItemColors.init(ColorProviderRegistry.ITEM::register);
         }
     }
 }
