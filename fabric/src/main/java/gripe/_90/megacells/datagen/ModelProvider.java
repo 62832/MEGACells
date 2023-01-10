@@ -30,10 +30,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
-import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
+import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
 
@@ -175,7 +175,7 @@ class ModelProvider extends FabricModelProvider {
         var alternate = Utils.makeId("block/mega_pattern_provider_alternate");
         var arrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
-                .with(PropertyDispatch.property(PatternProviderBlock.OMNIDIRECTIONAL)
+                .with(PropertyDispatch.property(MEGAPatternProviderBlock.OMNIDIRECTIONAL)
                         .select(true, Variant.variant().with(VariantProperties.MODEL,
                                 ModelTemplates.CUBE_ALL.create(normal, TextureMapping.cube(normal),
                                         generator.modelOutput)))
@@ -191,15 +191,15 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void createPatternProviderPart(ItemModelGenerators generator) {
-        var provider = MEGACells.makeId("part/mega_pattern_provider");
-        var monitorBack = MEGACells.makeId("part/mega_monitor_back");
-        var monitorSides = MEGACells.makeId("part/mega_monitor_sides");
+        var provider = Utils.makeId("part/mega_pattern_provider");
+        var monitorBack = Utils.makeId("part/mega_monitor_back");
+        var monitorSides = Utils.makeId("part/mega_monitor_sides");
         PATTERN_PROVIDER.create(provider, new TextureMapping()
-                .put(SIDES_STATUS, MEGACells.makeId("part/mega_monitor_sides_status"))
+                .put(SIDES_STATUS, Utils.makeId("part/mega_monitor_sides_status"))
                 .put(SIDES, monitorSides).put(TextureSlot.BACK, monitorBack)
                 .put(TextureSlot.FRONT, provider).put(TextureSlot.PARTICLE, monitorBack),
                 generator.output);
-        CABLE_PATTERN_PROVIDER.create(MEGACells.makeId("item/cable_mega_pattern_provider"), new TextureMapping()
+        CABLE_PATTERN_PROVIDER.create(Utils.makeId("item/cable_mega_pattern_provider"), new TextureMapping()
                 .put(SIDES, monitorSides).put(TextureSlot.FRONT, provider).put(TextureSlot.BACK, monitorBack),
                 generator.output);
     }
@@ -237,7 +237,6 @@ class ModelProvider extends FabricModelProvider {
 
         @NotNull
         @Override
-        @NotNull
         public JsonElement get() {
             JsonObject json = super.get().getAsJsonObject();
 

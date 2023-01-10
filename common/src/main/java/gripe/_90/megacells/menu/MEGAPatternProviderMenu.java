@@ -12,7 +12,6 @@ import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.filter.AEItemDefinitionFilter;
 
 public class MEGAPatternProviderMenu extends PatternProviderMenu {
-
     public static final MenuType<MEGAPatternProviderMenu> TYPE = MenuTypeBuilder
             .create(MEGAPatternProviderMenu::new, PatternProviderLogicHost.class)
             .requirePermission(SecurityPermissions.BUILD)

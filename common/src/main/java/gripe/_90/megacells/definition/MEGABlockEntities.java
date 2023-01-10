@@ -20,6 +20,7 @@ import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
+import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 import gripe._90.megacells.util.Utils;
 
 @SuppressWarnings({ "unused", "unchecked" })

@@ -9,11 +9,11 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
-import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 import appeng.core.definitions.BlockDefinition;
 
+import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.datagen.CommonModelSupplier;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
@@ -96,9 +96,9 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
                 textureArrow, textureArrow, textureArrow).texture("particle", texture);
 
         getVariantBuilder(definition.block())
-                .partialState().with(PatternProviderBlock.OMNIDIRECTIONAL, true)
+                .partialState().with(MEGAPatternProviderBlock.OMNIDIRECTIONAL, true)
                 .setModels(new ConfiguredModel(modelNormal))
-                .partialState().with(PatternProviderBlock.OMNIDIRECTIONAL, false)
+                .partialState().with(MEGAPatternProviderBlock.OMNIDIRECTIONAL, false)
                 .setModels(new ConfiguredModel(modelOriented, 90, 0, false));
         simpleBlockItem(definition.block(), modelNormal);
     }

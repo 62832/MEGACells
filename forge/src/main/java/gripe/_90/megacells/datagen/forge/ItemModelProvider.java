@@ -36,9 +36,9 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         driveCell("bulk_item_cell");
 
         withExistingParent("item/cable_mega_pattern_provider", INTERFACE)
-                .texture("sides", MEGACells.makeId("part/mega_monitor_sides"))
-                .texture("back", MEGACells.makeId("part/mega_monitor_back"))
-                .texture("front", MEGACells.makeId("part/mega_pattern_provider"));
+                .texture("sides", Utils.makeId("part/mega_monitor_sides"))
+                .texture("back", Utils.makeId("part/mega_monitor_back"))
+                .texture("front", Utils.makeId("part/mega_pattern_provider"));
     }
 
     private void driveCell(String texture) {

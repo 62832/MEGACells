@@ -11,9 +11,9 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.api.features.P2PTunnelAttunement;
 
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.util.Utils;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
+import gripe._90.megacells.util.Utils;
 
 public class TagProvider {
     static class Items extends ItemTagsProvider {

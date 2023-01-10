@@ -40,6 +40,7 @@ dependencies {
 
     modImplementation("appeng:appliedenergistics2-fabric:${property("ae2_version")}")
     modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wt_fileid")}")
+
     modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbot_fileid")}") {
         exclude(group = "dev.emi", module = "emi")
     }
@@ -47,6 +48,7 @@ dependencies {
     modRuntimeOnly("vazkii.botania:Botania:${property("minecraft_version")}-${property("botania_version")}-FABRIC") {
         exclude(group = "dev.emi", module = "emi")
     }
+
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_version")}")
 
     modRuntimeOnly("com.terraformersmc:modmenu:${property("mod_menu_version")}")

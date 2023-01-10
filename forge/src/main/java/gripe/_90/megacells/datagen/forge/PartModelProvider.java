@@ -10,14 +10,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import appeng.core.AppEng;
 
-import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.util.Utils;
 
 public class PartModelProvider extends ModelProvider<ItemModelBuilder> {
-
     static final ResourceLocation PATTERN_PROVIDER = AppEng.makeId("part/pattern_provider_base");
 
     public PartModelProvider(DataGenerator gen, ExistingFileHelper efh) {
-        super(gen, MEGACells.MODID, "part", ItemModelBuilder::new, efh);
+        super(gen, Utils.MODID, "part", ItemModelBuilder::new, efh);
         efh.trackGenerated(PATTERN_PROVIDER, MODEL);
     }
 
@@ -29,10 +28,10 @@ public class PartModelProvider extends ModelProvider<ItemModelBuilder> {
     @Override
     protected void registerModels() {
         withExistingParent("part/mega_pattern_provider", PATTERN_PROVIDER)
-                .texture("sides", MEGACells.makeId("part/mega_monitor_sides"))
-                .texture("sidesStatus", MEGACells.makeId("part/mega_monitor_sides_status"))
-                .texture("back", MEGACells.makeId("part/mega_monitor_back"))
-                .texture("front", MEGACells.makeId("part/mega_pattern_provider"))
-                .texture("particle", MEGACells.makeId("part/mega_monitor_back"));
+                .texture("sides", Utils.makeId("part/mega_monitor_sides"))
+                .texture("sidesStatus", Utils.makeId("part/mega_monitor_sides_status"))
+                .texture("back", Utils.makeId("part/mega_monitor_back"))
+                .texture("front", Utils.makeId("part/mega_pattern_provider"))
+                .texture("particle", Utils.makeId("part/mega_monitor_back"));
     }
 }
