@@ -17,11 +17,11 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 '''
 
 [[dependencies.megacells]]
-    modId = "ae2"
-    mandatory = true
-    versionRange = "[12.9.1,13.0.0)"
-    ordering = "AFTER"
-    side = "BOTH"
+    modId="ae2"
+    mandatory=true
+    versionRange = "[12.9.2,13.0.0)"
+    ordering="AFTER"
+    side="BOTH"
 
 [[dependencies.megacells]]
     modId = "appmek"

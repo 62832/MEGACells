@@ -33,6 +33,7 @@ import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 
+import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
 
@@ -48,6 +49,17 @@ class ModelProvider extends FabricModelProvider {
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
 
+    static final TextureSlot SIDES = TextureSlot.create("sides");
+    static final TextureSlot SIDES_STATUS = TextureSlot.create("sidesStatus");
+
+    static final ModelTemplate PATTERN_PROVIDER = new ModelTemplate(
+            Optional.of(AppEng.makeId("part/pattern_provider_base")), Optional.empty(),
+            SIDES, SIDES_STATUS, TextureSlot.BACK, TextureSlot.FRONT, TextureSlot.PARTICLE);
+
+    static final ModelTemplate CABLE_PATTERN_PROVIDER = new ModelTemplate(
+            Optional.of(AppEng.makeId("item/cable_interface")), Optional.empty(),
+            SIDES, TextureSlot.BACK, TextureSlot.FRONT);
+
     ModelProvider(FabricDataGenerator gen) {
         super(gen);
     }
@@ -60,10 +72,13 @@ class ModelProvider extends FabricModelProvider {
             createCraftingUnit(block.first.block(), block.second, generator);
         }
         createCraftingMonitor(generator);
+        createPatternProviderBlock(generator);
     }
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
+        generatePartModels(generator);
+
         for (var item : CommonModelSupplier.FLAT_ITEMS) {
             generator.generateFlatItem(item.asItem(), ModelTemplates.FLAT_ITEM);
         }
@@ -84,6 +99,10 @@ class ModelProvider extends FabricModelProvider {
         createDriveCellModel("mega_fluid_cell", generator.output);
         createDriveCellModel("mega_mana_cell", generator.output);
         createDriveCellModel("bulk_item_cell", generator.output);
+    }
+
+    private void generatePartModels(ItemModelGenerators generator) {
+        createPatternProviderPart(generator);
     }
 
     private TextureMapping cell(ResourceLocation cell, ResourceLocation led) {
@@ -148,6 +167,43 @@ class ModelProvider extends FabricModelProvider {
         var json = new JsonObject();
         json.addProperty("loader", loc.toString());
         return json;
+    }
+
+    private void createPatternProviderBlock(BlockModelGenerators generator) {
+        var normal = Utils.makeId("block/mega_pattern_provider");
+
+        generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
+                .with(PropertyDispatch.property(MEGAPatternProviderBlock.OMNIDIRECTIONAL)
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_ALL
+                                .create(normal, TextureMapping.cube(normal), generator.modelOutput)))
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE
+                                .create(Utils.makeId("block/mega_pattern_provider_oriented"), new TextureMapping()
+                                        .put(TextureSlot.UP,
+                                                Utils.makeId("block/mega_pattern_provider_alternate_front"))
+                                        .put(TextureSlot.DOWN, Utils.makeId("block/mega_pattern_provider_alternate"))
+                                        .put(TextureSlot.NORTH,
+                                                Utils.makeId("block/mega_pattern_provider_alternate_arrow"))
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.EAST)
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.SOUTH)
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.WEST)
+                                        .put(TextureSlot.PARTICLE, normal), generator.modelOutput))
+                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))));
+
+        generator.delegateItemModel(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), normal);
+    }
+
+    private void createPatternProviderPart(ItemModelGenerators generator) {
+        var provider = Utils.makeId("part/mega_pattern_provider");
+        var monitorBack = Utils.makeId("part/mega_monitor_back");
+        var monitorSides = Utils.makeId("part/mega_monitor_sides");
+        PATTERN_PROVIDER.create(provider, new TextureMapping()
+                .put(SIDES_STATUS, Utils.makeId("part/mega_monitor_sides_status"))
+                .put(SIDES, monitorSides).put(TextureSlot.BACK, monitorBack)
+                .put(TextureSlot.FRONT, provider).put(TextureSlot.PARTICLE, monitorBack),
+                generator.output);
+        CABLE_PATTERN_PROVIDER.create(Utils.makeId("item/cable_mega_pattern_provider"), new TextureMapping()
+                .put(SIDES, monitorSides).put(TextureSlot.FRONT, provider).put(TextureSlot.BACK, monitorBack),
+                generator.output);
     }
 
     private void createEnergyCell(BlockModelGenerators generator) {

@@ -6,7 +6,11 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.tags.BlockTags;
 
+import appeng.api.features.P2PTunnelAttunement;
+
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.definition.MEGATags;
 
 class TagProvider {
     static class Items extends FabricTagProvider.ItemTagProvider {
@@ -16,7 +20,11 @@ class TagProvider {
 
         @Override
         protected void generateTags() {
-
+            tag(P2PTunnelAttunement.getAttunementTag(P2PTunnelAttunement.ENERGY_TUNNEL))
+                    .add(MEGABlocks.MEGA_ENERGY_CELL.asItem());
+            tag(MEGATags.MEGA_PATTERN_PROVIDER)
+                    .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem())
+                    .add(MEGAParts.MEGA_PATTERN_PROVIDER.asItem());
         }
     }
 

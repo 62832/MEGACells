@@ -15,12 +15,14 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
     static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
+    static final ResourceLocation INTERFACE = AppEng.makeId("item/cable_interface");
 
     public ItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
         super(gen, Utils.MODID, efh);
         efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
         efh.trackGenerated(DRIVE_CELL, MODEL);
+        efh.trackGenerated(INTERFACE, MODEL);
     }
 
     @Override
@@ -32,6 +34,11 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         driveCell("mega_fluid_cell");
         driveCell("mega_mana_cell");
         driveCell("bulk_item_cell");
+
+        withExistingParent("item/cable_mega_pattern_provider", INTERFACE)
+                .texture("sides", Utils.makeId("part/mega_monitor_sides"))
+                .texture("back", Utils.makeId("part/mega_monitor_back"))
+                .texture("front", Utils.makeId("part/mega_pattern_provider"));
     }
 
     private void driveCell(String texture) {

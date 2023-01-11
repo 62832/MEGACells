@@ -28,6 +28,7 @@ public class MEGADataGenerators {
 
         generator.addProvider(true, new BlockStateProvider(generator, existingFileHelper));
         generator.addProvider(true, new ItemModelProvider(generator, existingFileHelper));
+        generator.addProvider(true, new PartModelProvider(generator, existingFileHelper));
 
         for (var en : List.of("en_us", "en_gb", "en_au", "en_ca", "en_nz")) {
             generator.addProvider(true, new LocalisationProvider(generator, en));

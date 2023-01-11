@@ -20,6 +20,7 @@ import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
+import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 import gripe._90.megacells.util.Utils;
 
 @SuppressWarnings({ "unused", "unchecked" })
@@ -41,6 +42,8 @@ public final class MEGABlockEntities {
     public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_UNIT = create("mega_crafting_unit", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.MEGA_CRAFTING_UNIT, MEGABlocks.CRAFTING_ACCELERATOR);
     public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_STORAGE = create("mega_crafting_storage", CraftingBlockEntity.class, CraftingBlockEntity::new, MEGABlocks.CRAFTING_STORAGE_1M, MEGABlocks.CRAFTING_STORAGE_4M, MEGABlocks.CRAFTING_STORAGE_16M, MEGABlocks.CRAFTING_STORAGE_64M, MEGABlocks.CRAFTING_STORAGE_256M);
     public static final BlockEntityType<CraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create("mega_crafting_monitor", CraftingMonitorBlockEntity.class, CraftingMonitorBlockEntity::new, MEGABlocks.CRAFTING_MONITOR);
+
+    public static final BlockEntityType<MEGAPatternProviderBlockEntity> MEGA_PATTERN_PROVIDER = create("mega_pattern_provider", MEGAPatternProviderBlockEntity.class, MEGAPatternProviderBlockEntity::new, MEGABlocks.MEGA_PATTERN_PROVIDER);
     // spotless:on
 
     @SafeVarargs

@@ -14,20 +14,25 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
+import appeng.core.AppEng;
+
 import gripe._90.megacells.datagen.forge.MEGADataGenerators;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.init.forge.client.InitAutoRotatingModel;
 import gripe._90.megacells.init.forge.client.InitBlockEntityRenderers;
 import gripe._90.megacells.init.forge.client.InitBuiltInModels;
 import gripe._90.megacells.init.forge.client.InitItemColors;
+import gripe._90.megacells.init.forge.client.InitScreens;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.item.cell.CompressionHandler;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
 
 @Mod(Utils.MODID)
@@ -37,6 +42,7 @@ public class MEGACellsForge {
 
         MEGABlocks.init();
         MEGAItems.init();
+        MEGAParts.init();
         MEGABlockEntities.init();
 
         if (Utils.PLATFORM.isModLoaded("appmek")) {
@@ -62,6 +68,11 @@ public class MEGACellsForge {
             if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
                 MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
             }
+
+            if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
+                ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
+                        MEGAPatternProviderMenu.TYPE);
+            }
         });
 
         bus.addListener(MEGADataGenerators::onGatherData);
@@ -85,5 +96,6 @@ public class MEGACellsForge {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBuiltInModels::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitItemColors::init);
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitScreens::init);
     }
 }
