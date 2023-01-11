@@ -90,10 +90,11 @@ public class BlockStateProvider extends net.minecraftforge.client.model.generato
         var texture = Utils.makeId("block/mega_pattern_provider");
         var textureAlt = Utils.makeId("block/mega_pattern_provider_alternate");
         var textureArrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
+        var textureFront = Utils.makeId("block/mega_pattern_provider_alternate_front");
 
         var modelNormal = cubeAll(definition.block());
-        var modelOriented = models().cube("block/mega_pattern_provider_oriented", textureAlt, texture, textureArrow,
-                textureArrow, textureArrow, textureArrow).texture("particle", texture);
+        var modelOriented = models().cube("block/mega_pattern_provider_oriented", textureAlt, textureFront,
+                textureArrow, textureArrow, textureArrow, textureArrow).texture("particle", texture);
 
         getVariantBuilder(definition.block())
                 .partialState().with(MEGAPatternProviderBlock.OMNIDIRECTIONAL, true)

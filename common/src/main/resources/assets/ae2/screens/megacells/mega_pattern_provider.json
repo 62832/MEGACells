@@ -20,7 +20,7 @@
   "text": {
     "dialog_title": {
       "text": {
-        "translate": "gui.ae2.CraftingInterface"
+        "translate": "block.megacells.mega_pattern_provider"
       },
       "position": {
         "left": 8,

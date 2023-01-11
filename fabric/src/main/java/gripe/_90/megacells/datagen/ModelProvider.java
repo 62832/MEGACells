@@ -171,22 +171,24 @@ class ModelProvider extends FabricModelProvider {
 
     private void createPatternProviderBlock(BlockModelGenerators generator) {
         var normal = Utils.makeId("block/mega_pattern_provider");
-        var oriented = Utils.makeId("block/mega_pattern_provider_oriented");
-        var alternate = Utils.makeId("block/mega_pattern_provider_alternate");
-        var arrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
+
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
                 .with(PropertyDispatch.property(MEGAPatternProviderBlock.OMNIDIRECTIONAL)
-                        .select(true, Variant.variant().with(VariantProperties.MODEL,
-                                ModelTemplates.CUBE_ALL.create(normal, TextureMapping.cube(normal),
-                                        generator.modelOutput)))
-                        .select(false, Variant.variant().with(VariantProperties.MODEL,
-                                ModelTemplates.CUBE.create(oriented, new TextureMapping()
-                                        .put(TextureSlot.UP, normal)
-                                        .put(TextureSlot.DOWN, alternate).put(TextureSlot.NORTH, arrow)
-                                        .put(TextureSlot.EAST, arrow).put(TextureSlot.SOUTH, arrow)
-                                        .put(TextureSlot.WEST, arrow).put(TextureSlot.PARTICLE, normal),
-                                        generator.modelOutput))
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_ALL
+                                .create(normal, TextureMapping.cube(normal), generator.modelOutput)))
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE
+                                .create(Utils.makeId("block/mega_pattern_provider_oriented"), new TextureMapping()
+                                        .put(TextureSlot.UP,
+                                                Utils.makeId("block/mega_pattern_provider_alternate_front"))
+                                        .put(TextureSlot.DOWN, Utils.makeId("block/mega_pattern_provider_alternate"))
+                                        .put(TextureSlot.NORTH,
+                                                Utils.makeId("block/mega_pattern_provider_alternate_arrow"))
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.EAST)
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.SOUTH)
+                                        .copySlot(TextureSlot.NORTH, TextureSlot.WEST)
+                                        .put(TextureSlot.PARTICLE, normal), generator.modelOutput))
                                 .with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))));
+
         generator.delegateItemModel(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), normal);
     }
 
