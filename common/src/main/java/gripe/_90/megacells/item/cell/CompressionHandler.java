@@ -1,6 +1,5 @@
 package gripe._90.megacells.item.cell;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -9,7 +8,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -40,30 +38,34 @@ public class CompressionHandler {
     }
 
     private List<CraftingRecipe> getCompressionRecipes(List<CraftingRecipe> recipes) {
-        List<CraftingRecipe> compressionRecipes = new ObjectArrayList<>();
+        var compressionRecipes = new ObjectArrayList<CraftingRecipe>();
+
         for (var recipe : recipes) {
             if (isCompressionRecipe(recipe)) {
                 compressionRecipes.add(recipe);
             }
         }
+
         return compressionRecipes;
     }
 
     private List<CraftingRecipe> getDecompressionRecipes(List<CraftingRecipe> recipes) {
-        List<CraftingRecipe> decompressionRecipes = new ObjectArrayList<>();
+        var decompressionRecipes = new ObjectArrayList<CraftingRecipe>();
+
         for (var recipe : recipes) {
             if (isDecompressionRecipe(recipe)) {
                 decompressionRecipes.add(recipe);
             }
         }
+
         return decompressionRecipes;
     }
 
     private List<CraftingRecipe> getCandidateRecipes() {
-        MinecraftServer currentServer = AppEng.instance().getCurrentServer();
-        List<CraftingRecipe> allRecipes = currentServer != null
+        var currentServer = AppEng.instance().getCurrentServer();
+        var allRecipes = currentServer != null
                 ? currentServer.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)
-                : Collections.emptyList();
+                : new ObjectArrayList<CraftingRecipe>();
 
         return Stream.concat(
                 allRecipes.stream().filter(this::isCompressionRecipe),
@@ -71,22 +73,27 @@ public class CompressionHandler {
     }
 
     private boolean isReversibleRecipe(CraftingRecipe recipe, List<CraftingRecipe> candidates) {
+        var compressible = false;
+        var decompressible = false;
+
         var input = recipe.getIngredients().get(0);
         var output = recipe.getResultItem();
 
         for (var candidate : candidates) {
             for (var item : candidate.getIngredients().get(0).getItems()) {
                 if (item.getItem().equals(output.getItem())) {
-                    return true;
+                    compressible = true;
                 }
             }
+
             for (var item : input.getItems()) {
                 if (item.getItem().equals(candidate.getResultItem().getItem())) {
-                    return true;
+                    decompressible = true;
                 }
             }
         }
-        return false;
+
+        return compressible && decompressible;
     }
 
     public void load() {
@@ -104,6 +111,7 @@ public class CompressionHandler {
                 }
             }
         }
+
         return null;
     }
 
@@ -111,9 +119,11 @@ public class CompressionHandler {
         if (isCompressionRecipe(recipe)) {
             return recipe.getIngredients().size();
         }
+
         if (isDecompressionRecipe(recipe)) {
             return recipe.getResultItem().getCount();
         }
+
         return 1;
     }
 
