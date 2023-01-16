@@ -255,13 +255,15 @@ public class BulkCellInventory implements StorageCell {
                 var count = unitCount;
 
                 for (var variant : allVariants.keySet()) {
-                    if (count.signum() != 1) {
+                    var compressionFactor = BigInteger.valueOf(allVariants.getInt(variant));
+
+                    if (count.divide(compressionFactor).signum() == 1 && variant != allVariants.lastKey()) {
+                        out.add(variant, clampedLong(count.remainder(compressionFactor), stackLimit));
+                        count = count.divide(compressionFactor);
+                    } else {
+                        out.add(variant, clampedLong(count, stackLimit));
                         break;
                     }
-
-                    var compressionFactor = BigInteger.valueOf(allVariants.getInt(variant));
-                    out.add(variant, clampedLong(count.remainder(compressionFactor), stackLimit));
-                    count = count.divide(compressionFactor);
                 }
             } else {
                 out.add(storedItem, clampedLong(unitCount.divide(BigInteger.valueOf(unitFactor)), stackLimit));
