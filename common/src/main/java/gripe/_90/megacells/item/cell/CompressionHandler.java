@@ -21,9 +21,65 @@ import gripe._90.megacells.util.Utils;
 public class CompressionHandler {
     public static final CompressionHandler INSTANCE = new CompressionHandler();
 
-    private final List<CraftingRecipe> validRecipes = new ObjectArrayList<>();
+    private final List<CraftingRecipe> compressionRecipes = new ObjectArrayList<>();
+    private final List<CraftingRecipe> decompressionRecipes = new ObjectArrayList<>();
 
     private CompressionHandler() {
+    }
+
+    public void load() {
+        // Clear old recipe cache in case of the server restarting or recipes being reloaded
+        compressionRecipes.clear();
+        decompressionRecipes.clear();
+
+        // Retrieve all available "compression" and "decompression" recipes on the current server (if running)
+        var server = AppEng.instance().getCurrentServer();
+        var allRecipes = server != null
+                ? server.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)
+                : new ObjectArrayList<CraftingRecipe>();
+
+        var candidates = Stream.concat(
+                allRecipes.stream().filter(this::isCompressionRecipe),
+                allRecipes.stream().filter(this::isDecompressionRecipe)).toList();
+
+        // Filter gathered candidate recipes and retain only those that are reversible (i.e. those which can be carried
+        // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
+        var validRecipes = candidates.stream().filter(recipe -> {
+            var compressible = false;
+            var decompressible = false;
+
+            var input = recipe.getIngredients().get(0);
+            var output = recipe.getResultItem();
+
+            for (var candidate : candidates) {
+                for (var item : candidate.getIngredients().get(0).getItems()) {
+                    if (item.getItem().equals(output.getItem())) {
+                        compressible = true;
+                    }
+                }
+
+                for (var item : input.getItems()) {
+                    if (item.getItem().equals(candidate.getResultItem().getItem())) {
+                        decompressible = true;
+                    }
+                }
+            }
+
+            return compressible && decompressible;
+        }).toList();
+
+        // Add respective recipes to handler cache
+        validRecipes.forEach(recipe -> {
+            if (isCompressionRecipe(recipe)) {
+                compressionRecipes.add(recipe);
+            }
+
+            if (isDecompressionRecipe(recipe)) {
+                decompressionRecipes.add(recipe);
+            }
+        });
+
+        Utils.LOGGER.info("Loaded bulk cell compression recipes.");
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe) {
@@ -37,105 +93,15 @@ public class CompressionHandler {
                 && recipe.getIngredients().size() == 1;
     }
 
-    private List<CraftingRecipe> getCompressionRecipes(List<CraftingRecipe> recipes) {
-        var compressionRecipes = new ObjectArrayList<CraftingRecipe>();
-
-        for (var recipe : recipes) {
-            if (isCompressionRecipe(recipe)) {
-                compressionRecipes.add(recipe);
-            }
-        }
-
-        return compressionRecipes;
-    }
-
-    private List<CraftingRecipe> getDecompressionRecipes(List<CraftingRecipe> recipes) {
-        var decompressionRecipes = new ObjectArrayList<CraftingRecipe>();
-
-        for (var recipe : recipes) {
-            if (isDecompressionRecipe(recipe)) {
-                decompressionRecipes.add(recipe);
-            }
-        }
-
-        return decompressionRecipes;
-    }
-
-    private List<CraftingRecipe> getCandidateRecipes() {
-        var currentServer = AppEng.instance().getCurrentServer();
-        var allRecipes = currentServer != null
-                ? currentServer.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)
-                : new ObjectArrayList<CraftingRecipe>();
-
-        return Stream.concat(
-                allRecipes.stream().filter(this::isCompressionRecipe),
-                allRecipes.stream().filter(this::isDecompressionRecipe)).toList();
-    }
-
-    private boolean isReversibleRecipe(CraftingRecipe recipe, List<CraftingRecipe> candidates) {
-        var compressible = false;
-        var decompressible = false;
-
-        var input = recipe.getIngredients().get(0);
-        var output = recipe.getResultItem();
-
-        for (var candidate : candidates) {
-            for (var item : candidate.getIngredients().get(0).getItems()) {
-                if (item.getItem().equals(output.getItem())) {
-                    compressible = true;
-                }
-            }
-
-            for (var item : input.getItems()) {
-                if (item.getItem().equals(candidate.getResultItem().getItem())) {
-                    decompressible = true;
-                }
-            }
-        }
-
-        return compressible && decompressible;
-    }
-
-    public void load() {
-        var candidates = getCandidateRecipes();
-        this.validRecipes.clear();
-        this.validRecipes.addAll(candidates.stream().filter(r -> isReversibleRecipe(r, candidates)).toList());
-        Utils.LOGGER.info("Loaded bulk cell compression recipes.");
-    }
-
-    private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes) {
-        for (var recipe : recipes) {
-            for (var input : recipe.getIngredients().get(0).getItems()) {
-                if (input.getItem().equals(item)) {
-                    return Pair.of(recipe.getResultItem().getItem(), getMultiplier(recipe));
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private int getMultiplier(CraftingRecipe recipe) {
-        if (isCompressionRecipe(recipe)) {
-            return recipe.getIngredients().size();
-        }
-
-        if (isDecompressionRecipe(recipe)) {
-            return recipe.getResultItem().getCount();
-        }
-
-        return 1;
-    }
-
     public Object2IntMap<AEItemKey> getCompressedVariants(AEKey key) {
-        return getVariants(key, getCompressionRecipes(this.validRecipes));
+        return getVariants(key, compressionRecipes);
     }
 
     public Object2IntMap<AEItemKey> getDecompressedVariants(AEKey key) {
-        return getVariants(key, getDecompressionRecipes(this.validRecipes));
+        return getVariants(key, decompressionRecipes);
     }
 
-    public Object2IntMap<AEItemKey> getVariants(AEKey key, List<CraftingRecipe> recipes) {
+    private Object2IntMap<AEItemKey> getVariants(AEKey key, List<CraftingRecipe> recipes) {
         var variants = new Object2IntLinkedOpenHashMap<AEItemKey>();
 
         if (!(key instanceof AEItemKey item)) {
@@ -148,5 +114,25 @@ public class CompressionHandler {
         }
 
         return variants;
+    }
+
+    private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes) {
+        for (var recipe : recipes) {
+            for (var input : recipe.getIngredients().get(0).getItems()) {
+                if (input.getItem().equals(item)) {
+                    var multiplier = 1;
+
+                    if (isCompressionRecipe(recipe)) {
+                        multiplier = recipe.getIngredients().size();
+                    } else if (isDecompressionRecipe(recipe)) {
+                        multiplier = recipe.getResultItem().getCount();
+                    }
+
+                    return Pair.of(recipe.getResultItem().getItem(), multiplier);
+                }
+            }
+        }
+
+        return null;
     }
 }
