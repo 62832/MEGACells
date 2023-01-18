@@ -6,6 +6,7 @@ import gripe._90.megacells.util.Utils;
 
 public enum MEGATranslations implements LocalizationEnum {
     AcceleratorThreads("Provides 4 co-processing threads per block.", Type.TOOLTIP),
+    ALot("A lot.", Type.TOOLTIP),
     Compression("Compression: %s", Type.TOOLTIP),
     Contains("Contains: %s", Type.TOOLTIP),
     Disabled("Disabled", Type.TOOLTIP),

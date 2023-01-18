@@ -51,8 +51,10 @@ public class BulkCellHandler implements ICellHandler {
 
         if (storedItem != null) {
             lines.add(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
-            var quantity = handler.getAvailableStacks().get(storedItem);
-            lines.add(Tooltips.of(MEGATranslations.Quantity.text(Tooltips.ofNumber(quantity))));
+            var quantity = handler.getStoredQuantity();
+            lines.add(Tooltips.of(MEGATranslations.Quantity.text(quantity < Long.MAX_VALUE
+                    ? Tooltips.ofNumber(quantity)
+                    : MEGATranslations.ALot.text().withStyle(Tooltips.NUMBER_TEXT))));
         } else {
             lines.add(Tooltips.of(MEGATranslations.Empty.text()));
         }

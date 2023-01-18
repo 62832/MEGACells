@@ -99,6 +99,10 @@ public class BulkCellInventory implements StorageCell {
         return storedItem;
     }
 
+    protected long getStoredQuantity() {
+        return clampedLong(unitCount.divide(BigInteger.valueOf(unitFactor)), Long.MAX_VALUE);
+    }
+
     protected AEKey getFilterItem() {
         return filterItem;
     }
