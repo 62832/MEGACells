@@ -47,25 +47,33 @@ public class CompressionHandler {
         var validRecipes = candidates.stream().filter(recipe -> {
             var compressible = false;
             var decompressible = false;
+            var constantAmount = false;
 
             var input = recipe.getIngredients().get(0);
             var output = recipe.getResultItem();
 
             for (var candidate : candidates) {
+                var compressionMultiplier = 0;
+                var decompressionMultiplier = 0;
+
                 for (var item : candidate.getIngredients().get(0).getItems()) {
                     if (item.getItem().equals(output.getItem())) {
                         compressible = true;
+                        compressionMultiplier = candidate.getIngredients().size();
                     }
                 }
 
                 for (var item : input.getItems()) {
                     if (item.getItem().equals(candidate.getResultItem().getItem())) {
                         decompressible = true;
+                        decompressionMultiplier = candidate.getResultItem().getCount();
                     }
                 }
+
+                constantAmount = compressionMultiplier == decompressionMultiplier;
             }
 
-            return compressible && decompressible;
+            return compressible && decompressible && constantAmount;
         }).toList();
 
         // Add respective recipes to handler cache
