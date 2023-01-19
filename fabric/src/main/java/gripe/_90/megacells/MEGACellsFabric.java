@@ -24,7 +24,7 @@ import gripe._90.megacells.init.client.InitItemColors;
 import gripe._90.megacells.init.client.InitRenderTypes;
 import gripe._90.megacells.init.client.InitScreens;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.item.cell.CompressionHandler;
+import gripe._90.megacells.item.cell.CompressionService;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
 
@@ -52,14 +52,14 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
         InitStorageCells.init();
         InitUpgrades.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionHandler.INSTANCE.init());
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionService.INSTANCE.load());
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
             if (success)
-                CompressionHandler.INSTANCE.init();
+                CompressionService.INSTANCE.load();
         });
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
             if (client)
-                CompressionHandler.INSTANCE.init();
+                CompressionService.INSTANCE.load();
         });
     }
 

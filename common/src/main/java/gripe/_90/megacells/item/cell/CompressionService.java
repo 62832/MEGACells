@@ -18,32 +18,34 @@ import net.minecraft.world.item.crafting.RecipeType;
 import appeng.api.stacks.AEItemKey;
 import appeng.core.AppEng;
 
-import gripe._90.megacells.util.Utils;
-
-public class CompressionHandler {
-    public static final CompressionHandler INSTANCE = new CompressionHandler();
+public class CompressionService {
+    public static final CompressionService INSTANCE = new CompressionService();
 
     private final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
 
-    private CompressionHandler() {
+    private CompressionService() {
     }
 
     public Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
+        // Retrieve the (optional) variant chain containing the given item key
         var variantChain = compressionChains.stream().filter(chain -> chain.containsKey(key)).findFirst();
+
         return variantChain.map(chain -> {
             var keys = new ObjectArrayList<>(chain.keySet());
 
+            // Reverse ordering when going from provided storage/filter variant to least-compressed "base unit"
             if (decompress) {
                 Collections.reverse(keys);
             }
 
+            // Split variant chain into separate compressed/decompressed chains, omitting the initial variant provided
             var variants = new Object2IntLinkedOpenHashMap<AEItemKey>();
             keys.subList(keys.indexOf(key) + 1, keys.size()).forEach(k -> variants.put(k, chain.getInt(k)));
             return variants;
         }).orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public void init() {
+    public void load() {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
@@ -61,39 +63,39 @@ public class CompressionHandler {
         var validRecipes = candidates.stream().filter(recipe -> {
             var compressible = false;
             var decompressible = false;
-            var constantAmount = false;
 
             var input = recipe.getIngredients().get(0);
             var output = recipe.getResultItem();
 
-            for (var candidate : candidates) {
-                var compressionMultiplier = 0;
-                var decompressionMultiplier = 0;
+            var checkAgainst = candidates.stream().filter(isCompressionRecipe(recipe)
+                    ? this::isDecompressionRecipe
+                    : this::isCompressionRecipe).toList();
 
+            for (var candidate : checkAgainst) {
                 for (var item : candidate.getIngredients().get(0).getItems()) {
                     if (item.getItem().equals(output.getItem())) {
                         compressible = true;
-                        compressionMultiplier = candidate.getIngredients().size();
                     }
                 }
 
                 for (var item : input.getItems()) {
                     if (item.getItem().equals(candidate.getResultItem().getItem())) {
                         decompressible = true;
-                        decompressionMultiplier = candidate.getResultItem().getCount();
                     }
                 }
 
-                constantAmount = compressionMultiplier == decompressionMultiplier;
+                if (compressible && decompressible) {
+                    break;
+                }
             }
 
-            return compressible && decompressible && constantAmount;
+            return compressible && decompressible;
         }).toList();
 
-        // Pull all available compression chains from the recipe shortlist and add these to the handler cache
         var compressed = validRecipes.stream().filter(this::isCompressionRecipe).toList();
         var decompressed = validRecipes.stream().filter(this::isDecompressionRecipe).toList();
 
+        // Pull all available compression chains from the recipe shortlist and add these to the handler cache
         compressed.forEach(recipe -> {
             var baseVariant = recipe.getResultItem().getItem();
 
@@ -106,23 +108,28 @@ public class CompressionHandler {
                 }
 
                 var compressionChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                var decompressionKeys = new ObjectArrayList<>(decompressionChain.keySet());
-
-                // Reverse current "decompression chain" and add base variant as the next compression step
-                Collections.reverse(decompressionKeys);
-                decompressionKeys.forEach(k -> compressionChain.put(k, decompressionChain.getInt(k)));
-                compressionChain.put(AEItemKey.of(baseVariant), compressionChain.getInt(compressionChain.lastKey()));
 
                 for (var higherVariant = getSubsequentVariant(baseVariant, compressed); higherVariant != null;) {
                     compressionChain.put(AEItemKey.of(higherVariant.first()), (int) higherVariant.second());
                     higherVariant = getSubsequentVariant(higherVariant.first(), compressed);
                 }
 
-                compressionChains.add(compressionChain);
+                // Collate decompression and compression chains together with base variant
+                var fullChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
+
+                var decompressionKeys = new ObjectArrayList<>(decompressionChain.keySet());
+                Collections.reverse(decompressionKeys);
+                decompressionKeys.forEach(k -> fullChain.put(k, decompressionChain.getInt(k)));
+
+                // Retrieve appropriate multiplier for base variant for completion's sake
+                fullChain.put(AEItemKey.of(baseVariant), fullChain.isEmpty()
+                        ? compressionChain.getInt(compressionChain.firstKey())
+                        : fullChain.getInt(fullChain.lastKey()));
+                fullChain.putAll(compressionChain);
+
+                compressionChains.add(fullChain);
             }
         });
-
-        Utils.LOGGER.info("Loaded bulk cell compression recipes.");
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe) {
@@ -140,15 +147,9 @@ public class CompressionHandler {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    var multiplier = 1;
-
-                    if (isCompressionRecipe(recipe)) {
-                        multiplier = recipe.getIngredients().size();
-                    } else if (isDecompressionRecipe(recipe)) {
-                        multiplier = recipe.getResultItem().getCount();
-                    }
-
-                    return Pair.of(recipe.getResultItem().getItem(), multiplier);
+                    return Pair.of(recipe.getResultItem().getItem(), isCompressionRecipe(recipe)
+                            ? recipe.getIngredients().size()
+                            : recipe.getResultItem().getCount());
                 }
             }
         }

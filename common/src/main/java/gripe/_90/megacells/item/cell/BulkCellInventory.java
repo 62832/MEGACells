@@ -55,8 +55,8 @@ public class BulkCellInventory implements StorageCell {
         builder.addAll(config.keySet());
         this.partitionList = builder.build();
 
-        this.compressed = CompressionHandler.INSTANCE.getVariants(filterItem, false);
-        this.decompressed = CompressionHandler.INSTANCE.getVariants(filterItem, true);
+        this.compressed = CompressionService.INSTANCE.getVariants(filterItem, false);
+        this.decompressed = CompressionService.INSTANCE.getVariants(filterItem, true);
         this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
 
         this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;

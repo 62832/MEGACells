@@ -31,7 +31,7 @@ import gripe._90.megacells.init.forge.client.InitScreens;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.item.cell.CompressionHandler;
+import gripe._90.megacells.item.cell.CompressionService;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
 
@@ -88,9 +88,9 @@ public class MEGACellsForge {
             });
         });
 
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionHandler.INSTANCE.init());
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionHandler.INSTANCE.init());
-        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionHandler.INSTANCE.init());
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionService.INSTANCE.load());
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
