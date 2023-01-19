@@ -37,13 +37,13 @@ public class CompressionHandler {
                 Collections.reverse(keys);
             }
 
-            var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-            keys.subList(keys.indexOf(key) + 1, keys.size()).forEach(k -> decompressed.put(k, chain.getInt(k)));
-            return decompressed;
+            var variants = new Object2IntLinkedOpenHashMap<AEItemKey>();
+            keys.subList(keys.indexOf(key) + 1, keys.size()).forEach(k -> variants.put(k, chain.getInt(k)));
+            return variants;
         }).orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public void load() {
+    public void init() {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
@@ -90,17 +90,17 @@ public class CompressionHandler {
             return compressible && decompressible && constantAmount;
         }).toList();
 
-        // Add final available variant chains to handler cache
+        // Pull all available compression chains from the recipe shortlist and add these to the handler cache
         var compressed = validRecipes.stream().filter(this::isCompressionRecipe).toList();
         var decompressed = validRecipes.stream().filter(this::isDecompressionRecipe).toList();
 
         compressed.forEach(recipe -> {
-            var recipeOutput = recipe.getResultItem().getItem();
+            var baseVariant = recipe.getResultItem().getItem();
 
-            if (compressionChains.stream().noneMatch(chain -> chain.containsKey(AEItemKey.of(recipeOutput)))) {
+            if (compressionChains.stream().noneMatch(chain -> chain.containsKey(AEItemKey.of(baseVariant)))) {
                 var decompressionChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
 
-                for (var lowerVariant = getSubsequentVariant(recipeOutput, decompressed); lowerVariant != null;) {
+                for (var lowerVariant = getSubsequentVariant(baseVariant, decompressed); lowerVariant != null;) {
                     decompressionChain.put(AEItemKey.of(lowerVariant.first()), (int) lowerVariant.second());
                     lowerVariant = getSubsequentVariant(lowerVariant.first(), decompressed);
                 }
@@ -108,11 +108,12 @@ public class CompressionHandler {
                 var compressionChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
                 var decompressionKeys = new ObjectArrayList<>(decompressionChain.keySet());
 
+                // Reverse current "decompression chain" and add base variant as the next compression step
                 Collections.reverse(decompressionKeys);
                 decompressionKeys.forEach(k -> compressionChain.put(k, decompressionChain.getInt(k)));
-                compressionChain.put(AEItemKey.of(recipeOutput), compressionChain.getInt(compressionChain.lastKey()));
+                compressionChain.put(AEItemKey.of(baseVariant), compressionChain.getInt(compressionChain.lastKey()));
 
-                for (var higherVariant = getSubsequentVariant(recipeOutput, compressed); higherVariant != null; ) {
+                for (var higherVariant = getSubsequentVariant(baseVariant, compressed); higherVariant != null;) {
                     compressionChain.put(AEItemKey.of(higherVariant.first()), (int) higherVariant.second());
                     higherVariant = getSubsequentVariant(higherVariant.first(), compressed);
                 }

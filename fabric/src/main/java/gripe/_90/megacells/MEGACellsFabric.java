@@ -52,14 +52,14 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
         InitStorageCells.init();
         InitUpgrades.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionHandler.INSTANCE.load());
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionHandler.INSTANCE.init());
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
             if (success)
-                CompressionHandler.INSTANCE.load();
+                CompressionHandler.INSTANCE.init();
         });
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
             if (client)
-                CompressionHandler.INSTANCE.load();
+                CompressionHandler.INSTANCE.init();
         });
     }
 

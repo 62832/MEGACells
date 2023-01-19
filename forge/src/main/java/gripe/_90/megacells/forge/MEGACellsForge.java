@@ -88,9 +88,9 @@ public class MEGACellsForge {
             });
         });
 
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionHandler.INSTANCE.load());
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionHandler.INSTANCE.load());
-        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionHandler.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionHandler.INSTANCE.init());
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionHandler.INSTANCE.init());
+        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionHandler.INSTANCE.init());
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);
