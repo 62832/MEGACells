@@ -3,6 +3,7 @@ package gripe._90.megacells.block;
 import net.minecraft.world.item.Item;
 
 import appeng.block.crafting.ICraftingUnitType;
+import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.definition.MEGABlocks;
 
@@ -38,9 +39,8 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
         return this.affix;
     }
 
-    @Override
-    public Item getItemFromType() {
-        var definition = switch (this) {
+    public BlockDefinition<?> getDefinition() {
+        return switch (this) {
             case UNIT -> MEGABlocks.MEGA_CRAFTING_UNIT;
             case ACCELERATOR -> MEGABlocks.CRAFTING_ACCELERATOR;
             case STORAGE_1M -> MEGABlocks.CRAFTING_STORAGE_1M;
@@ -50,6 +50,10 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
             case STORAGE_256M -> MEGABlocks.CRAFTING_STORAGE_256M;
             case MONITOR -> MEGABlocks.CRAFTING_MONITOR;
         };
-        return definition.asItem();
+    }
+
+    @Override
+    public Item getItemFromType() {
+        return getDefinition().asItem();
     }
 }

@@ -17,33 +17,33 @@ public class InitUpgrades {
         var portableCellGroup = GuiText.PortableCells.getTranslationKey();
         var wirelessTerminalGroup = GuiText.WirelessTerminals.getTranslationKey();
 
-        MEGAItems.getItemCells().forEach(itemCell -> {
+        for (var itemCell : MEGAItems.getItemCells()) {
             Upgrades.add(AEItems.FUZZY_CARD, itemCell, 1, storageCellGroup);
             Upgrades.add(AEItems.INVERTER_CARD, itemCell, 1, storageCellGroup);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemCell, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, itemCell, 1, storageCellGroup);
-        });
+        }
 
-        MEGAItems.getFluidCells().forEach(fluidCell -> {
+        for (var fluidCell : MEGAItems.getFluidCells()) {
             Upgrades.add(AEItems.INVERTER_CARD, fluidCell, 1, storageCellGroup);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidCell, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, fluidCell, 1, storageCellGroup);
-        });
+        }
 
-        MEGAItems.getItemPortables().forEach(itemPortable -> {
+        for (var itemPortable : MEGAItems.getItemPortables()) {
             Upgrades.add(AEItems.FUZZY_CARD, itemPortable, 1, portableCellGroup);
             Upgrades.add(AEItems.INVERTER_CARD, itemPortable, 1, portableCellGroup);
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, itemPortable, 2, portableCellGroup);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemPortable, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, itemPortable, 1, storageCellGroup);
-        });
+        }
 
-        MEGAItems.getFluidPortables().forEach(fluidPortable -> {
+        for (var fluidPortable : MEGAItems.getFluidPortables()) {
             Upgrades.add(AEItems.INVERTER_CARD, fluidPortable, 1, portableCellGroup);
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, fluidPortable, 2, portableCellGroup);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidPortable, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, fluidPortable, 1, storageCellGroup);
-        });
+        }
 
         Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_TERMINAL, 2, wirelessTerminalGroup);
         Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_CRAFTING_TERMINAL, 2, wirelessTerminalGroup);

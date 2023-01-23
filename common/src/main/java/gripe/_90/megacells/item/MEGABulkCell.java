@@ -33,24 +33,22 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     }
 
     @Override
-    public FuzzyMode getFuzzyMode(ItemStack itemStack) {
-        return null;
-    }
-
-    @Override
-    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
-    }
-
-    @Override
-    public void appendHoverText(ItemStack is, Level level, @NotNull List<Component> lines,
-            @NotNull TooltipFlag advancedTooltips) {
+    public void appendHoverText(ItemStack is, Level level, @NotNull List<Component> lines, @NotNull TooltipFlag adv) {
         Preconditions.checkArgument(is.getItem() == this);
         BulkCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
     }
 
     @Override
     public IUpgradeInventory getUpgrades(ItemStack is) {
-        // placeholder for later
         return UpgradeInventories.forItem(is, 1);
+    }
+
+    @Override
+    public FuzzyMode getFuzzyMode(ItemStack itemStack) {
+        return null;
+    }
+
+    @Override
+    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
     }
 }
