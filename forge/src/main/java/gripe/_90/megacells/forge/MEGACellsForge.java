@@ -2,7 +2,6 @@ package gripe._90.megacells.forge;
 
 import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -89,7 +88,6 @@ public class MEGACellsForge {
 
         MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE.load());
         MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.load());
-        MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent event) -> CompressionService.INSTANCE.load());
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitAutoRotatingModel::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBlockEntityRenderers::init);

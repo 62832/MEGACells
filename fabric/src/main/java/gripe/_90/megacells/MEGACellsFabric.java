@@ -3,7 +3,6 @@ package gripe._90.megacells;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.Registry;
 
@@ -54,12 +53,9 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionService.INSTANCE.load());
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
-            if (success)
+            if (success) {
                 CompressionService.INSTANCE.load();
-        });
-        CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> {
-            if (client)
-                CompressionService.INSTANCE.load();
+            }
         });
     }
 
