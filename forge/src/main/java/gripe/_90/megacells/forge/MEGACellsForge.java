@@ -16,7 +16,6 @@ import net.minecraftforge.registries.RegisterEvent;
 
 import appeng.core.AppEng;
 
-import gripe._90.megacells.datagen.forge.MEGADataGenerators;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -31,6 +30,7 @@ import gripe._90.megacells.init.forge.client.InitScreens;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.datagen.AppMekDataGenerators;
 import gripe._90.megacells.item.cell.CompressionService;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
@@ -75,7 +75,6 @@ public class MEGACellsForge {
             }
         });
 
-        bus.addListener(MEGADataGenerators::onGatherData);
         bus.addListener((FMLCommonSetupEvent event) -> {
             event.enqueueWork(InitStorageCells::init);
             event.enqueueWork(InitUpgrades::init);
@@ -97,5 +96,7 @@ public class MEGACellsForge {
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitBuiltInModels::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitItemColors::init);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InitScreens::init);
+
+        bus.addListener(AppMekDataGenerators::onGatherData);
     }
 }

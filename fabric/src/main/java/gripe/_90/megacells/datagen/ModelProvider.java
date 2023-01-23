@@ -1,10 +1,12 @@
 package gripe._90.megacells.datagen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,6 +37,8 @@ import appeng.core.AppEng;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
@@ -68,9 +72,19 @@ class ModelProvider extends FabricModelProvider {
     public void generateBlockStateModels(BlockModelGenerators generator) {
         createEnergyCell(generator);
 
-        for (var block : CommonModelSupplier.CRAFTING_UNITS) {
+        var craftingUnits = List.of(
+                Pair.of(MEGABlocks.MEGA_CRAFTING_UNIT, "unit"),
+                Pair.of(MEGABlocks.CRAFTING_STORAGE_1M, "1m_storage"),
+                Pair.of(MEGABlocks.CRAFTING_STORAGE_4M, "4m_storage"),
+                Pair.of(MEGABlocks.CRAFTING_STORAGE_16M, "16m_storage"),
+                Pair.of(MEGABlocks.CRAFTING_STORAGE_64M, "64m_storage"),
+                Pair.of(MEGABlocks.CRAFTING_STORAGE_256M, "256m_storage"),
+                Pair.of(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator"));
+
+        for (var block : craftingUnits) {
             createCraftingUnit(block.first.block(), block.second, generator);
         }
+
         createCraftingMonitor(generator);
         createPatternProviderBlock(generator);
     }
@@ -79,17 +93,37 @@ class ModelProvider extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerators generator) {
         generatePartModels(generator);
 
-        for (var item : CommonModelSupplier.FLAT_ITEMS) {
-            generator.generateFlatItem(item.asItem(), ModelTemplates.FLAT_ITEM);
-        }
+        generator.generateFlatItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
-        for (var cell : CommonModelSupplier.STORAGE_CELLS) {
+        generator.generateFlatItem(MEGAItems.CELL_COMPONENT_1M.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.CELL_COMPONENT_4M.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.CELL_COMPONENT_16M.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.CELL_COMPONENT_64M.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.CELL_COMPONENT_256M.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.BULK_CELL_COMPONENT.asItem(), ModelTemplates.FLAT_ITEM);
+
+        generator.generateFlatItem(MEGAItems.GREATER_ENERGY_CARD.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.COMPRESSION_CARD.asItem(), ModelTemplates.FLAT_ITEM);
+
+        var cells = Stream.concat(
+                Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells(), AppBotItems.getCells())
+                        .flatMap(Collection::stream),
+                Stream.of(MEGAItems.BULK_ITEM_CELL)).toList();
+
+        for (var cell : cells) {
             createCellItem(
                     Utils.makeId("item/cell/standard/" + cell.id().getPath()),
                     Utils.makeId("item/" + cell.id().getPath()), STORAGE_CELL_LED, generator.output);
         }
 
-        for (var cell : CommonModelSupplier.PORTABLE_CELLS) {
+        var portables = Stream.concat(
+                Stream.of(MEGAItems.getItemPortables(), MEGAItems.getFluidPortables(), AppBotItems.getPortables())
+                        .flatMap(Collection::stream),
+                Stream.of()).toList();
+
+        for (var cell : portables) {
             createCellItem(
                     Utils.makeId("item/cell/portable/" + cell.id().getPath()),
                     Utils.makeId("item/" + cell.id().getPath()), PORTABLE_CELL_LED, generator.output);
@@ -222,13 +256,13 @@ class ModelProvider extends FabricModelProvider {
                         Pair.of(Utils.makeId("block/" + cell.id().getPath() + "_" + (i + 1)), fillPredicate));
             }
         }
+
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(cell.block()).with(fillStage));
         generator.modelOutput.accept(Utils.makeId("item/" + cell.id().getPath()), new OverrideableDelegatedModel(
                 Utils.makeId("block/" + cell.id().getPath() + "_0"), itemModelOverrides));
     }
 
     static class OverrideableDelegatedModel extends DelegatedModel {
-
         private final List<Pair<ResourceLocation, JsonObject>> overrides;
 
         public OverrideableDelegatedModel(ResourceLocation resourceLocation,

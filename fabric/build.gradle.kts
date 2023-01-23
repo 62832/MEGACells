@@ -16,7 +16,7 @@ loom {
             name("Minecraft Data")
             property("fabric-api.datagen")
             property("fabric-api.datagen.modid", rootProject.property("mod_id").toString())
-            property("fabric-api.datagen.output-dir", file("src/generated/resources").absolutePath)
+            property("fabric-api.datagen.output-dir", project(":common").file("src/generated/resources").absolutePath)
             property("fabric-api.datagen.strict-validation")
         }
     }
@@ -54,15 +54,6 @@ dependencies {
     modRuntimeOnly("com.terraformersmc:modmenu:${property("mod_menu_version")}")
     modRuntimeOnly("mezz.jei:jei-${property("minecraft_version")}-fabric:${property("jei_version")}")
     modRuntimeOnly("curse.maven:jade-324717:${property("jade_fileid")}")
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir("src/generated/resources")
-            exclude("**/.cache")
-        }
-    }
 }
 
 tasks {

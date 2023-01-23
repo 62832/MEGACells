@@ -14,6 +14,15 @@ dependencies {
     modCompileOnly("curse.maven:applied-botanics-addon-610632:${project(":fabric").dependencyProject.property("appbot_fileid")}")
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir("src/generated/resources")
+            exclude("**/.cache")
+        }
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenCommon") {
