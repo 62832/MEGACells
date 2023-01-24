@@ -134,6 +134,16 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
                 .save(consumer, Utils.makeId("crafting/compression_card"));
 
+        ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_PATTERN_PROVIDER)
+                .pattern("IPI")
+                .pattern("V V")
+                .pattern("IPI")
+                .define('I', ConventionTags.IRON_INGOT)
+                .define('P', ConventionTags.PATTERN_PROVIDER)
+                .define('V', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
+                .save(consumer, Utils.makeId("network/mega_pattern_provider"));
+
         ShapelessRecipeBuilder.shapeless(MEGAParts.MEGA_PATTERN_PROVIDER)
                 .requires(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .unlockedBy("has_mega_pattern_provider", has(MEGABlocks.MEGA_PATTERN_PROVIDER))
