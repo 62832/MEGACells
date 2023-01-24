@@ -10,7 +10,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -47,19 +46,19 @@ class RecipeProvider extends FabricRecipeProvider {
         component(consumer, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem());
         component(consumer, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem());
 
-        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
 
-        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
 
         portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -100,7 +99,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .pattern("aba")
                 .pattern("cdc")
                 .pattern("aba")
-                .define('a', ConventionTags.IRON_INGOT)
+                .define('a', Items.IRON_INGOT)
                 .define('b', AEItems.LOGIC_PROCESSOR)
                 .define('c', AEParts.SMART_CABLE.item(AEColor.TRANSPARENT))
                 .define('d', AEItems.ENGINEERING_PROCESSOR)
@@ -138,7 +137,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .pattern("IPI")
                 .pattern("V V")
                 .pattern("IPI")
-                .define('I', ConventionTags.IRON_INGOT)
+                .define('I', Items.IRON_INGOT)
                 .define('P', ConventionTags.PATTERN_PROVIDER)
                 .define('V', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
@@ -185,7 +184,7 @@ class RecipeProvider extends FabricRecipeProvider {
     }
 
     private static void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
-            ItemDefinition<?> housing, TagKey<Item> housingMaterial) {
+            ItemDefinition<?> housing, Item housingMaterial) {
         ShapedRecipeBuilder.shaped(cell)
                 .pattern("aba")
                 .pattern("bcb")
@@ -217,8 +216,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/portable/" + cell.id().getPath()));
     }
 
-    private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing,
-            TagKey<Item> housingMaterial) {
+    private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, Item housingMaterial) {
         ShapedRecipeBuilder.shaped(housing)
                 .pattern("aba")
                 .pattern("b b")
