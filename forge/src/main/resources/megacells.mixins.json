@@ -4,7 +4,7 @@
   "package": "gripe._90.megacells.mixin.forge",
   "compatibilityLevel": "JAVA_17",
   "client": [],
-  "mixins": ["MainMixin"],
+  "mixins": ["data.MainMixin"],
   "injectors": {
     "defaultRequire": 1
   }

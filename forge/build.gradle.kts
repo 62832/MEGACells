@@ -11,7 +11,7 @@ loom {
     runs {
         create("data") {
             data()
-            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
+            programArgs("--existing", project(":common").file("src/**/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
         }
     }

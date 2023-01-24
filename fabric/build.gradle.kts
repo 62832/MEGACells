@@ -12,8 +12,15 @@ loom {
 
     runs {
         create("data") {
-            inherit(getByName("client"))
+            client()
             name("Minecraft Data")
+
+            source(sourceSets.create("data") {
+                val main = sourceSets.main.get()
+                compileClasspath += main.compileClasspath + main.output
+                runtimeClasspath += main.runtimeClasspath + main.output
+            })
+
             property("fabric-api.datagen")
             property("fabric-api.datagen.modid", rootProject.property("mod_id").toString())
             property("fabric-api.datagen.output-dir", project(":common").file("src/generated/resources").absolutePath)
