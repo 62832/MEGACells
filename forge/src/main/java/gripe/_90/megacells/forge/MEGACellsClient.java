@@ -43,6 +43,7 @@ public class MEGACellsClient {
     public MEGACellsClient() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::initScreens);
+        bus.addListener(this::initRenderTypes);
         bus.addListener(this::initModels);
         bus.addListener(this::initModelRotation);
         bus.addListener(this::initItemColors);
@@ -53,12 +54,16 @@ public class MEGACellsClient {
                 "/screens/megacells/mega_pattern_provider.json");
     }
 
+    private void initRenderTypes(FMLClientSetupEvent ignoredEvent) {
+        for (var type : MEGACraftingUnitType.values()) {
+            ItemBlockRenderTypes.setRenderLayer(type.getDefinition().block(), RenderType.cutout());
+        }
+    }
+
     private void initModels(ModelEvent.RegisterGeometryLoaders event) {
         for (var type : MEGACraftingUnitType.values()) {
             event.register("block/crafting/" + type.getAffix() + "_formed",
                     new SimpleModelLoader<>(() -> new CraftingCubeModel(new MEGACraftingUnitModelProvider(type))));
-
-            ItemBlockRenderTypes.setRenderLayer(type.getDefinition().block(), RenderType.cutout());
         }
 
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
