@@ -134,11 +134,12 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("crafting/compression_card"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_PATTERN_PROVIDER)
-                .pattern("IPI")
-                .pattern("V V")
-                .pattern("IPI")
+                .pattern("ICI")
+                .pattern("VPV")
+                .pattern("ICI")
+                .define('C', AEItems.CALCULATION_PROCESSOR)
                 .define('I', Items.IRON_INGOT)
-                .define('P', ConventionTags.PATTERN_PROVIDER)
+                .define('P', AEBlocks.PATTERN_PROVIDER)
                 .define('V', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
                 .save(consumer, Utils.makeId("network/mega_pattern_provider"));
