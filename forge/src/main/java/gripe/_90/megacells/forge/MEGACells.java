@@ -30,8 +30,18 @@ import gripe._90.megacells.util.Utils;
 @Mod(Utils.MODID)
 public class MEGACells {
     public MEGACells() {
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        initAll();
 
+        var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::registerAll);
+        bus.addListener(this::initCells);
+
+        initCompression();
+
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MEGACellsClient::new);
+    }
+
+    private void initAll() {
         MEGABlocks.init();
         MEGAItems.init();
         MEGAParts.init();
@@ -44,44 +54,44 @@ public class MEGACells {
         if (Utils.PLATFORM.isModLoaded("appbot")) {
             AppBotItems.init();
         }
+    }
 
-        bus.addListener((RegisterEvent event) -> {
-            if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
-                MEGABlocks.getBlocks().forEach(b -> {
-                    ForgeRegistries.BLOCKS.register(b.id(), b.block());
-                    ForgeRegistries.ITEMS.register(b.id(), b.asItem());
-                });
-            }
-
-            if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
-                MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
-            }
-
-            if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
-                MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
-            }
-
-            if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
-                ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
-                        MEGAPatternProviderMenu.TYPE);
-            }
-        });
-
-        bus.addListener((FMLCommonSetupEvent event) -> {
-            event.enqueueWork(InitStorageCells::init);
-            event.enqueueWork(InitUpgrades::init);
-
-            event.enqueueWork(() -> {
-                if (Utils.PLATFORM.isModLoaded("appmek")) {
-                    AppMekIntegration.initUpgrades();
-                    AppMekIntegration.initStorageCells();
-                }
+    private void registerAll(RegisterEvent event) {
+        if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
+            MEGABlocks.getBlocks().forEach(b -> {
+                ForgeRegistries.BLOCKS.register(b.id(), b.block());
+                ForgeRegistries.ITEMS.register(b.id(), b.asItem());
             });
-        });
+        }
 
+        if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+            MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
+        }
+
+        if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
+            MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
+        }
+
+        if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
+            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
+                    MEGAPatternProviderMenu.TYPE);
+        }
+    }
+
+    private void initCells(FMLCommonSetupEvent event) {
+        event.enqueueWork(InitStorageCells::init);
+        event.enqueueWork(InitUpgrades::init);
+
+        event.enqueueWork(() -> {
+            if (Utils.PLATFORM.isModLoaded("appmek")) {
+                AppMekIntegration.initUpgrades();
+                AppMekIntegration.initStorageCells();
+            }
+        });
+    }
+
+    private void initCompression() {
         MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE.load());
         MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.load());
-
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MEGACellsClient::new);
     }
 }

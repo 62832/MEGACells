@@ -45,11 +45,20 @@ import gripe._90.megacells.util.Utils;
 public class MEGACellsClient implements IAEAddonEntrypoint {
     @Override
     public void onAe2Initialized() {
+        initScreens();
+        initBlockModels();
+        initItemModels();
+        initItemColors();
+    }
+
+    private void initScreens() {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             InitScreens.register(MEGAPatternProviderMenu.TYPE, PatternProviderScreen<MEGAPatternProviderMenu>::new,
                     "/screens/megacells/mega_pattern_provider.json");
         });
+    }
 
+    private void initBlockModels() {
         for (var type : MEGACraftingUnitType.values()) {
             ModelLoadingRegistry.INSTANCE.registerResourceProvider(resourceManager -> new SimpleModelLoader<>(
                     Utils.makeId("block/crafting/" + type.getAffix() + "_formed"),
@@ -59,31 +68,6 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
         }
 
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
-
-        var cells = new ArrayList<>(MEGAItems.getItemCells());
-        cells.addAll(MEGAItems.getFluidCells());
-        cells.add(MEGAItems.BULK_ITEM_CELL);
-
-        var portables = new ArrayList<>(MEGAItems.getItemPortables());
-        portables.addAll(MEGAItems.getFluidPortables());
-
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
-            cells.addAll(AppBotItems.getCells());
-            portables.addAll(AppBotItems.getPortables());
-        }
-
-        ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
-        ColorProviderRegistry.ITEM.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
-
-        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
-                (is, level, entity, seed) -> {
-                    var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
-
-                    double curPower = energyCell.getAECurrentPower(is);
-                    double maxPower = energyCell.getAEMaxPower(is);
-
-                    return (float) (curPower / maxPower);
-                });
 
         ModelsReloadCallback.EVENT.register(modelRegistry -> {
             var customizers = new HashMap<ResourceLocation, Function<BakedModel, BakedModel>>();
@@ -114,5 +98,34 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
                 }
             }
         });
+    }
+
+    private void initItemModels() {
+        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
+                (is, level, entity, seed) -> {
+                    var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
+
+                    double curPower = energyCell.getAECurrentPower(is);
+                    double maxPower = energyCell.getAEMaxPower(is);
+
+                    return (float) (curPower / maxPower);
+                });
+    }
+
+    private void initItemColors() {
+        var cells = new ArrayList<>(MEGAItems.getItemCells());
+        cells.addAll(MEGAItems.getFluidCells());
+        cells.add(MEGAItems.BULK_ITEM_CELL);
+
+        var portables = new ArrayList<>(MEGAItems.getItemPortables());
+        portables.addAll(MEGAItems.getFluidPortables());
+
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            cells.addAll(AppBotItems.getCells());
+            portables.addAll(AppBotItems.getPortables());
+        }
+
+        ColorProviderRegistry.ITEM.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
+        ColorProviderRegistry.ITEM.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
     }
 }

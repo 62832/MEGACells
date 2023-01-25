@@ -20,6 +20,16 @@ import gripe._90.megacells.util.Utils;
 public class MEGACells implements IAEAddonEntrypoint {
     @Override
     public void onAe2Initialized() {
+        initAll();
+        registerAll();
+
+        InitStorageCells.init();
+        InitUpgrades.init();
+
+        initCompression();
+    }
+
+    private void initAll() {
         MEGABlocks.init();
         MEGAItems.init();
         MEGAParts.init();
@@ -28,19 +38,26 @@ public class MEGACells implements IAEAddonEntrypoint {
         if (Utils.PLATFORM.isModLoaded("appbot")) {
             AppBotItems.init();
         }
+    }
 
-        MEGABlocks.getBlocks().forEach(b -> {
-            Registry.register(Registry.BLOCK, b.id(), b.block());
-            Registry.register(Registry.ITEM, b.id(), b.asItem());
-        });
-        MEGAItems.getItems().forEach(i -> Registry.register(Registry.ITEM, i.id(), i.asItem()));
-        MEGABlockEntities.getBlockEntityTypes().forEach((k, v) -> Registry.register(Registry.BLOCK_ENTITY_TYPE, k, v));
+    private void registerAll() {
+        for (var block : MEGABlocks.getBlocks()) {
+            Registry.register(Registry.BLOCK, block.id(), block.block());
+            Registry.register(Registry.ITEM, block.id(), block.asItem());
+        }
+
+        for (var item : MEGAItems.getItems()) {
+            Registry.register(Registry.ITEM, item.id(), item.asItem());
+        }
+
+        for (var blockEntity : MEGABlockEntities.getBlockEntityTypes().entrySet()) {
+            Registry.register(Registry.BLOCK_ENTITY_TYPE, blockEntity.getKey(), blockEntity.getValue());
+        }
 
         Registry.register(Registry.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
+    }
 
-        InitStorageCells.init();
-        InitUpgrades.init();
-
+    private void initCompression() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionService.INSTANCE.load());
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
             if (success) {
