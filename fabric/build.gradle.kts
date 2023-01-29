@@ -101,8 +101,6 @@ dependencies {
     modRuntimeOnly("curse.maven:jade-324717:${property("jade_fileid")}")
 }
 
-tasks {
-    remapJar {
-        injectAccessWidener.set(true)
-    }
+tasks.remapJar {
+    injectAccessWidener.set(true)
 }

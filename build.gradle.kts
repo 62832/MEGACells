@@ -1,20 +1,21 @@
-import com.diffplug.gradle.spotless.SpotlessExtension
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import dev.architectury.plugin.ArchitectPluginExtension
-import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
+
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     java
-    id("architectury-plugin") version "3.4-SNAPSHOT" apply false
+    `maven-publish`
+    id("architectury-plugin") version "3.4-SNAPSHOT"
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
-    id("me.shedaniel.unified-publishing") version "0.1.+" apply false
-    id("com.diffplug.spotless") version "6.4.1" apply false
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("me.shedaniel.unified-publishing") version "0.1.+"
+    id("com.diffplug.spotless") version "6.4.1"
 }
 
 val mcVersion = property("minecraft_version").toString()
@@ -37,7 +38,7 @@ tasks {
     }
 
     withType<Jar> {
-        enabled = false;
+        enabled = false
     }
 }
 
@@ -60,13 +61,19 @@ subprojects {
         withSourcesJar()
     }
 
-    configure<ArchitectPluginExtension> {
+    architectury {
         minecraft = mcVersion
         injectInjectables = false
     }
 
     configure<LoomGradleExtensionAPI> {
         silentMojangMappingsLicense()
+
+        val accessWidenerFile = project(":common").file("src/main/resources/$modId.accesswidener")
+
+        if (accessWidenerFile.exists()) {
+            accessWidenerPath.set(accessWidenerFile)
+        }
 
         mixin {
             defaultRefmapName.set("$modId-refmap.json")
@@ -109,6 +116,18 @@ subprojects {
             from(rootProject.file("LICENSE")) {
                 rename { "${it}_$modId"}
             }
+
+            manifest {
+                attributes(
+                        "Specification-Title" to modId,
+                        "Specification-Version" to project.version.toString(),
+                        "Specification-Vendor" to "90",
+                        "Implementation-Title" to base.archivesName.get(),
+                        "Implementation-Version" to project.version.toString(),
+                        "Implementation-Vendor" to "90",
+                        "Implementation-Timestamp" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
+                )
+            }
         }
 
         withType<JavaCompile> {
@@ -117,7 +136,7 @@ subprojects {
         }
     }
 
-    configure<SpotlessExtension> {
+    spotless {
         java {
             target("src/**/java/**/*.java")
             endWithNewline()
@@ -141,13 +160,13 @@ subprojects {
         }
 
         json {
-            target("src/*/resources/**/*.json")
+            target("src/**/resources/**/*.json")
             targetExclude("src/generated/resources/**")
             prettier().config(mapOf("parser" to "json"))
         }
     }
 
-    configure<PublishingExtension> {
+    publishing {
         publications {
             create<MavenPublication>("maven${project.name.capitalize()}") {
                 artifactId = "$modId-${project.name}"
@@ -167,13 +186,9 @@ for (platform in platforms) {
         apply(plugin = "com.github.johnrengelman.shadow")
         apply(plugin = "me.shedaniel.unified-publishing")
 
-        configure<ArchitectPluginExtension> {
+        architectury {
             platformSetupLoomIde()
             loader(platform)
-        }
-
-        configure<LoomGradleExtensionAPI> {
-            accessWidenerPath.set(project(":common").extensions.getByName<LoomGradleExtensionAPI>("loom").accessWidenerPath)
         }
 
         val common: Configuration by configurations.creating
@@ -210,15 +225,14 @@ for (platform in platforms) {
                 }
             }
 
-            withType<ShadowJar> {
+            shadowJar {
                 exclude("architectury.common.json")
                 configurations = listOf(shadowCommon)
                 archiveClassifier.set("dev-shadow")
             }
 
             withType<RemapJarTask> {
-                val shadowJar: ShadowJar by project
-                inputFile.set(shadowJar.archiveFile)
+                inputFile.set(shadowJar.get().archiveFile)
                 dependsOn(shadowJar)
                 archiveClassifier.set(null as String?)
             }
@@ -240,7 +254,7 @@ for (platform in platforms) {
         }
 
         if (project.version != "0.0.0") {
-            configure<UnifiedPublishingExtension> {
+            unifiedPublishing {
                 project {
                     val modVersion = project.version.toString()
 

@@ -4,10 +4,6 @@ architectury {
     common(platforms)
 }
 
-loom {
-    accessWidenerPath.set(file("src/main/resources/megacells.accesswidener"))
-}
-
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
 
