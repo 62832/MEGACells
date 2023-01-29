@@ -1,5 +1,7 @@
 architectury {
-    common(property("enabled_platforms").toString().split(','))
+    val platforms: List<String> by rootProject.extra
+    println("Platforms: $platforms")
+    common(platforms)
 }
 
 loom {
@@ -20,19 +22,5 @@ sourceSets {
             srcDir("src/generated/resources")
             exclude("**/.cache")
         }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenCommon") {
-            artifactId = property("mod_id").toString()
-            from(components["java"])
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

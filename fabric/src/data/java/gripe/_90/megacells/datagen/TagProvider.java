@@ -1,7 +1,5 @@
 package gripe._90.megacells.datagen;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.tags.BlockTags;
@@ -12,9 +10,9 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
 
-class TagProvider {
+abstract class TagProvider {
     static class Items extends FabricTagProvider.ItemTagProvider {
-        Items(FabricDataGenerator gen, @Nullable BlockTagProvider block) {
+        Items(FabricDataGenerator gen, BlockTagProvider block) {
             super(gen, block);
         }
 

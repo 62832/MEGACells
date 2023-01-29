@@ -42,25 +42,22 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
-    static final TextureSlot LAYER1 = TextureSlot.create("layer1");
-    static final TextureSlot CELL_TEXTURE = TextureSlot.create("cell");
+    private static final TextureSlot LAYER1 = TextureSlot.create("layer1");
+    private static final TextureSlot CELL_TEXTURE = TextureSlot.create("cell");
 
-    static final ModelTemplate CELL = new ModelTemplate(Optional.of(new ResourceLocation("item/generated")),
+    private static final ModelTemplate CELL = new ModelTemplate(Optional.of(new ResourceLocation("item/generated")),
             Optional.empty(), TextureSlot.LAYER0, LAYER1);
-    static final ModelTemplate DRIVE_CELL = new ModelTemplate(Optional.of(AppEng.makeId("block/drive/drive_cell")),
-            Optional.empty(), CELL_TEXTURE);
+    private static final ModelTemplate DRIVE_CELL = new ModelTemplate(
+            Optional.of(AppEng.makeId("block/drive/drive_cell")), Optional.empty(), CELL_TEXTURE);
 
-    static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
-    static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
+    private static final TextureSlot SIDES = TextureSlot.create("sides");
+    private static final TextureSlot SIDES_STATUS = TextureSlot.create("sidesStatus");
 
-    static final TextureSlot SIDES = TextureSlot.create("sides");
-    static final TextureSlot SIDES_STATUS = TextureSlot.create("sidesStatus");
-
-    static final ModelTemplate PATTERN_PROVIDER = new ModelTemplate(
+    private static final ModelTemplate PATTERN_PROVIDER = new ModelTemplate(
             Optional.of(AppEng.makeId("part/pattern_provider_base")), Optional.empty(),
             SIDES, SIDES_STATUS, TextureSlot.BACK, TextureSlot.FRONT, TextureSlot.PARTICLE);
 
-    static final ModelTemplate CABLE_PATTERN_PROVIDER = new ModelTemplate(
+    private static final ModelTemplate CABLE_PATTERN_PROVIDER = new ModelTemplate(
             Optional.of(AppEng.makeId("item/cable_interface")), Optional.empty(),
             SIDES, TextureSlot.BACK, TextureSlot.FRONT);
 
@@ -115,7 +112,8 @@ class ModelProvider extends FabricModelProvider {
         for (var cell : cells) {
             createCellItem(
                     Utils.makeId("item/cell/standard/" + cell.id().getPath()),
-                    Utils.makeId("item/" + cell.id().getPath()), STORAGE_CELL_LED, generator.output);
+                    Utils.makeId("item/" + cell.id().getPath()),
+                    AppEng.makeId("item/storage_cell_led"), generator.output);
         }
 
         var portables = Stream.concat(
@@ -126,7 +124,8 @@ class ModelProvider extends FabricModelProvider {
         for (var cell : portables) {
             createCellItem(
                     Utils.makeId("item/cell/portable/" + cell.id().getPath()),
-                    Utils.makeId("item/" + cell.id().getPath()), PORTABLE_CELL_LED, generator.output);
+                    Utils.makeId("item/" + cell.id().getPath()),
+                    AppEng.makeId("item/portable_cell_led"), generator.output);
         }
 
         createDriveCellModel("mega_item_cell", generator.output);

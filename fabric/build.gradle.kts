@@ -1,15 +1,4 @@
-plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-}
-
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
 loom {
-    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
-
     runs {
         create("data") {
             client()
@@ -29,21 +18,70 @@ loom {
     }
 }
 
-val common: Configuration by configurations.creating
-val shadowCommon: Configuration by configurations.creating
+repositories {
+    maven {
+        name = "Shedaniel"
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("dev.architectury")
+        }
+    }
 
-configurations {
-    compileClasspath.get().extendsFrom(common)
-    runtimeClasspath.get().extendsFrom(common)
-    named("developmentFabric").get().extendsFrom(common)
+    maven {
+        name = "BlameJared"
+        url = uri("https://maven.blamejared.com")
+        content {
+            includeGroup("vazkii.botania")
+            includeGroup("vazkii.patchouli")
+        }
+    }
+
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+        content {
+            includeGroup("com.terraformersmc")
+            includeGroup("dev.emi")
+        }
+    }
+
+    maven {
+        name = "LadySnake Libs"
+        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+        content {
+            includeGroup("dev.onyxstudios.cardinal-components-api")
+        }
+    }
+
+    maven {
+        name = "JamiesWhiteShirt"
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    maven {
+        name = "Jitpack"
+        url = uri("https://jitpack.io/")
+        content {
+            includeGroup("com.github.emilyploszaj")
+        }
+    }
+
+    maven {
+        name = "Progwml6"
+        url = uri("https://dvs1.progwml6.com/files/maven/")
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
 }
 
 dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modApi("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}+${property("minecraft_version")}")
-
-    common(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    shadowCommon(project(path = ":common", configuration = "transformProductionFabric")) { isTransitive = false }
 
     modImplementation("appeng:appliedenergistics2-fabric:${property("ae2_version")}")
     modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wt_fileid")}")
@@ -64,54 +102,7 @@ dependencies {
 }
 
 tasks {
-    processResources {
-        inputs.property("version", project.version)
-
-        filesMatching("fabric.mod.json") {
-            expand("version" to project.version)
-        }
-    }
-
-    shadowJar {
-        exclude("architectury.common.json")
-
-        configurations = listOf(shadowCommon)
-        archiveClassifier.set("dev-shadow")
-    }
-
     remapJar {
         injectAccessWidener.set(true)
-        inputFile.set(shadowJar.get().archiveFile)
-        dependsOn(shadowJar)
-        archiveClassifier.set(null as String?)
-    }
-
-    jar {
-        archiveClassifier.set("dev")
-    }
-
-    sourcesJar {
-        val commonSources = project(":common").tasks.sourcesJar
-        dependsOn(commonSources)
-        from(commonSources.get().archiveFile.map { zipTree(it) })
-    }
-}
-
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
-    skip()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenFabric") {
-            artifactId = "${property("mod_id")}-$project.name"
-            from(components["java"])
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

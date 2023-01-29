@@ -1,11 +1,17 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import dev.architectury.plugin.ArchitectPluginExtension
 import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
+import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     java
-    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("architectury-plugin") version "3.4-SNAPSHOT" apply false
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
     id("me.shedaniel.unified-publishing") version "0.1.+" apply false
     id("com.diffplug.spotless") version "6.4.1" apply false
@@ -14,13 +20,13 @@ plugins {
 val mcVersion = property("minecraft_version").toString()
 val modId = property("mod_id").toString()
 
-architectury {
-    minecraft = mcVersion
+val platforms by extra {
+    listOf("fabric", "forge")
 }
 
 tasks {
     val collectJars by registering(Copy::class) {
-        val tasks = subprojects.filter { it.path != ":common" }.map { it.tasks.named("remapJar") }
+        val tasks = subprojects.filter { it.name in platforms }.map { it.tasks.named("remapJar") }
         dependsOn(tasks)
         from(tasks)
         into(buildDir.resolve("libs"))
@@ -29,28 +35,50 @@ tasks {
     assemble {
         dependsOn(collectJars)
     }
+
+    withType<Jar> {
+        enabled = false;
+    }
 }
 
-allprojects {
+subprojects {
     apply(plugin = "java")
-    apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")
+    apply(plugin = "architectury-plugin")
+    apply(plugin = "dev.architectury.loom")
+    apply(plugin = "io.github.juuxel.loom-quiltflower")
     apply(plugin = "com.diffplug.spotless")
 
     base.archivesName.set("$modId-${project.name}")
     version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
     group = "${property("maven_group")}.$modId"
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
+        withSourcesJar()
+    }
+
+    configure<ArchitectPluginExtension> {
+        minecraft = mcVersion
+        injectInjectables = false
+    }
+
+    configure<LoomGradleExtensionAPI> {
+        silentMojangMappingsLicense()
+
+        mixin {
+            defaultRefmapName.set("$modId-refmap.json")
+        }
+    }
+
+    repositories {
         maven {
             name = "ModMaven (K4U-NL)"
             url = uri("https://modmaven.dev/")
             content {
                 includeGroup("appeng")
-                includeGroup("mekanism")
             }
         }
 
@@ -69,79 +97,17 @@ allprojects {
                 includeGroup("maven.modrinth")
             }
         }
+    }
 
-        maven {
-            name = "Progwml6"
-            url = uri("https://dvs1.progwml6.com/files/maven/")
-            content {
-                includeGroup("mezz.jei")
-            }
-        }
-
-        maven {
-            name = "Shedaniel"
-            url = uri("https://maven.shedaniel.me/")
-            content {
-                includeGroup("me.shedaniel.cloth")
-                includeGroup("dev.architectury")
-            }
-        }
-
-        maven {
-            name = "BlameJared"
-            url = uri("https://maven.blamejared.com")
-            content {
-                includeGroup("vazkii.botania")
-                includeGroup("vazkii.patchouli")
-            }
-        }
-
-        maven {
-            name = "TheIllusiveC4"
-            url = uri("https://maven.theillusivec4.top/")
-            content {
-                includeGroup("top.theillusivec4.curios")
-            }
-        }
-
-        maven {
-            name = "TerraformersMC"
-            url = uri("https://maven.terraformersmc.com/")
-            content {
-                includeGroup("com.terraformersmc")
-                includeGroup("dev.emi")
-            }
-        }
-
-        maven {
-            name = "LadySnake Libs"
-            url = uri("https://ladysnake.jfrog.io/artifactory/mods")
-            content {
-                includeGroup("dev.onyxstudios.cardinal-components-api")
-            }
-        }
-
-        maven {
-            name = "JamiesWhiteShirt"
-            url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
-            content {
-                includeGroup("com.jamieswhiteshirt")
-            }
-        }
-
-        maven {
-            name = "Jitpack"
-            url = uri("https://jitpack.io/")
-            content {
-                includeGroup("com.github.emilyploszaj")
-            }
-        }
+    dependencies {
+        "minecraft"("com.mojang:minecraft:$mcVersion")
+        "mappings"(project.extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
     }
 
     tasks {
         jar {
-            from("LICENSE") {
-                rename { "${it}_${base.archivesName}"}
+            from(rootProject.file("LICENSE")) {
+                rename { "${it}_$modId"}
             }
         }
 
@@ -149,13 +115,6 @@ allprojects {
             options.encoding = "UTF-8"
             options.release.set(17)
         }
-    }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-
-        withSourcesJar()
     }
 
     configure<SpotlessExtension> {
@@ -174,8 +133,10 @@ allprojects {
                 if (it.contains("*;\n")) {
                     throw Error("No wildcard imports allowed")
                 }
+
                 it
             }
+
             bumpThisNumberIfACustomStepChanges(1)
         }
 
@@ -185,86 +146,167 @@ allprojects {
             prettier().config(mapOf("parser" to "json"))
         }
     }
-}
 
-subprojects {
-    apply(plugin = "dev.architectury.loom")
-    apply(plugin = "io.github.juuxel.loom-quiltflower")
-    apply(plugin = "me.shedaniel.unified-publishing")
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("maven${project.name.capitalize()}") {
+                artifactId = "$modId-${project.name}"
+                from(components["java"])
+            }
+        }
 
-    configure<LoomGradleExtensionAPI> {
-        silentMojangMappingsLicense()
-        mixin {
-            defaultRefmapName.set("${base.archivesName}-refmap.json")
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            // Add repositories to publish to here.
         }
     }
+}
 
-    dependencies {
-        "minecraft"("com.mojang:minecraft:$mcVersion")
-        "mappings"(project.extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
-    }
+for (platform in platforms) {
+    project(":$platform") {
+        apply(plugin = "com.github.johnrengelman.shadow")
+        apply(plugin = "me.shedaniel.unified-publishing")
 
-    architectury {
-        injectInjectables = false
-    }
+        configure<ArchitectPluginExtension> {
+            platformSetupLoomIde()
+            loader(platform)
+        }
 
-    if ((project.name == "fabric" || project.name == "forge") && project.version != "0.0.0") {
-        configure<UnifiedPublishingExtension> {
-            project {
-                val modVersion = project.version.toString()
+        configure<LoomGradleExtensionAPI> {
+            accessWidenerPath.set(project(":common").extensions.getByName<LoomGradleExtensionAPI>("loom").accessWidenerPath)
+        }
 
-                gameVersions.set(listOf(mcVersion))
-                gameLoaders.set(listOf(project.name))
-                version.set("${project.name}-$modVersion")
+        val common: Configuration by configurations.creating
+        val shadowCommon: Configuration by configurations.creating
 
-                val loader = project.name.substring(0, 1).toUpperCase() + project.name.substring(1)
-                var releaseChannel = "release"
-                var changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
-                if (modVersion.toLowerCase().contains("alpha")) {
-                    releaseChannel = "alpha"
-                    changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n$changes"
-                } else if (modVersion.toLowerCase().contains("beta")) {
-                    releaseChannel = "beta"
-                    changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n$changes"
+        configurations {
+            compileClasspath.get().extendsFrom(common)
+            runtimeClasspath.get().extendsFrom(common)
+            getByName("development${platform.capitalize()}").extendsFrom(common)
+        }
+
+        dependencies {
+            common(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
+            shadowCommon(project(path = ":common", configuration = "transformProduction${platform.capitalize()}")) { isTransitive = false }
+        }
+
+        tasks {
+            processResources {
+                inputs.property("version", project.version)
+
+                val conventionTags = ObjectMapper().readValue(file("convention_tags.json"), object: TypeReference<Map<String, String>>() {})
+
+                for (key in conventionTags.keys) {
+                    inputs.property(key, conventionTags[key])
                 }
 
-                releaseType.set(releaseChannel)
-                changelog.set(changes)
-                displayName.set(String.format("%s (%s %s)", modVersion.substring(0, modVersion.lastIndexOf("-")), loader, mcVersion))
+                filesMatching(listOf("fabric.mod.json", "META-INF/mods.toml")) {
+                    expand("version" to project.version)
+                }
 
-                mainPublication(project.tasks.getByName("remapJar")) // Declares the publicated jar
+                from(fileTree(project(":common").file("src/generated/resources"))) {
+                    expand(conventionTags)
+                    exclude("**/.cache")
+                }
+            }
 
-                relations {
-                    depends {
-                        curseforge.set("applied-energistics-2")
-                        modrinth.set("ae2")
+            withType<ShadowJar> {
+                exclude("architectury.common.json")
+                configurations = listOf(shadowCommon)
+                archiveClassifier.set("dev-shadow")
+            }
+
+            withType<RemapJarTask> {
+                val shadowJar: ShadowJar by project
+                inputFile.set(shadowJar.archiveFile)
+                dependsOn(shadowJar)
+                archiveClassifier.set(null as String?)
+            }
+
+            jar {
+                archiveClassifier.set("dev")
+            }
+
+            getByName<Jar>("sourcesJar") {
+                val commonSources = project(":common").tasks.getByName<Jar>("sourcesJar")
+                dependsOn(commonSources)
+                from(commonSources.archiveFile.map { zipTree(it) })
+            }
+        }
+
+        val javaComponent = components["java"] as AdhocComponentWithVariants
+        javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
+            skip()
+        }
+
+        if (project.version != "0.0.0") {
+            configure<UnifiedPublishingExtension> {
+                project {
+                    val modVersion = project.version.toString()
+
+                    gameVersions.set(listOf(mcVersion))
+                    gameLoaders.set(listOf(platform))
+                    version.set("$platform-$modVersion")
+
+                    var releaseChannel = "release"
+                    var changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
+
+                    if (modVersion.toLowerCase().contains("alpha")) {
+                        releaseChannel = "alpha"
+                        changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n$changes"
+                    } else if (modVersion.toLowerCase().contains("beta")) {
+                        releaseChannel = "beta"
+                        changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n$changes"
                     }
-                    optional {
-                        curseforge.set("applied-energistics-2-wireless-terminals")
-                        curseforge.set("applied-botanics-addon")
-                        modrinth.set("applied-energistics-2-wireless-terminals")
-                    }
-                    if (project.name == "forge") {
+
+                    releaseType.set(releaseChannel)
+                    changelog.set(changes)
+                    displayName.set(String.format("%s (%s %s)",
+                            modVersion.substring(0, modVersion.lastIndexOf("-")),
+                            platform.capitalize(),
+                            mcVersion))
+
+                    mainPublication(project.tasks.getByName("remapJar"))
+
+                    relations {
+                        depends {
+                            curseforge.set("applied-energistics-2")
+                            modrinth.set("ae2")
+                        }
+
                         optional {
-                            curseforge.set("applied-mekanistics")
-                            modrinth.set("applied-mekanistics")
+                            curseforge.set("applied-energistics-2-wireless-terminals")
+                            modrinth.set("applied-energistics-2-wireless-terminals")
+                        }
+
+                        optional {
+                            curseforge.set("applied-botanics-addon")
+                            modrinth.set("applied-botanics")
+                        }
+
+                        if (platform == "forge") {
+                            optional {
+                                curseforge.set("applied-mekanistics")
+                                modrinth.set("applied-mekanistics")
+                            }
                         }
                     }
-                }
 
-                val cfToken = System.getenv("CURSEFORGE_TOKEN")
-                if (cfToken != null) {
-                    curseforge {
-                        token.set(cfToken)
-                        id.set("622112")
+                    val cfToken = System.getenv("CURSEFORGE_TOKEN")
+                    val mrToken = System.getenv("MODRINTH_TOKEN")
+
+                    if (cfToken != null) {
+                        curseforge {
+                            token.set(cfToken)
+                            id.set("622112")
+                        }
                     }
-                }
 
-                val mrToken = System.getenv("MODRINTH_TOKEN")
-                if (mrToken != null) {
-                    modrinth {
-                        token.set(mrToken)
-                        id.set("7QZJE3uU")
+                    if (mrToken != null) {
+                        modrinth {
+                            token.set(mrToken)
+                            id.set("7QZJE3uU")
+                        }
                     }
                 }
             }

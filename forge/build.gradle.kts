@@ -1,22 +1,10 @@
-plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-}
-
-architectury {
-    platformSetupLoomIde()
-    forge()
-}
-
 loom {
     runs {
         create("data") {
             data()
-            programArgs("--existing", project(":common").file("src/**/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
         }
     }
-
-    accessWidenerPath.set(project(":common").loom.accessWidenerPath)
 
     forge {
         val modId = property("mod_id").toString()
@@ -33,13 +21,48 @@ loom {
     }
 }
 
-val common: Configuration by configurations.creating
-val shadowCommon: Configuration by configurations.creating
+repositories {
+    maven {
+        name = "ModMaven (K4U-NL)"
+        url = uri("https://modmaven.dev/")
+        content {
+            includeGroup("mekanism")
+        }
+    }
 
-configurations {
-    compileClasspath.get().extendsFrom(common)
-    runtimeClasspath.get().extendsFrom(common)
-    named("developmentForge").get().extendsFrom(common)
+    maven {
+        name = "Shedaniel"
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("dev.architectury")
+        }
+    }
+
+    maven {
+        name = "BlameJared"
+        url = uri("https://maven.blamejared.com")
+        content {
+            includeGroup("vazkii.botania")
+            includeGroup("vazkii.patchouli")
+        }
+    }
+
+    maven {
+        name = "TheIllusiveC4"
+        url = uri("https://maven.theillusivec4.top/")
+        content {
+            includeGroup("top.theillusivec4.curios")
+        }
+    }
+
+    maven {
+        name = "Progwml6"
+        url = uri("https://dvs1.progwml6.com/files/maven/")
+        content {
+            includeGroup("mezz.jei")
+        }
+    }
 }
 
 dependencies {
@@ -47,9 +70,6 @@ dependencies {
 
     forge("net.minecraftforge:forge:$mcVersion-${property("forge_version")}")
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
-
-    common(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-    shadowCommon(project(path = ":common", configuration = "transformProductionForge")) { isTransitive = false }
 
     modImplementation("appeng:appliedenergistics2-forge:${property("ae2_version")}")
     modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wt_fileid")}")
@@ -77,58 +97,5 @@ sourceSets {
         resources {
             exclude("**/.cache")
         }
-    }
-}
-
-tasks {
-    processResources {
-        inputs.property("version", project.version)
-
-        filesMatching("META-INF/mods.toml") {
-            expand("version" to project.version)
-        }
-    }
-
-    shadowJar {
-        exclude("fabric.mod.json")
-        exclude("architectury.common.json")
-
-        configurations = listOf(shadowCommon)
-        archiveClassifier.set("dev-shadow")
-    }
-
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
-        dependsOn(shadowJar)
-        archiveClassifier.set(null as String?)
-    }
-
-    jar {
-        archiveClassifier.set("dev")
-    }
-
-    sourcesJar {
-        val commonSources = project(":common").tasks.sourcesJar
-        dependsOn(commonSources)
-        from(commonSources.get().archiveFile.map { zipTree(it) })
-    }
-}
-
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
-    skip()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenForge") {
-            artifactId = "${property("mod_id")}-$project.name"
-            from(components["java"])
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

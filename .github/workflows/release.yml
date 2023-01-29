@@ -29,9 +29,7 @@ jobs:
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            build/libs/megacells-fabric-*.jar
-            build/libs/megacells-forge-*.jar
+          files: build/libs/megacells-*.jar
           tag_name: ${{ github.event.release.tag_name }}
       - name: Upload to mod repositories
         env:

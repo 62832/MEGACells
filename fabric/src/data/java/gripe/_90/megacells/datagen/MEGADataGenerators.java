@@ -8,7 +8,7 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         var blockTags = new TagProvider.Blocks(generator);
         generator.addProvider(blockTags);
-        generator.addProvider(g -> new TagProvider.Items(g, blockTags));
+        generator.addProvider(new TagProvider.Items(generator, blockTags));
 
         generator.addProvider(LootTableProvider::new);
         generator.addProvider(ModelProvider::new);

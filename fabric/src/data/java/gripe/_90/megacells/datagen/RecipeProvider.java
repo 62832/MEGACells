@@ -1,6 +1,11 @@
 package gripe._90.megacells.datagen;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +15,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -33,6 +38,9 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class RecipeProvider extends FabricRecipeProvider {
+    private static final String IRON_INGOT = "iron_ingot";
+    private static final String COPPER_INGOT = "copper_ingot";
+
     RecipeProvider(FabricDataGenerator gen) {
         super(gen);
     }
@@ -46,19 +54,19 @@ class RecipeProvider extends FabricRecipeProvider {
         component(consumer, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem());
         component(consumer, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem());
 
-        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
 
-        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Items.IRON_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Items.COPPER_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
+        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
 
         portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -185,7 +193,7 @@ class RecipeProvider extends FabricRecipeProvider {
     }
 
     private static void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
-            ItemDefinition<?> housing, Item housingMaterial) {
+            ItemDefinition<?> housing, String housingMaterial) {
         ShapedRecipeBuilder.shaped(cell)
                 .pattern("aba")
                 .pattern("bcb")
@@ -193,9 +201,10 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .define('b', AEItems.SKY_DUST)
                 .define('c', component)
-                .define('d', housingMaterial)
+                .define('d', placeholderTag(housingMaterial))
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath()));
+
         ShapelessRecipeBuilder.shapeless(cell)
                 .requires(housing)
                 .requires(component)
@@ -217,14 +226,14 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/portable/" + cell.id().getPath()));
     }
 
-    private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, Item housingMaterial) {
+    private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, String housingMaterial) {
         ShapedRecipeBuilder.shaped(housing)
                 .pattern("aba")
                 .pattern("b b")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .define('b', AEItems.SKY_DUST)
-                .define('d', housingMaterial)
+                .define('d', placeholderTag(housingMaterial))
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
                 .save(consumer, Utils.makeId("cells/" + housing.id().getPath()));
     }
@@ -256,5 +265,25 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .save(consumer, Utils.makeId("cells/portable/" + portable.id().getPath()));
+    }
+
+    private static Ingredient placeholderTag(String placeholder) {
+        return Ingredient.fromValues(Stream.of(new PlaceholderTagValue(placeholder)));
+    }
+
+    private record PlaceholderTagValue(String placeholder) implements Ingredient.Value {
+        @NotNull
+        @Override
+        public Collection<ItemStack> getItems() {
+            return Collections.emptyList();
+        }
+
+        @NotNull
+        @Override
+        public JsonObject serialize() {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("tag", "$" + placeholder);
+            return jsonObject;
+        }
     }
 }
