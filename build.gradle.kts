@@ -1,28 +1,35 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import com.diffplug.gradle.spotless.SpotlessExtension
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
 
+import dev.architectury.plugin.ArchitectPluginExtension
+
+import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
+
 plugins {
     java
     `maven-publish`
-    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("architectury-plugin") version "3.4-SNAPSHOT" apply false
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
     id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("me.shedaniel.unified-publishing") version "0.1.+"
-    id("com.diffplug.spotless") version "6.4.1"
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
+    id("me.shedaniel.unified-publishing") version "0.1.+" apply false
+    id("com.diffplug.spotless") version "6.4.1" apply false
 }
 
-val mcVersion = property("minecraft_version").toString()
-val modId = property("mod_id").toString()
+val modId: String by project
+val minecraftVersion: String by project
+val javaVersion: String by project
 
 val platforms by extra {
-    listOf("fabric", "forge")
+    property("enabledPlatforms").toString().split(',')
 }
 
 tasks {
@@ -51,18 +58,18 @@ subprojects {
     apply(plugin = "com.diffplug.spotless")
 
     base.archivesName.set("$modId-${project.name}")
-    version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$mcVersion"
-    group = "${property("maven_group")}.$modId"
+    version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$minecraftVersion"
+    group = "${property("mavenGroup")}.$modId"
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.valueOf("VERSION_$javaVersion")
+        targetCompatibility = JavaVersion.valueOf("VERSION_$javaVersion")
 
         withSourcesJar()
     }
 
-    architectury {
-        minecraft = mcVersion
+    configure<ArchitectPluginExtension> {
+        minecraft = minecraftVersion
         injectInjectables = false
     }
 
@@ -107,7 +114,7 @@ subprojects {
     }
 
     dependencies {
-        "minecraft"("com.mojang:minecraft:$mcVersion")
+        "minecraft"("com.mojang:minecraft:$minecraftVersion")
         "mappings"(project.extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
     }
 
@@ -132,11 +139,11 @@ subprojects {
 
         withType<JavaCompile> {
             options.encoding = "UTF-8"
-            options.release.set(17)
+            options.release.set(javaVersion.toInt())
         }
     }
 
-    spotless {
+    configure<SpotlessExtension> {
         java {
             target("src/**/java/**/*.java")
             endWithNewline()
@@ -169,7 +176,10 @@ subprojects {
     publishing {
         publications {
             create<MavenPublication>("maven${project.name.capitalize()}") {
-                artifactId = "$modId-${project.name}"
+                groupId = project.group.toString()
+                artifactId = project.base.archivesName.get()
+                version = project.version.toString()
+
                 from(components["java"])
             }
         }
@@ -186,7 +196,7 @@ for (platform in platforms) {
         apply(plugin = "com.github.johnrengelman.shadow")
         apply(plugin = "me.shedaniel.unified-publishing")
 
-        architectury {
+        configure<ArchitectPluginExtension> {
             platformSetupLoomIde()
             loader(platform)
         }
@@ -207,32 +217,24 @@ for (platform in platforms) {
 
         tasks {
             processResources {
-                inputs.property("version", project.version)
-
-                val conventionTags = ObjectMapper().readValue(file("convention_tags.json"), object: TypeReference<Map<String, String>>() {})
-
-                for (key in conventionTags.keys) {
-                    inputs.property(key, conventionTags[key])
-                }
-
-                filesMatching(listOf("fabric.mod.json", "META-INF/mods.toml")) {
-                    expand("version" to project.version)
-                }
+                extra["commonProps"] = mapOf("version" to project.version) + project.properties
 
                 from(fileTree(project(":common").file("src/generated/resources"))) {
+                    val conventionTags = ObjectMapper().readValue(file("convention_tags.json"), object: TypeReference<Map<String, String>>() {})
                     expand(conventionTags)
                     exclude("**/.cache")
                 }
             }
 
-            shadowJar {
+            withType<ShadowJar> {
                 exclude("architectury.common.json")
                 configurations = listOf(shadowCommon)
                 archiveClassifier.set("dev-shadow")
             }
 
             withType<RemapJarTask> {
-                inputFile.set(shadowJar.get().archiveFile)
+                val shadowJar: ShadowJar by project.tasks
+                inputFile.set(shadowJar.archiveFile)
                 dependsOn(shadowJar)
                 archiveClassifier.set(null as String?)
             }
@@ -254,11 +256,11 @@ for (platform in platforms) {
         }
 
         if (project.version != "0.0.0") {
-            unifiedPublishing {
+            configure<UnifiedPublishingExtension> {
                 project {
                     val modVersion = project.version.toString()
 
-                    gameVersions.set(listOf(mcVersion))
+                    gameVersions.set(listOf(minecraftVersion))
                     gameLoaders.set(listOf(platform))
                     version.set("$platform-$modVersion")
 
@@ -278,7 +280,7 @@ for (platform in platforms) {
                     displayName.set(String.format("%s (%s %s)",
                             modVersion.substring(0, modVersion.lastIndexOf("-")),
                             platform.capitalize(),
-                            mcVersion))
+                            minecraftVersion))
 
                     mainPublication(project.tasks.getByName("remapJar"))
 

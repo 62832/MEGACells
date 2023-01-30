@@ -7,7 +7,7 @@ loom {
     }
 
     forge {
-        val modId = property("mod_id").toString()
+        val modId: String by project
 
         dataGen {
             mod(modId)
@@ -65,31 +65,37 @@ repositories {
     }
 }
 
-dependencies {
-    val mcVersion = property("minecraft_version").toString()
+val forgeVersion: String by project
+val ae2Version: String by project
 
-    forge("net.minecraftforge:forge:$mcVersion-${property("forge_version")}")
+dependencies {
+    val minecraftVersion: String by project
+
+    forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
-    modImplementation("appeng:appliedenergistics2-forge:${property("ae2_version")}")
-    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wt_fileid")}")
-    modImplementation("curse.maven:appmek-574300:${property("appmek_fileid")}")
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbot_fileid")}")
+    modImplementation("appeng:appliedenergistics2-forge:$ae2Version")
+    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
+    modImplementation("curse.maven:appmek-574300:${property("appmekFile")}")
+    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}")
 
-    val mekVersion = property("mekanism_version").toString()
-    modCompileOnly("mekanism:Mekanism:$mcVersion-$mekVersion")
-    modCompileOnly("mekanism:Mekanism:$mcVersion-$mekVersion:generators")
-    modRuntimeOnly("mekanism:Mekanism:$mcVersion-$mekVersion:all")
+    val mekanismVersion: String by project
+    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion")
+    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:generators")
+    modRuntimeOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:all")
 
-    modRuntimeOnly("vazkii.botania:Botania:$mcVersion-${property("botania_version")}-FORGE")
-    modRuntimeOnly("vazkii.patchouli:Patchouli:$mcVersion-${property("patchouli_version")}")
+    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FORGE")
+    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraftVersion-${property("patchouliVersion")}")
 
-    modRuntimeOnly("dev.architectury:architectury-forge:${property("architectury_version")}")
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${property("cloth_version")}")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:$mcVersion-${property("curios_version")}")
+    modRuntimeOnly("dev.architectury:architectury-forge:${property("architecturyVersion")}")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${property("clothVersion")}")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:$minecraftVersion-${property("curiosVersion")}")
 
-    modRuntimeOnly("mezz.jei:jei-$mcVersion-forge:${property("jei_version")}") { isTransitive = false }
-    modRuntimeOnly("curse.maven:jade-324717:${property("jade_fileid")}")
+    modRuntimeOnly("mezz.jei:jei-$minecraftVersion-forge:${property("jeiVersion")}") {
+        isTransitive = false
+    }
+
+    modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
 }
 
 sourceSets {
@@ -97,5 +103,15 @@ sourceSets {
         resources {
             exclude("**/.cache")
         }
+    }
+}
+
+tasks.processResources {
+    filesMatching("META-INF/mods.toml") {
+        val commonProps: Map<String, *> by extra
+        expand(commonProps + mapOf(
+                "loaderVersion" to forgeVersion.substringBefore('.'),
+                "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
+        ))
     }
 }

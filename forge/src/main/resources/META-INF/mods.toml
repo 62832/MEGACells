@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[$loaderVersion,)"
 license = "LGPLv3.0"
 
 issueTrackerURL = "https://github.com/62832/MEGACells/issues"
@@ -7,21 +7,19 @@ displayURL = "https://github.com/62832/MEGACells"
 
 [[mods]]
 modId = "megacells"
-version = "${version}"
+version = "$version"
 displayName = "MEGA Cells"
 logoFile = "logo.png"
 credits = "s/o to the AE2 dev team and the AE2 Discord server for making this all possible."
 authors = "90"
-description = '''
-ME Greater Accumulation Cells - For when kilobytes just won't do.
-'''
+description = "ME Greater Accumulation Cells - For when kilobytes just won't do."
 
 [[dependencies.megacells]]
-    modId="ae2"
-    mandatory=true
-    versionRange = "[12.9.2,13.0.0)"
-    ordering="AFTER"
-    side="BOTH"
+    modId = "ae2"
+    mandatory = true
+    versionRange = "[$ae2Version,$ae2VersionEnd)"
+    ordering = "AFTER"
+    side=  "BOTH"
 
 [[dependencies.megacells]]
     modId = "appmek"
@@ -33,27 +31,27 @@ ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId = "ae2wtlib"
     mandatory = false
-    versionRange = "[12.8.4,13.0.0)"
+    versionRange = "[$ae2wtVersion,)"
     ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.megacells]]
     modId="appbot"
     mandatory=false
-    versionRange = "[1.4.1,)"
+    versionRange = "[$appbotVersion,)"
     ordering = "AFTER"
     side = "BOTH"
 
 [[dependencies.megacells]]
     modId = "forge"
     mandatory = true
-    versionRange = "[43,)"
+    versionRange = "[$loaderVersion,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.megacells]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19.2,1.20)"
+    versionRange = "[$minecraftVersion]"
     ordering = "NONE"
     side = "BOTH"

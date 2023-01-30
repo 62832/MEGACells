@@ -8,7 +8,10 @@ pluginManagement {
 }
 
 include("common")
-include("fabric")
-include("forge")
 
-rootProject.name = "MEGACells"
+for (platform in providers.gradleProperty("enabledPlatforms").get().split(',')) {
+    include(platform)
+}
+
+val modName: String by settings
+rootProject.name = modName

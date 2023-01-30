@@ -11,7 +11,7 @@ loom {
             })
 
             property("fabric-api.datagen")
-            property("fabric-api.datagen.modid", rootProject.property("mod_id").toString())
+            property("fabric-api.datagen.modid", rootProject.property("modId").toString())
             property("fabric-api.datagen.output-dir", project(":common").file("src/generated/resources").absolutePath)
             property("fabric-api.datagen.strict-validation")
         }
@@ -80,27 +80,38 @@ repositories {
 }
 
 dependencies {
-    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}+${property("minecraft_version")}")
+    val minecraftVersion: String by project
 
-    modImplementation("appeng:appliedenergistics2-fabric:${property("ae2_version")}")
-    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wt_fileid")}")
+    modImplementation("net.fabricmc:fabric-loader:${property("fabricLoaderVersion")}")
+    modApi("net.fabricmc.fabric-api:fabric-api:${property("fabricApiVersion")}+$minecraftVersion")
 
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbot_fileid")}") {
+    modImplementation("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
+    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
+
+    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
         exclude(group = "dev.emi", module = "emi")
     }
 
-    modRuntimeOnly("vazkii.botania:Botania:${property("minecraft_version")}-${property("botania_version")}-FABRIC") {
+    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FABRIC") {
         exclude(group = "dev.emi", module = "emi")
     }
 
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${property("cloth_version")}")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${property("clothVersion")}")
 
-    modRuntimeOnly("com.terraformersmc:modmenu:${property("mod_menu_version")}")
-    modRuntimeOnly("mezz.jei:jei-${property("minecraft_version")}-fabric:${property("jei_version")}")
-    modRuntimeOnly("curse.maven:jade-324717:${property("jade_fileid")}")
+    modRuntimeOnly("com.terraformersmc:modmenu:${property("modMenuVersion")}")
+    modRuntimeOnly("mezz.jei:jei-$minecraftVersion-fabric:${property("jeiVersion")}")
+    modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
 }
 
-tasks.remapJar {
-    injectAccessWidener.set(true)
+tasks {
+    processResources {
+        filesMatching("fabric.mod.json") {
+            val commonProps: Map<String, *> by extra
+            expand(commonProps)
+        }
+    }
+
+    remapJar {
+        injectAccessWidener.set(true)
+    }
 }

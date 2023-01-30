@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "megacells",
-  "version": "${version}",
+  "version": "$version",
 
   "name": "MEGA Cells",
   "description": "ME Greater Accumulation Cells - For when kilobytes just won't do.",
@@ -24,14 +24,12 @@
   "mixins": ["megacells.mixins.json"],
 
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "fabric-api": "*",
-    "minecraft": "~1.19",
-    "java": ">=17",
-    "ae2": ">=12.9.2"
+    "minecraft": "$minecraftVersion",
+    "java": ">=$javaVersion",
+    "ae2": ">=$ae2Version"
   },
   "suggests": {
-    "ae2wtlib": ">=12.8.4",
-    "appbot": ">=1.4.1"
+    "ae2wtlib": ">=$ae2wtVersion",
+    "appbot": ">=$appbotVersion"
   }
 }

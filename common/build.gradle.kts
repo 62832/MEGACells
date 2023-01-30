@@ -5,11 +5,11 @@ architectury {
 }
 
 dependencies {
-    modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
-    modCompileOnly("appeng:appliedenergistics2-fabric:${property("ae2_version")}")
-    modCompileOnly("curse.maven:ae2wtlib-459929:${project(":fabric").dependencyProject.property("ae2wt_fileid")}")
-    modCompileOnly("curse.maven:applied-botanics-addon-610632:${project(":fabric").dependencyProject.property("appbot_fileid")}")
+    modCompileOnly("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
+    modCompileOnly("curse.maven:ae2wtlib-459929:${project(":fabric").dependencyProject.property("ae2wtFile")}")
+    modCompileOnly("curse.maven:applied-botanics-addon-610632:${project(":fabric").dependencyProject.property("appbotFile")}")
 }
 
 sourceSets {
