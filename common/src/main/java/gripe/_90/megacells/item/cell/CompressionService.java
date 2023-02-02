@@ -13,10 +13,10 @@ import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import appeng.api.stacks.AEItemKey;
-import appeng.core.AppEng;
 
 public class CompressionService {
     public static final CompressionService INSTANCE = new CompressionService();
@@ -45,15 +45,12 @@ public class CompressionService {
         }).orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public void load() {
+    public void loadRecipes(RecipeManager recipeManager) {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
         // Retrieve all available "compression" and "decompression" recipes on the current server (if running)
-        var server = AppEng.instance().getCurrentServer();
-        var allRecipes = server != null
-                ? server.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)
-                : new ObjectArrayList<CraftingRecipe>();
+        var allRecipes = recipeManager.getAllRecipesFor(RecipeType.CRAFTING);
         var candidates = Stream.concat(
                 allRecipes.stream().filter(this::isCompressionRecipe),
                 allRecipes.stream().filter(this::isDecompressionRecipe)).toList();
@@ -96,7 +93,7 @@ public class CompressionService {
         var decompressed = validRecipes.stream().filter(this::isDecompressionRecipe).toList();
 
         // Pull all available compression chains from the recipe shortlist and add these to the handler cache
-        compressed.forEach(recipe -> {
+        for (var recipe : compressed) {
             var baseVariant = recipe.getResultItem().getItem();
 
             if (compressionChains.stream().noneMatch(chain -> chain.containsKey(AEItemKey.of(baseVariant)))) {
@@ -129,7 +126,7 @@ public class CompressionService {
 
                 compressionChains.add(fullChain);
             }
-        });
+        }
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe) {

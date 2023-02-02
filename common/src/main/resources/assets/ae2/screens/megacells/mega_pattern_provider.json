@@ -1,5 +1,5 @@
 {
-  "$schema": "schema.json",
+  "$schema": "../schema.json",
   "includes": ["../common/common.json", "../common/player_inventory.json"],
   "background": {
     "texture": "guis/megacells/mega_pattern_provider.png",

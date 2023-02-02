@@ -11,12 +11,3 @@ dependencies {
     modCompileOnly("curse.maven:ae2wtlib-459929:${project(":fabric").dependencyProject.property("ae2wtFile")}")
     modCompileOnly("curse.maven:applied-botanics-addon-610632:${project(":fabric").dependencyProject.property("appbotFile")}")
 }
-
-sourceSets {
-    main {
-        resources {
-            srcDir("src/generated/resources")
-            exclude("**/.cache")
-        }
-    }
-}

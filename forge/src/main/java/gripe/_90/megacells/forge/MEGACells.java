@@ -91,7 +91,9 @@ public class MEGACells {
     }
 
     private void initCompression() {
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE.load());
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.load());
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE
+                .loadRecipes(event.getServer().getRecipeManager()));
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE
+                .loadRecipes(event.getServerResources().getRecipeManager()));
     }
 }

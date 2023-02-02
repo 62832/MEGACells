@@ -281,9 +281,9 @@ class RecipeProvider extends FabricRecipeProvider {
         @NotNull
         @Override
         public JsonObject serialize() {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("tag", "$" + placeholder);
-            return jsonObject;
+            var tag = new JsonObject();
+            tag.addProperty("tag", "$" + placeholder);
+            return tag;
         }
     }
 }
