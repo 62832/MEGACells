@@ -5,7 +5,10 @@ import static gripe._90.megacells.definition.MEGAItems.COMPRESSION_CARD;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Function;
 
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
@@ -24,6 +27,7 @@ import appeng.api.storage.cells.StorageCell;
 import appeng.util.prioritylist.IPartitionList;
 
 import gripe._90.megacells.item.MEGABulkCell;
+import gripe._90.megacells.service.CompressionService;
 
 public class BulkCellInventory implements StorageCell {
     private static final String KEY = "key";
@@ -40,7 +44,7 @@ public class BulkCellInventory implements StorageCell {
     private final Object2IntMap<AEItemKey> decompressed;
     private BigInteger unitCount;
     private final long unitFactor;
-    protected final boolean compressionEnabled;
+    public final boolean compressionEnabled;
 
     private boolean isPersisted = true;
 
@@ -95,15 +99,15 @@ public class BulkCellInventory implements StorageCell {
         return CellState.NOT_EMPTY;
     }
 
-    protected AEKey getStoredItem() {
+    public AEItemKey getStoredItem() {
         return storedItem;
     }
 
-    protected long getStoredQuantity() {
+    public long getStoredQuantity() {
         return clampedLong(unitCount.divide(BigInteger.valueOf(unitFactor)), Long.MAX_VALUE);
     }
 
-    protected AEKey getFilterItem() {
+    public AEItemKey getFilterItem() {
         return filterItem;
     }
 
@@ -178,34 +182,32 @@ public class BulkCellInventory implements StorageCell {
 
     private BigInteger compressedTransferFactor(AEItemKey what) {
         if (compressed.getInt(what) > 0) {
-            var variantKeys = new LinkedList<>(compressed.keySet());
-            var toDecompress = new Object2IntLinkedOpenHashMap<>(compressed);
-            toDecompress.keySet().retainAll(variantKeys.subList(0, variantKeys.indexOf(what) + 1));
-
-            var factor = unitFactor;
-            for (var i : toDecompress.values()) {
-                factor *= i;
-            }
-
-            return BigInteger.valueOf(factor);
+            return compressedTransferFactor(compressed, unitFactor, keys -> Pair.of(0, keys.indexOf(what) + 1));
         } else if (decompressed.getInt(what) > 0) {
-            var variantKeys = new LinkedList<>(decompressed.keySet());
-            var toCompress = new Object2IntLinkedOpenHashMap<>(decompressed);
-            toCompress.keySet().retainAll(variantKeys.subList(variantKeys.indexOf(what) + 1, variantKeys.size()));
-
-            var factor = 1L;
-            for (var i : toCompress.values()) {
-                factor *= i;
-            }
-
-            return BigInteger.valueOf(factor);
+            return compressedTransferFactor(decompressed, 1, keys -> Pair.of(keys.indexOf(what) + 1, keys.size()));
         } else {
             return BigInteger.valueOf(unitFactor);
         }
     }
 
+    private BigInteger compressedTransferFactor(Object2IntMap<AEItemKey> variants, long baseFactor,
+            Function<List<?>, Pair<Integer, Integer>> subLister) {
+        var variantKeys = new LinkedList<>(variants.keySet());
+        var toStored = new Object2IntLinkedOpenHashMap<>(variants);
+
+        var range = subLister.apply(variantKeys);
+        toStored.keySet().retainAll(variantKeys.subList(range.first(), range.second()));
+
+        for (var i : toStored.values()) {
+            baseFactor *= i;
+        }
+
+        return BigInteger.valueOf(baseFactor);
+    }
+
     private void saveChanges() {
         isPersisted = false;
+
         if (container != null) {
             container.saveChanges();
         } else {
@@ -277,11 +279,8 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
-        if (!(what instanceof AEItemKey item)) {
-            return false;
-        }
-
-        return partitionList.isListed(item) || compressed.containsKey(item) || decompressed.containsKey(item);
+        return what instanceof AEItemKey item
+                && (partitionList.isListed(item) || compressed.containsKey(item) || decompressed.containsKey(item));
     }
 
     @Override

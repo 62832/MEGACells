@@ -13,8 +13,8 @@ import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.item.cell.CompressionService;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
+import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.util.Utils;
 
 public class MEGACells implements IAEAddonEntrypoint {

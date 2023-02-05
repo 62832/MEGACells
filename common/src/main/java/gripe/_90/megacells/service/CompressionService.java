@@ -1,7 +1,8 @@
-package gripe._90.megacells.item.cell;
+package gripe._90.megacells.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -26,11 +27,12 @@ public class CompressionService {
     private CompressionService() {
     }
 
-    public Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
-        // Retrieve the (optional) variant chain containing the given item key
-        var variantChain = compressionChains.stream().filter(chain -> chain.containsKey(key)).findFirst();
+    public Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
+        return compressionChains.stream().filter(chain -> chain.containsKey(key)).findFirst();
+    }
 
-        return variantChain.map(chain -> {
+    public Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
+        return getChain(key).map(chain -> {
             var keys = new ObjectArrayList<>(chain.keySet());
 
             // Reverse ordering when going from provided storage/filter variant to least-compressed "base unit"
@@ -109,6 +111,10 @@ public class CompressionService {
                 for (var higherVariant = getSubsequentVariant(baseVariant, compressed); higherVariant != null;) {
                     compressionChain.put(AEItemKey.of(higherVariant.first()), (int) higherVariant.second());
                     higherVariant = getSubsequentVariant(higherVariant.first(), compressed);
+                }
+
+                if (compressionChain.isEmpty() && decompressionChain.isEmpty()) {
+                    continue;
                 }
 
                 // Collate decompression and compression chains together with base variant

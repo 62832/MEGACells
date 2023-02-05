@@ -86,7 +86,7 @@ dependencies {
     modApi("net.fabricmc.fabric-api:fabric-api:${property("fabricApiVersion")}+$minecraftVersion")
 
     modImplementation("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
-    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
+    // modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
 
     modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
         exclude(group = "dev.emi", module = "emi")

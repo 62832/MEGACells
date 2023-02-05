@@ -23,8 +23,8 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.item.cell.CompressionService;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
+import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.util.Utils;
 
 @Mod(Utils.MODID)
