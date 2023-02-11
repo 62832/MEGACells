@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -15,10 +16,14 @@ import appeng.core.localization.Tooltips;
 import appeng.helpers.iface.PatternProviderLogic;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModels;
+import appeng.menu.ISubMenu;
+import appeng.menu.MenuOpener;
+import appeng.menu.locator.MenuLocator;
 import appeng.parts.PartModel;
 import appeng.parts.crafting.PatternProviderPart;
 
 import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
@@ -42,6 +47,16 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
     @Override
     public PatternProviderLogic createLogic() {
         return new PatternProviderLogic(this.getMainNode(), this, 18);
+    }
+
+    @Override
+    public void openMenu(Player player, MenuLocator locator) {
+        MenuOpener.open(MEGAPatternProviderMenu.TYPE, player, locator);
+    }
+
+    @Override
+    public void returnToMainMenu(Player player, ISubMenu subMenu) {
+        MenuOpener.returnTo(MEGAPatternProviderMenu.TYPE, player, subMenu.getLocator());
     }
 
     @Override
