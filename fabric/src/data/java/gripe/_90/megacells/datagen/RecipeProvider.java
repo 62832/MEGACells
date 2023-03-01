@@ -107,7 +107,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .pattern("aba")
                 .pattern("cdc")
                 .pattern("aba")
-                .define('a', Items.IRON_INGOT)
+                .define('a', AEBlocks.CRAFTING_UNIT)
                 .define('b', AEItems.LOGIC_PROCESSOR)
                 .define('c', AEParts.SMART_CABLE.item(AEColor.TRANSPARENT))
                 .define('d', AEItems.ENGINEERING_PROCESSOR)
