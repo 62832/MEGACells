@@ -15,6 +15,7 @@ public enum MEGATranslations implements LocalizationEnum {
     FilterChemicalUnsupported("Filter chemical unsupported!", Type.TOOLTIP),
     MismatchedFilter("Mismatched filter!", Type.TOOLTIP),
     PartitionedFor("Partitioned for: %s", Type.TOOLTIP),
+    ProcessingOnly("Supports processing patterns only.", Type.TOOLTIP),
     Quantity("Quantity: %s", Type.TOOLTIP),
     NotPartitioned("Not Partitioned", Type.TOOLTIP);
 

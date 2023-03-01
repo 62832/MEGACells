@@ -22,11 +22,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import appeng.api.util.IOrientable;
 import appeng.block.AEBaseBlockItem;
 import appeng.block.AEBaseEntityBlock;
-import appeng.core.localization.Tooltips;
 import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
 
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
+import gripe._90.megacells.definition.MEGATranslations;
 
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
     public static final BooleanProperty OMNIDIRECTIONAL = BooleanProperty.create("omnidirectional");
@@ -96,7 +96,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
 
         @Override
         public void addCheckedInformation(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Tooltips.of("Supports processing patterns only."));
+            tooltip.add(MEGATranslations.ProcessingOnly.text());
         }
     }
 }
