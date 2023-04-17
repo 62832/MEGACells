@@ -93,9 +93,11 @@ public class BulkCellInventory implements StorageCell {
         if (unitCount.signum() == 0) {
             return CellState.EMPTY;
         }
+
         if (!storedItem.equals(filterItem)) {
             return CellState.FULL;
         }
+
         return CellState.NOT_EMPTY;
     }
 
@@ -155,7 +157,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !storedItem.equals(what)
+        if (compressionEnabled && !storedItem.equals(what) && !filterItem.equals(what)
                 && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
             return 0;
         }

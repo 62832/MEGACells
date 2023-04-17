@@ -66,7 +66,11 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
                     }
                 }
             } else {
-                lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
+                if (storedItem != null) {
+                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
+                } else {
+                    lines.add(MEGATranslations.NotPartitioned.text());
+                }
             }
 
             lines.add(Tooltips.of(MEGATranslations.Compression.text(inv.compressionEnabled
