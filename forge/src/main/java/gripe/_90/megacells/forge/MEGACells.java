@@ -12,9 +12,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
+import appeng.api.crafting.PatternDetailsHelper;
+import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
+import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -25,6 +28,7 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.service.CompressionService;
+import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Utils;
 
 @Mod(Utils.MODID)
@@ -95,5 +99,8 @@ public class MEGACells {
                 .loadRecipes(event.getServer().getRecipeManager()));
         MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE
                 .loadRecipes(event.getServerResources().getRecipeManager()));
+
+        GridServices.register(DecompressionService.class, DecompressionService.class);
+        PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);
     }
 }
