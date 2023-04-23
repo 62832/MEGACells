@@ -23,7 +23,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.MEGABulkCell;
 
 public class DecompressionService implements IGridService, IGridServiceProvider {
-
     private final Set<Object2IntMap<AEItemKey>> decompressionChains = new ObjectLinkedOpenHashSet<>();
     private final List<ChestBlockEntity> chests = new ObjectArrayList<>();
     private final List<DriveBlockEntity> drives = new ObjectArrayList<>();
@@ -97,7 +96,11 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         decompressionChains.remove(getChain(cell));
     }
 
-    private Set<AEItemKey> getDecompressionPatterns(Object2IntMap<AEItemKey> compressionChain) {
+    public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {
+        return decompressionChains;
+    }
+
+    public Set<AEItemKey> getDecompressionPatterns(Object2IntMap<AEItemKey> compressionChain) {
         var variants = new ObjectArrayList<>(compressionChain.keySet());
         var patterns = new ObjectLinkedOpenHashSet<AEItemKey>();
 
