@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.IAEAddonEntrypoint;
@@ -70,14 +69,14 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
         ModelsReloadCallback.EVENT.register(modelRegistry -> {
-            var customizers = new HashMap<ResourceLocation, Function<BakedModel, BakedModel>>();
-            customizers.put(MEGABlocks.CRAFTING_MONITOR.id(), model -> model instanceof MonitorBakedModel
+            var customizers = new HashMap<String, Function<BakedModel, BakedModel>>();
+            customizers.put(MEGABlocks.CRAFTING_MONITOR.id().getPath(), model -> model instanceof MonitorBakedModel
                     ? model
                     : new AutoRotatingBakedModel(model));
 
             for (var block : MEGABlocks.getBlocks()) {
                 if (!(block.block() instanceof CraftingUnitBlock)) {
-                    customizers.put(block.id(), AutoRotatingBakedModel::new);
+                    customizers.put(block.id().getPath(), AutoRotatingBakedModel::new);
                 }
             }
 
@@ -87,14 +86,11 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
                 }
 
                 var originalModel = modelRegistry.get(location);
-                var customizer = customizers.get(location);
+                var customizer = customizers.get(location.getPath());
 
                 if (customizer != null) {
                     var newModel = customizer.apply(originalModel);
-
-                    if (newModel != originalModel) {
-                        modelRegistry.put(location, newModel);
-                    }
+                    modelRegistry.put(location, newModel);
                 }
             }
         });
