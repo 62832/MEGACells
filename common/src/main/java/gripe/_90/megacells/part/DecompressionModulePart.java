@@ -52,7 +52,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     public DecompressionModulePart(IPartItem<?> partItem) {
         super(partItem);
         getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL)
-                .addService(IGridTickable.class, new Ticker())
+                .addService(IGridTickable.class, new OutputInjector())
+                .addService(IGridTickable.class, new PatternUpdater())
                 .addService(ICraftingProvider.class, this);
     }
 
@@ -87,7 +88,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
         }
 
         var output = patternDetails.getPrimaryOutput();
-        outputs.merge(output.what(), 1L, Long::sum);
+        outputs.mergeLong(output.what(), 1L, Long::sum);
         return true;
     }
 
@@ -144,10 +145,10 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
         }
     }
 
-    private class Ticker implements IGridTickable {
+    private class OutputInjector implements IGridTickable {
         @Override
         public TickingRequest getTickingRequest(IGridNode node) {
-            return new TickingRequest(TickRates.Interface, !outputs.isEmpty(), true);
+            return new TickingRequest(TickRates.Interface, outputs.isEmpty(), true);
         }
 
         @Override
@@ -160,6 +161,19 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
                     ? TickRateModulation.URGENT
                     : TickRateModulation.SLOWER
                     : TickRateModulation.SLEEP;
+        }
+    }
+    
+    private class PatternUpdater implements IGridTickable {
+        @Override
+        public TickingRequest getTickingRequest(IGridNode node) {
+            return new TickingRequest(1, 1, false, false);
+        }
+
+        @Override
+        public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
+            ICraftingProvider.requestUpdate(getMainNode());
+            return TickRateModulation.URGENT;
         }
     }
 }

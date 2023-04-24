@@ -102,7 +102,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     private StorageCell getCellByChest(ChestBlockEntity chest) {
         var monitor = CHEST_MONITOR_HANDLE.get(chest);
-        return (StorageCell) CHEST_CELL_HANDLE.get(monitor);
+        return monitor != null ? (StorageCell) CHEST_CELL_HANDLE.get(monitor) : null;
     }
 
     private StorageCell getCellByDriveSlot(DriveBlockEntity drive, int slot) throws Throwable {
