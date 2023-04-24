@@ -1,5 +1,9 @@
 package gripe._90.megacells.service;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.VarHandle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -15,14 +19,42 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
 import appeng.api.stacks.AEItemKey;
+import appeng.api.storage.MEStorage;
+import appeng.api.storage.cells.StorageCell;
 import appeng.blockentity.storage.ChestBlockEntity;
 import appeng.blockentity.storage.DriveBlockEntity;
+import appeng.me.storage.DelegatingMEInventory;
+import appeng.me.storage.DriveWatcher;
 
 import gripe._90.megacells.crafting.DecompressionPatternEncoding;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.item.MEGABulkCell;
+import gripe._90.megacells.item.cell.BulkCellInventory;
 
 public class DecompressionService implements IGridService, IGridServiceProvider {
+    private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
+    private static final Class<?> CHEST_MONITOR_CLASS;
+    private static final VarHandle CHEST_MONITOR_HANDLE;
+    private static final VarHandle CHEST_CELL_HANDLE;
+    private static final MethodHandle DRIVE_DELEGATE_HANDLE;
+    private static final VarHandle DRIVE_WATCHERS_HANDLE;
+
+    static {
+        try {
+            CHEST_MONITOR_CLASS = Class.forName("appeng.blockentity.storage.ChestBlockEntity$ChestMonitorHandler");
+            CHEST_MONITOR_HANDLE = MethodHandles.privateLookupIn(ChestBlockEntity.class, LOOKUP)
+                    .findVarHandle(ChestBlockEntity.class, "cellHandler", CHEST_MONITOR_CLASS);
+            CHEST_CELL_HANDLE = MethodHandles.privateLookupIn(CHEST_MONITOR_CLASS, LOOKUP)
+                    .findVarHandle(CHEST_MONITOR_CLASS, "cellInventory", StorageCell.class);
+
+            DRIVE_WATCHERS_HANDLE = MethodHandles.privateLookupIn(DriveBlockEntity.class, LOOKUP)
+                    .findVarHandle(DriveBlockEntity.class, "invBySlot", DriveWatcher[].class);
+            DRIVE_DELEGATE_HANDLE = MethodHandles.privateLookupIn(DelegatingMEInventory.class, LOOKUP)
+                    .findVirtual(DelegatingMEInventory.class, "getDelegate", MethodType.methodType(MEStorage.class));
+        } catch (NoSuchFieldException | NoSuchMethodException | ClassNotFoundException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to create DecompressionService method handles", e);
+        }
+    }
+
     private final Set<Object2IntMap<AEItemKey>> decompressionChains = new ObjectLinkedOpenHashSet<>();
     private final List<ChestBlockEntity> chests = new ObjectArrayList<>();
     private final List<DriveBlockEntity> drives = new ObjectArrayList<>();
@@ -39,39 +71,48 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
     }
 
     @Override
-    public void onServerStartTick() {
-        for (var chest : chests) {
-            addChain(chest.getCell());
-        }
-
-        for (var drive : drives) {
-            for (var cell : drive.getInternalInventory()) {
-                addChain(cell);
-            }
-        }
-    }
-
-    @Override
     public void removeNode(IGridNode node) {
         if (node.getOwner()instanceof ChestBlockEntity chest) {
-            removeChain(chest.getCell());
             chests.remove(chest);
         }
 
         if (node.getOwner()instanceof DriveBlockEntity drive) {
-            for (var cell : drive.getInternalInventory()) {
-                removeChain(cell);
-            }
-
             drives.remove(drive);
         }
     }
 
-    private Object2IntMap<AEItemKey> getChain(ItemStack cell) {
-        var cellInv = MEGABulkCell.HANDLER.getCellInventory(cell, null);
+    @Override
+    public void onServerStartTick() {
+        decompressionChains.clear();
 
-        if (cellInv != null && cellInv.compressionEnabled) {
-            return CompressionService.INSTANCE.getChain(cellInv.getStoredItem()).map(c -> {
+        try {
+            for (var chest : chests) {
+                addChain(getCellByChest(chest));
+            }
+
+            for (var drive : drives) {
+                for (int i = 0; i < drive.getCellCount(); i++) {
+                    addChain(getCellByDriveSlot(drive, i));
+                }
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to invoke DecompressionService method handles", e);
+        }
+    }
+
+    private StorageCell getCellByChest(ChestBlockEntity chest) {
+        var monitor = CHEST_MONITOR_HANDLE.get(chest);
+        return (StorageCell) CHEST_CELL_HANDLE.get(monitor);
+    }
+
+    private StorageCell getCellByDriveSlot(DriveBlockEntity drive, int slot) throws Throwable {
+        var watchers = (DriveWatcher[]) DRIVE_WATCHERS_HANDLE.get(drive);
+        return watchers[slot] != null ? (StorageCell) DRIVE_DELEGATE_HANDLE.invoke(watchers[slot]) : null;
+    }
+
+    private Object2IntMap<AEItemKey> getChain(BulkCellInventory cell) {
+        if (cell.compressionEnabled) {
+            return CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
                 var keys = new ObjectArrayList<>(c.keySet());
                 Collections.reverse(keys);
 
@@ -84,16 +125,16 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         return new Object2IntLinkedOpenHashMap<>();
     }
 
-    private void addChain(ItemStack cell) {
-        var chain = getChain(cell);
+    private void addChain(StorageCell cell) {
+        if (!(cell instanceof BulkCellInventory bulkCell)) {
+            return;
+        }
+
+        var chain = getChain(bulkCell);
 
         if (!chain.isEmpty()) {
             decompressionChains.add(chain);
         }
-    }
-
-    private void removeChain(ItemStack cell) {
-        decompressionChains.remove(getChain(cell));
     }
 
     public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {
