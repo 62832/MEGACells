@@ -88,7 +88,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
         }
 
         var output = patternDetails.getPrimaryOutput();
-        outputs.mergeLong(output.what(), 1L, Long::sum);
+        outputs.mergeLong(output.what(), output.amount(), Long::sum);
         return true;
     }
 
@@ -112,7 +112,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
                 if (inserted >= stack.getLongValue()) {
                     outputs.removeLong(stack.getKey());
                 } else {
-                    stack.setValue(stack.getLongValue() - inserted);
+                    outputs.put(stack.getKey(), stack.getLongValue() - inserted);
                 }
 
                 inserted = Math.max(0, sizeBefore - stack.getLongValue());
@@ -163,7 +163,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
                     : TickRateModulation.SLEEP;
         }
     }
-    
+
     private class PatternUpdater implements IGridTickable {
         @Override
         public TickingRequest getTickingRequest(IGridNode node) {

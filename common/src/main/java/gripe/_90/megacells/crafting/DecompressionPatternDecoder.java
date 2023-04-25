@@ -5,7 +5,8 @@ import net.minecraft.world.level.Level;
 
 import appeng.api.crafting.IPatternDetailsDecoder;
 import appeng.api.stacks.AEItemKey;
-import appeng.core.AELog;
+
+import gripe._90.megacells.util.Utils;
 
 public class DecompressionPatternDecoder implements IPatternDetailsDecoder {
     public static final DecompressionPatternDecoder INSTANCE = new DecompressionPatternDecoder();
@@ -20,14 +21,15 @@ public class DecompressionPatternDecoder implements IPatternDetailsDecoder {
 
     @Override
     public MEGADecompressionPattern decodePattern(AEItemKey what, Level level) {
-        if (level == null || !(what.getItem() instanceof MEGADecompressionPattern.Item) || !(what.hasTag())) {
+        if (level == null || what == null || !(what.getItem() instanceof MEGADecompressionPattern.Item)
+                || !(what.hasTag())) {
             return null;
         }
 
         try {
             return new MEGADecompressionPattern(what);
         } catch (Exception e) {
-            AELog.warn("Could not decode an invalid decompression pattern %s: %s", what.getTag(), e);
+            Utils.LOGGER.warn("Could not decode an invalid decompression pattern %s: %s".formatted(what.getTag(), e));
             return null;
         }
     }
