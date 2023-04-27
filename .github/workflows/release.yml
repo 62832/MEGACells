@@ -36,5 +36,4 @@ jobs:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
           CHANGELOG: ${{ github.event.release.body }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_API_KEY }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_API_KEY }}
         run: ./gradlew :fabric:publishUnified :forge:publishUnified --max-workers 1

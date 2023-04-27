@@ -18,7 +18,6 @@ plugins {
     `maven-publish`
     id("architectury-plugin") version "3.4-SNAPSHOT" apply false
     id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
-    id("io.github.juuxel.loom-quiltflower") version "1.7.1" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("me.shedaniel.unified-publishing") version "0.1.+" apply false
     id("com.diffplug.spotless") version "6.4.1" apply false
@@ -54,7 +53,6 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "architectury-plugin")
     apply(plugin = "dev.architectury.loom")
-    apply(plugin = "io.github.juuxel.loom-quiltflower")
     apply(plugin = "com.diffplug.spotless")
 
     base.archivesName.set("$modId-${project.name}")
@@ -287,41 +285,29 @@ for (platform in platforms) {
                     relations {
                         depends {
                             curseforge.set("applied-energistics-2")
-                            modrinth.set("ae2")
                         }
 
                         optional {
                             curseforge.set("applied-energistics-2-wireless-terminals")
-                            modrinth.set("applied-energistics-2-wireless-terminals")
                         }
 
                         optional {
                             curseforge.set("applied-botanics-addon")
-                            modrinth.set("applied-botanics")
                         }
 
                         if (platform == "forge") {
                             optional {
                                 curseforge.set("applied-mekanistics")
-                                modrinth.set("applied-mekanistics")
                             }
                         }
                     }
 
                     val cfToken = System.getenv("CURSEFORGE_TOKEN")
-                    val mrToken = System.getenv("MODRINTH_TOKEN")
 
                     if (cfToken != null) {
                         curseforge {
                             token.set(cfToken)
                             id.set("622112")
-                        }
-                    }
-
-                    if (mrToken != null) {
-                        modrinth {
-                            token.set(mrToken)
-                            id.set("7QZJE3uU")
                         }
                     }
                 }
