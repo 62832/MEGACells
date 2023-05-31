@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import appeng.api.IAEAddonEntrypoint;
 import appeng.core.AppEng;
 
+import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -13,7 +14,6 @@ import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.util.Utils;
 
@@ -54,7 +54,7 @@ public class MEGACells implements IAEAddonEntrypoint {
             Registry.register(Registry.BLOCK_ENTITY_TYPE, blockEntity.getKey(), blockEntity.getValue());
         }
 
-        Registry.register(Registry.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
+        Registry.register(Registry.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderBlock.MENU);
     }
 
     private void initCompression() {

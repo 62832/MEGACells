@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegisterEvent;
 
 import appeng.core.AppEng;
 
+import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -23,7 +24,6 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.util.Utils;
 
@@ -74,7 +74,7 @@ public class MEGACells {
 
         if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
             ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
-                    MEGAPatternProviderMenu.TYPE);
+                    MEGAPatternProviderBlock.MENU);
         }
     }
 
