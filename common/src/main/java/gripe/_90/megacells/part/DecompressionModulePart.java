@@ -2,20 +2,25 @@ package gripe._90.megacells.part;
 
 import java.util.List;
 
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import net.minecraft.resources.ResourceLocation;
 
+import appeng.api.config.Actionable;
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.crafting.ICraftingProvider;
+import appeng.api.networking.security.IActionSource;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
+import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
 import appeng.core.AppEng;
 import appeng.items.parts.PartModels;
@@ -23,9 +28,10 @@ import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
+import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.service.DecompressionService;
 
-public class DecompressionModulePart extends AEBasePart implements ICraftingProvider {
+public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
     public static final ResourceLocation MODEL_BASE = new ResourceLocation(AppEng.MOD_ID, "part/export_bus_base");
 
     @PartModels
@@ -41,11 +47,12 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
             new ResourceLocation(AppEng.MOD_ID, "part/export_bus_has_channel"));
 
     private final List<IPatternDetails> patterns = new ObjectArrayList<>();
+    private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();
 
     public DecompressionModulePart(IPartItem<?> partItem) {
         super(partItem);
         getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL)
-                .addService(IGridTickable.class, new PatternUpdater())
+                .addService(IGridTickable.class, this)
                 .addService(ICraftingProvider.class, this);
     }
 
@@ -61,12 +68,18 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public boolean pushPattern(IPatternDetails patternDetails, KeyCounter[] inputHolder) {
-        return false;
+        if (!getMainNode().isActive() || !(patternDetails instanceof MEGADecompressionPattern pattern)) {
+            return false;
+        }
+
+        var output = pattern.getPrimaryOutput();
+        outputs.mergeLong(output.what(), output.amount(), Long::sum);
+        return true;
     }
 
     @Override
     public boolean isBusy() {
-        return false;
+        return !outputs.isEmpty();
     }
 
     @Override
@@ -88,30 +101,44 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
         }
     }
 
-    private class PatternUpdater implements IGridTickable {
-        @Override
-        public TickingRequest getTickingRequest(IGridNode node) {
-            return new TickingRequest(1, 1, false, false);
-        }
+    @Override
+    public TickingRequest getTickingRequest(IGridNode node) {
+        return new TickingRequest(1, 1, false, false);
+    }
 
-        @Override
-        public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
-            patterns.clear();
-            var grid = getMainNode().getGrid();
+    @Override
+    public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
+        patterns.clear();
+        var grid = getMainNode().getGrid();
 
-            if (grid != null) {
-                var decompressionService = grid.getService(DecompressionService.class);
+        if (grid != null) {
+            var decompressionService = grid.getService(DecompressionService.class);
 
-                for (var chain : decompressionService.getDecompressionChains()) {
-                    var patternItems = decompressionService.getDecompressionPatterns(chain);
-                    var decodedPatterns = patternItems.stream()
-                            .map(p -> DecompressionPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
-                    patterns.addAll(decodedPatterns.toList());
+            for (var chain : decompressionService.getDecompressionChains()) {
+                var patternItems = decompressionService.getDecompressionPatterns(chain);
+                var decodedPatterns = patternItems.stream()
+                        .map(p -> DecompressionPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
+                patterns.addAll(decodedPatterns.toList());
+            }
+
+            var storage = grid.getStorageService();
+
+            for (var output : outputs.object2LongEntrySet()) {
+                var what = output.getKey();
+                var amount = output.getLongValue();
+                var inserted = storage.getInventory().insert(what, amount, Actionable.MODULATE,
+                        IActionSource.ofMachine(this));
+
+                if (inserted >= amount) {
+                    outputs.removeLong(what);
+                } else if (inserted > 0) {
+                    outputs.put(what, amount - inserted);
                 }
             }
 
             ICraftingProvider.requestUpdate(getMainNode());
-            return TickRateModulation.URGENT;
         }
+
+        return TickRateModulation.URGENT;
     }
 }
