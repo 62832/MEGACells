@@ -1,0 +1,55 @@
+{
+  "parent": "ae2:item/part_base",
+  "textures": {
+    "sides": "megacells:part/mega_monitor_sides",
+    "back": "megacells:part/mega_monitor_back",
+    "front": "megacells:part/decompression_module"
+  },
+  "elements": [
+    {
+      "from": [3, 3, 8],
+      "to": [13, 13, 9],
+      "faces": {
+        "north": {
+          "texture": "#front"
+        },
+        "south": {
+          "texture": "#back"
+        },
+        "east": {
+          "texture": "#sides"
+        },
+        "west": {
+          "texture": "#sides"
+        },
+        "up": {
+          "texture": "#sides"
+        },
+        "down": {
+          "texture": "#sides"
+        }
+      }
+    },
+    {
+      "from": [5, 5, 9],
+      "to": [11, 11, 10],
+      "faces": {
+        "east": {
+          "texture": "#sides"
+        },
+        "south": {
+          "texture": "#back"
+        },
+        "west": {
+          "texture": "#sides"
+        },
+        "up": {
+          "texture": "#sides"
+        },
+        "down": {
+          "texture": "#sides"
+        }
+      }
+    }
+  ]
+}

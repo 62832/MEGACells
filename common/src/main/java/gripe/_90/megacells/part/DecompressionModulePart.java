@@ -6,8 +6,6 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import net.minecraft.resources.ResourceLocation;
-
 import appeng.api.config.Actionable;
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.networking.GridFlags;
@@ -22,7 +20,6 @@ import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
-import appeng.core.AppEng;
 import appeng.items.parts.PartModels;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
@@ -30,21 +27,11 @@ import appeng.parts.PartModel;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.service.DecompressionService;
+import gripe._90.megacells.util.Utils;
 
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
-    public static final ResourceLocation MODEL_BASE = new ResourceLocation(AppEng.MOD_ID, "part/export_bus_base");
-
     @PartModels
-    public static final IPartModel MODELS_OFF = new PartModel(MODEL_BASE,
-            new ResourceLocation(AppEng.MOD_ID, "part/export_bus_off"));
-
-    @PartModels
-    public static final IPartModel MODELS_ON = new PartModel(MODEL_BASE,
-            new ResourceLocation(AppEng.MOD_ID, "part/export_bus_on"));
-
-    @PartModels
-    public static final IPartModel MODELS_HAS_CHANNEL = new PartModel(MODEL_BASE,
-            new ResourceLocation(AppEng.MOD_ID, "part/export_bus_has_channel"));
+    public static final IPartModel MODEL = new PartModel(Utils.makeId("part/decompression_module"));
 
     private final List<IPatternDetails> patterns = new ObjectArrayList<>();
     private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();
@@ -53,7 +40,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
         super(partItem);
         getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL)
                 .addService(IGridTickable.class, this)
-                .addService(ICraftingProvider.class, this);
+                .addService(ICraftingProvider.class, this)
+                .setIdlePowerUsage(10.0);
     }
 
     @Override
@@ -84,21 +72,13 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public void getBoxes(IPartCollisionHelper bch) {
-        bch.addBox(4, 4, 12, 12, 12, 14);
-        bch.addBox(5, 5, 14, 11, 11, 15);
-        bch.addBox(6, 6, 15, 10, 10, 16);
-        bch.addBox(6, 6, 11, 10, 10, 12);
+        bch.addBox(3, 3, 14, 13, 13, 16);
+        bch.addBox(5, 5, 13, 11, 11, 14);
     }
 
     @Override
     public IPartModel getStaticModels() {
-        if (this.isActive() && this.isPowered()) {
-            return MODELS_HAS_CHANNEL;
-        } else if (this.isPowered()) {
-            return MODELS_ON;
-        } else {
-            return MODELS_OFF;
-        }
+        return MODEL;
     }
 
     @Override
