@@ -72,8 +72,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public void getBoxes(IPartCollisionHelper bch) {
-        bch.addBox(3, 3, 14, 13, 13, 16);
-        bch.addBox(5, 5, 13, 11, 11, 14);
+        bch.addBox(3, 3, 12, 13, 13, 16);
+        bch.addBox(5, 5, 11, 11, 11, 12);
     }
 
     @Override
