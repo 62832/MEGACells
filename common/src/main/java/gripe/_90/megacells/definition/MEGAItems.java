@@ -18,6 +18,7 @@ import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
 
+import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.util.Utils;
@@ -81,6 +82,7 @@ public final class MEGAItems {
 
     public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD = item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
+    public static final ItemDefinition<MEGADecompressionPattern.Item> DECOMPRESSION_PATTERN = item("Decompression Pattern", "decompression_pattern", MEGADecompressionPattern.Item::new);
     // spotless:on
 
     public static List<ItemDefinition<?>> getItemCells() {

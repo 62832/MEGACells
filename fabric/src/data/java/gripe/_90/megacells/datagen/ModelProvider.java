@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.Block;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
+import appeng.core.definitions.AEItems;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -103,6 +104,9 @@ class ModelProvider extends FabricModelProvider {
 
         generator.generateFlatItem(MEGAItems.GREATER_ENERGY_CARD.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.COMPRESSION_CARD.asItem(), ModelTemplates.FLAT_ITEM);
+
+        generator.generateFlatItem(MEGAItems.DECOMPRESSION_PATTERN.asItem(), AEItems.CRAFTING_PATTERN.asItem(),
+                ModelTemplates.FLAT_ITEM);
 
         var cells = Stream.concat(
                 Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells(), AppBotItems.getCells())
