@@ -43,6 +43,7 @@ public class BulkCellInventory implements StorageCell {
     private final Object2IntMap<AEItemKey> compressed;
     private final Object2IntMap<AEItemKey> decompressed;
     private BigInteger unitCount;
+    private AEItemKey highestCompressed;
     private final long unitFactor;
     public final boolean compressionEnabled;
 
@@ -65,6 +66,7 @@ public class BulkCellInventory implements StorageCell {
 
         this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
         this.unitCount = retrieveUnitCount();
+        this.highestCompressed = storedItem;
 
         this.compressionEnabled = cell.getUpgrades(i).isInstalled(COMPRESSION_CARD);
     }
@@ -107,6 +109,10 @@ public class BulkCellInventory implements StorageCell {
 
     public long getStoredQuantity() {
         return clampedLong(unitCount.divide(BigInteger.valueOf(unitFactor)), Long.MAX_VALUE);
+    }
+
+    public AEItemKey getHighestCompressed() {
+        return highestCompressed;
     }
 
     public AEItemKey getFilterItem() {
@@ -270,6 +276,7 @@ public class BulkCellInventory implements StorageCell {
                         count = count.divide(compressionFactor);
                     } else {
                         out.add(variant, clampedLong(count, stackLimit));
+                        highestCompressed = variant;
                         break;
                     }
                 }

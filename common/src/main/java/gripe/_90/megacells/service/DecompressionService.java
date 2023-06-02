@@ -117,7 +117,11 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 Collections.reverse(keys);
 
                 var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                keys.forEach(k -> decompressed.put(k, c.getInt(k)));
+
+                for (var key : keys.subList(keys.indexOf(cell.getHighestCompressed()), keys.size())) {
+                    decompressed.put(key, c.getInt(key));
+                }
+
                 return decompressed;
             }).orElseGet(Object2IntLinkedOpenHashMap::new);
         }
