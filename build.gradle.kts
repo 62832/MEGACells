@@ -1,5 +1,4 @@
 import java.text.SimpleDateFormat
-import java.util.Date
 
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.fasterxml.jackson.core.type.TypeReference
@@ -12,12 +11,13 @@ import net.fabricmc.loom.task.RemapJarTask
 import dev.architectury.plugin.ArchitectPluginExtension
 
 import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
+import java.util.*
 
 plugins {
     java
     `maven-publish`
     id("architectury-plugin") version "3.4-SNAPSHOT" apply false
-    id("dev.architectury.loom") version "1.0-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.2-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "7.1.2" apply false
     id("me.shedaniel.unified-publishing") version "0.1.+" apply false
     id("com.diffplug.spotless") version "6.4.1" apply false
@@ -29,6 +29,16 @@ val javaVersion: String by project
 
 val platforms by extra {
     property("enabledPlatforms").toString().split(',')
+}
+
+fun capitalise(str: String): String {
+    return str.replaceFirstChar {
+        if (it.isLowerCase()) {
+            it.titlecase(Locale.getDefault())
+        } else {
+            it.toString()
+        }
+    }
 }
 
 tasks {
@@ -173,7 +183,7 @@ subprojects {
 
     publishing {
         publications {
-            create<MavenPublication>("maven${project.name.capitalize()}") {
+            create<MavenPublication>("maven${capitalise(project.name)}") {
                 groupId = project.group.toString()
                 artifactId = project.base.archivesName.get()
                 version = project.version.toString()
@@ -205,12 +215,12 @@ for (platform in platforms) {
         configurations {
             compileClasspath.get().extendsFrom(common)
             runtimeClasspath.get().extendsFrom(common)
-            getByName("development${platform.capitalize()}").extendsFrom(common)
+            getByName("development${capitalise(platform)}").extendsFrom(common)
         }
 
         dependencies {
             common(project(path = ":common", configuration = "namedElements")) { isTransitive = false }
-            shadowCommon(project(path = ":common", configuration = "transformProduction${platform.capitalize()}")) { isTransitive = false }
+            shadowCommon(project(path = ":common", configuration = "transformProduction${capitalise(platform)}")) { isTransitive = false }
         }
 
         tasks {
@@ -265,10 +275,10 @@ for (platform in platforms) {
                     var releaseChannel = "release"
                     var changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
 
-                    if (modVersion.toLowerCase().contains("alpha")) {
+                    if (modVersion.lowercase().contains("alpha")) {
                         releaseChannel = "alpha"
                         changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n$changes"
-                    } else if (modVersion.toLowerCase().contains("beta")) {
+                    } else if (modVersion.lowercase().contains("beta")) {
                         releaseChannel = "beta"
                         changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n$changes"
                     }
@@ -277,7 +287,7 @@ for (platform in platforms) {
                     changelog.set(changes)
                     displayName.set(String.format("%s (%s %s)",
                             modVersion.substring(0, modVersion.lastIndexOf("-")),
-                            platform.capitalize(),
+                            capitalise(platform),
                             minecraftVersion))
 
                     mainPublication(project.tasks.getByName("remapJar"))

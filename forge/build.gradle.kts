@@ -1,18 +1,18 @@
+val generated = file("src/generated/resources")
+
 loom {
+    val modId: String by project
+
     runs {
         create("data") {
             data()
+            programArgs("--all", "--mod", modId)
+            programArgs("--output", generated.absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
         }
     }
 
     forge {
-        val modId: String by project
-
-        dataGen {
-            mod(modId)
-        }
-
         convertAccessWideners.set(true)
         extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 
@@ -101,6 +101,7 @@ dependencies {
 sourceSets {
     main {
         resources {
+            srcDir(generated)
             exclude("**/.cache")
         }
     }
@@ -114,4 +115,6 @@ tasks.processResources {
                 "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
         ))
     }
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
