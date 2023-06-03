@@ -115,6 +115,4 @@ tasks.processResources {
                 "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
         ))
     }
-
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

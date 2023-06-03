@@ -13,9 +13,5 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
         generator.addProvider(LootTableProvider::new);
         generator.addProvider(ModelProvider::new);
         generator.addProvider(RecipeProvider::new);
-
-        for (var en : new String[] { "en_us", "en_gb", "en_au", "en_ca", "en_nz" }) {
-            generator.addProvider(new LocalisationProvider(generator, en));
-        }
     }
 }
