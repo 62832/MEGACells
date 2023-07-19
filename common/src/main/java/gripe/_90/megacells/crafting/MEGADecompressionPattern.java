@@ -2,9 +2,6 @@ package gripe._90.megacells.crafting;
 
 import java.util.Objects;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appeng.api.crafting.IPatternDetails;
@@ -84,11 +81,6 @@ public class MEGADecompressionPattern implements IPatternDetails {
     public static class Item extends AEBaseItem {
         public Item(Properties properties) {
             super(properties);
-        }
-
-        @Override
-        public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
-            // Don't show in creative mode, this isn't meant to be used as an item anyway
         }
     }
 }

@@ -1,9 +1,12 @@
 package gripe._90.megacells.forge;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -24,9 +27,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
-import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Utils;
@@ -38,6 +38,7 @@ public class MEGACells {
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerAll);
+        bus.addListener(this::populateTab);
         bus.addListener(this::initCells);
 
         initCompression();
@@ -51,34 +52,45 @@ public class MEGACells {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        if (Utils.PLATFORM.isModLoaded("appmek")) {
-            AppMekItems.init();
-        }
+        /*
+         * if (Utils.PLATFORM.isModLoaded("appmek")) { AppMekItems.init(); }
+         */
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
-            AppBotItems.init();
-        }
+        /*
+         * if (Utils.PLATFORM.isModLoaded("appbot")) { AppBotItems.init(); }
+         */
     }
 
     private void registerAll(RegisterEvent event) {
-        if (event.getRegistryKey().equals(Registry.BLOCK_REGISTRY)) {
+        if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB)) {
+            Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, MEGAItems.CREATIVE_TAB_ID, MEGAItems.CREATIVE_TAB);
+        }
+
+        if (event.getRegistryKey().equals(Registries.BLOCK)) {
             MEGABlocks.getBlocks().forEach(b -> {
                 ForgeRegistries.BLOCKS.register(b.id(), b.block());
                 ForgeRegistries.ITEMS.register(b.id(), b.asItem());
             });
         }
 
-        if (event.getRegistryKey().equals(Registry.ITEM_REGISTRY)) {
+        if (event.getRegistryKey().equals(Registries.ITEM)) {
             MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
         }
 
-        if (event.getRegistryKey().equals(Registry.BLOCK_ENTITY_TYPE_REGISTRY)) {
+        if (event.getRegistryKey().equals(Registries.BLOCK_ENTITY_TYPE)) {
             MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
         }
 
-        if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
+        if (event.getRegistryKey().equals(Registries.MENU)) {
             ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
                     MEGAPatternProviderBlock.MENU);
+        }
+    }
+
+    private void populateTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == MEGAItems.CREATIVE_TAB_KEY) {
+            MEGAItems.getItems().forEach(event::accept);
+            MEGABlocks.getBlocks().forEach(event::accept);
         }
     }
 
@@ -86,19 +98,17 @@ public class MEGACells {
         event.enqueueWork(InitStorageCells::init);
         event.enqueueWork(InitUpgrades::init);
 
-        event.enqueueWork(() -> {
-            if (Utils.PLATFORM.isModLoaded("appmek")) {
-                AppMekIntegration.initUpgrades();
-                AppMekIntegration.initStorageCells();
-            }
-        });
+        /*
+         * event.enqueueWork(() -> { if (Utils.PLATFORM.isModLoaded("appmek")) { AppMekIntegration.initUpgrades();
+         * AppMekIntegration.initStorageCells(); } });
+         */
     }
 
     private void initCompression() {
         MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE
-                .loadRecipes(event.getServer().getRecipeManager()));
+                .loadRecipes(event.getServer().getRecipeManager(), event.getServer().registryAccess()));
         MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE
-                .loadRecipes(event.getServerResources().getRecipeManager()));
+                .loadRecipes(event.getServerResources().getRecipeManager(), event.getRegistryAccess()));
 
         GridServices.register(DecompressionService.class, DecompressionService.class);
         PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);

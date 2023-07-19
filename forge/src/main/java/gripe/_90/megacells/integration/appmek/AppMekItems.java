@@ -62,6 +62,6 @@ public final class AppMekItems {
     private static ItemDefinition<MEGAPortableChemicalCell> portable(StorageTier tier) {
         return MEGAItems.item(tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
                 "portable_chemical_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableChemicalCell(p, tier));
+                p -> new MEGAPortableChemicalCell(p, tier, 0x33528D));
     }
 }

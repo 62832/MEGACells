@@ -18,21 +18,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-import appeng.api.config.SecurityPermissions;
 import appeng.api.networking.IManagedGridNode;
-import appeng.api.util.IOrientable;
 import appeng.block.AEBaseBlockItem;
 import appeng.block.AEBaseEntityBlock;
+import appeng.block.crafting.PushDirection;
 import appeng.core.definitions.AEItems;
-import appeng.helpers.iface.PatternProviderLogic;
-import appeng.helpers.iface.PatternProviderLogicHost;
+import appeng.core.localization.Tooltips;
+import appeng.helpers.patternprovider.PatternProviderLogic;
+import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.menu.implementations.PatternProviderMenu;
 import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
+import appeng.util.Platform;
 import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.filter.AEItemDefinitionFilter;
 
@@ -40,15 +41,16 @@ import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 import gripe._90.megacells.definition.MEGATranslations;
 
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
-    public static final BooleanProperty OMNIDIRECTIONAL = BooleanProperty.create("omnidirectional");
+    public static final EnumProperty<PushDirection> PUSH_DIRECTION = EnumProperty.create("push_direction",
+            PushDirection.class);
+
     public static final MenuType<Menu> MENU = MenuTypeBuilder
             .create(Menu::new, PatternProviderLogicHost.class)
-            .requirePermission(SecurityPermissions.BUILD)
             .build("mega_pattern_provider");
 
     public MEGAPatternProviderBlock(Properties props) {
         super(props);
-        registerDefaultState(defaultBlockState().setValue(OMNIDIRECTIONAL, true));
+        registerDefaultState(defaultBlockState().setValue(PUSH_DIRECTION, PushDirection.ALL));
     }
 
     public static PatternProviderLogic createLogic(IManagedGridNode mainNode, PatternProviderLogicHost host) {
@@ -61,12 +63,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(OMNIDIRECTIONAL);
-    }
-
-    @Override
-    protected BlockState updateBlockStateFromBlockEntity(BlockState currentState, MEGAPatternProviderBlockEntity be) {
-        return currentState.setValue(OMNIDIRECTIONAL, be.isOmniDirectional());
+        builder.add(PUSH_DIRECTION);
     }
 
     @Override
@@ -86,6 +83,11 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
             return InteractionResult.PASS;
         }
 
+        if (heldItem != null && InteractionUtil.canWrenchRotate(heldItem)) {
+            setSide(level, pos, hit.getDirection());
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+
         var be = this.getBlockEntity(level, pos);
 
         if (be != null) {
@@ -99,16 +101,22 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         return InteractionResult.PASS;
     }
 
-    @Override
-    protected boolean hasCustomRotation() {
-        return true;
-    }
+    public void setSide(Level level, BlockPos pos, Direction facing) {
+        var currentState = level.getBlockState(pos);
+        var pushSide = currentState.getValue(PUSH_DIRECTION).getDirection();
 
-    @Override
-    protected void customRotateBlock(IOrientable rotatable, Direction axis) {
-        if (rotatable instanceof MEGAPatternProviderBlockEntity patternProvider) {
-            patternProvider.setSide(axis);
+        PushDirection newPushDirection;
+        if (pushSide == facing.getOpposite()) {
+            newPushDirection = PushDirection.fromDirection(facing);
+        } else if (pushSide == facing) {
+            newPushDirection = PushDirection.ALL;
+        } else if (pushSide == null) {
+            newPushDirection = PushDirection.fromDirection(facing.getOpposite());
+        } else {
+            newPushDirection = PushDirection.fromDirection(Platform.rotateAround(pushSide, facing));
         }
+
+        level.setBlockAndUpdate(pos, currentState.setValue(PUSH_DIRECTION, newPushDirection));
     }
 
     public static class Item extends AEBaseBlockItem {
@@ -117,8 +125,8 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         }
 
         @Override
-        public void addCheckedInformation(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(MEGATranslations.ProcessingOnly.text());
+        public void addCheckedInformation(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
+            lines.add(Tooltips.of(MEGATranslations.ProcessingOnly.text()));
         }
     }
 

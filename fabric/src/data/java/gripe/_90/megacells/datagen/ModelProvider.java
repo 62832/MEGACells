@@ -15,7 +15,7 @@ import com.ibm.icu.impl.Pair;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
@@ -31,6 +31,7 @@ import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
+import appeng.api.orientation.BlockOrientation;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
@@ -39,7 +40,6 @@ import appeng.core.definitions.AEItems;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
@@ -62,8 +62,8 @@ class ModelProvider extends FabricModelProvider {
             Optional.of(AppEng.makeId("item/cable_interface")), Optional.empty(),
             SIDES, TextureSlot.BACK, TextureSlot.FRONT);
 
-    ModelProvider(FabricDataGenerator gen) {
-        super(gen);
+    ModelProvider(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
@@ -93,7 +93,7 @@ class ModelProvider extends FabricModelProvider {
 
         generator.generateFlatItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
-        generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
+        // generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
         generator.generateFlatItem(MEGAItems.CELL_COMPONENT_1M.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.CELL_COMPONENT_4M.asItem(), ModelTemplates.FLAT_ITEM);
@@ -109,7 +109,9 @@ class ModelProvider extends FabricModelProvider {
                 ModelTemplates.FLAT_ITEM);
 
         var cells = Stream.concat(
-                Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells(), AppBotItems.getCells())
+                Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells()
+                // , AppBotItems.getCells()
+                )
                         .flatMap(Collection::stream),
                 Stream.of(MEGAItems.BULK_ITEM_CELL)).toList();
 
@@ -121,7 +123,9 @@ class ModelProvider extends FabricModelProvider {
         }
 
         var portables = Stream.concat(
-                Stream.of(MEGAItems.getItemPortables(), MEGAItems.getFluidPortables(), AppBotItems.getPortables())
+                Stream.of(MEGAItems.getItemPortables(), MEGAItems.getFluidPortables()
+                // , AppBotItems.getPortables()
+                )
                         .flatMap(Collection::stream),
                 Stream.of()).toList();
 
@@ -207,26 +211,53 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void createPatternProviderBlock(BlockModelGenerators generator) {
-        var normal = Utils.makeId("block/mega_pattern_provider");
+        var normal = ModelTemplates.CUBE_ALL.create(MEGABlocks.MEGA_PATTERN_PROVIDER.block(),
+                TextureMapping.cube(MEGABlocks.MEGA_PATTERN_PROVIDER.block()),
+                generator.modelOutput);
+        var oriented = ModelTemplates.CUBE
+                .create(Utils.makeId("block/mega_pattern_provider_oriented"), new TextureMapping()
+                        .put(TextureSlot.UP, Utils.makeId("block/mega_pattern_provider_alternate_front"))
+                        .put(TextureSlot.DOWN, Utils.makeId("block/mega_pattern_provider_alternate"))
+                        .put(TextureSlot.NORTH, Utils.makeId("block/mega_pattern_provider_alternate_arrow"))
+                        .copySlot(TextureSlot.NORTH, TextureSlot.EAST)
+                        .copySlot(TextureSlot.NORTH, TextureSlot.SOUTH)
+                        .copySlot(TextureSlot.NORTH, TextureSlot.WEST)
+                        .put(TextureSlot.PARTICLE, normal), generator.modelOutput);
 
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
-                .with(PropertyDispatch.property(MEGAPatternProviderBlock.OMNIDIRECTIONAL)
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_ALL
-                                .create(normal, TextureMapping.cube(normal), generator.modelOutput)))
-                        .select(false, Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE
-                                .create(Utils.makeId("block/mega_pattern_provider_oriented"), new TextureMapping()
-                                        .put(TextureSlot.UP,
-                                                Utils.makeId("block/mega_pattern_provider_alternate_front"))
-                                        .put(TextureSlot.DOWN, Utils.makeId("block/mega_pattern_provider_alternate"))
-                                        .put(TextureSlot.NORTH,
-                                                Utils.makeId("block/mega_pattern_provider_alternate_arrow"))
-                                        .copySlot(TextureSlot.NORTH, TextureSlot.EAST)
-                                        .copySlot(TextureSlot.NORTH, TextureSlot.SOUTH)
-                                        .copySlot(TextureSlot.NORTH, TextureSlot.WEST)
-                                        .put(TextureSlot.PARTICLE, normal), generator.modelOutput))
-                                .with(VariantProperties.X_ROT, VariantProperties.Rotation.R90))));
+                .with(PropertyDispatch.property(MEGAPatternProviderBlock.PUSH_DIRECTION).generate(pushDirection -> {
+                    var forward = pushDirection.getDirection();
+
+                    if (forward == null) {
+                        return Variant.variant().with(VariantProperties.MODEL, normal);
+                    } else {
+                        var orientation = BlockOrientation.get(forward);
+
+                        // + 90 because the default model is oriented UP, while block orientation assumes NORTH
+                        var angleX = normalizeAngle(orientation.getAngleX() + 90);
+                        var angleY = normalizeAngle(orientation.getAngleY());
+
+                        return Variant.variant().with(VariantProperties.MODEL, oriented)
+                                .with(VariantProperties.X_ROT, rotationByAngle(angleX))
+                                .with(VariantProperties.Y_ROT, rotationByAngle(angleY));
+                    }
+                })));
 
         generator.delegateItemModel(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), normal);
+    }
+
+    private int normalizeAngle(int angle) {
+        return angle - (angle / 360) * 360;
+    }
+
+    private VariantProperties.Rotation rotationByAngle(int angle) {
+        return switch (angle) {
+            case 0 -> VariantProperties.Rotation.R0;
+            case 90 -> VariantProperties.Rotation.R90;
+            case 180 -> VariantProperties.Rotation.R180;
+            case 270 -> VariantProperties.Rotation.R270;
+            default -> throw new IllegalArgumentException("Invalid angle: " + angle);
+        };
     }
 
     private void createPatternProviderPart(ItemModelGenerators generator) {

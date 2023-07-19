@@ -2,7 +2,7 @@ package gripe._90.megacells.integration.appmek.datagen;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -19,8 +19,8 @@ public class AppMekItemModelProvider extends ItemModelProvider {
     static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
     static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
-    public AppMekItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
-        super(gen, Utils.MODID, efh);
+    public AppMekItemModelProvider(PackOutput output, ExistingFileHelper efh) {
+        super(output, Utils.MODID, efh);
         efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
         efh.trackGenerated(DRIVE_CELL, MODEL);

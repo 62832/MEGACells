@@ -13,7 +13,7 @@ import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.core.AppEng;
 import appeng.core.localization.Tooltips;
-import appeng.helpers.iface.PatternProviderLogic;
+import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModels;
 import appeng.menu.ISubMenu;
@@ -24,6 +24,7 @@ import appeng.parts.crafting.PatternProviderPart;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.util.Utils;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
@@ -81,9 +82,9 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-            super.appendHoverText(stack, level, tooltip, flag);
-            tooltip.add(Tooltips.of("Supports processing patterns only."));
+        public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
+            super.appendHoverText(stack, level, lines, flag);
+            lines.add(Tooltips.of(MEGATranslations.ProcessingOnly.text()));
         }
     }
 }

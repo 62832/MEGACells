@@ -4,8 +4,9 @@ import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
@@ -28,13 +29,13 @@ import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.util.Utils;
 
 public class AppMekRecipeProvider extends RecipeProvider {
-    public AppMekRecipeProvider(DataGenerator generator) {
-        super(generator);
+    public AppMekRecipeProvider(PackOutput output) {
+        super(output);
     }
 
     @Override
-    protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                 .pattern("aba")
                 .pattern("b b")
                 .pattern("ddd")
@@ -61,7 +62,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .setTop(Ingredient.of(AEItems.CELL_COMPONENT_256K))
                 .setBottom(Ingredient.of(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
                 .save(consumer, Utils.makeId("inscriber/radioactive_cell_component"));
-        ShapedRecipeBuilder.shaped(AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
                 .pattern("aba")
                 .pattern("bcb")
                 .pattern("ded")
@@ -75,7 +76,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
-        ShapedRecipeBuilder.shaped(cell)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                 .pattern("aba")
                 .pattern("bcb")
                 .pattern("ddd")
@@ -85,7 +86,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .define('d', ItemTags.create(new ResourceLocation("forge", "ingots/osmium")))
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath()));
-        ShapelessRecipeBuilder.shapeless(cell)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                 .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                 .requires(component)
                 .unlockedBy("has_" + component.id().getPath(), has(component))
@@ -94,7 +95,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
     }
 
     private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
-        ShapelessRecipeBuilder.shapeless(cell)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                 .requires(AEBlocks.CHEST)
                 .requires(component)
                 .requires(AEBlocks.DENSE_ENERGY_CELL)
@@ -105,8 +106,9 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .save(consumer, Utils.makeId("cells/portable/" + cell.id().getPath()));
     }
 
-    @Override
-    public @NotNull String getName() {
-        return super.getName() + "/appmek";
-    }
+    /*
+     * why the fuck is this final now
+     * 
+     * @Override public @NotNull String getName() { return super.getName() + "/appmek"; }
+     */
 }

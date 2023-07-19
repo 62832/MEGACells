@@ -9,6 +9,7 @@ public enum MEGATranslations implements LocalizationEnum {
     ALot("A lot.", Type.TOOLTIP),
     Compression("Compression: %s", Type.TOOLTIP),
     Contains("Contains: %s", Type.TOOLTIP),
+    CreativeTab("MEGA Cells", Type.GUI),
     Disabled("Disabled", Type.TOOLTIP),
     Empty("Empty", Type.TOOLTIP),
     Enabled("Enabled", Type.TOOLTIP),

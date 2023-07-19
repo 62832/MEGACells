@@ -55,14 +55,6 @@ repositories {
             includeGroup("top.theillusivec4.curios")
         }
     }
-
-    maven {
-        name = "Progwml6"
-        url = uri("https://dvs1.progwml6.com/files/maven/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
 }
 
 val forgeVersion: String by project
@@ -76,20 +68,20 @@ dependencies {
 
     modImplementation("appeng:appliedenergistics2-forge:$ae2Version")
     modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
-    modImplementation("curse.maven:appmek-574300:${property("appmekFile")}")
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}")
+    modCompileOnly("curse.maven:appmek-574300:${property("appmekFile")}")
+    modCompileOnly("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}")
 
     val mekanismVersion: String by project
-    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion")
-    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:generators")
-    modRuntimeOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:all")
+    modCompileOnly("mekanism:Mekanism:1.19.2-$mekanismVersion")
+    modCompileOnly("mekanism:Mekanism:1.19.2-$mekanismVersion:generators")
+    // modRuntimeOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:all")
 
-    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FORGE")
-    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraftVersion-${property("patchouliVersion")}")
+    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FORGE-SNAPSHOT")
+    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraftVersion-${property("patchouliVersion")}-FORGE")
 
     modRuntimeOnly("dev.architectury:architectury-forge:${property("architecturyVersion")}")
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${property("clothVersion")}")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:$minecraftVersion-${property("curiosVersion")}")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${property("curiosVersion")}+$minecraftVersion")
 
     modRuntimeOnly("mezz.jei:jei-$minecraftVersion-forge:${property("jeiVersion")}") {
         isTransitive = false

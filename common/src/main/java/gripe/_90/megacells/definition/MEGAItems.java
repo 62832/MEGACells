@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
@@ -35,9 +38,11 @@ public final class MEGAItems {
         return Collections.unmodifiableList(ITEMS);
     }
 
-    public static final CreativeModeTab CREATIVE_TAB = Utils.PLATFORM.getCreativeTab();
-
     // spotless:off
+    public static final CreativeModeTab CREATIVE_TAB = Utils.PLATFORM.getCreativeTab();
+    public static final ResourceLocation CREATIVE_TAB_ID = Utils.makeId("tab");
+    public static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, CREATIVE_TAB_ID);
+
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
     public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
 
@@ -130,18 +135,19 @@ public final class MEGAItems {
 
     public static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
         return item(tier.namePrefix().toUpperCase() + " Portable Item Cell", "portable_item_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE));
+                p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
     }
 
     public static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
         return item(tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE));
+                p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE,
+                        0x00F1C5));
     }
 
     public static <T extends Item> ItemDefinition<T> item(String englishName, String id,
             Function<Item.Properties, T> factory) {
-        Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
+        Item.Properties p = new Item.Properties();
         T item = factory.apply(p);
 
         ItemDefinition<T> definition = new ItemDefinition<>(englishName, Utils.makeId(id), item);

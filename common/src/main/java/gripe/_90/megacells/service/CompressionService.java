@@ -12,6 +12,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -47,15 +48,16 @@ public class CompressionService {
         }).orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public void loadRecipes(RecipeManager recipeManager) {
+    public void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
+
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
         // Retrieve all available "compression" and "decompression" recipes on the current server (if running)
         var allRecipes = recipeManager.getAllRecipesFor(RecipeType.CRAFTING);
         var candidates = Stream.concat(
-                allRecipes.stream().filter(this::isCompressionRecipe),
-                allRecipes.stream().filter(this::isDecompressionRecipe)).toList();
+                allRecipes.stream().filter(recipe -> isCompressionRecipe(recipe, access)),
+                allRecipes.stream().filter(recipe -> isDecompressionRecipe(recipe, access))).toList();
 
         // Filter gathered candidate recipes and retain only those that are reversible (i.e. those which can be carried
         // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
@@ -64,11 +66,11 @@ public class CompressionService {
             var decompressible = false;
 
             var input = recipe.getIngredients().get(0);
-            var output = recipe.getResultItem();
+            var output = recipe.getResultItem(access);
 
-            var checkAgainst = candidates.stream().filter(isCompressionRecipe(recipe)
-                    ? this::isDecompressionRecipe
-                    : this::isCompressionRecipe).toList();
+            var checkAgainst = candidates.stream().filter(r -> isCompressionRecipe(recipe, access)
+                    ? isDecompressionRecipe(r, access)
+                    : isCompressionRecipe(r, access)).toList();
 
             for (var candidate : checkAgainst) {
                 for (var item : candidate.getIngredients().get(0).getItems()) {
@@ -78,7 +80,7 @@ public class CompressionService {
                 }
 
                 for (var item : input.getItems()) {
-                    if (item.getItem().equals(candidate.getResultItem().getItem())) {
+                    if (item.getItem().equals(candidate.getResultItem(access).getItem())) {
                         decompressible = true;
                     }
                 }
@@ -91,26 +93,28 @@ public class CompressionService {
             return compressible && decompressible;
         }).toList();
 
-        var compressed = validRecipes.stream().filter(this::isCompressionRecipe).toList();
-        var decompressed = validRecipes.stream().filter(this::isDecompressionRecipe).toList();
+        var compressed = validRecipes.stream().filter(recipe -> isCompressionRecipe(recipe, access)).toList();
+        var decompressed = validRecipes.stream().filter(recipe -> isDecompressionRecipe(recipe, access)).toList();
 
         // Pull all available compression chains from the recipe shortlist and add these to the handler cache
         for (var recipe : compressed) {
-            var baseVariant = recipe.getResultItem().getItem();
+            var baseVariant = recipe.getResultItem(access).getItem();
 
             if (compressionChains.stream().noneMatch(chain -> chain.containsKey(AEItemKey.of(baseVariant)))) {
                 var decompressionChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
 
-                for (var lowerVariant = getSubsequentVariant(baseVariant, decompressed); lowerVariant != null;) {
+                for (var lowerVariant = getSubsequentVariant(baseVariant, decompressed,
+                        access); lowerVariant != null;) {
                     decompressionChain.put(AEItemKey.of(lowerVariant.first()), (int) lowerVariant.second());
-                    lowerVariant = getSubsequentVariant(lowerVariant.first(), decompressed);
+                    lowerVariant = getSubsequentVariant(lowerVariant.first(), decompressed, access);
                 }
 
                 var compressionChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
 
-                for (var higherVariant = getSubsequentVariant(baseVariant, compressed); higherVariant != null;) {
+                for (var higherVariant = getSubsequentVariant(baseVariant, compressed,
+                        access); higherVariant != null;) {
                     compressionChain.put(AEItemKey.of(higherVariant.first()), (int) higherVariant.second());
-                    higherVariant = getSubsequentVariant(higherVariant.first(), compressed);
+                    higherVariant = getSubsequentVariant(higherVariant.first(), compressed, access);
                 }
 
                 if (compressionChain.isEmpty() && decompressionChain.isEmpty()) {
@@ -135,24 +139,27 @@ public class CompressionService {
         }
     }
 
-    private boolean isCompressionRecipe(CraftingRecipe recipe) {
+    private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess registryAccess) {
         return (recipe.getIngredients().size() == 4 || recipe.getIngredients().size() == 9)
                 && recipe.getIngredients().stream().distinct().limit(2).count() == 1
-                && recipe.getResultItem().getCount() == 1;
+                && recipe.getResultItem(registryAccess).getCount() == 1;
     }
 
-    private boolean isDecompressionRecipe(CraftingRecipe recipe) {
-        return (recipe.getResultItem().getCount() == 4 || recipe.getResultItem().getCount() == 9)
+    private boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess registryAccess) {
+        return (recipe.getResultItem(registryAccess).getCount() == 4
+                || recipe.getResultItem(registryAccess).getCount() == 9)
                 && recipe.getIngredients().size() == 1;
     }
 
-    private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes) {
+    private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes,
+            RegistryAccess registryAccess) {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    return Pair.of(recipe.getResultItem().getItem(), isCompressionRecipe(recipe)
-                            ? recipe.getIngredients().size()
-                            : recipe.getResultItem().getCount());
+                    return Pair.of(recipe.getResultItem(registryAccess).getItem(),
+                            isCompressionRecipe(recipe, registryAccess)
+                                    ? recipe.getIngredients().size()
+                                    : recipe.getResultItem(registryAccess).getCount());
                 }
             }
         }

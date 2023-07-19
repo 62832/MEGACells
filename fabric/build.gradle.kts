@@ -48,7 +48,7 @@ repositories {
 
     maven {
         name = "LadySnake Libs"
-        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+        url = uri("https://maven.ladysnake.org/releases")
         content {
             includeGroup("dev.onyxstudios.cardinal-components-api")
         }
@@ -69,14 +69,6 @@ repositories {
             includeGroup("com.github.emilyploszaj")
         }
     }
-
-    maven {
-        name = "Progwml6"
-        url = uri("https://dvs1.progwml6.com/files/maven/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
 }
 
 dependencies {
@@ -86,13 +78,13 @@ dependencies {
     modApi("net.fabricmc.fabric-api:fabric-api:${property("fabricApiVersion")}+$minecraftVersion")
 
     modImplementation("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
-    // modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
+    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
 
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
+    modCompileOnly("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
         exclude(group = "dev.emi", module = "emi")
     }
 
-    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FABRIC") {
+    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FABRIC-SNAPSHOT") {
         exclude(group = "dev.emi", module = "emi")
     }
 

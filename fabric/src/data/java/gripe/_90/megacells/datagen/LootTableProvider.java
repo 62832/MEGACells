@@ -2,7 +2,9 @@ package gripe._90.megacells.datagen;
 
 import java.util.function.BiConsumer;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import org.jetbrains.annotations.NotNull;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -16,12 +18,12 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.util.Utils;
 
 class LootTableProvider extends SimpleFabricLootTableProvider {
-    LootTableProvider(FabricDataGenerator dataGenerator) {
-        super(dataGenerator, LootContextParamSets.BLOCK);
+    LootTableProvider(FabricDataOutput output) {
+        super(output, LootContextParamSets.BLOCK);
     }
 
     @Override
-    public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+    public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         MEGABlocks.getBlocks()
                 .forEach(block -> consumer.accept(Utils.makeId("blocks/" + block.id().getPath()),
                         LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))

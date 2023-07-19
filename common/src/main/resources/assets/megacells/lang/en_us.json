@@ -1,6 +1,4 @@
 {
-  "itemGroup.megacells.tab": "MEGA Cells",
-
   "item.megacells.cell_component_1m": "1M MEGA Storage Component",
   "item.megacells.cell_component_4m": "4M MEGA Storage Component",
   "item.megacells.cell_component_16m": "16M MEGA Storage Component",
@@ -85,6 +83,7 @@
   "block.megacells.mega_energy_cell": "Superdense Energy Cell",
   "block.megacells.mega_pattern_provider": "MEGA Pattern Provider",
 
+  "gui.megacells.CreativeTab": "MEGA Cells",
   "gui.tooltips.megacells.ALot": "A lot.",
   "gui.tooltips.megacells.AcceleratorThreads": "Provides 4 co-processing threads per block.",
   "gui.tooltips.megacells.Compression": "Compression: %s",

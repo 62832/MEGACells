@@ -12,10 +12,10 @@ public class AppMekDataGenerators {
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
         if (Utils.PLATFORM.isModLoaded("appmek")) {
-            var generator = event.getGenerator();
+            var pack = event.getGenerator().getVanillaPack(true);
 
-            generator.addProvider(true, new AppMekItemModelProvider(generator, event.getExistingFileHelper()));
-            generator.addProvider(true, new AppMekRecipeProvider(generator));
+            pack.addProvider(packOutput -> new AppMekItemModelProvider(packOutput, event.getExistingFileHelper()));
+            pack.addProvider(AppMekRecipeProvider::new);
         }
     }
 }

@@ -16,14 +16,10 @@ import gripe._90.megacells.util.Utils;
 public class MEGAPortableCell extends PortableCellItem {
     private final StorageTier tier;
 
-    public MEGAPortableCell(Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu) {
-        super(keyType, menu, tier, props.stacksTo(1));
+    public MEGAPortableCell(Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu,
+            int defaultColour) {
+        super(keyType, 18 + tier.index() * 9, menu, tier, props.stacksTo(1), defaultColour);
         this.tier = tier;
-    }
-
-    @Override
-    public int getTotalTypes(ItemStack cellItem) {
-        return 18 + this.tier.index() * 9;
     }
 
     @Override

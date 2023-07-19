@@ -13,8 +13,8 @@ import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import gripe._90.megacells.item.MEGAPortableCell;
 
 public class MEGAPortableChemicalCell extends MEGAPortableCell {
-    public MEGAPortableChemicalCell(Properties props, StorageTier tier) {
-        super(props.stacksTo(1), tier, MekanismKeyType.TYPE, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE);
+    public MEGAPortableChemicalCell(Properties props, StorageTier tier, int defaultColour) {
+        super(props.stacksTo(1), tier, MekanismKeyType.TYPE, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, defaultColour);
     }
 
     @Override
