@@ -24,7 +24,7 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId = "appmek"
     mandatory = false
-    versionRange = "(,2.0.0)"
+    versionRange = "[$appmekVersion]"
     ordering = "AFTER"
     side = "BOTH"
 
@@ -38,7 +38,7 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[dependencies.megacells]]
     modId="appbot"
     mandatory=false
-    versionRange = "[$appbotVersion,)"
+    versionRange = "[$appbotVersion]"
     ordering = "AFTER"
     side = "BOTH"
 

@@ -35,6 +35,7 @@ import appeng.recipes.handlers.InscriberRecipeBuilder;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class RecipeProvider extends FabricRecipeProvider {
@@ -172,16 +173,16 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
                 .save(consumer, Utils.makeId("network/mega_pattern_provider_block"));
 
-        /*
-         * manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
-         * manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
-         * manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);
-         * manaCells(consumer, AppBotItems.MANA_CELL_64M, AppBotItems.PORTABLE_MANA_CELL_64M, MEGAItems.TIER_64M);
-         * manaCells(consumer, AppBotItems.MANA_CELL_256M, AppBotItems.PORTABLE_MANA_CELL_256M, MEGAItems.TIER_256M);
-         */
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
+            manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
+            manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);
+            manaCells(consumer, AppBotItems.MANA_CELL_64M, AppBotItems.PORTABLE_MANA_CELL_64M, MEGAItems.TIER_64M);
+            manaCells(consumer, AppBotItems.MANA_CELL_256M, AppBotItems.PORTABLE_MANA_CELL_256M, MEGAItems.TIER_256M);
+        }
     }
 
-    private static void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
+    private void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
             ItemLike binder) {
         var precedingComponent = preceding.componentSupplier().get();
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, tier.componentSupplier().get())
@@ -199,7 +200,7 @@ class RecipeProvider extends FabricRecipeProvider {
                                 "cells/" + BuiltInRegistries.ITEM.getKey(tier.componentSupplier().get()).getPath()));
     }
 
-    private static void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
+    private void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
             ItemDefinition<?> output) {
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, output, 1)
                 .setMode(InscriberProcessType.PRESS)
@@ -207,7 +208,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("inscriber/" + output.id().getPath()));
     }
 
-    private static void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
+    private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
             ItemDefinition<?> housing, String housingMaterial) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                 .pattern("aba")
@@ -228,7 +229,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
-    private static void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
+    private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
             ItemDefinition<?> housing) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                 .requires(AEBlocks.CHEST)
@@ -241,7 +242,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/portable/" + cell.id().getPath()));
     }
 
-    private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, String housingMaterial) {
+    private void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, String housingMaterial) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, housing)
                 .pattern("aba")
                 .pattern("b b")
@@ -253,7 +254,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/" + housing.id().getPath()));
     }
 
-    private static void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
+    private void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, unit)
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)
@@ -261,26 +262,25 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("crafting/" + unit.id().getPath()));
     }
 
-    // private static void manaCells(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?>
-    // portable,
-    // StorageTier tier) {
-    // var component = tier.componentSupplier().get();
-    // var componentPath = BuiltInRegistries.ITEM.getKey(component).getPath();
-    //
-    // ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
-    // .requires(tier.componentSupplier().get()).unlockedBy("has_" + componentPath, has(component))
-    // .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
-    // .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
-    //
-    // ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, portable).requires(AEBlocks.CHEST).requires(component)
-    // .requires(AEBlocks.DENSE_ENERGY_CELL).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
-    // .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
-    // .unlockedBy("has_" + componentPath, has(component))
-    // .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-    // .save(consumer, Utils.makeId("cells/portable/" + portable.id().getPath()));
-    // }
+    private void manaCells(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable,
+            StorageTier tier) {
+        var component = tier.componentSupplier().get();
+        var componentPath = BuiltInRegistries.ITEM.getKey(component).getPath();
 
-    private static Ingredient placeholderTag(String placeholder) {
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
+                .requires(tier.componentSupplier().get()).unlockedBy("has_" + componentPath, has(component))
+                .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
+                .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, portable).requires(AEBlocks.CHEST).requires(component)
+                .requires(AEBlocks.DENSE_ENERGY_CELL).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
+                .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
+                .unlockedBy("has_" + componentPath, has(component))
+                .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
+                .save(consumer, Utils.makeId("cells/portable/" + portable.id().getPath()));
+    }
+
+    private Ingredient placeholderTag(String placeholder) {
         return Ingredient.fromValues(Stream.of(new PlaceholderTagValue(placeholder)));
     }
 

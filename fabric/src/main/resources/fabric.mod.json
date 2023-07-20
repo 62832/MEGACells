@@ -30,6 +30,6 @@
   },
   "suggests": {
     "ae2wtlib": ">=$ae2wtVersion",
-    "appbot": ">=$appbotVersion"
+    "appbot": "$appbotVersion"
   }
 }

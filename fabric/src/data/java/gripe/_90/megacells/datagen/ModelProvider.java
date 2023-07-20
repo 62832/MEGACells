@@ -1,12 +1,10 @@
 package gripe._90.megacells.datagen;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -40,6 +38,7 @@ import appeng.core.definitions.AEItems;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
@@ -93,7 +92,6 @@ class ModelProvider extends FabricModelProvider {
 
         generator.generateFlatItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
-        // generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
         generator.generateFlatItem(MEGAItems.CELL_COMPONENT_1M.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.CELL_COMPONENT_4M.asItem(), ModelTemplates.FLAT_ITEM);
@@ -108,12 +106,20 @@ class ModelProvider extends FabricModelProvider {
         generator.generateFlatItem(MEGAItems.DECOMPRESSION_PATTERN.asItem(), AEItems.CRAFTING_PATTERN.asItem(),
                 ModelTemplates.FLAT_ITEM);
 
-        var cells = Stream.concat(
-                Stream.of(MEGAItems.getItemCells(), MEGAItems.getFluidCells()
-                // , AppBotItems.getCells()
-                )
-                        .flatMap(Collection::stream),
-                Stream.of(MEGAItems.BULK_ITEM_CELL)).toList();
+        var cells = new ArrayList<>(MEGAItems.getItemCells());
+        cells.addAll(MEGAItems.getFluidCells());
+        cells.add(MEGAItems.BULK_ITEM_CELL);
+
+        var portables = new ArrayList<>(MEGAItems.getItemPortables());
+        portables.addAll(MEGAItems.getFluidPortables());
+
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            cells.addAll(AppBotItems.getCells());
+            portables.addAll(AppBotItems.getPortables());
+
+            generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
+            createDriveCellModel("mega_mana_cell", generator.output);
+        }
 
         for (var cell : cells) {
             createCellItem(
@@ -121,13 +127,6 @@ class ModelProvider extends FabricModelProvider {
                     Utils.makeId("item/" + cell.id().getPath()),
                     AppEng.makeId("item/storage_cell_led"), generator.output);
         }
-
-        var portables = Stream.concat(
-                Stream.of(MEGAItems.getItemPortables(), MEGAItems.getFluidPortables()
-                // , AppBotItems.getPortables()
-                )
-                        .flatMap(Collection::stream),
-                Stream.of()).toList();
 
         for (var cell : portables) {
             createCellItem(
@@ -138,7 +137,6 @@ class ModelProvider extends FabricModelProvider {
 
         createDriveCellModel("mega_item_cell", generator.output);
         createDriveCellModel("mega_fluid_cell", generator.output);
-        createDriveCellModel("mega_mana_cell", generator.output);
         createDriveCellModel("bulk_item_cell", generator.output);
     }
 

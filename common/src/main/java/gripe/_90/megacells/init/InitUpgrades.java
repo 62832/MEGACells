@@ -8,6 +8,7 @@ import appeng.core.localization.GuiText;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
+import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.util.Utils;
 
 public class InitUpgrades {
@@ -63,8 +64,8 @@ public class InitUpgrades {
             AE2WTIntegration.initUpgrades();
         }
 
-        /*
-         * if (Utils.PLATFORM.isModLoaded("appbot")) { AppBotIntegration.initUpgrades(); }
-         */
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            AppBotIntegration.initUpgrades();
+        }
     }
 }

@@ -18,8 +18,10 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
+import gripe._90.megacells.util.Utils;
 
 public class MEGACells implements IAEAddonEntrypoint {
     @Override
@@ -39,9 +41,9 @@ public class MEGACells implements IAEAddonEntrypoint {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        /*
-         * if (Utils.PLATFORM.isModLoaded("appbot")) { AppBotItems.init(); }
-         */
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            AppBotItems.init();
+        }
     }
 
     private void registerAll() {

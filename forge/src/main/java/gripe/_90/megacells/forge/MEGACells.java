@@ -27,6 +27,9 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Utils;
@@ -52,13 +55,13 @@ public class MEGACells {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        /*
-         * if (Utils.PLATFORM.isModLoaded("appmek")) { AppMekItems.init(); }
-         */
+        if (Utils.PLATFORM.isModLoaded("appmek")) {
+            AppMekItems.init();
+        }
 
-        /*
-         * if (Utils.PLATFORM.isModLoaded("appbot")) { AppBotItems.init(); }
-         */
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            AppBotItems.init();
+        }
     }
 
     private void registerAll(RegisterEvent event) {
@@ -89,7 +92,7 @@ public class MEGACells {
 
     private void populateTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == MEGAItems.CREATIVE_TAB_KEY) {
-            MEGAItems.getItems().forEach(event::accept);
+            MEGAItems.getItems().stream().filter(i -> i != MEGAItems.DECOMPRESSION_PATTERN).forEach(event::accept);
             MEGABlocks.getBlocks().forEach(event::accept);
         }
     }
@@ -98,10 +101,12 @@ public class MEGACells {
         event.enqueueWork(InitStorageCells::init);
         event.enqueueWork(InitUpgrades::init);
 
-        /*
-         * event.enqueueWork(() -> { if (Utils.PLATFORM.isModLoaded("appmek")) { AppMekIntegration.initUpgrades();
-         * AppMekIntegration.initStorageCells(); } });
-         */
+        event.enqueueWork(() -> {
+            if (Utils.PLATFORM.isModLoaded("appmek")) {
+                AppMekIntegration.initUpgrades();
+                AppMekIntegration.initStorageCells();
+            }
+        });
     }
 
     private void initCompression() {

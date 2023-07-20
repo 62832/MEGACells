@@ -7,6 +7,7 @@ import appeng.api.client.StorageCellModels;
 import appeng.api.storage.StorageCells;
 
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.util.Utils;
 
@@ -20,10 +21,11 @@ public class InitStorageCells {
         StorageCells.addCellHandler(MEGABulkCell.HANDLER);
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, Utils.makeId("block/drive/cells/bulk_item_cell"));
 
-        /*
-         * if (Utils.PLATFORM.isModLoaded("appbot")) { Stream.of(AppBotItems.getCells(),
-         * AppBotItems.getPortables()).flatMap(Collection::stream) .forEach(c -> StorageCellModels.registerModel(c,
-         * Utils.makeId("block/drive/cells/mega_mana_cell"))); }
-         */
+        if (Utils.PLATFORM.isModLoaded("appbot")) {
+            Stream.of(AppBotItems.getCells(),
+                    AppBotItems.getPortables()).flatMap(Collection::stream)
+                    .forEach(c -> StorageCellModels.registerModel(c,
+                            Utils.makeId("block/drive/cells/mega_mana_cell")));
+        }
     }
 }

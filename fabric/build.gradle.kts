@@ -81,11 +81,11 @@ dependencies {
     modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
 
     modCompileOnly("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
-        exclude(group = "dev.emi", module = "emi")
+        exclude(group = "dev.emi", module = "emi-fabric")
     }
 
     modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FABRIC-SNAPSHOT") {
-        exclude(group = "dev.emi", module = "emi")
+        exclude(group = "dev.emi", module = "emi-fabric")
     }
 
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${property("clothVersion")}")
