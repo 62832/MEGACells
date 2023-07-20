@@ -11,10 +11,11 @@ import gripe._90.megacells.util.service.Platform;
 
 public final class ForgePlatform implements Platform {
     @Override
-    public CreativeModeTab getCreativeTab() {
+    public CreativeModeTab getCreativeTab(CreativeModeTab.DisplayItemsGenerator display) {
         return CreativeModeTab.builder()
                 .title(MEGATranslations.CreativeTab.text())
                 .icon(() -> MEGAItems.ITEM_CELL_256M.stack(1))
+                .displayItems(display)
                 .build();
     }
 

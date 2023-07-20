@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +22,7 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
@@ -41,7 +41,6 @@ public class MEGACells {
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerAll);
-        bus.addListener(this::populateTab);
         bus.addListener(this::initCells);
 
         initCompression();
@@ -65,10 +64,6 @@ public class MEGACells {
     }
 
     private void registerAll(RegisterEvent event) {
-        if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB)) {
-            Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, MEGAItems.CREATIVE_TAB_ID, MEGAItems.CREATIVE_TAB);
-        }
-
         if (event.getRegistryKey().equals(Registries.BLOCK)) {
             MEGABlocks.getBlocks().forEach(b -> {
                 ForgeRegistries.BLOCKS.register(b.id(), b.block());
@@ -80,6 +75,10 @@ public class MEGACells {
             MEGAItems.getItems().forEach(i -> ForgeRegistries.ITEMS.register(i.id(), i.asItem()));
         }
 
+        if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB)) {
+            Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, MEGACreativeTab.ID, MEGACreativeTab.TAB);
+        }
+
         if (event.getRegistryKey().equals(Registries.BLOCK_ENTITY_TYPE)) {
             MEGABlockEntities.getBlockEntityTypes().forEach(ForgeRegistries.BLOCK_ENTITY_TYPES::register);
         }
@@ -87,13 +86,6 @@ public class MEGACells {
         if (event.getRegistryKey().equals(Registries.MENU)) {
             ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
                     MEGAPatternProviderBlock.MENU);
-        }
-    }
-
-    private void populateTab(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == MEGAItems.CREATIVE_TAB_KEY) {
-            MEGAItems.getItems().stream().filter(i -> i != MEGAItems.DECOMPRESSION_PATTERN).forEach(event::accept);
-            MEGABlocks.getBlocks().forEach(event::accept);
         }
     }
 

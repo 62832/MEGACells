@@ -5,10 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 import appeng.api.stacks.AEKeyType;
@@ -39,10 +35,6 @@ public final class MEGAItems {
     }
 
     // spotless:off
-    public static final CreativeModeTab CREATIVE_TAB = Utils.PLATFORM.getCreativeTab();
-    public static final ResourceLocation CREATIVE_TAB_ID = Utils.makeId("tab");
-    public static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, CREATIVE_TAB_ID);
-
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
     public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
 

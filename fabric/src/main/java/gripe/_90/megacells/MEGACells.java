@@ -1,7 +1,6 @@
 package gripe._90.megacells;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -14,6 +13,7 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
@@ -47,8 +47,6 @@ public class MEGACells implements IAEAddonEntrypoint {
     }
 
     private void registerAll() {
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, MEGAItems.CREATIVE_TAB_ID, MEGAItems.CREATIVE_TAB);
-
         for (var block : MEGABlocks.getBlocks()) {
             Registry.register(BuiltInRegistries.BLOCK, block.id(), block.block());
             Registry.register(BuiltInRegistries.ITEM, block.id(), block.asItem());
@@ -58,17 +56,14 @@ public class MEGACells implements IAEAddonEntrypoint {
             Registry.register(BuiltInRegistries.ITEM, item.id(), item.asItem());
         }
 
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, MEGACreativeTab.ID, MEGACreativeTab.TAB);
+
         for (var blockEntity : MEGABlockEntities.getBlockEntityTypes().entrySet()) {
             Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntity.getKey(), blockEntity.getValue());
         }
 
         Registry.register(BuiltInRegistries.MENU, AppEng.makeId("mega_pattern_provider"),
                 MEGAPatternProviderBlock.MENU);
-
-        ItemGroupEvents.modifyEntriesEvent(MEGAItems.CREATIVE_TAB_KEY).register(content -> {
-            MEGAItems.getItems().stream().filter(i -> i != MEGAItems.DECOMPRESSION_PATTERN).forEach(content::accept);
-            MEGABlocks.getBlocks().forEach(content::accept);
-        });
     }
 
     private void initCompression() {
