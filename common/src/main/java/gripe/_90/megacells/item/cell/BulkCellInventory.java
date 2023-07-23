@@ -65,21 +65,12 @@ public class BulkCellInventory implements StorageCell {
         this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
 
         this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
-        this.unitCount = retrieveUnitCount();
+        this.unitCount = !getTag().getString(UNIT_COUNT).equals("")
+                ? new BigInteger(getTag().getString(UNIT_COUNT))
+                : BigInteger.ZERO;
         this.highestCompressed = storedItem;
 
         this.compressionEnabled = cell.getUpgrades(i).isInstalled(COMPRESSION_CARD);
-    }
-
-    private BigInteger retrieveUnitCount() {
-        // TODO 1.19.3 / 1.20.0: Remove pre-2.0.0 bulk cell conversion (again)
-        if (getTag().contains("count")) {
-            return BigInteger.valueOf(getTag().getLong("count")).multiply(BigInteger.valueOf(unitFactor));
-        } else {
-            return !getTag().getString(UNIT_COUNT).equals("")
-                    ? new BigInteger(getTag().getString(UNIT_COUNT))
-                    : BigInteger.ZERO;
-        }
     }
 
     private long clampedLong(BigInteger toClamp, long limit) {
@@ -237,9 +228,6 @@ public class BulkCellInventory implements StorageCell {
             getTag().put(KEY, storedItem.toTagGeneric());
             getTag().putString(UNIT_COUNT, unitCount.toString());
         }
-
-        // remove pre-2.0.0 count tag
-        getTag().remove("count");
 
         isPersisted = true;
     }
