@@ -1,29 +1,36 @@
 package gripe._90.megacells.item;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.GenericStack;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
+import appeng.core.AEConfig;
 import appeng.core.localization.Tooltips;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
+import appeng.items.storage.StorageCellTooltipComponent;
 import appeng.util.ConfigInventory;
 
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.cell.BulkCellInventory;
 
@@ -73,10 +80,36 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
                 }
             }
 
-            lines.add(Tooltips.of(MEGATranslations.Compression.text(inv.compressionEnabled
+            lines.add(Tooltips.of(MEGATranslations.Compression.text(inv.isCompressionEnabled()
                     ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                     : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
         }
+    }
+
+    @NotNull
+    @Override
+    public Optional<TooltipComponent> getTooltipImage(ItemStack is) {
+        var inv = HANDLER.getCellInventory(is, null);
+
+        if (inv == null) {
+            return Optional.empty();
+        }
+
+        var upgrades = new ArrayList<ItemStack>();
+        if (AEConfig.instance().isTooltipShowCellUpgrades()) {
+            if (inv.isCompressionEnabled()) {
+                upgrades.add(MEGAItems.COMPRESSION_CARD.stack());
+            }
+        }
+
+        var content = new ArrayList<GenericStack>();
+        if (AEConfig.instance().isTooltipShowCellContent()) {
+            if (inv.getStoredItem() != null) {
+                content.add(new GenericStack(inv.getStoredItem(), inv.getStoredQuantity()));
+            }
+        }
+
+        return Optional.of(new StorageCellTooltipComponent(upgrades, content, false, true));
     }
 
     @Override
@@ -93,7 +126,7 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
     }
 
-    public static class Handler implements ICellHandler {
+    private static class Handler implements ICellHandler {
         private Handler() {
         }
 

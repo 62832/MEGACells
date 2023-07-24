@@ -45,7 +45,7 @@ public class BulkCellInventory implements StorageCell {
     private BigInteger unitCount;
     private AEItemKey highestCompressed;
     private final long unitFactor;
-    public final boolean compressionEnabled;
+    private final boolean compressionEnabled;
 
     private boolean isPersisted = true;
 
@@ -108,6 +108,10 @@ public class BulkCellInventory implements StorageCell {
 
     public AEItemKey getFilterItem() {
         return filterItem;
+    }
+
+    public boolean isCompressionEnabled() {
+        return compressionEnabled;
     }
 
     @Override
