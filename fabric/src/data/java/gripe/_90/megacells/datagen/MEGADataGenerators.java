@@ -1,5 +1,6 @@
 package gripe._90.megacells.datagen;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -22,5 +23,9 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
         pack.addProvider(LootTableProvider::new);
         pack.addProvider(ModelProvider::new);
         pack.addProvider(RecipeProvider::new);
+
+        for (var en : List.of("en_us", "en_gb", "en_ca", "en_au", "en_nz")) {
+            pack.addProvider((FabricDataOutput packOutput) -> new LocalisationProvider(packOutput, en));
+        }
     }
 }
