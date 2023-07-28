@@ -11,9 +11,9 @@ loom {
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
 
+            /*
             mods {
                 create(modId) {
-                    // this doesn't actually work yet for the time being
                     sourceSet(sourceSets.create("data") {
                         val main = sourceSets.main.get()
                         compileClasspath += main.compileClasspath + main.output
@@ -21,6 +21,7 @@ loom {
                     })
                 }
             }
+             */
         }
     }
 
