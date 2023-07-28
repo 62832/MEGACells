@@ -76,6 +76,8 @@ class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
+        generator.createTrivialCube(MEGABlocks.SKY_STEEL_BLOCK.block());
+
         energyCell(generator);
 
         var craftingUnits = List.of(
@@ -97,6 +99,12 @@ class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
+        generator.generateFlatItem(MEGAItems.SKY_STEEL_INGOT.asItem(), ModelTemplates.FLAT_ITEM);
+
+        generator.generateFlatItem(MEGAItems.ACCUMULATION_PROCESSOR_PRESS.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.ACCUMULATION_PROCESSOR_PRINT.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(MEGAItems.ACCUMULATION_PROCESSOR.asItem(), ModelTemplates.FLAT_ITEM);
+
         generator.generateFlatItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 

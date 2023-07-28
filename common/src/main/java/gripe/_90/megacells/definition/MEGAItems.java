@@ -35,6 +35,12 @@ public final class MEGAItems {
     }
 
     // spotless:off
+    public static final ItemDefinition<MaterialItem> SKY_STEEL_INGOT = item("Sky Steel Ingot", "sky_steel_ingot", p -> new MaterialItem(p.fireResistant()));
+
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRESS = item("Inscriber Accumulation Press", "accumulation_processor_press", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRINT = item("Printed Accumulation Circuit", "printed_accumulation_processor", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR = item("Accumulation Processor", "accumulation_processor", MaterialItem::new);
+
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
     public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
 

@@ -11,6 +11,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -27,10 +28,13 @@ import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
+import appeng.recipes.transform.TransformCircumstance;
+import appeng.recipes.transform.TransformRecipeBuilder;
 
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
@@ -48,7 +52,7 @@ class RecipeProvider extends FabricRecipeProvider {
         component(consumer, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem());
         component(consumer, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem());
 
-        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
 
         cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
@@ -72,9 +76,56 @@ class RecipeProvider extends FabricRecipeProvider {
         portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-
-        specialisedComponent(consumer, MEGAItems.CELL_COMPONENT_16M, AEItems.SPATIAL_16_CELL_COMPONENT, MEGAItems.BULK_CELL_COMPONENT);
         // spotless:on
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', MEGATags.SKY_STEEL_INGOT)
+                .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
+                .save(consumer, Utils.makeId("crafting/sky_steel_block"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.SKY_STEEL_INGOT, 9)
+                .requires(MEGATags.SKY_STEEL_BLOCK_ITEM)
+                .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
+                .save(consumer, Utils.makeId("crafting/sky_steel_ingot_from_sky_steel_block"));
+
+        TransformRecipeBuilder.transform(consumer, Utils.makeId("transform/sky_steel_ingot"), MEGAItems.SKY_STEEL_INGOT,
+                2, TransformCircumstance.fluid(FluidTags.WATER), Ingredient.of(ConventionTags.IRON_INGOT),
+                Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED), Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
+
+        InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)
+                .setTop(Ingredient.of(AEItems.CALCULATION_PROCESSOR_PRESS))
+                .setBottom(Ingredient.of(AEItems.ENGINEERING_PROCESSOR_PRESS))
+                .setMode(InscriberProcessType.PRESS)
+                .save(consumer, Utils.makeId("inscriber/accumulation_processor_press"));
+        InscriberRecipeBuilder.inscribe(Items.IRON_BLOCK, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)
+                .setTop(Ingredient.of(MEGAItems.ACCUMULATION_PROCESSOR_PRESS))
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(consumer, Utils.makeId("inscriber/accumulation_processor_press_extra"));
+
+        InscriberRecipeBuilder.inscribe(MEGATags.SKY_STEEL_INGOT, MEGAItems.ACCUMULATION_PROCESSOR_PRINT, 1)
+                .setTop(Ingredient.of(MEGAItems.ACCUMULATION_PROCESSOR_PRESS))
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(consumer, Utils.makeId("inscriber/accumulation_processor_print"));
+        InscriberRecipeBuilder.inscribe(ConventionTags.FLUIX_DUST, MEGAItems.ACCUMULATION_PROCESSOR, 1)
+                .setTop(Ingredient.of(MEGAItems.ACCUMULATION_PROCESSOR_PRINT))
+                .setBottom(Ingredient.of(AEItems.SILICON_PRINT))
+                .setMode(InscriberProcessType.PRESS)
+                .save(consumer, Utils.makeId("inscriber/accumulation_processor"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.BULK_CELL_COMPONENT)
+                .pattern("aba")
+                .pattern("cdc")
+                .pattern("aea")
+                .define('a', AEItems.SKY_DUST)
+                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                .define('c', MEGAItems.CELL_COMPONENT_4M)
+                .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .define('e', AEItems.SPATIAL_2_CELL_COMPONENT)
+                .unlockedBy("has_cell_component_4m", has(MEGAItems.CELL_COMPONENT_4M))
+                .unlockedBy("has_2_cubed_spatial_cell_component", has(AEItems.SPATIAL_2_CELL_COMPONENT))
+                .save(consumer, Utils.makeId("crafting/bulk_cell_component"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.BULK_ITEM_CELL)
                 .pattern("aba")
@@ -92,9 +143,9 @@ class RecipeProvider extends FabricRecipeProvider {
                 .pattern("aba")
                 .pattern("aaa")
                 .define('a', AEBlocks.DENSE_ENERGY_CELL)
-                .define('b', AEItems.ENGINEERING_PROCESSOR)
+                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-                .unlockedBy("has_engineering_processor", has(AEItems.ENGINEERING_PROCESSOR))
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
                 .save(consumer, Utils.makeId("crafting/mega_energy_cell"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGABlocks.MEGA_CRAFTING_UNIT)
@@ -104,8 +155,9 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('a', AEBlocks.CRAFTING_UNIT)
                 .define('b', AEItems.LOGIC_PROCESSOR)
                 .define('c', AEParts.SMART_CABLE.item(AEColor.TRANSPARENT))
-                .define('d', AEItems.ENGINEERING_PROCESSOR)
+                .define('d', MEGAItems.ACCUMULATION_PROCESSOR)
                 .unlockedBy("has_logic_processor", has(AEItems.LOGIC_PROCESSOR))
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
                 .save(consumer, Utils.makeId("crafting/mega_crafting_unit"));
         craftingBlock(consumer, MEGABlocks.CRAFTING_ACCELERATOR, AEItems.ENGINEERING_PROCESSOR);
         craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_1M, MEGAItems.CELL_COMPONENT_1M);
@@ -135,25 +187,23 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
                 .save(consumer, Utils.makeId("crafting/compression_card"));
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAParts.DECOMPRESSION_MODULE)
-                .pattern("ICI")
-                .pattern("E#E")
+                .pattern("IAI")
+                .pattern("C#E")
                 .pattern("ILI")
                 .define('I', ConventionTags.IRON_INGOT)
+                .define('A', MEGAItems.ACCUMULATION_PROCESSOR)
                 .define('C', AEItems.CALCULATION_PROCESSOR)
                 .define('E', AEItems.ENGINEERING_PROCESSOR)
                 .define('L', AEItems.LOGIC_PROCESSOR)
                 .define('#', MEGAItems.COMPRESSION_CARD)
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
                 .unlockedBy("has_compression_card", has(MEGAItems.COMPRESSION_CARD))
                 .save(consumer, Utils.makeId("crafting/decompression_module"));
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGABlocks.MEGA_PATTERN_PROVIDER)
-                .pattern("ICI")
-                .pattern("VPV")
-                .pattern("ICI")
-                .define('C', AEItems.CALCULATION_PROCESSOR)
-                .define('I', ConventionTags.IRON_INGOT)
-                .define('P', AEBlocks.PATTERN_PROVIDER)
-                .define('V', AEBlocks.QUARTZ_VIBRANT_GLASS)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGABlocks.MEGA_PATTERN_PROVIDER)
+                .requires(AEBlocks.PATTERN_PROVIDER)
+                .requires(MEGAItems.ACCUMULATION_PROCESSOR)
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
                 .save(consumer, Utils.makeId("network/mega_pattern_provider"));
 
@@ -183,22 +233,14 @@ class RecipeProvider extends FabricRecipeProvider {
                 .pattern("cdc")
                 .pattern("aca")
                 .define('a', binder)
-                .define('b', AEItems.CALCULATION_PROCESSOR)
+                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
                 .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(precedingComponent).getPath(),
                         has(precedingComponent))
-                .save(consumer,
-                        Utils.makeId(
-                                "cells/" + BuiltInRegistries.ITEM.getKey(tier.componentSupplier().get()).getPath()));
-    }
-
-    private void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
-            ItemDefinition<?> output) {
-        InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, output, 1)
-                .setMode(InscriberProcessType.PRESS)
-                .setTop(Ingredient.of(top)).setBottom(Ingredient.of(bottom))
-                .save(consumer, Utils.makeId("inscriber/" + output.id().getPath()));
+                .save(consumer, Utils
+                        .makeId("cells/" + BuiltInRegistries.ITEM.getKey(tier.componentSupplier().get()).getPath()));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,

@@ -23,6 +23,7 @@ import appeng.block.networking.EnergyCellBlockItem;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
+import appeng.decorative.AEDecorativeBlock;
 
 import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -48,9 +49,11 @@ public final class MEGABlocks {
             .forceSolidOn();
 
     // spotless:off
+    public static final BlockDefinition<AEDecorativeBlock> SKY_STEEL_BLOCK = block("Sky Steel Block", "sky_steel_block", () -> new AEDecorativeBlock(BlockBehaviour.Properties.of().strength(5.0f, 12.0f).requiresCorrectToolForDrops().mapColor(MapColor.METAL).sound(SoundType.METAL)));
+
     public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block("Superdense Energy Cell", "mega_energy_cell", () -> new EnergyCellBlock(12800000, 3200, 12800), EnergyCellBlockItem::new);
 
-    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("MEGA Crafting Unit", "mega_crafting_unit", () -> new CraftingUnitBlock(MEGACraftingUnitType.UNIT), null);
+    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("MEGA Crafting Unit", "mega_crafting_unit", () -> new CraftingUnitBlock(MEGACraftingUnitType.UNIT));
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("MEGA Crafting Co-Processing Unit", "mega_crafting_accelerator", () -> new CraftingUnitBlock(MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock("1M MEGA Crafting Storage", "1m_crafting_storage", () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_1M), () -> MEGAItems.CELL_COMPONENT_1M);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock("4M MEGA Crafting Storage", "4m_crafting_storage", () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_4M), () -> MEGAItems.CELL_COMPONENT_4M);
@@ -67,6 +70,11 @@ public final class MEGABlocks {
             Supplier<ItemLike> disassemblyExtra) {
         return block(englishName, id, blockSupplier,
                 (block, props) -> new MEGACraftingBlockItem(block, props, disassemblyExtra));
+    }
+
+    private static <T extends Block> BlockDefinition<T> block(String englishName, String id,
+            Supplier<T> blockSupplier) {
+        return block(englishName, id, blockSupplier, null);
     }
 
     private static <T extends Block> BlockDefinition<T> block(String englishName, String id, Supplier<T> blockSupplier,

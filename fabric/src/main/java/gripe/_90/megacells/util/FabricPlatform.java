@@ -10,6 +10,11 @@ import gripe._90.megacells.util.service.Platform;
 
 public final class FabricPlatform implements Platform {
     @Override
+    public Loader getLoader() {
+        return Loader.FABRIC;
+    }
+
+    @Override
     public CreativeModeTab getCreativeTab(CreativeModeTab.DisplayItemsGenerator display) {
         return FabricItemGroup.builder()
                 .title(MEGATranslations.CreativeTab.text())

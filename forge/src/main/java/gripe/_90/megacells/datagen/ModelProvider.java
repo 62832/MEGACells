@@ -3,22 +3,18 @@ package gripe._90.megacells.datagen;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonPrimitive;
 import com.ibm.icu.impl.Pair;
 
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.blockstates.VariantProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -30,6 +26,7 @@ import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
+import appeng.datagen.providers.models.AE2BlockStateProvider;
 import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
@@ -64,6 +61,12 @@ abstract class ModelProvider {
 
         @Override
         protected void registerModels() {
+            basicItem(MEGAItems.SKY_STEEL_INGOT.asItem());
+
+            basicItem(MEGAItems.ACCUMULATION_PROCESSOR_PRESS.asItem());
+            basicItem(MEGAItems.ACCUMULATION_PROCESSOR_PRINT.asItem());
+            basicItem(MEGAItems.ACCUMULATION_PROCESSOR.asItem());
+
             basicItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem());
             basicItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem());
 
@@ -115,13 +118,10 @@ abstract class ModelProvider {
         }
     }
 
-    static class Blocks extends BlockStateProvider {
+    static class Blocks extends AE2BlockStateProvider {
         // because for whatever reason this isn't fucking accessible from BlockStateProvider
         private static final ExistingFileHelper.ResourceType MODEL = new ExistingFileHelper.ResourceType(
                 PackType.CLIENT_RESOURCES, ".json", "models");
-
-        private static final VariantProperty<VariantProperties.Rotation> Z_ROT = new VariantProperty<>("ae2:z",
-                r -> new JsonPrimitive(r.ordinal() * 90));
 
         private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
@@ -132,6 +132,8 @@ abstract class ModelProvider {
 
         @Override
         protected void registerStatesAndModels() {
+            simpleBlockAndItem(MEGABlocks.SKY_STEEL_BLOCK);
+
             energyCell();
             patternProvider();
 
@@ -241,54 +243,6 @@ abstract class ModelProvider {
                                     0);
                         }
                     }));
-        }
-
-        private MultiVariantGenerator multiVariantGenerator(BlockDefinition<?> block, Variant... variants) {
-            if (variants.length == 0) {
-                variants = new Variant[] { Variant.variant() };
-            }
-
-            var builder = MultiVariantGenerator.multiVariant(block.block(), variants);
-            registeredBlocks.put(block.block(), () -> builder.get().getAsJsonObject());
-            return builder;
-        }
-
-        protected Variant applyOrientation(Variant variant, BlockOrientation orientation) {
-            return applyRotation(variant,
-                    orientation.getAngleX(),
-                    orientation.getAngleY(),
-                    orientation.getAngleZ());
-        }
-
-        protected Variant applyRotation(Variant variant, int angleX, int angleY, int angleZ) {
-            angleX = normalizeAngle(angleX);
-            angleY = normalizeAngle(angleY);
-            angleZ = normalizeAngle(angleZ);
-
-            if (angleX != 0) {
-                variant = variant.with(VariantProperties.X_ROT, rotationByAngle(angleX));
-            }
-            if (angleY != 0) {
-                variant = variant.with(VariantProperties.Y_ROT, rotationByAngle(angleY));
-            }
-            if (angleZ != 0) {
-                variant = variant.with(Z_ROT, rotationByAngle(angleZ));
-            }
-            return variant;
-        }
-
-        private int normalizeAngle(int angle) {
-            return angle - (angle / 360) * 360;
-        }
-
-        private VariantProperties.Rotation rotationByAngle(int angle) {
-            return switch (angle) {
-                case 0 -> VariantProperties.Rotation.R0;
-                case 90 -> VariantProperties.Rotation.R90;
-                case 180 -> VariantProperties.Rotation.R180;
-                case 270 -> VariantProperties.Rotation.R270;
-                default -> throw new IllegalArgumentException("Invalid angle: " + angle);
-            };
         }
     }
 
