@@ -34,6 +34,8 @@ import gripe._90.megacells.util.Utils;
 
 public class MEGACellsClient {
     public MEGACellsClient() {
+        initBuiltInModels();
+
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::initScreens);
         bus.addListener(this::initRenderTypes);
@@ -52,12 +54,14 @@ public class MEGACellsClient {
         }
     }
 
-    private void initModels(ModelEvent.RegisterGeometryLoaders event) {
+    private void initBuiltInModels() {
         for (var type : MEGACraftingUnitType.values()) {
             BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/mega_" + type.getAffix() + "_formed"),
                     new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
         }
+    }
 
+    private void initModels(ModelEvent.RegisterGeometryLoaders event) {
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
         ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
