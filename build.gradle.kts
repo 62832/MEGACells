@@ -1,8 +1,8 @@
 import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 import com.diffplug.gradle.spotless.SpotlessExtension
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
@@ -11,7 +11,6 @@ import net.fabricmc.loom.task.RemapJarTask
 import dev.architectury.plugin.ArchitectPluginExtension
 
 import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
-import java.util.*
 
 plugins {
     java
@@ -224,15 +223,18 @@ for (platform in platforms) {
             shadowCommon(project(path = ":common", configuration = "transformProduction${capitalise(platform)}")) { isTransitive = false }
         }
 
+        sourceSets {
+            main {
+                resources {
+                    srcDir(file("src/generated/resources"))
+                    exclude("**/.cache")
+                }
+            }
+        }
+
         tasks {
             processResources {
                 extra["commonProps"] = mapOf("version" to project.version) + project.properties
-
-                from(fileTree(project(":common").file("src/generated/resources"))) {
-                    val conventionTags = ObjectMapper().readValue(file("convention_tags.json"), object: TypeReference<Map<String, String>>() {})
-                    expand(conventionTags)
-                    exclude("**/.cache")
-                }
             }
 
             withType<ShadowJar> {

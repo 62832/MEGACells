@@ -1,12 +1,11 @@
 package gripe._90.megacells.datagen;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.api.util.AEColor;
 import appeng.core.definitions.AEBlocks;
@@ -34,13 +34,13 @@ import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Utils;
 
-class RecipeProvider extends FabricRecipeProvider {
-    RecipeProvider(FabricDataOutput output) {
+public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
+    public RecipeProvider(PackOutput output) {
         super(output);
     }
 
     @Override
-    public void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
         // spotless:off
         component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem());
         component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, AEItems.ENDER_DUST.asItem());
@@ -186,11 +186,10 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('b', AEItems.CALCULATION_PROCESSOR)
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .unlockedBy("has_" + BuiltInRegistries.ITEM.getKey(precedingComponent).getPath(),
+                .unlockedBy("has_" + Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(precedingComponent)).getPath(),
                         has(precedingComponent))
-                .save(consumer,
-                        Utils.makeId(
-                                "cells/" + BuiltInRegistries.ITEM.getKey(tier.componentSupplier().get()).getPath()));
+                .save(consumer, Utils.makeId("cells/" + Objects
+                        .requireNonNull(ForgeRegistries.ITEMS.getKey(tier.componentSupplier().get())).getPath()));
     }
 
     private void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
@@ -258,7 +257,7 @@ class RecipeProvider extends FabricRecipeProvider {
     private void manaCells(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable,
             StorageTier tier) {
         var component = tier.componentSupplier().get();
-        var componentPath = BuiltInRegistries.ITEM.getKey(component).getPath();
+        var componentPath = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(component)).getPath();
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
                 .requires(tier.componentSupplier().get()).unlockedBy("has_" + componentPath, has(component))

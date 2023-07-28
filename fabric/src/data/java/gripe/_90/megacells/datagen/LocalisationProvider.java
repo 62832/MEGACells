@@ -1,14 +1,15 @@
 package gripe._90.megacells.datagen;
 
-import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGATranslations;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
+import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGATranslations;
+
 class LocalisationProvider extends FabricLanguageProvider {
-    protected LocalisationProvider(FabricDataOutput output, String locale) {
-        super(output, locale);
+    protected LocalisationProvider(FabricDataOutput output) {
+        super(output, "en_us");
     }
 
     @Override

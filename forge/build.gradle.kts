@@ -1,14 +1,26 @@
-val generated = file("src/generated/resources")
-
 loom {
     val modId: String by project
 
     runs {
         create("data") {
             data()
+            name("Minecraft Data")
+
             programArgs("--all", "--mod", modId)
-            programArgs("--output", generated.absolutePath)
+            programArgs("--output", file("src/generated/resources").absolutePath)
+            programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
+
+            mods {
+                create(modId) {
+                    // this doesn't actually work yet for the time being
+                    sourceSet(sourceSets.create("data") {
+                        val main = sourceSets.main.get()
+                        compileClasspath += main.compileClasspath + main.output
+                        runtimeClasspath += main.runtimeClasspath + main.output
+                    })
+                }
+            }
         }
     }
 
@@ -88,15 +100,6 @@ dependencies {
     }
 
     modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir(generated)
-            exclude("**/.cache")
-        }
-    }
 }
 
 tasks.processResources {

@@ -12,7 +12,7 @@ loom {
 
             property("fabric-api.datagen")
             property("fabric-api.datagen.modid", rootProject.property("modId").toString())
-            property("fabric-api.datagen.output-dir", project(":common").file("src/generated/resources").absolutePath)
+            property("fabric-api.datagen.output-dir", file("src/generated/resources").absolutePath)
             property("fabric-api.datagen.strict-validation")
         }
     }

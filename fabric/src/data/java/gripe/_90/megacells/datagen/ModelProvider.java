@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.ibm.icu.impl.Pair;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import net.minecraft.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.blockstates.VariantProperty;
 import net.minecraft.data.models.model.DelegatedModel;
 import net.minecraft.data.models.model.ModelTemplate;
 import net.minecraft.data.models.model.ModelTemplates;
@@ -26,6 +28,7 @@ import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import appeng.api.orientation.BlockOrientation;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
@@ -64,6 +67,9 @@ class ModelProvider extends FabricModelProvider {
             Optional.of(AppEng.makeId("item/cable_interface")), Optional.empty(),
             SIDES, TextureSlot.BACK, TextureSlot.FRONT);
 
+    private static final VariantProperty<VariantProperties.Rotation> Z_ROT = new VariantProperty<>("ae2:z",
+            r -> new JsonPrimitive(r.ordinal() * 90));
+
     ModelProvider(FabricDataOutput output) {
         super(output);
     }
@@ -91,8 +97,6 @@ class ModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
-        generatePartModels(generator);
-
         generator.generateFlatItem(MEGAItems.MEGA_ITEM_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(MEGAItems.MEGA_FLUID_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
@@ -141,6 +145,8 @@ class ModelProvider extends FabricModelProvider {
         driveCell("mega_item_cell", generator);
         driveCell("mega_fluid_cell", generator);
         driveCell("bulk_item_cell", generator);
+
+        generatePartModels(generator);
     }
 
     private void generatePartModels(ItemModelGenerators generator) {
@@ -153,8 +159,8 @@ class ModelProvider extends FabricModelProvider {
                 .put(TextureSlot.LAYER1, AppEng.makeId("item/storage_cell_led")), generator.output);
     }
 
-    private void portableModel(ItemDefinition<?> portable, String screenType,
-            ResourceLocation housingTexture, ItemModelGenerators generator) {
+    private void portableModel(ItemDefinition<?> portable, String screenType, ResourceLocation housingTexture,
+            ItemModelGenerators generator) {
         var path = portable.id().getPath();
         var tierSuffix = path.substring(path.lastIndexOf('_') + 1);
         PORTABLE.create(Utils.makeId("item/" + portable.id().getPath()), new TextureMapping()
@@ -187,22 +193,30 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void craftingMonitor(BlockModelGenerators generator) {
-        var formed = Utils.makeId("block/crafting/monitor_formed");
         var unformed = Utils.makeId("block/crafting/monitor");
         var unit = Utils.makeId("block/crafting/unit");
+        var unformedModel = ModelTemplates.CUBE.create(unformed, new TextureMapping()
+                .put(TextureSlot.NORTH, unformed)
+                .put(TextureSlot.EAST, unit)
+                .put(TextureSlot.SOUTH, unit)
+                .put(TextureSlot.WEST, unit)
+                .put(TextureSlot.DOWN, unit)
+                .put(TextureSlot.UP, unit)
+                .put(TextureSlot.PARTICLE, unformed), generator.modelOutput);
+
+        var formedModel = Utils.makeId("block/crafting/monitor_formed");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.CRAFTING_MONITOR.block())
-                .with(PropertyDispatch.property(AbstractCraftingUnitBlock.FORMED)
-                        .select(false, Variant.variant().with(VariantProperties.MODEL,
-                                ModelTemplates.CUBE.create(unformed, new TextureMapping()
-                                        .put(TextureSlot.NORTH, unformed)
-                                        .put(TextureSlot.EAST, unit)
-                                        .put(TextureSlot.SOUTH, unit)
-                                        .put(TextureSlot.WEST, unit)
-                                        .put(TextureSlot.DOWN, unit)
-                                        .put(TextureSlot.UP, unit)
-                                        .put(TextureSlot.PARTICLE, unformed), generator.modelOutput)))
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, formed))));
-        generator.modelOutput.accept(formed, () -> customModelLoader(formed));
+                .with(PropertyDispatch.properties(AbstractCraftingUnitBlock.FORMED, BlockStateProperties.FACING)
+                        .generate((formed, facing) -> {
+                            if (formed) {
+                                return Variant.variant().with(VariantProperties.MODEL, formedModel);
+                            } else {
+                                return applyOrientation(
+                                        Variant.variant().with(VariantProperties.MODEL, unformedModel),
+                                        BlockOrientation.get(facing));
+                            }
+                        })));
+        generator.modelOutput.accept(formedModel, () -> customModelLoader(formedModel));
         generator.delegateItemModel(MEGABlocks.CRAFTING_MONITOR.block(), unformed);
     }
 
@@ -234,18 +248,40 @@ class ModelProvider extends FabricModelProvider {
                         return Variant.variant().with(VariantProperties.MODEL, normal);
                     } else {
                         var orientation = BlockOrientation.get(forward);
-
-                        // + 90 because the default model is oriented UP, while block orientation assumes NORTH
-                        var angleX = normalizeAngle(orientation.getAngleX() + 90);
-                        var angleY = normalizeAngle(orientation.getAngleY());
-
-                        return Variant.variant().with(VariantProperties.MODEL, oriented)
-                                .with(VariantProperties.X_ROT, rotationByAngle(angleX))
-                                .with(VariantProperties.Y_ROT, rotationByAngle(angleY));
+                        return applyRotation(
+                                Variant.variant().with(VariantProperties.MODEL, oriented),
+                                // + 90 because the default model is oriented UP, while block orientation assumes NORTH
+                                orientation.getAngleX() + 90,
+                                orientation.getAngleY(),
+                                0);
                     }
                 })));
 
         generator.delegateItemModel(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), normal);
+    }
+
+    protected Variant applyOrientation(Variant variant, BlockOrientation orientation) {
+        return applyRotation(variant,
+                orientation.getAngleX(),
+                orientation.getAngleY(),
+                orientation.getAngleZ());
+    }
+
+    protected Variant applyRotation(Variant variant, int angleX, int angleY, int angleZ) {
+        angleX = normalizeAngle(angleX);
+        angleY = normalizeAngle(angleY);
+        angleZ = normalizeAngle(angleZ);
+
+        if (angleX != 0) {
+            variant = variant.with(VariantProperties.X_ROT, rotationByAngle(angleX));
+        }
+        if (angleY != 0) {
+            variant = variant.with(VariantProperties.Y_ROT, rotationByAngle(angleY));
+        }
+        if (angleZ != 0) {
+            variant = variant.with(Z_ROT, rotationByAngle(angleZ));
+        }
+        return variant;
     }
 
     private int normalizeAngle(int angle) {
