@@ -15,7 +15,6 @@ import gripe._90.megacells.part.DecompressionModulePart;
 import gripe._90.megacells.part.MEGAPatternProviderPart;
 
 public final class MEGAParts {
-
     public static void init() {
         // controls static load order
     }

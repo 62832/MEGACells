@@ -21,6 +21,7 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 public class MEGACells implements IAEAddonEntrypoint {
@@ -41,7 +42,7 @@ public class MEGACells implements IAEAddonEntrypoint {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotItems.init();
         }
     }

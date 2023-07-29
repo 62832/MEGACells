@@ -10,7 +10,9 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -31,11 +33,17 @@ import appeng.recipes.handlers.InscriberRecipeBuilder;
 import appeng.recipes.transform.TransformCircumstance;
 import appeng.recipes.transform.TransformRecipeBuilder;
 
+import mekanism.common.registries.MekanismBlocks;
+import mekanism.common.registries.MekanismItems;
+import mekanism.generators.common.registries.GeneratorsBlocks;
+
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
@@ -216,7 +224,46 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
                 .save(consumer, Utils.makeId("network/mega_pattern_provider_block"));
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
+            var osmiumTag = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
+
+            // spotless:off
+            housing(consumer, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+
+            cell(consumer, AppMekItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+            cell(consumer, AppMekItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+            cell(consumer, AppMekItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+            cell(consumer, AppMekItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+            cell(consumer, AppMekItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+
+            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            //spotless:on
+
+            // TODO
+            InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, AppMekItems.RADIOACTIVE_CELL_COMPONENT, 1)
+                    .setMode(InscriberProcessType.PRESS)
+                    .setTop(Ingredient.of(AEItems.CELL_COMPONENT_256K))
+                    .setBottom(Ingredient.of(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
+                    .save(consumer, Utils.makeId("inscriber/radioactive_cell_component"));
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
+                    .pattern("aba")
+                    .pattern("bcb")
+                    .pattern("ded")
+                    .define('a', GeneratorsBlocks.REACTOR_GLASS)
+                    .define('b', AEItems.SKY_DUST)
+                    .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
+                    .define('d', MekanismItems.HDPE_SHEET)
+                    .define('e', MekanismItems.POLONIUM_PELLET)
+                    .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT))
+                    .save(consumer, Utils.makeId("cells/standard/radioactive_chemical_cell"));
+        }
+
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
             manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
             manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);

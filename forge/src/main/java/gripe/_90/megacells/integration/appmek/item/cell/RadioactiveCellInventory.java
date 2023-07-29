@@ -29,7 +29,7 @@ public class RadioactiveCellInventory implements StorageCell {
     private static final String KEY = "key";
     private static final String COUNT = "count";
 
-    static final int MAX_BYTES = 256;
+    public static final int MAX_BYTES = 256;
     private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
 
     private final ISaveProvider container;
@@ -93,7 +93,7 @@ public class RadioactiveCellInventory implements StorageCell {
         return CellState.NOT_EMPTY;
     }
 
-    protected AEKey getFilterItem() {
+    public AEKey getFilterItem() {
         var config = getConfigInventory().keySet().stream().toList();
         if (config.isEmpty()) {
             return null;
@@ -102,7 +102,7 @@ public class RadioactiveCellInventory implements StorageCell {
         }
     }
 
-    protected long getUsedBytes() {
+    public long getUsedBytes() {
         return this.chemAmount / MekanismKeyType.TYPE.getAmountPerByte();
     }
 
@@ -115,7 +115,7 @@ public class RadioactiveCellInventory implements StorageCell {
         return this.cellType.getConfigInventory(this.i);
     }
 
-    protected boolean isBlackListed(AEKey what) {
+    public boolean isBlackListed(AEKey what) {
         if (what instanceof MekanismKey key) {
             return ChemicalAttributeValidator.DEFAULT.process(key.getStack())
                     || key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical();

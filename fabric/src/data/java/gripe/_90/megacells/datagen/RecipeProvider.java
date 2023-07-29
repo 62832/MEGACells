@@ -36,6 +36,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 class RecipeProvider extends FabricRecipeProvider {
@@ -216,7 +217,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
                 .save(consumer, Utils.makeId("network/mega_pattern_provider_block"));
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
             manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
             manaCells(consumer, AppBotItems.MANA_CELL_16M, AppBotItems.PORTABLE_MANA_CELL_16M, MEGAItems.TIER_16M);

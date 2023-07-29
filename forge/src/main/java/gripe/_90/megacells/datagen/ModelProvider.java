@@ -33,6 +33,9 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 abstract class ModelProvider {
@@ -47,6 +50,7 @@ abstract class ModelProvider {
         private static final ResourceLocation PORTABLE_CELL_FLUID_HOUSING = AppEng.makeId("item/portable_cell_fluid_housing");
 
         private static final ResourceLocation CABLE_INTERFACE = AppEng.makeId("item/cable_interface");
+        private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
         //spotless:on
 
         public Items(PackOutput output, ExistingFileHelper existing) {
@@ -57,6 +61,7 @@ abstract class ModelProvider {
             existing.trackGenerated(PORTABLE_CELL_ITEM_HOUSING, TEXTURE);
             existing.trackGenerated(PORTABLE_CELL_FLUID_HOUSING, TEXTURE);
             existing.trackGenerated(CABLE_INTERFACE, MODEL);
+            existing.trackGenerated(DRIVE_CELL, MODEL);
         }
 
         @Override
@@ -86,9 +91,37 @@ abstract class ModelProvider {
             MEGAItems.getItemPortables().forEach(p -> portableModel(p, "item", PORTABLE_CELL_ITEM_HOUSING));
             MEGAItems.getFluidPortables().forEach(p -> portableModel(p, "fluid", PORTABLE_CELL_FLUID_HOUSING));
 
+            driveCell("mega_item_cell");
+            driveCell("mega_fluid_cell");
+            driveCell("bulk_item_cell");
+
             var cells = new ArrayList<>(MEGAItems.getItemCells());
             cells.addAll(MEGAItems.getFluidCells());
             cells.add(MEGAItems.BULK_ITEM_CELL);
+
+            if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
+                basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
+
+                cells.addAll(AppMekItems.getCells());
+                // TODO
+                AppMekItems.getPortables().forEach(p -> portableModel(p, "chemical", PORTABLE_CELL_ITEM_HOUSING));
+
+                basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT.asItem());
+                cells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
+
+                driveCell("mega_chemical_cell");
+                driveCell("radioactive_chemical_cell");
+            }
+
+            if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+                basicItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem());
+
+                cells.addAll(AppBotItems.getCells());
+                // TODO
+                AppBotItems.getPortables().forEach(p -> portableModel(p, "mana", PORTABLE_CELL_ITEM_HOUSING));
+
+                driveCell("mega_mana_cell");
+            }
 
             cells.forEach(this::cellModel);
 
@@ -108,6 +141,11 @@ abstract class ModelProvider {
                     Utils.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
                             .texture("layer1", PORTABLE_CELL_LED).texture("layer2", housingTexture)
                             .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
+        }
+
+        private void driveCell(String texture) {
+            var path = "block/drive/cells/" + texture;
+            withExistingParent(path, DRIVE_CELL).texture("cell", path);
         }
 
         private void patternProviderPart() {
@@ -147,15 +185,6 @@ abstract class ModelProvider {
                     Pair.of(MEGABlocks.CRAFTING_ACCELERATOR, "accelerator"));
             craftingUnits.forEach(block -> craftingModel(block.first, block.second));
             craftingMonitor();
-
-            driveCell("mega_item_cell");
-            driveCell("mega_fluid_cell");
-            driveCell("bulk_item_cell");
-        }
-
-        private void driveCell(String texture) {
-            var path = "block/drive/cells/" + texture;
-            models().withExistingParent(path, DRIVE_CELL).texture("cell", path);
         }
 
         private void energyCell() {

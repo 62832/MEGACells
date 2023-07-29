@@ -65,7 +65,7 @@ public class BulkCellInventory implements StorageCell {
         this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
 
         this.storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
-        this.unitCount = !getTag().getString(UNIT_COUNT).equals("")
+        this.unitCount = !getTag().getString(UNIT_COUNT).isEmpty()
                 ? new BigInteger(getTag().getString(UNIT_COUNT))
                 : BigInteger.ZERO;
         this.highestCompressed = storedItem;

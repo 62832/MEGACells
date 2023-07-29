@@ -24,7 +24,7 @@ public final class FabricPlatform implements Platform {
     }
 
     @Override
-    public boolean isModLoaded(String modId) {
-        return FabricLoaderImpl.INSTANCE.isModLoaded(modId);
+    public boolean isAddonLoaded(Addons addon) {
+        return FabricLoaderImpl.INSTANCE.isModLoaded(addon.getModId());
     }
 }

@@ -126,7 +126,7 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
     }
 
-    private static class Handler implements ICellHandler {
+    public static class Handler implements ICellHandler {
         private Handler() {
         }
 

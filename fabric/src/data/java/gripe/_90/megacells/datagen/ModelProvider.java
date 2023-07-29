@@ -41,6 +41,7 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
@@ -125,15 +126,13 @@ class ModelProvider extends FabricModelProvider {
         cells.addAll(MEGAItems.getFluidCells());
         cells.add(MEGAItems.BULK_ITEM_CELL);
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
-            for (var portable : AppBotItems.getPortables()) {
-                // lot of assumptions being made here in advance
-                portableModel(portable, "mana", new ResourceLocation("appbot", "item/portable_cell_mana_housing"),
-                        generator);
-            }
+            // lot of assumptions being made here in advance
+            AppBotItems.getPortables().forEach(p -> portableModel(p, "mana",
+                    new ResourceLocation(Addons.APPBOT.getModId(), "item/portable_cell_mana_housing"), generator));
 
             driveCell("mega_mana_cell", generator);
         }

@@ -2,26 +2,32 @@ package gripe._90.megacells.integration.appmek.item;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
+import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ICellWorkbenchItem;
+import appeng.api.storage.cells.ISaveProvider;
+import appeng.core.localization.Tooltips;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.util.ConfigInventory;
 
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
-import gripe._90.megacells.integration.appmek.item.cell.RadioactiveCellHandler;
+import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.integration.appmek.item.cell.RadioactiveCellInventory;
 
 public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchItem {
+    public static final Handler HANDLER = new Handler();
+
     public MEGARadioactiveCell(Properties properties) {
         super(properties.stacksTo(1));
     }
@@ -40,10 +46,48 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
     }
 
     @Override
-    public void appendHoverText(ItemStack is, Level level, @NotNull List<Component> lines,
-            @NotNull TooltipFlag advancedTooltips) {
-        Preconditions.checkArgument(is.getItem() == this);
-        RadioactiveCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
+    public void appendHoverText(@NotNull ItemStack is, Level level, @NotNull List<Component> lines,
+            @NotNull TooltipFlag adv) {
+        var inv = HANDLER.getCellInventory(is, null);
+
+        if (inv != null) {
+            var containedType = inv.getAvailableStacks().getFirstKey();
+            var filterItem = inv.getFilterItem();
+
+            lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
+            lines.add(Tooltips.of(containedType != null ? MEGATranslations.Contains.text(containedType.getDisplayName())
+                    : MEGATranslations.Empty.text()));
+
+            if (filterItem != null) {
+                if (containedType == null) {
+                    lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
+                } else {
+                    if (!containedType.equals(filterItem)) {
+                        lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
+                    }
+                }
+                if (inv.isBlackListed(filterItem)) {
+                    lines.add(MEGATranslations.FilterChemicalUnsupported.text().withStyle(ChatFormatting.DARK_RED));
+                }
+            } else {
+                lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
+            }
+        }
     }
 
+    public static class Handler implements ICellHandler {
+        private Handler() {
+        }
+
+        @Override
+        public boolean isCell(ItemStack is) {
+            return is != null && is.getItem() instanceof MEGARadioactiveCell;
+        }
+
+        @Nullable
+        @Override
+        public RadioactiveCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider container) {
+            return RadioactiveCellInventory.createInventory(is, container);
+        }
+    }
 }

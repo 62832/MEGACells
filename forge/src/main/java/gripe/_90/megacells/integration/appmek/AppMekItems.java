@@ -22,22 +22,19 @@ public final class AppMekItems {
     public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING = MEGAItems
             .item("MEGA Chemical Cell Housing", "mega_chemical_cell_housing", MaterialItem::new);
 
+    // spotless:off
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_1M = cell(MEGAItems.TIER_1M);
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_4M = cell(MEGAItems.TIER_4M);
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_16M = cell(MEGAItems.TIER_16M);
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_64M = cell(MEGAItems.TIER_64M);
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_256M = cell(MEGAItems.TIER_256M);
 
-    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_1M = portable(
-            MEGAItems.TIER_1M);
-    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_4M = portable(
-            MEGAItems.TIER_4M);
-    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_16M = portable(
-            MEGAItems.TIER_16M);
-    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_64M = portable(
-            MEGAItems.TIER_64M);
-    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_256M = portable(
-            MEGAItems.TIER_256M);
+    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGAItems.TIER_1M);
+    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGAItems.TIER_4M);
+    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_16M = portable(MEGAItems.TIER_16M);
+    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGAItems.TIER_64M);
+    public static final ItemDefinition<MEGAPortableChemicalCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGAItems.TIER_256M);
+    //spotless:on
 
     public static final ItemDefinition<MaterialItem> RADIOACTIVE_CELL_COMPONENT = MEGAItems
             .item("MEGA Radioactive Storage Component", "radioactive_cell_component", MaterialItem::new);

@@ -32,6 +32,7 @@ import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
 @Mod(Utils.MODID)
@@ -54,11 +55,11 @@ public class MEGACells {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        if (Utils.PLATFORM.isModLoaded("appmek")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             AppMekItems.init();
         }
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotItems.init();
         }
     }
@@ -94,7 +95,7 @@ public class MEGACells {
         event.enqueueWork(InitUpgrades::init);
 
         event.enqueueWork(() -> {
-            if (Utils.PLATFORM.isModLoaded("appmek")) {
+            if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
                 AppMekIntegration.initUpgrades();
                 AppMekIntegration.initStorageCells();
             }

@@ -13,7 +13,7 @@ import appeng.core.localization.GuiText;
 import me.ramidzkh.mekae2.AMItems;
 
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.appmek.item.cell.RadioactiveCellHandler;
+import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 import gripe._90.megacells.util.Utils;
 
 public final class AppMekIntegration {
@@ -45,7 +45,7 @@ public final class AppMekIntegration {
         Stream.of(AppMekItems.getCells(), AppMekItems.getPortables()).flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_chemical_cell")));
 
-        StorageCells.addCellHandler(RadioactiveCellHandler.INSTANCE);
+        StorageCells.addCellHandler(MEGARadioactiveCell.HANDLER);
         StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
                 Utils.makeId("block/drive/cells/radioactive_chemical_cell"));
     }

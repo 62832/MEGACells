@@ -7,6 +7,7 @@ import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.service.Platform;
 
 public final class ForgePlatform implements Platform {
@@ -25,11 +26,11 @@ public final class ForgePlatform implements Platform {
     }
 
     @Override
-    public boolean isModLoaded(String modId) {
+    public boolean isAddonLoaded(Addons addon) {
         if (ModList.get() == null) {
-            return LoadingModList.get().getMods().stream().map(ModInfo::getModId).anyMatch(modId::equals);
+            return LoadingModList.get().getMods().stream().map(ModInfo::getModId).anyMatch(addon.getModId()::equals);
         }
 
-        return ModList.get().isLoaded(modId);
+        return ModList.get().isLoaded(addon.getModId());
     }
 }
