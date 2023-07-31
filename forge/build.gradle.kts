@@ -48,7 +48,6 @@ repositories {
         url = uri("https://maven.shedaniel.me/")
         content {
             includeGroup("me.shedaniel.cloth")
-            includeGroup("dev.architectury")
         }
     }
 
@@ -70,45 +69,36 @@ repositories {
     }
 }
 
-val forgeVersion: String by project
-val ae2Version: String by project
-
 dependencies {
-    val minecraftVersion: String by project
+    forge(libs.forge)
+    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
 
-    forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
-    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    modImplementation(libs.ae2.forge)
 
-    modImplementation("appeng:appliedenergistics2-forge:$ae2Version")
-    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
-    modCompileOnly("curse.maven:appmek-574300:${property("appmekFile")}")
-    modCompileOnly("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}")
+    modCompileOnly(libs.appmek)
+    modCompileOnly(libs.mekanism)
+    modCompileOnly(variantOf(libs.mekanism) { classifier("generators") })
+    // modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
-    val mekanismVersion: String by project
-    modCompileOnly("mekanism:Mekanism:1.19.2-$mekanismVersion")
-    modCompileOnly("mekanism:Mekanism:1.19.2-$mekanismVersion:generators")
-    // modRuntimeOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:all")
+    modCompileOnly(libs.appbot.forge)
+    modRuntimeOnly(libs.botania.forge)
+    modRuntimeOnly(libs.patchouli.forge)
 
-    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FORGE-SNAPSHOT")
-    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraftVersion-${property("patchouliVersion")}-FORGE")
+    modImplementation(libs.ae2wtlib.forge)
+    modRuntimeOnly(libs.cloth.forge)
+    modRuntimeOnly(libs.architectury.forge)
+    modRuntimeOnly(libs.curios)
 
-    modRuntimeOnly("dev.architectury:architectury-forge:${property("architecturyVersion")}")
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${property("clothVersion")}")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${property("curiosVersion")}+$minecraftVersion")
-
-    modRuntimeOnly("mezz.jei:jei-$minecraftVersion-forge:${property("jeiVersion")}") {
-        isTransitive = false
-    }
-
-    modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
+    modRuntimeOnly(libs.jei.forge) { isTransitive = false }
+    modRuntimeOnly(libs.jade.forge)
 }
 
 tasks.processResources {
     val commonProps: Map<String, *> by extra
     val forgeProps = mapOf(
-            "appmekVersion" to project.extra.get("appmekVersion"),
-            "loaderVersion" to forgeVersion.substringBefore('.'),
-            "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
+            "appmekVersion" to libs.versions.appmek.get(),
+            "loaderVersion" to libs.forge.get().version!!.substringAfter('-').substringBefore('.'),
+            "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1
     )
 
     inputs.properties(commonProps)

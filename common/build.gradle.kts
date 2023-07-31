@@ -5,12 +5,10 @@ architectury {
 }
 
 dependencies {
-    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
 
-    val fabricProject = project(":fabric").dependencyProject
-
-    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${fabricProject.property("fabricApiVersion")}+${property("minecraftVersion")}")
-    modCompileOnly("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
-    modCompileOnly("curse.maven:ae2wtlib-459929:${fabricProject.property("ae2wtFile")}")
-    modCompileOnly("curse.maven:applied-botanics-addon-610632:${fabricProject.property("appbotFile")}")
+    modCompileOnly(libs.fabric.api)
+    modCompileOnly(libs.ae2.fabric)
+    modCompileOnly(libs.ae2wtlib.fabric)
+    modCompileOnly(libs.appbot.fabric)
 }
