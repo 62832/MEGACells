@@ -1,30 +1,18 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
-import com.diffplug.gradle.spotless.SpotlessExtension
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
-
-import dev.architectury.plugin.ArchitectPluginExtension
-
-import me.shedaniel.unifiedpublishing.UnifiedPublishingExtension
 
 plugins {
     java
     `maven-publish`
-    id("architectury-plugin") version "3.4-SNAPSHOT" apply false
-    id("dev.architectury.loom") version "1.2-SNAPSHOT" apply false
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
-    id("me.shedaniel.unified-publishing") version "0.1.+" apply false
-    id("com.diffplug.spotless") version "6.4.1" apply false
+    id("dev.architectury.loom") version "1.3-SNAPSHOT" apply false
+    id("architectury-plugin") version "3.4-SNAPSHOT"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("me.shedaniel.unified-publishing") version "0.1.+"
+    id("com.diffplug.spotless") version "6.20.0"
 }
 
 val modId: String by project
 val minecraftVersion: String by project
-val javaVersion: String by project
 
 val platforms by extra {
     property("enabledPlatforms").toString().split(',')
@@ -33,7 +21,7 @@ val platforms by extra {
 fun capitalise(str: String): String {
     return str.replaceFirstChar {
         if (it.isLowerCase()) {
-            it.titlecase(Locale.getDefault())
+            it.titlecase()
         } else {
             it.toString()
         }
@@ -67,6 +55,8 @@ subprojects {
     base.archivesName.set("$modId-${project.name}")
     version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$minecraftVersion"
     group = "${property("mavenGroup")}.$modId"
+    
+    val javaVersion: String by project
 
     java {
         sourceCompatibility = JavaVersion.valueOf("VERSION_$javaVersion")
@@ -75,7 +65,7 @@ subprojects {
         withSourcesJar()
     }
 
-    configure<ArchitectPluginExtension> {
+    architectury {
         minecraft = minecraftVersion
         injectInjectables = false
     }
@@ -131,18 +121,6 @@ subprojects {
             from(rootProject.file("LICENSE")) {
                 rename { "${it}_$modId"}
             }
-
-            manifest {
-                attributes(
-                        "Specification-Title" to modId,
-                        "Specification-Version" to project.version.toString(),
-                        "Specification-Vendor" to "90",
-                        "Implementation-Title" to base.archivesName.get(),
-                        "Implementation-Version" to project.version.toString(),
-                        "Implementation-Vendor" to "90",
-                        "Implementation-Timestamp" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
-                )
-            }
         }
 
         withType<JavaCompile> {
@@ -151,7 +129,7 @@ subprojects {
         }
     }
 
-    configure<SpotlessExtension> {
+    spotless {
         java {
             target("src/**/java/**/*.java")
             endWithNewline()
@@ -204,7 +182,7 @@ for (platform in platforms) {
         apply(plugin = "com.github.johnrengelman.shadow")
         apply(plugin = "me.shedaniel.unified-publishing")
 
-        configure<ArchitectPluginExtension> {
+        architectury {
             platformSetupLoomIde()
             loader(platform)
         }
@@ -234,18 +212,25 @@ for (platform in platforms) {
 
         tasks {
             processResources {
-                extra["commonProps"] = mapOf("version" to project.version) + project.properties
+                val commonProps by extra { mapOf(
+                        "version"           to project.version,
+                        "minecraftVersion"  to minecraftVersion,
+                        "ae2Version"        to project.extra.get("ae2Version"),
+                        "ae2wtVersion"      to project.extra.get("ae2wtVersion"),
+                        "appbotVersion"     to project.extra.get("appbotVersion"))
+                }
+
+                inputs.properties(commonProps)
             }
 
-            withType<ShadowJar> {
+            shadowJar {
                 exclude("architectury.common.json")
                 configurations = listOf(shadowCommon)
                 archiveClassifier.set("dev-shadow")
             }
 
             withType<RemapJarTask> {
-                val shadowJar: ShadowJar by project.tasks
-                inputFile.set(shadowJar.archiveFile)
+                inputFile.set(shadowJar.get().archiveFile)
                 dependsOn(shadowJar)
                 archiveClassifier.set(null as String?)
             }
@@ -267,7 +252,7 @@ for (platform in platforms) {
         }
 
         if (project.version != "0.0.0") {
-            configure<UnifiedPublishingExtension> {
+            unifiedPublishing {
                 project {
                     val modVersion = project.version.toString()
 

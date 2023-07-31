@@ -104,11 +104,17 @@ dependencies {
 }
 
 tasks.processResources {
+    val commonProps: Map<String, *> by extra
+    val forgeProps = mapOf(
+            "appmekVersion" to project.extra.get("appmekVersion"),
+            "loaderVersion" to forgeVersion.substringBefore('.'),
+            "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
+    )
+
+    inputs.properties(commonProps)
+    inputs.properties(forgeProps)
+
     filesMatching("META-INF/mods.toml") {
-        val commonProps: Map<String, *> by extra
-        expand(commonProps + mapOf(
-                "loaderVersion" to forgeVersion.substringBefore('.'),
-                "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
-        ))
+        expand(commonProps + forgeProps)
     }
 }
