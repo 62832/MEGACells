@@ -62,7 +62,7 @@ public class RadioactiveCellInventory implements StorageCell {
     public static RadioactiveCellInventory createInventory(ItemStack o, ISaveProvider container) {
         Objects.requireNonNull(o, "Cannot create cell inventory for null itemstack");
 
-        if (!(o.getItem()instanceof MEGARadioactiveCell cellType)) {
+        if (!(o.getItem() instanceof MEGARadioactiveCell cellType)) {
             return null;
         }
 

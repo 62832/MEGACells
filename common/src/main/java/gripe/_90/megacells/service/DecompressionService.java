@@ -61,22 +61,22 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     @Override
     public void addNode(IGridNode node) {
-        if (node.getOwner()instanceof ChestBlockEntity chest) {
+        if (node.getOwner() instanceof ChestBlockEntity chest) {
             chests.add(chest);
         }
 
-        if (node.getOwner()instanceof DriveBlockEntity drive) {
+        if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.add(drive);
         }
     }
 
     @Override
     public void removeNode(IGridNode node) {
-        if (node.getOwner()instanceof ChestBlockEntity chest) {
+        if (node.getOwner() instanceof ChestBlockEntity chest) {
             chests.remove(chest);
         }
 
-        if (node.getOwner()instanceof DriveBlockEntity drive) {
+        if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.remove(drive);
         }
     }

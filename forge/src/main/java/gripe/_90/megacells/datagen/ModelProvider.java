@@ -139,8 +139,8 @@ abstract class ModelProvider {
             var tierSuffix = path.substring(path.lastIndexOf('_') + 1);
             singleTexture(path, mcLoc("item/generated"), "layer0",
                     Utils.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
-                            .texture("layer1", PORTABLE_CELL_LED).texture("layer2", housingTexture)
-                            .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
+                    .texture("layer1", PORTABLE_CELL_LED).texture("layer2", housingTexture)
+                    .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
         }
 
         private void driveCell(String texture) {

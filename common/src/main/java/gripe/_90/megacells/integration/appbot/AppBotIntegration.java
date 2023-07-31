@@ -4,10 +4,10 @@ import static gripe._90.megacells.definition.MEGAItems.GREATER_ENERGY_CARD;
 
 import java.util.List;
 
-import appbot.ABItems;
-
 import appeng.api.upgrades.Upgrades;
 import appeng.core.localization.GuiText;
+
+import appbot.ABItems;
 
 public final class AppBotIntegration {
     public static void initUpgrades() {

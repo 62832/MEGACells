@@ -2,12 +2,12 @@ package gripe._90.megacells.integration.appbot;
 
 import java.util.List;
 
-import appbot.item.ManaCellItem;
-import appbot.item.PortableManaCellItem;
-
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
+
+import appbot.item.ManaCellItem;
+import appbot.item.PortableManaCellItem;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.util.Utils;
