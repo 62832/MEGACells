@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
@@ -18,6 +20,7 @@ import appeng.client.render.crafting.UnitBakedModel;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.util.Utils;
 
+@Environment(EnvType.CLIENT)
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
     private static final List<Material> MATERIALS = new ArrayList<>();
 

@@ -1,5 +1,4 @@
-name: 'Release'
-
+name: Release
 on:
   release:
     types: [published]
@@ -10,30 +9,63 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
       - name: Generate data
-        run: ./gradlew downloadAssets runData --max-workers 1
+        run: ./gradlew downloadAssets runData
       - name: Build release files
+        id: build
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
-        run: ./gradlew build --max-workers 1
-      - name: Upload release artifacts
-        uses: softprops/action-gh-release@v1
+        run: ./gradlew releaseInfo build
+      - name: Publish release files (Fabric)
+        uses: Kir-Antipov/mc-publish@4db8bd126f74d5e143822181a2b1201308e2c796
         with:
-          files: build/libs/megacells-*.jar
-          tag_name: ${{ github.event.release.tag_name }}
-      - name: Upload to mod repositories
-        env:
-          MEGA_VERSION: ${{ github.event.release.tag_name }}
-          CHANGELOG: ${{ github.event.release.body }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_API_KEY }}
-        run: ./gradlew :fabric:publishUnified :forge:publishUnified --max-workers 1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          curseforge-id: 622112
+          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+
+          modrinth-id: jjuIRIVr
+          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+
+          name: ${{ steps.build.outputs.MOD_VERSION }} (Fabric ${{ steps.build.outputs.MINECRAFT_VERSION }})
+          version: fabric-${{ steps.build.outputs.MOD_VERSION }}-${{ steps.build.outputs.MINECRAFT_VERSION }}
+          game-versions: ${{ steps.build.outputs.MINECRAFT_VERSION }}
+          dependencies: |
+            ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
+            appbot(optional){curseforge:610632}{modrinth:545hUrw9}
+            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
+
+          files: fabric/build/libs/*[0-9].jar
+      - name: Publish release files (Forge)
+        uses: Kir-Antipov/mc-publish@4db8bd126f74d5e143822181a2b1201308e2c796
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          curseforge-id: 622112
+          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+
+          modrinth-id: jjuIRIVr
+          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+
+          name: ${{ steps.build.outputs.MOD_VERSION }} (Forge ${{ steps.build.outputs.MINECRAFT_VERSION }})
+          version: forge-${{ steps.build.outputs.MOD_VERSION }}-${{ steps.build.outputs.MINECRAFT_VERSION }}
+          game-versions: ${{ steps.build.outputs.MINECRAFT_VERSION }}
+          dependencies: |
+            ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
+            appmek(optional){curseforge:574300}{modrinth:IiATswDj}
+            appbot(optional){curseforge:610632}{modrinth:545hUrw9}
+            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
+
+          files: forge/build/libs/*[0-9].jar

@@ -10,8 +10,8 @@ import gripe._90.megacells.util.service.Platform;
 
 public final class FabricPlatform implements Platform {
     @Override
-    public Loader getLoader() {
-        return Loader.FABRIC;
+    public Loaders getLoader() {
+        return Loaders.FABRIC;
     }
 
     @Override

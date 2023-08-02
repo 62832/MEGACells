@@ -13,7 +13,6 @@ dependencyResolutionManagement {
             plugin("archLoom", "dev.architectury.loom").version("1.3-SNAPSHOT")
             plugin("architectury", "architectury-plugin").version("3.4-SNAPSHOT")
             plugin("shadow", "com.github.johnrengelman.shadow").version("8.1.1")
-            plugin("unifiedPublishing", "me.shedaniel.unified-publishing").version("0.1.+")
             plugin("spotless", "com.diffplug.spotless").version("6.20.0")
 
             val minecraftVersion = "1.20.1"

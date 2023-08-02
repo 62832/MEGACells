@@ -8,12 +8,13 @@ import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.util.Addons;
+import gripe._90.megacells.util.Loaders;
 import gripe._90.megacells.util.service.Platform;
 
 public final class ForgePlatform implements Platform {
     @Override
-    public Loader getLoader() {
-        return Loader.FORGE;
+    public Loaders getLoader() {
+        return Loaders.FORGE;
     }
 
     @Override

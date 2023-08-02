@@ -7,37 +7,24 @@ plugins {
     alias(libs.plugins.archLoom) apply false
     alias(libs.plugins.architectury)
     alias(libs.plugins.shadow)
-    alias(libs.plugins.unifiedPublishing)
     alias(libs.plugins.spotless)
 }
 
 val modId: String by project
+val modVersion = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
 val minecraftVersion: String = libs.versions.minecraft.get()
 
-val platforms by extra {
-    property("enabledPlatforms").toString().split(',')
-}
-
-fun capitalise(str: String): String {
-    return str.replaceFirstChar {
-        if (it.isLowerCase()) {
-            it.titlecase()
-        } else {
-            it.toString()
-        }
-    }
-}
-
 tasks {
-    val collectJars by registering(Copy::class) {
-        val tasks = subprojects.filter { it.name in platforms }.map { it.tasks.named("remapJar") }
-        dependsOn(tasks)
-        from(tasks)
-        into(buildDir.resolve("libs"))
-    }
+    register("releaseInfo") {
+        doLast {
+            val output = System.getenv("GITHUB_OUTPUT")
 
-    assemble {
-        dependsOn(collectJars)
+            if (!output.isNullOrEmpty()) {
+                val outputFile = File(output)
+                outputFile.appendText("MOD_VERSION=$modVersion\n")
+                outputFile.appendText("MINECRAFT_VERSION=$minecraftVersion\n")
+            }
+        }
     }
 
     withType<Jar> {
@@ -47,14 +34,13 @@ tasks {
 
 subprojects {
     apply(plugin = "java")
-    apply(plugin = "maven-publish")
     apply(plugin = rootProject.libs.plugins.architectury.get().pluginId)
     apply(plugin = rootProject.libs.plugins.archLoom.get().pluginId)
     apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
 
     base.archivesName.set("$modId-${project.name}")
-    version = "${(System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)}-$minecraftVersion"
-    group = "${property("mavenGroup")}.$modId"
+    version = "$modVersion-$minecraftVersion"
+    group = property("mavenGroup").toString()
     
     val javaVersion: String by project
 
@@ -158,33 +144,25 @@ subprojects {
             prettier().config(mapOf("parser" to "json"))
         }
     }
-
-    publishing {
-        publications {
-            create<MavenPublication>("maven${capitalise(project.name)}") {
-                groupId = project.group.toString()
-                artifactId = project.base.archivesName.get()
-                version = project.version.toString()
-
-                from(components["java"])
-            }
-        }
-
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-        repositories {
-            // Add repositories to publish to here.
-        }
-    }
 }
 
-for (platform in platforms) {
+for (platform in property("enabledPlatforms").toString().split(',')) {
     project(":$platform") {
         apply(plugin = rootProject.libs.plugins.shadow.get().pluginId)
-        apply(plugin = rootProject.libs.plugins.unifiedPublishing.get().pluginId)
 
         architectury {
             platformSetupLoomIde()
             loader(platform)
+        }
+
+        fun capitalise(str: String): String {
+            return str.replaceFirstChar {
+                if (it.isLowerCase()) {
+                    it.titlecase()
+                } else {
+                    it.toString()
+                }
+            }
         }
 
         val common: Configuration by configurations.creating
@@ -254,67 +232,6 @@ for (platform in platforms) {
         val javaComponent = components["java"] as AdhocComponentWithVariants
         javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
             skip()
-        }
-
-        if (project.version != "0.0.0") {
-            unifiedPublishing {
-                project {
-                    val modVersion = project.version.toString()
-
-                    gameVersions.set(listOf(minecraftVersion))
-                    gameLoaders.set(listOf(platform))
-                    version.set("$platform-$modVersion")
-
-                    var releaseChannel = "release"
-                    var changes = System.getenv("CHANGELOG") ?: "No changelog provided?"
-
-                    if (modVersion.lowercase().contains("alpha")) {
-                        releaseChannel = "alpha"
-                        changes = "THIS IS AN ALPHA RELEASE, MAKE A BACKUP BEFORE INSTALLING AND FREQUENTLY WHILE PLAYING, AND PLEASE REPORT ANY ISSUE YOU MAY FIND ON THE ISSUE TRACKER.\n\n$changes"
-                    } else if (modVersion.lowercase().contains("beta")) {
-                        releaseChannel = "beta"
-                        changes = "This is a beta release. It is expected to be mostly stable, but in any case please report any issue you may find.\n\n$changes"
-                    }
-
-                    releaseType.set(releaseChannel)
-                    changelog.set(changes)
-                    displayName.set(String.format("%s (%s %s)",
-                            modVersion.substring(0, modVersion.lastIndexOf("-")),
-                            capitalise(platform),
-                            minecraftVersion))
-
-                    mainPublication(project.tasks.getByName("remapJar"))
-
-                    relations {
-                        depends {
-                            curseforge.set("applied-energistics-2")
-                        }
-
-                        optional {
-                            curseforge.set("applied-energistics-2-wireless-terminals")
-                        }
-
-                        optional {
-                            curseforge.set("applied-botanics-addon")
-                        }
-
-                        if (platform == "forge") {
-                            optional {
-                                curseforge.set("applied-mekanistics")
-                            }
-                        }
-                    }
-
-                    val cfToken = System.getenv("CURSEFORGE_TOKEN")
-
-                    if (cfToken != null) {
-                        curseforge {
-                            token.set(cfToken)
-                            id.set("622112")
-                        }
-                    }
-                }
-            }
         }
     }
 }

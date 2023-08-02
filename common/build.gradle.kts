@@ -1,12 +1,11 @@
 architectury {
-    val platforms: List<String> by rootProject.extra
+    val platforms = property("enabledPlatforms").toString().split(',')
     println("Platforms: $platforms")
     common(platforms)
 }
 
 dependencies {
-    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
-
+    modImplementation(libs.fabric.loader)
     modCompileOnly(libs.fabric.api)
     modCompileOnly(libs.ae2.fabric)
     modCompileOnly(libs.ae2wtlib.fabric)

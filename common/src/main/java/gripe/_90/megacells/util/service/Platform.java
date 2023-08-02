@@ -3,15 +3,12 @@ package gripe._90.megacells.util.service;
 import net.minecraft.world.item.CreativeModeTab;
 
 import gripe._90.megacells.util.Addons;
+import gripe._90.megacells.util.Loaders;
 
 public interface Platform {
-    Loader getLoader();
+    Loaders getLoader();
 
     CreativeModeTab getCreativeTab(CreativeModeTab.DisplayItemsGenerator display);
 
-    boolean isAddonLoaded(Addons modId);
-
-    enum Loader {
-        FABRIC, FORGE
-    }
+    boolean isAddonLoaded(Addons addon);
 }
