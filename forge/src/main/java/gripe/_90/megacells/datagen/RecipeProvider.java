@@ -53,7 +53,6 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
 
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        // spotless:off
         component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem());
         component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, AEItems.ENDER_DUST.asItem());
         component(consumer, MEGAItems.TIER_16M, MEGAItems.TIER_4M, AEItems.ENDER_DUST.asItem());
@@ -63,28 +62,117 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
 
-        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                ConventionTags.IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                ConventionTags.IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                ConventionTags.IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                ConventionTags.IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                ConventionTags.IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                ConventionTags.COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                ConventionTags.COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                ConventionTags.COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                ConventionTags.COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                ConventionTags.COPPER_INGOT);
 
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        // spotless:on
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
                 .pattern("###")
@@ -98,9 +186,15 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
                 .save(consumer, Utils.makeId("crafting/sky_steel_ingot_from_sky_steel_block"));
 
-        TransformRecipeBuilder.transform(consumer, Utils.makeId("transform/sky_steel_ingot"), MEGAItems.SKY_STEEL_INGOT,
-                2, TransformCircumstance.fluid(FluidTags.WATER), Ingredient.of(ConventionTags.IRON_INGOT),
-                Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED), Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
+        TransformRecipeBuilder.transform(
+                consumer,
+                Utils.makeId("transform/sky_steel_ingot"),
+                MEGAItems.SKY_STEEL_INGOT,
+                2,
+                TransformCircumstance.fluid(FluidTags.WATER),
+                Ingredient.of(ConventionTags.IRON_INGOT),
+                Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
+                Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
 
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)
                 .setTop(Ingredient.of(AEItems.CALCULATION_PROCESSOR_PRESS))
@@ -227,21 +321,64 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             var osmiumTag = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
 
-            // spotless:off
             housing(consumer, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
 
-            cell(consumer, AppMekItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
-            cell(consumer, AppMekItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
-            cell(consumer, AppMekItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
-            cell(consumer, AppMekItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
-            cell(consumer, AppMekItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING, osmiumTag);
+            cell(
+                    consumer,
+                    AppMekItems.CHEMICAL_CELL_1M,
+                    MEGAItems.CELL_COMPONENT_1M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
+                    osmiumTag);
+            cell(
+                    consumer,
+                    AppMekItems.CHEMICAL_CELL_4M,
+                    MEGAItems.CELL_COMPONENT_4M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
+                    osmiumTag);
+            cell(
+                    consumer,
+                    AppMekItems.CHEMICAL_CELL_16M,
+                    MEGAItems.CELL_COMPONENT_16M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
+                    osmiumTag);
+            cell(
+                    consumer,
+                    AppMekItems.CHEMICAL_CELL_64M,
+                    MEGAItems.CELL_COMPONENT_64M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
+                    osmiumTag);
+            cell(
+                    consumer,
+                    AppMekItems.CHEMICAL_CELL_256M,
+                    MEGAItems.CELL_COMPONENT_256M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
+                    osmiumTag);
 
-            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            //spotless:on
+            portable(
+                    consumer,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_1M,
+                    MEGAItems.CELL_COMPONENT_1M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(
+                    consumer,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_4M,
+                    MEGAItems.CELL_COMPONENT_4M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(
+                    consumer,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_16M,
+                    MEGAItems.CELL_COMPONENT_16M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(
+                    consumer,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_64M,
+                    MEGAItems.CELL_COMPONENT_64M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+            portable(
+                    consumer,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_256M,
+                    MEGAItems.CELL_COMPONENT_256M,
+                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
 
             // TODO
             InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, AppMekItems.RADIOACTIVE_CELL_COMPONENT, 1)
@@ -272,8 +409,8 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         }
     }
 
-    private void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
-            ItemLike binder) {
+    private void component(
+            Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding, ItemLike binder) {
         var precedingComponent = preceding.componentSupplier().get();
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, tier.componentSupplier().get())
                 .pattern("aba")
@@ -284,14 +421,25 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
-                .unlockedBy("has_" + Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(precedingComponent)).getPath(),
+                .unlockedBy(
+                        "has_"
+                                + Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(precedingComponent))
+                                        .getPath(),
                         has(precedingComponent))
-                .save(consumer, Utils.makeId("cells/" + Objects
-                        .requireNonNull(ForgeRegistries.ITEMS.getKey(tier.componentSupplier().get())).getPath()));
+                .save(
+                        consumer,
+                        Utils.makeId("cells/"
+                                + Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(
+                                                tier.componentSupplier().get()))
+                                        .getPath()));
     }
 
-    private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
-            ItemDefinition<?> housing, TagKey<Item> housingMaterial) {
+    private void cell(
+            Consumer<FinishedRecipe> consumer,
+            ItemDefinition<?> cell,
+            ItemDefinition<?> component,
+            ItemDefinition<?> housing,
+            TagKey<Item> housingMaterial) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                 .pattern("aba")
                 .pattern("bcb")
@@ -311,7 +459,10 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
-    private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
+    private void portable(
+            Consumer<FinishedRecipe> consumer,
+            ItemDefinition<?> cell,
+            ItemDefinition<?> component,
             ItemDefinition<?> housing) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                 .requires(AEBlocks.CHEST)
@@ -344,18 +495,24 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .save(consumer, Utils.makeId("crafting/" + unit.id().getPath()));
     }
 
-    private void manaCells(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable,
-            StorageTier tier) {
+    private void manaCells(
+            Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable, StorageTier tier) {
         var component = tier.componentSupplier().get();
-        var componentPath = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(component)).getPath();
+        var componentPath =
+                Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(component)).getPath();
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
-                .requires(tier.componentSupplier().get()).unlockedBy("has_" + componentPath, has(component))
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
+                .requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
+                .requires(tier.componentSupplier().get())
+                .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, portable).requires(AEBlocks.CHEST).requires(component)
-                .requires(AEBlocks.DENSE_ENERGY_CELL).requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, portable)
+                .requires(AEBlocks.CHEST)
+                .requires(component)
+                .requires(AEBlocks.DENSE_ENERGY_CELL)
+                .requires(AppBotItems.MEGA_MANA_CELL_HOUSING)
                 .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
                 .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))

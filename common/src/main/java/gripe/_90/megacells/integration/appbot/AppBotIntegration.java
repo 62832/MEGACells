@@ -14,8 +14,11 @@ public final class AppBotIntegration {
         AppBotItems.getPortables()
                 .forEach(c -> Upgrades.add(GREATER_ENERGY_CARD, c, 2, GuiText.PortableCells.getTranslationKey()));
 
-        for (var portable : List.of(ABItems.PORTABLE_MANA_CELL_1K, ABItems.PORTABLE_MANA_CELL_4K,
-                ABItems.PORTABLE_MANA_CELL_16K, ABItems.PORTABLE_MANA_CELL_64K,
+        for (var portable : List.of(
+                ABItems.PORTABLE_MANA_CELL_1K,
+                ABItems.PORTABLE_MANA_CELL_4K,
+                ABItems.PORTABLE_MANA_CELL_16K,
+                ABItems.PORTABLE_MANA_CELL_64K,
                 ABItems.PORTABLE_MANA_CELL_256K)) {
             Upgrades.add(GREATER_ENERGY_CARD, portable, 2, GuiText.PortableCells.getTranslationKey());
         }

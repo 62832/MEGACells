@@ -28,8 +28,11 @@ import gripe._90.megacells.util.Utils;
 
 abstract class TagProvider {
     static class Items extends ItemTagsProvider {
-        public Items(PackOutput output, CompletableFuture<HolderLookup.Provider> registries,
-                CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existing) {
+        public Items(
+                PackOutput output,
+                CompletableFuture<HolderLookup.Provider> registries,
+                CompletableFuture<TagLookup<Block>> blockTags,
+                @Nullable ExistingFileHelper existing) {
             super(output, registries, blockTags, Utils.MODID, existing);
         }
 
@@ -51,14 +54,17 @@ abstract class TagProvider {
     }
 
     static class Blocks extends BlockTagsProvider {
-        public Blocks(PackOutput output, CompletableFuture<HolderLookup.Provider> registries,
+        public Blocks(
+                PackOutput output,
+                CompletableFuture<HolderLookup.Provider> registries,
                 @Nullable ExistingFileHelper existing) {
             super(output, registries, Utils.MODID, existing);
         }
 
         @Override
         protected void addTags(@NotNull HolderLookup.Provider provider) {
-            MEGABlocks.getBlocks().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(getKey(block)));
+            MEGABlocks.getBlocks()
+                    .forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(getKey(block)));
             tag(MEGATags.SKY_STEEL_BLOCK).add(getKey(MEGABlocks.SKY_STEEL_BLOCK));
         }
 

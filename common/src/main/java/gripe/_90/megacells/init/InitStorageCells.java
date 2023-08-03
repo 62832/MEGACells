@@ -14,19 +14,20 @@ import gripe._90.megacells.util.Utils;
 
 public class InitStorageCells {
     public static void init() {
-        Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables()).flatMap(Collection::stream)
+        Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
+                .flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_item_cell")));
-        Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables()).flatMap(Collection::stream)
+        Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables())
+                .flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_fluid_cell")));
 
         StorageCells.addCellHandler(MEGABulkCell.HANDLER);
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, Utils.makeId("block/drive/cells/bulk_item_cell"));
 
         if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
-            Stream.of(AppBotItems.getCells(),
-                    AppBotItems.getPortables()).flatMap(Collection::stream)
-                    .forEach(c -> StorageCellModels.registerModel(c,
-                            Utils.makeId("block/drive/cells/mega_mana_cell")));
+            Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
+                    .flatMap(Collection::stream)
+                    .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_mana_cell")));
         }
     }
 }

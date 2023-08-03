@@ -112,21 +112,24 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     private Object2IntMap<AEItemKey> getChain(BulkCellInventory cell) {
         if (cell.isCompressionEnabled()) {
-            return CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
-                var keys = new ObjectArrayList<>(c.keySet());
-                Collections.reverse(keys);
+            return CompressionService.INSTANCE
+                    .getChain(cell.getStoredItem())
+                    .map(c -> {
+                        var keys = new ObjectArrayList<>(c.keySet());
+                        Collections.reverse(keys);
 
-                var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                var highest = keys.indexOf(cell.getHighestCompressed());
+                        var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
+                        var highest = keys.indexOf(cell.getHighestCompressed());
 
-                if (highest > -1) {
-                    for (var key : keys.subList(highest, keys.size())) {
-                        decompressed.put(key, c.getInt(key));
-                    }
-                }
+                        if (highest > -1) {
+                            for (var key : keys.subList(highest, keys.size())) {
+                                decompressed.put(key, c.getInt(key));
+                            }
+                        }
 
-                return decompressed;
-            }).orElseGet(Object2IntLinkedOpenHashMap::new);
+                        return decompressed;
+                    })
+                    .orElseGet(Object2IntLinkedOpenHashMap::new);
         }
 
         return new Object2IntLinkedOpenHashMap<>();

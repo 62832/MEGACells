@@ -42,12 +42,11 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
     }
 
     @Override
-    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
-    }
+    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {}
 
     @Override
-    public void appendHoverText(@NotNull ItemStack is, Level level, @NotNull List<Component> lines,
-            @NotNull TooltipFlag adv) {
+    public void appendHoverText(
+            @NotNull ItemStack is, Level level, @NotNull List<Component> lines, @NotNull TooltipFlag adv) {
         var inv = HANDLER.getCellInventory(is, null);
 
         if (inv != null) {
@@ -55,8 +54,10 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
             var filterItem = inv.getFilterItem();
 
             lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
-            lines.add(Tooltips.of(containedType != null ? MEGATranslations.Contains.text(containedType.getDisplayName())
-                    : MEGATranslations.Empty.text()));
+            lines.add(Tooltips.of(
+                    containedType != null
+                            ? MEGATranslations.Contains.text(containedType.getDisplayName())
+                            : MEGATranslations.Empty.text()));
 
             if (filterItem != null) {
                 if (containedType == null) {
@@ -76,8 +77,7 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
     }
 
     public static class Handler implements ICellHandler {
-        private Handler() {
-        }
+        private Handler() {}
 
         @Override
         public boolean isCell(ItemStack is) {

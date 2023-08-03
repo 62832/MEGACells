@@ -33,8 +33,13 @@ class LootTableProvider extends net.minecraft.data.loot.LootTableProvider {
         @Override
         protected void generate() {
             for (var block : getKnownBlocks()) {
-                add(block, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                        .add(LootItem.lootTableItem(block)).when(ExplosionCondition.survivesExplosion())));
+                add(
+                        block,
+                        LootTable.lootTable()
+                                .withPool(LootPool.lootPool()
+                                        .setRolls(ConstantValue.exactly(1))
+                                        .add(LootItem.lootTableItem(block))
+                                        .when(ExplosionCondition.survivesExplosion())));
             }
         }
 

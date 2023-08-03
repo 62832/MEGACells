@@ -38,7 +38,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     public DecompressionModulePart(IPartItem<?> partItem) {
         super(partItem);
-        getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL)
+        getMainNode()
+                .setFlags(GridFlags.REQUIRE_CHANNEL)
                 .addService(IGridTickable.class, this)
                 .addService(ICraftingProvider.class, this)
                 .setIdlePowerUsage(10.0);
@@ -106,8 +107,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
             for (var output : outputs.object2LongEntrySet()) {
                 var what = output.getKey();
                 var amount = output.getLongValue();
-                var inserted = storage.getInventory().insert(what, amount, Actionable.MODULATE,
-                        IActionSource.ofMachine(this));
+                var inserted =
+                        storage.getInventory().insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
                 if (inserted >= amount) {
                     outputs.removeLong(what);

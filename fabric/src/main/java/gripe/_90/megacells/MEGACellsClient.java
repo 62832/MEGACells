@@ -45,11 +45,10 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     }
 
     private void initScreens() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            InitScreens.register(MEGAPatternProviderBlock.MENU,
-                    PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
-                    "/screens/megacells/mega_pattern_provider.json");
-        });
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> InitScreens.register(
+                MEGAPatternProviderBlock.MENU,
+                PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
+                "/screens/megacells/mega_pattern_provider.json"));
     }
 
     private void initBlockModels() {
@@ -65,8 +64,8 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     }
 
     private void initItemModels() {
-        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
-                (is, level, entity, seed) -> {
+        ItemProperties.register(
+                MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"), (is, level, entity, seed) -> {
                     var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
 
                     double curPower = energyCell.getAECurrentPower(is);

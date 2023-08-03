@@ -17,8 +17,8 @@ public class MEGACreativeTab {
     public static final CreativeModeTab TAB = Utils.PLATFORM.getCreativeTab(MEGACreativeTab::populateTab);
     public static final ResourceLocation ID = Utils.makeId("tab");
 
-    private static void populateTab(CreativeModeTab.ItemDisplayParameters itemDisplayParameters,
-            CreativeModeTab.Output output) {
+    private static void populateTab(
+            CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
         var itemDefs = new ArrayList<ItemDefinition<?>>();
         var blacklist = List.of(MEGAItems.DECOMPRESSION_PATTERN);
 

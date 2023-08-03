@@ -45,7 +45,9 @@ public class MEGACellsClient {
     }
 
     private void initScreens(FMLClientSetupEvent ignoredEvent) {
-        InitScreens.register(MEGAPatternProviderBlock.MENU, PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
+        InitScreens.register(
+                MEGAPatternProviderBlock.MENU,
+                PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
     }
 
@@ -57,7 +59,8 @@ public class MEGACellsClient {
 
     private void initBuiltInModels() {
         for (var type : MEGACraftingUnitType.values()) {
-            BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/mega_" + type.getAffix() + "_formed"),
+            BuiltInModelHooks.addBuiltInModel(
+                    AppEng.makeId("block/crafting/mega_" + type.getAffix() + "_formed"),
                     new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
         }
     }
@@ -65,8 +68,8 @@ public class MEGACellsClient {
     private void initModels(ModelEvent.RegisterGeometryLoaders event) {
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
-        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
-                (is, level, entity, seed) -> {
+        ItemProperties.register(
+                MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"), (is, level, entity, seed) -> {
                     var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
 
                     double curPower = energyCell.getAECurrentPower(is);

@@ -63,13 +63,13 @@ public class MEGACells implements IAEAddonEntrypoint {
             Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntity.getKey(), blockEntity.getValue());
         }
 
-        Registry.register(BuiltInRegistries.MENU, AppEng.makeId("mega_pattern_provider"),
-                MEGAPatternProviderBlock.MENU);
+        Registry.register(
+                BuiltInRegistries.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderBlock.MENU);
     }
 
     private void initCompression() {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> CompressionService.INSTANCE
-                .loadRecipes(server.getRecipeManager(), server.registryAccess()));
+        ServerLifecycleEvents.SERVER_STARTED.register(
+                server -> CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess()));
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
             if (success) {
                 CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());

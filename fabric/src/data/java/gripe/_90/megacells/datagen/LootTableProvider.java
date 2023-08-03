@@ -24,9 +24,14 @@ class LootTableProvider extends SimpleFabricLootTableProvider {
 
     @Override
     public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
-        MEGABlocks.getBlocks()
-                .forEach(block -> consumer.accept(Utils.makeId("blocks/" + block.id().getPath()),
-                        LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                                .add(LootItem.lootTableItem(block)).when(ExplosionCondition.survivesExplosion()))));
+        for (var block : MEGABlocks.getBlocks()) {
+            consumer.accept(
+                    Utils.makeId("blocks/" + block.id().getPath()),
+                    LootTable.lootTable()
+                            .withPool(LootPool.lootPool()
+                                    .setRolls(ConstantValue.exactly(1))
+                                    .add(LootItem.lootTableItem(block))
+                                    .when(ExplosionCondition.survivesExplosion())));
+        }
     }
 }

@@ -29,7 +29,9 @@ public final class ForgePlatform implements Platform {
     @Override
     public boolean isAddonLoaded(Addons addon) {
         if (ModList.get() == null) {
-            return LoadingModList.get().getMods().stream().map(ModInfo::getModId).anyMatch(addon.getModId()::equals);
+            return LoadingModList.get().getMods().stream()
+                    .map(ModInfo::getModId)
+                    .anyMatch(addon.getModId()::equals);
         }
 
         return ModList.get().isLoaded(addon.getModId());

@@ -40,18 +40,18 @@ import gripe._90.megacells.util.Utils;
 
 abstract class ModelProvider {
     static class Items extends ItemModelProvider {
-        // spotless:off
         private static final ResourceLocation CRAFTING_PATTERN = AppEng.makeId("item/crafting_pattern");
 
         private static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
         private static final ResourceLocation PORTABLE_CELL_LED = AppEng.makeId("item/portable_cell_led");
 
-        private static final ResourceLocation PORTABLE_CELL_ITEM_HOUSING = AppEng.makeId("item/portable_cell_item_housing");
-        private static final ResourceLocation PORTABLE_CELL_FLUID_HOUSING = AppEng.makeId("item/portable_cell_fluid_housing");
+        private static final ResourceLocation PORTABLE_CELL_ITEM_HOUSING =
+                AppEng.makeId("item/portable_cell_item_housing");
+        private static final ResourceLocation PORTABLE_CELL_FLUID_HOUSING =
+                AppEng.makeId("item/portable_cell_fluid_housing");
 
         private static final ResourceLocation CABLE_INTERFACE = AppEng.makeId("item/cable_interface");
         private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
-        //spotless:on
 
         public Items(PackOutput output, ExistingFileHelper existing) {
             super(output, Utils.MODID, existing);
@@ -85,7 +85,10 @@ abstract class ModelProvider {
             basicItem(MEGAItems.GREATER_ENERGY_CARD.asItem());
             basicItem(MEGAItems.COMPRESSION_CARD.asItem());
 
-            singleTexture(MEGAItems.DECOMPRESSION_PATTERN.id().getPath(), mcLoc("item/generated"), "layer0",
+            singleTexture(
+                    MEGAItems.DECOMPRESSION_PATTERN.id().getPath(),
+                    mcLoc("item/generated"),
+                    "layer0",
                     CRAFTING_PATTERN);
 
             MEGAItems.getItemPortables().forEach(p -> portableModel(p, "item", PORTABLE_CELL_ITEM_HOUSING));
@@ -137,9 +140,13 @@ abstract class ModelProvider {
         private void portableModel(ItemDefinition<?> portable, String screenType, ResourceLocation housingTexture) {
             var path = portable.id().getPath();
             var tierSuffix = path.substring(path.lastIndexOf('_') + 1);
-            singleTexture(path, mcLoc("item/generated"), "layer0",
-                    Utils.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
-                    .texture("layer1", PORTABLE_CELL_LED).texture("layer2", housingTexture)
+            singleTexture(
+                            path,
+                            mcLoc("item/generated"),
+                            "layer0",
+                            Utils.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
+                    .texture("layer1", PORTABLE_CELL_LED)
+                    .texture("layer2", housingTexture)
                     .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
         }
 
@@ -158,8 +165,8 @@ abstract class ModelProvider {
 
     static class Blocks extends AE2BlockStateProvider {
         // because for whatever reason this isn't fucking accessible from BlockStateProvider
-        private static final ExistingFileHelper.ResourceType MODEL = new ExistingFileHelper.ResourceType(
-                PackType.CLIENT_RESOURCES, ".json", "models");
+        private static final ExistingFileHelper.ResourceType MODEL =
+                new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");
 
         private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
@@ -195,7 +202,9 @@ abstract class ModelProvider {
 
             for (var i = 0; i < 5; i++) {
                 var model = models().cubeAll(path + "_" + i, Utils.makeId("block/" + path + "_" + i));
-                blockBuilder.partialState().with(EnergyCellBlock.ENERGY_STORAGE, i)
+                blockBuilder
+                        .partialState()
+                        .with(EnergyCellBlock.ENERGY_STORAGE, i)
                         .setModels(new ConfiguredModel(model));
                 models.add(model);
             }
@@ -213,9 +222,11 @@ abstract class ModelProvider {
         private void craftingModel(BlockDefinition<?> block, String name) {
             var blockModel = models().cubeAll("block/crafting/" + name, Utils.makeId("block/crafting/" + name));
             getVariantBuilder(block.block())
-                    .partialState().with(AbstractCraftingUnitBlock.FORMED, false)
+                    .partialState()
+                    .with(AbstractCraftingUnitBlock.FORMED, false)
                     .setModels(new ConfiguredModel(blockModel))
-                    .partialState().with(AbstractCraftingUnitBlock.FORMED, true)
+                    .partialState()
+                    .with(AbstractCraftingUnitBlock.FORMED, true)
                     .setModels(new ConfiguredModel(models().getBuilder("ae2:block/crafting/mega_" + name + "_formed")));
             simpleBlockItem(block.block(), blockModel);
         }
@@ -236,8 +247,8 @@ abstract class ModelProvider {
                                     return Variant.variant().with(VariantProperties.MODEL, formedModel);
                                 } else {
                                     return applyOrientation(
-                                            Variant.variant().with(VariantProperties.MODEL,
-                                                    unformedModel.getLocation()),
+                                            Variant.variant()
+                                                    .with(VariantProperties.MODEL, unformedModel.getLocation()),
                                             BlockOrientation.get(facing));
                                 }
                             }));
@@ -251,27 +262,35 @@ abstract class ModelProvider {
             simpleBlockItem(def.block(), normalModel);
 
             var arrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
-            var orientedModel = models().cube("block/mega_pattern_provider_oriented",
-                    Utils.makeId("block/mega_pattern_provider_alternate"),
-                    Utils.makeId("block/mega_pattern_provider_alternate_front"), arrow, arrow, arrow, arrow)
+            var orientedModel = models().cube(
+                            "block/mega_pattern_provider_oriented",
+                            Utils.makeId("block/mega_pattern_provider_alternate"),
+                            Utils.makeId("block/mega_pattern_provider_alternate_front"),
+                            arrow,
+                            arrow,
+                            arrow,
+                            arrow)
                     .texture("particle", "block/mega_pattern_provider");
 
             multiVariantGenerator(MEGABlocks.MEGA_PATTERN_PROVIDER, Variant.variant())
-                    .with(PropertyDispatch.property(MEGAPatternProviderBlock.PUSH_DIRECTION).generate(pushDirection -> {
-                        var forward = pushDirection.getDirection();
-                        if (forward == null) {
-                            return Variant.variant().with(VariantProperties.MODEL, normalModel.getLocation());
-                        } else {
-                            var orientation = BlockOrientation.get(forward);
-                            return applyRotation(
-                                    Variant.variant().with(VariantProperties.MODEL, orientedModel.getLocation()),
-                                    // + 90 because the default model is oriented UP, while block orientation assumes
-                                    // NORTH
-                                    orientation.getAngleX() + 90,
-                                    orientation.getAngleY(),
-                                    0);
-                        }
-                    }));
+                    .with(PropertyDispatch.property(MEGAPatternProviderBlock.PUSH_DIRECTION)
+                            .generate(pushDirection -> {
+                                var forward = pushDirection.getDirection();
+                                if (forward == null) {
+                                    return Variant.variant().with(VariantProperties.MODEL, normalModel.getLocation());
+                                } else {
+                                    var orientation = BlockOrientation.get(forward);
+                                    return applyRotation(
+                                            Variant.variant()
+                                                    .with(VariantProperties.MODEL, orientedModel.getLocation()),
+                                            // + 90 because the default model is oriented UP, while block orientation
+                                            // assumes
+                                            // NORTH
+                                            orientation.getAngleX() + 90,
+                                            orientation.getAngleY(),
+                                            0);
+                                }
+                            }));
         }
     }
 

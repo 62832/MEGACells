@@ -50,7 +50,10 @@ abstract class TagProvider {
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
-            MEGABlocks.getBlocks().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(getKey(block)));
+            for (var block : MEGABlocks.getBlocks()) {
+                tag(BlockTags.MINEABLE_WITH_PICKAXE).add(getKey(block));
+            }
+
             tag(MEGATags.SKY_STEEL_BLOCK).add(getKey(MEGABlocks.SKY_STEEL_BLOCK));
         }
 

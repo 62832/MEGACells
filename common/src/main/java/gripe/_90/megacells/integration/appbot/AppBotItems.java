@@ -18,8 +18,8 @@ public final class AppBotItems {
         Utils.LOGGER.info("Initialised Applied Botanics integration.");
     }
 
-    public static final ItemDefinition<MaterialItem> MEGA_MANA_CELL_HOUSING = MEGAItems.item("MEGA Mana Cell Housing",
-            "mega_mana_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_MANA_CELL_HOUSING =
+            MEGAItems.item("MEGA Mana Cell Housing", "mega_mana_cell_housing", MaterialItem::new);
 
     public static final ItemDefinition<ManaCellItem> MANA_CELL_1M = cell(MEGAItems.TIER_1M);
     public static final ItemDefinition<ManaCellItem> MANA_CELL_4M = cell(MEGAItems.TIER_4M);
@@ -38,18 +38,24 @@ public final class AppBotItems {
     }
 
     public static List<ItemDefinition<?>> getPortables() {
-        return List.of(PORTABLE_MANA_CELL_1M, PORTABLE_MANA_CELL_4M, PORTABLE_MANA_CELL_16M, PORTABLE_MANA_CELL_64M,
+        return List.of(
+                PORTABLE_MANA_CELL_1M,
+                PORTABLE_MANA_CELL_4M,
+                PORTABLE_MANA_CELL_16M,
+                PORTABLE_MANA_CELL_64M,
                 PORTABLE_MANA_CELL_256M);
     }
 
     private static ItemDefinition<ManaCellItem> cell(StorageTier tier) {
-        return MEGAItems.item(tier.namePrefix().toUpperCase() + " MEGA Mana Storage Cell",
+        return MEGAItems.item(
+                tier.namePrefix().toUpperCase() + " MEGA Mana Storage Cell",
                 "mana_storage_cell_" + tier.namePrefix(),
                 p -> new ManaCellItem(p, tier.componentSupplier().get(), tier.bytes() / 1024, tier.idleDrain()));
     }
 
     private static ItemDefinition<PortableManaCellItem> portable(StorageTier tier) {
-        return MEGAItems.item(tier.namePrefix().toUpperCase() + " Portable Mana Cell",
+        return MEGAItems.item(
+                tier.namePrefix().toUpperCase() + " Portable Mana Cell",
                 "portable_mana_cell_" + tier.namePrefix(),
                 p -> new PortableManaCellItem(p, tier.bytes() / 1024, tier.idleDrain()));
     }

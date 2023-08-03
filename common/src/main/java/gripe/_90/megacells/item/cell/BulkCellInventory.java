@@ -129,8 +129,10 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !partitionList.isListed(what)
-                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+        if (compressionEnabled
+                && !partitionList.isListed(what)
+                && !compressed.containsKey(item)
+                && !decompressed.containsKey(item)) {
             return 0;
         }
 
@@ -158,8 +160,11 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !storedItem.equals(what) && !filterItem.equals(what)
-                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+        if (compressionEnabled
+                && !storedItem.equals(what)
+                && !filterItem.equals(what)
+                && !compressed.containsKey(item)
+                && !decompressed.containsKey(item)) {
             return 0;
         }
 
@@ -193,8 +198,8 @@ public class BulkCellInventory implements StorageCell {
         }
     }
 
-    private BigInteger compressedTransferFactor(Object2IntMap<AEItemKey> variants, long baseFactor,
-            Function<List<?>, Pair<Integer, Integer>> subLister) {
+    private BigInteger compressedTransferFactor(
+            Object2IntMap<AEItemKey> variants, long baseFactor, Function<List<?>, Pair<Integer, Integer>> subLister) {
         var variantKeys = new LinkedList<>(variants.keySet());
         var toStored = new Object2IntLinkedOpenHashMap<>(variants);
 
@@ -252,7 +257,9 @@ public class BulkCellInventory implements StorageCell {
                     allVariants.put(storedItem, decompressed.getInt(decompressedKeys.getLast()));
                     allVariants.putAll(compressed);
                 } else if (!compressed.isEmpty()) {
-                    allVariants.put(storedItem, compressed.values().intStream().findFirst().orElseThrow());
+                    allVariants.put(
+                            storedItem,
+                            compressed.values().intStream().findFirst().orElseThrow());
                     allVariants.putAll(compressed);
                 } else {
                     allVariants.put(storedItem, 1);

@@ -119,10 +119,9 @@ subprojects {
         java {
             target("src/**/java/**/*.java")
             endWithNewline()
-            indentWithSpaces()
+            indentWithSpaces(4)
             removeUnusedImports()
-            toggleOffOn()
-            eclipse().configFile(rootProject.file("codeformat/codeformat.xml"))
+            palantirJavaFormat()
             importOrderFile(rootProject.file("codeformat/mega.importorder"))
 
             // courtesy of diffplug/spotless#240
