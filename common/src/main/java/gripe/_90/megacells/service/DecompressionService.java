@@ -112,7 +112,8 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     private Object2IntMap<AEItemKey> getChain(BulkCellInventory cell) {
         if (cell.isCompressionEnabled()) {
-            return CompressionService.getChain(cell.getStoredItem())
+            return CompressionService.INSTANCE
+                    .getChain(cell.getStoredItem())
                     .map(c -> {
                         var keys = new ObjectArrayList<>(c.keySet());
                         Collections.reverse(keys);

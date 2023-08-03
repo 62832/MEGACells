@@ -21,17 +21,19 @@ import net.minecraft.world.item.crafting.RecipeType;
 import appeng.api.stacks.AEItemKey;
 
 public class CompressionService {
-    private static final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
+    public static final CompressionService INSTANCE = new CompressionService();
+
+    private final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
 
     private CompressionService() {}
 
-    public static Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
+    public Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
         return compressionChains.stream()
                 .filter(chain -> chain.containsKey(key))
                 .findFirst();
     }
 
-    public static Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
+    public Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
         return getChain(key)
                 .map(chain -> {
                     var keys = new ObjectArrayList<>(chain.keySet());
@@ -50,7 +52,7 @@ public class CompressionService {
                 .orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
+    public void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
@@ -150,20 +152,19 @@ public class CompressionService {
         }
     }
 
-    private static boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return (recipe.getIngredients().size() == 4 || recipe.getIngredients().size() == 9)
                 && recipe.getIngredients().stream().distinct().count() <= 1
                 && recipe.getResultItem(access).getCount() == 1;
     }
 
-    private static boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return (recipe.getResultItem(access).getCount() == 4
                         || recipe.getResultItem(access).getCount() == 9)
                 && recipe.getIngredients().size() == 1;
     }
 
-    private static Pair<Item, Integer> getSubsequentVariant(
-            Item item, List<CraftingRecipe> recipes, RegistryAccess access) {
+    private Pair<Item, Integer> getSubsequentVariant(Item item, List<CraftingRecipe> recipes, RegistryAccess access) {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
