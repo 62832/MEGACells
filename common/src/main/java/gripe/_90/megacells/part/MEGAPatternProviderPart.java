@@ -28,8 +28,7 @@ import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.util.Utils;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
-
-    public static final ResourceLocation MODEL_BASE = Utils.makeId("part/mega_pattern_provider");
+    private static final ResourceLocation MODEL_BASE = Utils.makeId("part/mega_pattern_provider");
 
     @PartModels
     public static final PartModel MODELS_OFF = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_off"));

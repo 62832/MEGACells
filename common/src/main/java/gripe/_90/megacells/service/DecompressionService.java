@@ -31,8 +31,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
 
 public class DecompressionService implements IGridService, IGridServiceProvider {
-    private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
-    private static final Class<?> CHEST_MONITOR_CLASS;
     private static final VarHandle CHEST_MONITOR_HANDLE;
     private static final VarHandle CHEST_CELL_HANDLE;
     private static final MethodHandle DRIVE_DELEGATE_HANDLE;
@@ -40,15 +38,17 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     static {
         try {
-            CHEST_MONITOR_CLASS = Class.forName("appeng.blockentity.storage.ChestBlockEntity$ChestMonitorHandler");
-            CHEST_MONITOR_HANDLE = MethodHandles.privateLookupIn(ChestBlockEntity.class, LOOKUP)
-                    .findVarHandle(ChestBlockEntity.class, "cellHandler", CHEST_MONITOR_CLASS);
-            CHEST_CELL_HANDLE = MethodHandles.privateLookupIn(CHEST_MONITOR_CLASS, LOOKUP)
-                    .findVarHandle(CHEST_MONITOR_CLASS, "cellInventory", StorageCell.class);
+            var lookup = MethodHandles.lookup();
 
-            DRIVE_WATCHERS_HANDLE = MethodHandles.privateLookupIn(DriveBlockEntity.class, LOOKUP)
+            var chestMonitor = Class.forName("appeng.blockentity.storage.ChestBlockEntity$ChestMonitorHandler");
+            CHEST_MONITOR_HANDLE = MethodHandles.privateLookupIn(ChestBlockEntity.class, lookup)
+                    .findVarHandle(ChestBlockEntity.class, "cellHandler", chestMonitor);
+            CHEST_CELL_HANDLE = MethodHandles.privateLookupIn(chestMonitor, lookup)
+                    .findVarHandle(chestMonitor, "cellInventory", StorageCell.class);
+
+            DRIVE_WATCHERS_HANDLE = MethodHandles.privateLookupIn(DriveBlockEntity.class, lookup)
                     .findVarHandle(DriveBlockEntity.class, "invBySlot", DriveWatcher[].class);
-            DRIVE_DELEGATE_HANDLE = MethodHandles.privateLookupIn(DelegatingMEInventory.class, LOOKUP)
+            DRIVE_DELEGATE_HANDLE = MethodHandles.privateLookupIn(DelegatingMEInventory.class, lookup)
                     .findVirtual(DelegatingMEInventory.class, "getDelegate", MethodType.methodType(MEStorage.class));
         } catch (NoSuchFieldException | NoSuchMethodException | ClassNotFoundException | IllegalAccessException e) {
             throw new RuntimeException("Failed to create DecompressionService method handles", e);
