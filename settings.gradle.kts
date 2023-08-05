@@ -24,9 +24,9 @@ dependencyResolutionManagement {
             library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.3")
             library("mixin", "org.spongepowered", "mixin").version("0.8.5")
 
-            version("ae2", "15.0.5-beta")
+            version("ae2", "15.0.7-beta")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
-            library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
+            library("ae2-forge", "appeng", "appliedenergistics2-forge").version("15.0.8-beta")
 
             // AE2WTLib
             val ae2wtVersion = "15.0.1-beta"
