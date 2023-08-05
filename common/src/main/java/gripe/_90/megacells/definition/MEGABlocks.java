@@ -25,9 +25,10 @@ import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
 import appeng.decorative.AEDecorativeBlock;
 
-import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
+import gripe._90.megacells.item.MEGACraftingBlockItem;
+import gripe._90.megacells.item.MEGAPatternProviderBlockItem;
 import gripe._90.megacells.util.Utils;
 
 public final class MEGABlocks {
@@ -105,7 +106,7 @@ public final class MEGABlocks {
             "MEGA Pattern Provider",
             "mega_pattern_provider",
             () -> new MEGAPatternProviderBlock(props),
-            MEGAPatternProviderBlock.Item::new);
+            MEGAPatternProviderBlockItem::new);
 
     private static <T extends Block> BlockDefinition<T> craftingBlock(
             String englishName, String id, Supplier<T> blockSupplier, Supplier<ItemLike> disassemblyExtra) {

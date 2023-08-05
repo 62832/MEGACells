@@ -15,6 +15,7 @@ import appeng.menu.locator.MenuLocator;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 public class MEGAPatternProviderBlockEntity extends PatternProviderBlockEntity {
 
@@ -29,12 +30,12 @@ public class MEGAPatternProviderBlockEntity extends PatternProviderBlockEntity {
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAPatternProviderBlock.MENU, player, locator);
+        MenuOpener.open(MEGAPatternProviderMenu.TYPE, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAPatternProviderBlock.MENU, player, subMenu.getLocator());
+        MenuOpener.returnTo(MEGAPatternProviderMenu.TYPE, player, subMenu.getLocator());
     }
 
     @Override

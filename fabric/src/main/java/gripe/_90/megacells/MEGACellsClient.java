@@ -25,12 +25,12 @@ import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
 
 import gripe._90.megacells.block.MEGACraftingUnitType;
-import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Addons;
 import gripe._90.megacells.util.Utils;
 
@@ -46,8 +46,8 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
 
     private void initScreens() {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> InitScreens.register(
-                MEGAPatternProviderBlock.MENU,
-                PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
+                MEGAPatternProviderMenu.TYPE,
+                PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json"));
     }
 

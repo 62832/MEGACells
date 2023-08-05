@@ -1,20 +1,13 @@
 package gripe._90.megacells.part;
 
-import java.util.List;
-
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.core.AppEng;
-import appeng.core.localization.Tooltips;
 import appeng.helpers.patternprovider.PatternProviderLogic;
-import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModels;
 import appeng.menu.ISubMenu;
 import appeng.menu.MenuOpener;
@@ -24,7 +17,7 @@ import appeng.parts.crafting.PatternProviderPart;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGAParts;
-import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Utils;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
@@ -51,12 +44,12 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAPatternProviderBlock.MENU, player, locator);
+        MenuOpener.open(MEGAPatternProviderMenu.TYPE, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAPatternProviderBlock.MENU, player, subMenu.getLocator());
+        MenuOpener.returnTo(MEGAPatternProviderMenu.TYPE, player, subMenu.getLocator());
     }
 
     @Override
@@ -73,17 +66,5 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
     @Override
     public ItemStack getMainMenuIcon() {
         return MEGAParts.MEGA_PATTERN_PROVIDER.stack();
-    }
-
-    public static class Item extends PartItem<MEGAPatternProviderPart> {
-        public Item(Properties properties) {
-            super(properties, MEGAPatternProviderPart.class, MEGAPatternProviderPart::new);
-        }
-
-        @Override
-        public void appendHoverText(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
-            super.appendHoverText(stack, level, lines, flag);
-            lines.add(Tooltips.of(MEGATranslations.ProcessingOnly.text()));
-        }
     }
 }

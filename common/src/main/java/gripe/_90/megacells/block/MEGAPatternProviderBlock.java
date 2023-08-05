@@ -1,19 +1,13 @@
 package gripe._90.megacells.block;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,15 +16,11 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import appeng.api.networking.IManagedGridNode;
-import appeng.block.AEBaseBlockItem;
 import appeng.block.AEBaseEntityBlock;
 import appeng.block.crafting.PushDirection;
 import appeng.core.definitions.AEItems;
-import appeng.core.localization.Tooltips;
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
-import appeng.menu.implementations.MenuTypeBuilder;
-import appeng.menu.implementations.PatternProviderMenu;
 import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
 import appeng.util.Platform;
@@ -38,14 +28,11 @@ import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.filter.AEItemDefinitionFilter;
 
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
-import gripe._90.megacells.definition.MEGATranslations;
 
+@SuppressWarnings("deprecation")
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
     public static final EnumProperty<PushDirection> PUSH_DIRECTION =
             EnumProperty.create("push_direction", PushDirection.class);
-
-    public static final MenuType<Menu> MENU =
-            MenuTypeBuilder.create(Menu::new, PatternProviderLogicHost.class).build("mega_pattern_provider");
 
     public MEGAPatternProviderBlock(Properties props) {
         super(props);
@@ -120,22 +107,5 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         }
 
         level.setBlockAndUpdate(pos, currentState.setValue(PUSH_DIRECTION, newPushDirection));
-    }
-
-    public static class Item extends AEBaseBlockItem {
-        public Item(Block id, Properties props) {
-            super(id, props);
-        }
-
-        @Override
-        public void addCheckedInformation(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
-            lines.add(Tooltips.of(MEGATranslations.ProcessingOnly.text()));
-        }
-    }
-
-    public static class Menu extends PatternProviderMenu {
-        public Menu(int id, Inventory playerInventory, PatternProviderLogicHost host) {
-            super(MENU, id, playerInventory, host);
-        }
     }
 }

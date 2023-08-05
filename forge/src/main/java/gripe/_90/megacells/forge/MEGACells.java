@@ -18,7 +18,6 @@ import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
 
-import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -30,6 +29,7 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Addons;
@@ -85,7 +85,7 @@ public class MEGACells {
         }
 
         if (event.getRegistryKey().equals(Registries.MENU)) {
-            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderBlock.MENU);
+            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
         }
     }
 
