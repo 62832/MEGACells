@@ -12,7 +12,6 @@ import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -164,15 +163,8 @@ abstract class ModelProvider {
     }
 
     static class Blocks extends AE2BlockStateProvider {
-        // because for whatever reason this isn't fucking accessible from BlockStateProvider
-        private static final ExistingFileHelper.ResourceType MODEL =
-                new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");
-
-        private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
-
         public Blocks(PackOutput output, ExistingFileHelper existing) {
             super(output, Utils.MODID, existing);
-            existing.trackGenerated(DRIVE_CELL, MODEL);
         }
 
         @Override
@@ -227,13 +219,12 @@ abstract class ModelProvider {
                     .setModels(new ConfiguredModel(blockModel))
                     .partialState()
                     .with(AbstractCraftingUnitBlock.FORMED, true)
-                    .setModels(new ConfiguredModel(models().getBuilder("ae2:block/crafting/mega_" + name + "_formed")));
+                    .setModels(new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
             simpleBlockItem(block.block(), blockModel);
         }
 
         private void craftingMonitor() {
-            var formedModel = AppEng.makeId("block/crafting/mega_monitor_formed");
-            models().getBuilder("ae2:block/crafting/mega_monitor_formed");
+            models().getBuilder("block/crafting/monitor_formed");
 
             var monitor = Utils.makeId("block/crafting/monitor");
             var unit = Utils.makeId("block/crafting/unit");
@@ -244,7 +235,10 @@ abstract class ModelProvider {
                     .with(PropertyDispatch.properties(AbstractCraftingUnitBlock.FORMED, BlockStateProperties.FACING)
                             .generate((formed, facing) -> {
                                 if (formed) {
-                                    return Variant.variant().with(VariantProperties.MODEL, formedModel);
+                                    return Variant.variant()
+                                            .with(
+                                                    VariantProperties.MODEL,
+                                                    Utils.makeId("block/crafting/monitor_formed"));
                                 } else {
                                     return applyOrientation(
                                             Variant.variant()
@@ -284,8 +278,7 @@ abstract class ModelProvider {
                                             Variant.variant()
                                                     .with(VariantProperties.MODEL, orientedModel.getLocation()),
                                             // + 90 because the default model is oriented UP, while block orientation
-                                            // assumes
-                                            // NORTH
+                                            // assumes NORTH
                                             orientation.getAngleX() + 90,
                                             orientation.getAngleY(),
                                             0);

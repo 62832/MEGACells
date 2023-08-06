@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
             version("ae2", "15.0.7-beta")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
-            library("ae2-forge", "appeng", "appliedenergistics2-forge").version("15.0.8-beta")
+            library("ae2-forge", "appeng", "appliedenergistics2-forge").version("15.0.9-beta")
 
             // AE2WTLib
             val ae2wtVersion = "15.0.1-beta"

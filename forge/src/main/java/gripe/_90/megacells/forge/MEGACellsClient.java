@@ -61,7 +61,7 @@ public class MEGACellsClient {
     private void initBuiltInModels() {
         for (var type : MEGACraftingUnitType.values()) {
             BuiltInModelHooks.addBuiltInModel(
-                    AppEng.makeId("block/crafting/mega_" + type.getAffix() + "_formed"),
+                    Utils.makeId("block/crafting/" + type.getAffix() + "_formed"),
                     new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
         }
     }

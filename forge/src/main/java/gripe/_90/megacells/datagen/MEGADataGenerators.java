@@ -17,8 +17,8 @@ public class MEGADataGenerators {
     public static void onGatherData(GatherDataEvent event) {
         var pack = event.getGenerator().getVanillaPack(true);
         var existing = event.getExistingFileHelper();
-
         var registries = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
+
         var blockTags = pack.addProvider(output -> new TagProvider.Blocks(output, registries, existing));
         pack.addProvider(output -> new TagProvider.Items(output, registries, blockTags.contentsGetter(), existing));
 
