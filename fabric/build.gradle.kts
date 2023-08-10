@@ -80,8 +80,9 @@ dependencies {
     modCompileOnly(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
 
-    modImplementation(libs.ae2wtlib.fabric)
-    modRuntimeOnly(libs.cloth.fabric)
+    // Still seems to have issues in dev environments
+    // modImplementation(libs.ae2wtlib.fabric)
+    // modRuntimeOnly(libs.cloth.fabric)
 
     modRuntimeOnly(libs.modmenu)
     modRuntimeOnly(libs.jei.fabric)

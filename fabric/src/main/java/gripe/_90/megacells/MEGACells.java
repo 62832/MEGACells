@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import appeng.api.IAEAddonEntrypoint;
+import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
@@ -33,6 +34,7 @@ public class MEGACells implements IAEAddonEntrypoint {
         InitStorageCells.init();
         InitUpgrades.init();
 
+        initPatternProviderTransfer();
         initCompression();
     }
 
@@ -64,6 +66,12 @@ public class MEGACells implements IAEAddonEntrypoint {
         }
 
         Registry.register(BuiltInRegistries.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private void initPatternProviderTransfer() {
+        GenericInternalInventory.SIDED.registerForBlockEntity(
+                (be, context) -> be.getLogic().getReturnInv(), MEGABlockEntities.MEGA_PATTERN_PROVIDER);
     }
 
     private void initCompression() {
