@@ -18,7 +18,7 @@ import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.crafting.MEGADecompressionPattern;
+import gripe._90.megacells.crafting.DecompressionPatternItem;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
 
@@ -95,8 +95,8 @@ public final class MEGAItems {
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD =
             item("Compression Card", "compression_card", UpgradeCardItem::new);
 
-    public static final ItemDefinition<MEGADecompressionPattern.Item> DECOMPRESSION_PATTERN =
-            item("Decompression Pattern", "decompression_pattern", MEGADecompressionPattern.Item::new);
+    public static final ItemDefinition<DecompressionPatternItem> DECOMPRESSION_PATTERN =
+            item("Decompression Pattern", "decompression_pattern", DecompressionPatternItem::new);
 
     public static List<ItemDefinition<?>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);

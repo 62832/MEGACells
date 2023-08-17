@@ -1,7 +1,6 @@
 package gripe._90.megacells.definition;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -26,11 +25,8 @@ public final class MEGACreativeTab {
     private static void populateTab(
             CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
         var itemDefs = new ArrayList<ItemDefinition<?>>();
-        var blacklist = List.of(MEGAItems.DECOMPRESSION_PATTERN);
-
         itemDefs.addAll(MEGAItems.getItems());
         itemDefs.addAll(MEGABlocks.getBlocks());
-        itemDefs.removeAll(blacklist);
 
         for (var itemDef : itemDefs) {
             var item = itemDef.asItem();

@@ -8,15 +8,14 @@ import appeng.api.crafting.IPatternDetails;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
-import appeng.items.AEBaseItem;
 
-public class MEGADecompressionPattern implements IPatternDetails {
+public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
     private final AEItemKey input;
     private final IInput[] inputs;
     private final GenericStack[] outputs;
 
-    public MEGADecompressionPattern(AEItemKey definition) {
+    public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
         var tag = Objects.requireNonNull(definition.getTag());
 
@@ -49,7 +48,7 @@ public class MEGADecompressionPattern implements IPatternDetails {
     public boolean equals(Object obj) {
         return obj != null
                 && obj.getClass() == getClass()
-                && ((MEGADecompressionPattern) obj).definition.equals(definition);
+                && ((DecompressionPattern) obj).definition.equals(definition);
     }
 
     @Override
@@ -76,12 +75,6 @@ public class MEGADecompressionPattern implements IPatternDetails {
         @Override
         public AEKey getRemainingKey(AEKey template) {
             return null;
-        }
-    }
-
-    public static class Item extends AEBaseItem {
-        public Item(Properties properties) {
-            super(properties);
         }
     }
 }

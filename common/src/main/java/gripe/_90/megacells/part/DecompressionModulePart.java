@@ -20,13 +20,13 @@ import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
+import appeng.crafting.pattern.AEPatternDecoder;
 import appeng.items.parts.PartModels;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.crafting.DecompressionPatternDecoder;
-import gripe._90.megacells.crafting.MEGADecompressionPattern;
+import gripe._90.megacells.crafting.DecompressionPattern;
 import gripe._90.megacells.service.DecompressionService;
 
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
@@ -57,7 +57,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public boolean pushPattern(IPatternDetails patternDetails, KeyCounter[] inputHolder) {
-        if (!getMainNode().isActive() || !(patternDetails instanceof MEGADecompressionPattern pattern)) {
+        if (!getMainNode().isActive() || !(patternDetails instanceof DecompressionPattern pattern)) {
             return false;
         }
 
@@ -97,8 +97,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
             for (var chain : decompressionService.getDecompressionChains()) {
                 var patternItems = decompressionService.getDecompressionPatterns(chain);
-                var decodedPatterns = patternItems.stream()
-                        .map(p -> DecompressionPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
+                var decodedPatterns =
+                        patternItems.stream().map(p -> AEPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
                 patterns.addAll(decodedPatterns.toList());
             }
 

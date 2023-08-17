@@ -11,14 +11,12 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.resources.ResourceLocation;
 
 import appeng.api.client.StorageCellModels;
-import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.networking.GridServices;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
-import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -58,7 +56,7 @@ public final class MEGACells {
         initStorageCells();
 
         MEGACells.PLATFORM.initCompression();
-        initDecompression();
+        GridServices.register(DecompressionService.class, DecompressionService.class);
     }
 
     private static void initStorageCells() {
@@ -79,11 +77,6 @@ public final class MEGACells {
                     .forEach(c ->
                             StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_mana_cell")));
         }
-    }
-
-    private static void initDecompression() {
-        GridServices.register(DecompressionService.class, DecompressionService.class);
-        PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);
     }
 
     // has to be done post-registration
