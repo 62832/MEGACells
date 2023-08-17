@@ -32,13 +32,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import appeng.api.orientation.BlockOrientation;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
+import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
@@ -290,7 +290,7 @@ class ModelProvider extends FabricModelProvider {
                 generator.modelOutput);
 
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
-                .with(PropertyDispatch.property(MEGAPatternProviderBlock.PUSH_DIRECTION)
+                .with(PropertyDispatch.property(PatternProviderBlock.PUSH_DIRECTION)
                         .generate(pushDirection -> {
                             var forward = pushDirection.getDirection();
 

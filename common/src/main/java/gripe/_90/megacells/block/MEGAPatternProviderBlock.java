@@ -12,11 +12,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import appeng.api.networking.IManagedGridNode;
 import appeng.block.AEBaseEntityBlock;
+import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.crafting.PushDirection;
 import appeng.core.definitions.AEItems;
 import appeng.helpers.patternprovider.PatternProviderLogic;
@@ -31,12 +31,9 @@ import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 
 @SuppressWarnings("deprecation")
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
-    public static final EnumProperty<PushDirection> PUSH_DIRECTION =
-            EnumProperty.create("push_direction", PushDirection.class);
-
     public MEGAPatternProviderBlock(Properties props) {
         super(props);
-        registerDefaultState(defaultBlockState().setValue(PUSH_DIRECTION, PushDirection.ALL));
+        registerDefaultState(defaultBlockState().setValue(PatternProviderBlock.PUSH_DIRECTION, PushDirection.ALL));
     }
 
     public static PatternProviderLogic createLogic(IManagedGridNode mainNode, PatternProviderLogicHost host) {
@@ -49,13 +46,14 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(PUSH_DIRECTION);
+        builder.add(PatternProviderBlock.PUSH_DIRECTION);
     }
 
     @Override
     public void neighborChanged(
             BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         var be = this.getBlockEntity(level, pos);
+
         if (be != null) {
             be.getLogic().updateRedstoneState();
         }
@@ -93,7 +91,8 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
 
     public void setSide(Level level, BlockPos pos, Direction facing) {
         var currentState = level.getBlockState(pos);
-        var pushSide = currentState.getValue(PUSH_DIRECTION).getDirection();
+        var pushSide =
+                currentState.getValue(PatternProviderBlock.PUSH_DIRECTION).getDirection();
 
         PushDirection newPushDirection;
         if (pushSide == facing.getOpposite()) {
@@ -106,6 +105,6 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
             newPushDirection = PushDirection.fromDirection(Platform.rotateAround(pushSide, facing));
         }
 
-        level.setBlockAndUpdate(pos, currentState.setValue(PUSH_DIRECTION, newPushDirection));
+        level.setBlockAndUpdate(pos, currentState.setValue(PatternProviderBlock.PUSH_DIRECTION, newPushDirection));
     }
 }
