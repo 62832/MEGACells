@@ -12,7 +12,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.MEGACells;
 
 /**
  * Replicates AE2's own {@link appeng.mixins.ModelBakeryMixin} for models from the MEGA namespace.
@@ -31,7 +31,7 @@ public abstract class ModelBakeryMixin {
 
     @Unique
     private UnbakedModel megacells$getUnbakedModel(ResourceLocation variantId) {
-        if (!variantId.getNamespace().equals(Utils.MODID)) {
+        if (!variantId.getNamespace().equals(MEGACells.MODID)) {
             return null;
         }
 

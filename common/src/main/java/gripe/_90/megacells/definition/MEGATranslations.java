@@ -2,7 +2,7 @@ package gripe._90.megacells.definition;
 
 import appeng.core.localization.LocalizationEnum;
 
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.MEGACells;
 
 public enum MEGATranslations implements LocalizationEnum {
     AcceleratorThreads("Provides 4 co-processing threads per block.", Type.TOOLTIP),
@@ -35,7 +35,7 @@ public enum MEGATranslations implements LocalizationEnum {
 
     @Override
     public String getTranslationKey() {
-        return String.format("%s.%s.%s", type.getRoot(), Utils.MODID, this.name());
+        return String.format("%s.%s.%s", type.getRoot(), MEGACells.MODID, this.name());
     }
 
     private enum Type {

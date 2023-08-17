@@ -17,15 +17,15 @@ import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
-import gripe._90.megacells.util.Utils;
 
 public final class MEGAItems {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised items.");
+        MEGACells.LOGGER.info("Initialised items.");
     }
 
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
@@ -184,7 +184,7 @@ public final class MEGAItems {
 
     public static <T extends Item> ItemDefinition<T> item(
             String englishName, String id, Function<Item.Properties, T> factory) {
-        var definition = new ItemDefinition<>(englishName, Utils.makeId(id), factory.apply(new Item.Properties()));
+        var definition = new ItemDefinition<>(englishName, MEGACells.makeId(id), factory.apply(new Item.Properties()));
         ITEMS.add(definition);
         return definition;
     }

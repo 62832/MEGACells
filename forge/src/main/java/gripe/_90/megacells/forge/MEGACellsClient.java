@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -22,6 +24,7 @@ import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlockEntities;
@@ -31,9 +34,9 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Utils;
 
 @SuppressWarnings("deprecation")
+@OnlyIn(Dist.CLIENT)
 public class MEGACellsClient {
     public MEGACellsClient() {
         initBuiltInModels();
@@ -61,7 +64,7 @@ public class MEGACellsClient {
     private void initBuiltInModels() {
         for (var type : MEGACraftingUnitType.values()) {
             BuiltInModelHooks.addBuiltInModel(
-                    Utils.makeId("block/crafting/" + type.getAffix() + "_formed"),
+                    MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
                     new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
         }
     }
@@ -88,13 +91,13 @@ public class MEGACellsClient {
         var portables = new ArrayList<>(MEGAItems.getItemPortables());
         portables.addAll(MEGAItems.getFluidPortables());
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             cells.addAll(AppMekItems.getCells());
             portables.addAll(AppMekItems.getPortables());
             cells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
         }
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             portables.addAll(AppBotItems.getPortables());
         }

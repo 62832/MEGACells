@@ -47,11 +47,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             for (int i = 0; i < cellHost.getCellCount(); i++) {
                 var cell = cellHost.getOriginalCellInventory(i);
 
-                if (!(cell instanceof BulkCellInventory bulkCell)) {
-                    continue;
-                }
-
-                if (bulkCell.isCompressionEnabled()) {
+                if (cell instanceof BulkCellInventory bulkCell && bulkCell.isCompressionEnabled()) {
                     addChain(bulkCell);
                 }
             }
@@ -59,28 +55,22 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
     }
 
     private void addChain(BulkCellInventory cell) {
-        var chain = CompressionService.INSTANCE
-                .getChain(cell.getStoredItem())
-                .map(c -> {
-                    var keys = new ObjectArrayList<>(c.keySet());
-                    Collections.reverse(keys);
+        var chain = CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
+            var keys = new ObjectArrayList<>(c.keySet());
+            Collections.reverse(keys);
 
-                    var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                    var highest = keys.indexOf(cell.getHighestCompressed());
+            var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
+            var highest = keys.indexOf(cell.getHighestCompressed());
 
-                    if (highest > -1) {
-                        for (var key : keys.subList(highest, keys.size())) {
-                            decompressed.put(key, c.getInt(key));
-                        }
-                    }
+            if (highest > -1) {
+                for (var key : keys.subList(highest, keys.size())) {
+                    decompressed.put(key, c.getInt(key));
+                }
+            }
 
-                    return decompressed;
-                })
-                .orElseGet(Object2IntLinkedOpenHashMap::new);
-
-        if (!chain.isEmpty()) {
-            decompressionChains.add(chain);
-        }
+            return decompressed;
+        });
+        chain.ifPresent(decompressionChains::add);
     }
 
     public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {

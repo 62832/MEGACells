@@ -9,13 +9,13 @@ import appeng.items.storage.StorageTier;
 import appbot.item.ManaCellItem;
 import appbot.item.PortableManaCellItem;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.util.Utils;
 
 public final class AppBotItems {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised Applied Botanics integration.");
+        MEGACells.LOGGER.info("Initialised Applied Botanics integration.");
     }
 
     public static final ItemDefinition<MaterialItem> MEGA_MANA_CELL_HOUSING =

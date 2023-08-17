@@ -28,6 +28,7 @@ import appeng.core.definitions.ItemDefinition;
 import appeng.datagen.providers.models.AE2BlockStateProvider;
 import appeng.init.client.InitItemModelsProperties;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -35,7 +36,6 @@ import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Utils;
 
 abstract class ModelProvider {
     static class Items extends ItemModelProvider {
@@ -53,7 +53,7 @@ abstract class ModelProvider {
         private static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
         public Items(PackOutput output, ExistingFileHelper existing) {
-            super(output, Utils.MODID, existing);
+            super(output, MEGACells.MODID, existing);
             existing.trackGenerated(CRAFTING_PATTERN, TEXTURE);
             existing.trackGenerated(STORAGE_CELL_LED, TEXTURE);
             existing.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
@@ -101,7 +101,7 @@ abstract class ModelProvider {
             cells.addAll(MEGAItems.getFluidCells());
             cells.add(MEGAItems.BULK_ITEM_CELL);
 
-            if (Utils.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
+            if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
                 basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
                 cells.addAll(AppMekItems.getCells());
@@ -115,7 +115,7 @@ abstract class ModelProvider {
                 driveCell("radioactive_chemical_cell");
             }
 
-            if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+            if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
                 basicItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem());
 
                 cells.addAll(AppBotItems.getCells());
@@ -132,7 +132,7 @@ abstract class ModelProvider {
 
         private void cellModel(ItemDefinition<?> cell) {
             var path = cell.id().getPath();
-            singleTexture(path, mcLoc("item/generated"), "layer0", Utils.makeId("item/cell/standard/" + path))
+            singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/cell/standard/" + path))
                     .texture("layer1", STORAGE_CELL_LED);
         }
 
@@ -143,7 +143,7 @@ abstract class ModelProvider {
                             path,
                             mcLoc("item/generated"),
                             "layer0",
-                            Utils.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
+                            MEGACells.makeId("item/cell/portable/portable_cell_%s_screen".formatted(screenType)))
                     .texture("layer1", PORTABLE_CELL_LED)
                     .texture("layer2", housingTexture)
                     .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
@@ -164,7 +164,7 @@ abstract class ModelProvider {
 
     static class Blocks extends AE2BlockStateProvider {
         public Blocks(PackOutput output, ExistingFileHelper existing) {
-            super(output, Utils.MODID, existing);
+            super(output, MEGACells.MODID, existing);
         }
 
         @Override
@@ -193,7 +193,7 @@ abstract class ModelProvider {
             var models = new ArrayList<ModelFile>();
 
             for (var i = 0; i < 5; i++) {
-                var model = models().cubeAll(path + "_" + i, Utils.makeId("block/" + path + "_" + i));
+                var model = models().cubeAll(path + "_" + i, MEGACells.makeId("block/" + path + "_" + i));
                 blockBuilder
                         .partialState()
                         .with(EnergyCellBlock.ENERGY_STORAGE, i)
@@ -212,7 +212,7 @@ abstract class ModelProvider {
         }
 
         private void craftingModel(BlockDefinition<?> block, String name) {
-            var blockModel = models().cubeAll("block/crafting/" + name, Utils.makeId("block/crafting/" + name));
+            var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
             getVariantBuilder(block.block())
                     .partialState()
                     .with(AbstractCraftingUnitBlock.FORMED, false)
@@ -226,8 +226,8 @@ abstract class ModelProvider {
         private void craftingMonitor() {
             models().getBuilder("block/crafting/monitor_formed");
 
-            var monitor = Utils.makeId("block/crafting/monitor");
-            var unit = Utils.makeId("block/crafting/unit");
+            var monitor = MEGACells.makeId("block/crafting/monitor");
+            var unit = MEGACells.makeId("block/crafting/unit");
             var unformedModel = models().cube("block/crafting/mega_monitor", unit, unit, monitor, unit, unit, unit)
                     .texture("particle", monitor);
 
@@ -238,7 +238,7 @@ abstract class ModelProvider {
                                     return Variant.variant()
                                             .with(
                                                     VariantProperties.MODEL,
-                                                    Utils.makeId("block/crafting/monitor_formed"));
+                                                    MEGACells.makeId("block/crafting/monitor_formed"));
                                 } else {
                                     return applyOrientation(
                                             Variant.variant()
@@ -255,11 +255,11 @@ abstract class ModelProvider {
             var normalModel = cubeAll(def.block());
             simpleBlockItem(def.block(), normalModel);
 
-            var arrow = Utils.makeId("block/mega_pattern_provider_alternate_arrow");
+            var arrow = MEGACells.makeId("block/mega_pattern_provider_alternate_arrow");
             var orientedModel = models().cube(
                             "block/mega_pattern_provider_oriented",
-                            Utils.makeId("block/mega_pattern_provider_alternate"),
-                            Utils.makeId("block/mega_pattern_provider_alternate_front"),
+                            MEGACells.makeId("block/mega_pattern_provider_alternate"),
+                            MEGACells.makeId("block/mega_pattern_provider_alternate_front"),
                             arrow,
                             arrow,
                             arrow,
@@ -291,7 +291,7 @@ abstract class ModelProvider {
         private static final ResourceLocation PATTERN_PROVIDER = AppEng.makeId("part/pattern_provider_base");
 
         public Parts(PackOutput output, ExistingFileHelper existing) {
-            super(output, Utils.MODID, "part", BlockModelBuilder::new, existing);
+            super(output, MEGACells.MODID, "part", BlockModelBuilder::new, existing);
             existing.trackGenerated(PATTERN_PROVIDER, MODEL);
         }
 

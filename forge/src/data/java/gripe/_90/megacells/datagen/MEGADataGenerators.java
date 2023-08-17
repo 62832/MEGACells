@@ -9,9 +9,9 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.MEGACells;
 
-@Mod.EventBusSubscriber(modid = Utils.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = MEGACells.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MEGADataGenerators {
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {

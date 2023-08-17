@@ -1,19 +1,93 @@
-package gripe._90.megacells.init;
+package gripe._90.megacells;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.ServiceLoader;
+import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.minecraft.resources.ResourceLocation;
+
+import appeng.api.client.StorageCellModels;
+import appeng.api.crafting.PatternDetailsHelper;
+import appeng.api.networking.GridServices;
+import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.crafting.DecompressionPatternDecoder;
+import gripe._90.megacells.definition.MEGABlockEntities;
+import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
+import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.item.MEGABulkCell;
+import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.util.Platform;
 
-public class InitUpgrades {
-    public static void init() {
+public final class MEGACells {
+    private MEGACells() {}
+
+    public static final String MODID = "megacells";
+
+    public static final Logger LOGGER = LoggerFactory.getLogger("MEGA Cells");
+
+    public static final Platform PLATFORM =
+            ServiceLoader.load(Platform.class).findFirst().orElseThrow();
+
+    public static ResourceLocation makeId(String path) {
+        return new ResourceLocation(MODID, path);
+    }
+
+    public static void initCommon() {
+        MEGAItems.init();
+        MEGABlocks.init();
+        MEGABlockEntities.init();
+        MEGAParts.init();
+
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+            AppBotItems.init();
+        }
+
+        initStorageCells();
+
+        MEGACells.PLATFORM.initCompression();
+        initDecompression();
+    }
+
+    private static void initStorageCells() {
+        Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
+                .flatMap(Collection::stream)
+                .forEach(c -> StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_item_cell")));
+        Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables())
+                .flatMap(Collection::stream)
+                .forEach(
+                        c -> StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_fluid_cell")));
+
+        StorageCells.addCellHandler(MEGABulkCell.HANDLER);
+        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, MEGACells.makeId("block/drive/cells/bulk_item_cell"));
+
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+            Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
+                    .flatMap(Collection::stream)
+                    .forEach(c ->
+                            StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_mana_cell")));
+        }
+    }
+
+    private static void initDecompression() {
+        GridServices.register(DecompressionService.class, DecompressionService.class);
+        PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);
+    }
+
+    // has to be done post-registration
+    public static void initUpgrades() {
         var storageCellGroup = GuiText.StorageCells.getTranslationKey();
         var portableCellGroup = GuiText.PortableCells.getTranslationKey();
         var wirelessTerminalGroup = GuiText.WirelessTerminals.getTranslationKey();
@@ -68,11 +142,11 @@ public class InitUpgrades {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.AE2WTLIB)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.AE2WTLIB)) {
             AE2WTIntegration.initUpgrades();
         }
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotIntegration.initUpgrades();
         }
     }

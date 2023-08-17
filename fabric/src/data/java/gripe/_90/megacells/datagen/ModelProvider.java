@@ -37,12 +37,12 @@ import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Utils;
 
 class ModelProvider extends FabricModelProvider {
     private static final TextureSlot LAYER3 = TextureSlot.create("layer3");
@@ -139,7 +139,7 @@ class ModelProvider extends FabricModelProvider {
         cells.addAll(MEGAItems.getFluidCells());
         cells.add(MEGAItems.BULK_ITEM_CELL);
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             generator.generateFlatItem(AppBotItems.MEGA_MANA_CELL_HOUSING.asItem(), ModelTemplates.FLAT_ITEM);
 
@@ -179,11 +179,12 @@ class ModelProvider extends FabricModelProvider {
 
     private void cellModel(ItemDefinition<?> cell, ItemModelGenerators generator) {
         CELL.create(
-                Utils.makeId("item/" + cell.id().getPath()),
+                MEGACells.makeId("item/" + cell.id().getPath()),
                 new TextureMapping()
                         .put(
                                 TextureSlot.LAYER0,
-                                Utils.makeId("item/cell/standard/" + cell.id().getPath()))
+                                MEGACells.makeId(
+                                        "item/cell/standard/" + cell.id().getPath()))
                         .put(TextureSlot.LAYER1, AppEng.makeId("item/storage_cell_led")),
                 generator.output);
     }
@@ -196,25 +197,25 @@ class ModelProvider extends FabricModelProvider {
         var path = portable.id().getPath();
         var tierSuffix = path.substring(path.lastIndexOf('_') + 1);
         PORTABLE.create(
-                Utils.makeId("item/" + portable.id().getPath()),
+                MEGACells.makeId("item/" + portable.id().getPath()),
                 new TextureMapping()
                         .put(
                                 TextureSlot.LAYER0,
-                                Utils.makeId("item/cell/portable/portable_cell_" + screenType + "_screen"))
+                                MEGACells.makeId("item/cell/portable/portable_cell_" + screenType + "_screen"))
                         .put(TextureSlot.LAYER1, AppEng.makeId("item/portable_cell_led"))
                         .put(TextureSlot.LAYER2, housingTexture)
-                        .put(LAYER3, Utils.makeId("item/cell/portable/portable_cell_side_" + tierSuffix)),
+                        .put(LAYER3, MEGACells.makeId("item/cell/portable/portable_cell_side_" + tierSuffix)),
                 generator.output);
     }
 
     private void driveCell(String texture, ItemModelGenerators generator) {
-        var path = Utils.makeId("block/drive/cells/" + texture);
+        var path = MEGACells.makeId("block/drive/cells/" + texture);
         DRIVE_CELL.create(path, new TextureMapping().put(CELL_TEXTURE, path), generator.output);
     }
 
     private void craftingUnit(Block block, String texture, BlockModelGenerators generator) {
-        var formed = Utils.makeId("block/crafting/" + texture + "_formed");
-        var unformed = Utils.makeId("block/crafting/" + texture);
+        var formed = MEGACells.makeId("block/crafting/" + texture + "_formed");
+        var unformed = MEGACells.makeId("block/crafting/" + texture);
 
         var craftingUnit = MultiVariantGenerator.multiVariant(block)
                 .with(PropertyDispatch.property(AbstractCraftingUnitBlock.FORMED)
@@ -235,8 +236,8 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void craftingMonitor(BlockModelGenerators generator) {
-        var unformed = Utils.makeId("block/crafting/monitor");
-        var unit = Utils.makeId("block/crafting/unit");
+        var unformed = MEGACells.makeId("block/crafting/monitor");
+        var unit = MEGACells.makeId("block/crafting/unit");
         var unformedModel = ModelTemplates.CUBE.create(
                 unformed,
                 new TextureMapping()
@@ -249,7 +250,7 @@ class ModelProvider extends FabricModelProvider {
                         .put(TextureSlot.PARTICLE, unformed),
                 generator.modelOutput);
 
-        var formedModel = Utils.makeId("block/crafting/monitor_formed");
+        var formedModel = MEGACells.makeId("block/crafting/monitor_formed");
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(MEGABlocks.CRAFTING_MONITOR.block())
                 .with(PropertyDispatch.properties(AbstractCraftingUnitBlock.FORMED, BlockStateProperties.FACING)
                         .generate((formed, facing) -> {
@@ -277,11 +278,11 @@ class ModelProvider extends FabricModelProvider {
                 TextureMapping.cube(MEGABlocks.MEGA_PATTERN_PROVIDER.block()),
                 generator.modelOutput);
         var oriented = ModelTemplates.CUBE.create(
-                Utils.makeId("block/mega_pattern_provider_oriented"),
+                MEGACells.makeId("block/mega_pattern_provider_oriented"),
                 new TextureMapping()
-                        .put(TextureSlot.UP, Utils.makeId("block/mega_pattern_provider_alternate_front"))
-                        .put(TextureSlot.DOWN, Utils.makeId("block/mega_pattern_provider_alternate"))
-                        .put(TextureSlot.NORTH, Utils.makeId("block/mega_pattern_provider_alternate_arrow"))
+                        .put(TextureSlot.UP, MEGACells.makeId("block/mega_pattern_provider_alternate_front"))
+                        .put(TextureSlot.DOWN, MEGACells.makeId("block/mega_pattern_provider_alternate"))
+                        .put(TextureSlot.NORTH, MEGACells.makeId("block/mega_pattern_provider_alternate_arrow"))
                         .copySlot(TextureSlot.NORTH, TextureSlot.EAST)
                         .copySlot(TextureSlot.NORTH, TextureSlot.SOUTH)
                         .copySlot(TextureSlot.NORTH, TextureSlot.WEST)
@@ -346,20 +347,20 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void patternProviderPart(ItemModelGenerators generator) {
-        var provider = Utils.makeId("part/mega_pattern_provider");
-        var monitorBack = Utils.makeId("part/mega_monitor_back");
-        var monitorSides = Utils.makeId("part/mega_monitor_sides");
+        var provider = MEGACells.makeId("part/mega_pattern_provider");
+        var monitorBack = MEGACells.makeId("part/mega_monitor_back");
+        var monitorSides = MEGACells.makeId("part/mega_monitor_sides");
         PATTERN_PROVIDER.create(
                 provider,
                 new TextureMapping()
-                        .put(SIDES_STATUS, Utils.makeId("part/mega_monitor_sides_status"))
+                        .put(SIDES_STATUS, MEGACells.makeId("part/mega_monitor_sides_status"))
                         .put(SIDES, monitorSides)
                         .put(TextureSlot.BACK, monitorBack)
                         .put(TextureSlot.FRONT, provider)
                         .put(TextureSlot.PARTICLE, monitorBack),
                 generator.output);
         CABLE_PATTERN_PROVIDER.create(
-                Utils.makeId("item/cable_mega_pattern_provider"),
+                MEGACells.makeId("item/cable_mega_pattern_provider"),
                 new TextureMapping()
                         .put(SIDES, monitorSides)
                         .put(TextureSlot.FRONT, provider)
@@ -384,16 +385,16 @@ class ModelProvider extends FabricModelProvider {
                 var fillPredicate = new JsonObject();
                 fillPredicate.addProperty("ae2:fill_level", 0.25 * i);
                 itemModelOverrides.add(
-                        Pair.of(Utils.makeId("block/" + cell.id().getPath() + "_" + (i + 1)), fillPredicate));
+                        Pair.of(MEGACells.makeId("block/" + cell.id().getPath() + "_" + (i + 1)), fillPredicate));
             }
         }
 
         generator.blockStateOutput.accept(
                 MultiVariantGenerator.multiVariant(cell.block()).with(fillStage));
         generator.modelOutput.accept(
-                Utils.makeId("item/" + cell.id().getPath()),
+                MEGACells.makeId("item/" + cell.id().getPath()),
                 new OverrideableDelegatedModel(
-                        Utils.makeId("block/" + cell.id().getPath() + "_0"), itemModelOverrides));
+                        MEGACells.makeId("block/" + cell.id().getPath() + "_0"), itemModelOverrides));
     }
 
     static class OverrideableDelegatedModel extends DelegatedModel {

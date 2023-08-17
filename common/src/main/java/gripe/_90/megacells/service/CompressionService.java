@@ -23,6 +23,10 @@ import appeng.api.stacks.AEItemKey;
 public class CompressionService {
     public static final CompressionService INSTANCE = new CompressionService();
 
+    // Each chain is an ordered map with the items themselves as the keys and the values being the amount of either:
+    // - the item itself, needed to compress to its next variant
+    // - the next variant, when decompressing the item
+    // This value is typically either 4 or 9 for any given item.
     private final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
 
     private CompressionService() {}
@@ -73,10 +77,11 @@ public class CompressionService {
                     var input = recipe.getIngredients().get(0);
                     var output = recipe.getResultItem(access);
 
+                    // We're only checking against decompression recipes for every compression recipe and vice versa
                     var checkAgainst = candidates.stream()
-                            .filter(r -> isCompressionRecipe(recipe, access)
-                                    ? isDecompressionRecipe(r, access)
-                                    : isCompressionRecipe(r, access))
+                            .filter(reverse -> isCompressionRecipe(recipe, access)
+                                    ? isDecompressionRecipe(reverse, access)
+                                    : isCompressionRecipe(reverse, access))
                             .toList();
 
                     for (var candidate : checkAgainst) {
@@ -94,11 +99,11 @@ public class CompressionService {
                         }
 
                         if (compressible && decompressible) {
-                            break;
+                            return true;
                         }
                     }
 
-                    return compressible && decompressible;
+                    return false;
                 })
                 .toList();
 
@@ -128,6 +133,7 @@ public class CompressionService {
                     higher = getSubsequentVariant(higher.first(), compressed, access);
                 }
 
+                // In theory this shouldn't even be happening, but...
                 if (compressionChain.isEmpty() && decompressionChain.isEmpty()) {
                     continue;
                 }
@@ -135,6 +141,8 @@ public class CompressionService {
                 // Collate decompression and compression chains together with base variant
                 var fullChain = new Object2IntLinkedOpenHashMap<AEItemKey>();
 
+                // By default, full chains go from the smallest "unit" variant to the most compressed, so reverse the
+                // decompression chain and add it first
                 var decompressionKeys = new ObjectArrayList<>(decompressionChain.keySet());
                 Collections.reverse(decompressionKeys);
                 decompressionKeys.forEach(k -> fullChain.put(k, decompressionChain.getInt(k)));
@@ -145,8 +153,8 @@ public class CompressionService {
                         fullChain.isEmpty()
                                 ? compressionChain.getInt(compressionChain.firstKey())
                                 : fullChain.getInt(fullChain.lastKey()));
-                fullChain.putAll(compressionChain);
 
+                fullChain.putAll(compressionChain);
                 compressionChains.add(fullChain);
             }
         }

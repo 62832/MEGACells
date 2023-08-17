@@ -3,14 +3,14 @@ package gripe._90.megacells.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.util.Utils;
 
 class LocalisationProvider extends LanguageProvider {
     public LocalisationProvider(PackOutput output) {
-        super(output, Utils.MODID, "en_us");
+        super(output, MEGACells.MODID, "en_us");
     }
 
     @Override

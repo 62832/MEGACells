@@ -11,11 +11,17 @@ import appeng.block.AEBaseBlockItem;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.AEBaseItem;
 
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.MEGACells;
 
-public class MEGACreativeTab {
-    public static final CreativeModeTab TAB = Utils.PLATFORM.getCreativeTab(MEGACreativeTab::populateTab);
-    public static final ResourceLocation ID = Utils.makeId("tab");
+public final class MEGACreativeTab {
+    public static final ResourceLocation ID = MEGACells.makeId("tab");
+
+    public static final CreativeModeTab TAB = MEGACells.PLATFORM
+            .getCreativeTabBuilder()
+            .title(MEGATranslations.CreativeTab.text())
+            .icon(() -> MEGAItems.ITEM_CELL_256M.stack(1))
+            .displayItems(MEGACreativeTab::populateTab)
+            .build();
 
     private static void populateTab(
             CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {

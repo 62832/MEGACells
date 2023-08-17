@@ -1,4 +1,4 @@
-package gripe._90.megacells;
+package gripe._90.megacells.fabric;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,7 @@ import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlockEntities;
@@ -32,7 +33,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Utils;
 
 @Environment(EnvType.CLIENT)
 public class MEGACellsClient implements IAEAddonEntrypoint {
@@ -54,7 +54,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     private void initBlockModels() {
         for (var type : MEGACraftingUnitType.values()) {
             ModelLoadingRegistry.INSTANCE.registerResourceProvider(resourceManager -> new SimpleModelLoader<>(
-                    Utils.makeId("block/crafting/" + type.getAffix() + "_formed"),
+                    MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
                     () -> new CraftingCubeModel(new MEGACraftingUnitModelProvider(type))));
 
             BlockRenderLayerMap.INSTANCE.putBlock(type.getDefinition().block(), RenderType.cutout());
@@ -83,7 +83,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
         var portables = new ArrayList<>(MEGAItems.getItemPortables());
         portables.addAll(MEGAItems.getFluidPortables());
 
-        if (Utils.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             portables.addAll(AppBotItems.getPortables());
         }

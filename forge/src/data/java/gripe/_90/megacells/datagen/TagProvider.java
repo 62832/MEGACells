@@ -20,11 +20,11 @@ import appeng.api.features.P2PTunnelAttunement;
 import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
-import gripe._90.megacells.util.Utils;
 
 abstract class TagProvider {
     static class Items extends ItemTagsProvider {
@@ -33,7 +33,7 @@ abstract class TagProvider {
                 CompletableFuture<HolderLookup.Provider> registries,
                 CompletableFuture<TagLookup<Block>> blockTags,
                 @Nullable ExistingFileHelper existing) {
-            super(output, registries, blockTags, Utils.MODID, existing);
+            super(output, registries, blockTags, MEGACells.MODID, existing);
         }
 
         @Override
@@ -58,7 +58,7 @@ abstract class TagProvider {
                 PackOutput output,
                 CompletableFuture<HolderLookup.Provider> registries,
                 @Nullable ExistingFileHelper existing) {
-            super(output, registries, Utils.MODID, existing);
+            super(output, registries, MEGACells.MODID, existing);
         }
 
         @Override

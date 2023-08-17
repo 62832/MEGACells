@@ -20,14 +20,14 @@ import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
-import gripe._90.megacells.util.Utils;
 
 @SuppressWarnings({"unused", "unchecked"})
 public final class MEGABlockEntities {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised block entities.");
+        MEGACells.LOGGER.info("Initialised block entities.");
     }
 
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
@@ -81,7 +81,7 @@ public final class MEGABlockEntities {
                         (blockPos, blockState) -> factory.create(typeHolder.get(), blockPos, blockState), blocks)
                 .build(null);
         typeHolder.set(type); // Makes it available to the supplier used above
-        BLOCK_ENTITY_TYPES.put(Utils.makeId(id), type);
+        BLOCK_ENTITY_TYPES.put(MEGACells.makeId(id), type);
 
         AEBaseBlockEntity.registerBlockEntityItem(type, blockDefinitions[0].asItem());
 

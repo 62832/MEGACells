@@ -25,16 +25,16 @@ import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
 import appeng.decorative.AEDecorativeBlock;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.item.MEGACraftingBlockItem;
 import gripe._90.megacells.item.MEGAPatternProviderBlockItem;
-import gripe._90.megacells.util.Utils;
 
 public final class MEGABlocks {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised blocks.");
+        MEGACells.LOGGER.info("Initialised blocks.");
     }
 
     private static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
@@ -142,7 +142,7 @@ public final class MEGABlocks {
             item = new BlockItem(block, itemProperties);
         }
 
-        var definition = new BlockDefinition<>(englishName, Utils.makeId(id), block, item);
+        var definition = new BlockDefinition<>(englishName, MEGACells.makeId(id), block, item);
         BLOCKS.add(definition);
         return definition;
     }

@@ -11,15 +11,15 @@ import appeng.core.definitions.ItemDefinition;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.item.MEGAPatternProviderPartItem;
 import gripe._90.megacells.part.DecompressionModulePart;
 import gripe._90.megacells.part.MEGAPatternProviderPart;
-import gripe._90.megacells.util.Utils;
 
 public final class MEGAParts {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised cable parts.");
+        MEGACells.LOGGER.info("Initialised cable parts.");
     }
 
     public static final ItemDefinition<PartItem<MEGAPatternProviderPart>> MEGA_PATTERN_PROVIDER = customPart(
