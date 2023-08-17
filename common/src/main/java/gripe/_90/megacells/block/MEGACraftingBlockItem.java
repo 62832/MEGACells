@@ -1,4 +1,4 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.block;
 
 import static gripe._90.megacells.definition.MEGABlocks.CRAFTING_ACCELERATOR;
 import static gripe._90.megacells.definition.MEGABlocks.MEGA_CRAFTING_UNIT;

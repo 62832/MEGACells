@@ -1,4 +1,4 @@
-package gripe._90.megacells.part;
+package gripe._90.megacells.item.part;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +17,7 @@ import appeng.parts.crafting.PatternProviderPart;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
-import gripe._90.megacells.definition.MEGAParts;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
@@ -65,6 +65,6 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public ItemStack getMainMenuIcon() {
-        return MEGAParts.MEGA_PATTERN_PROVIDER.stack();
+        return MEGAItems.MEGA_PATTERN_PROVIDER.stack();
     }
 }

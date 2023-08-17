@@ -1,4 +1,4 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.item.part;
 
 import java.util.List;
 
@@ -11,7 +11,6 @@ import appeng.core.localization.Tooltips;
 import appeng.items.parts.PartItem;
 
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.part.MEGAPatternProviderPart;
 
 public class MEGAPatternProviderPartItem extends PartItem<MEGAPatternProviderPart> {
     public MEGAPatternProviderPartItem(Properties properties) {

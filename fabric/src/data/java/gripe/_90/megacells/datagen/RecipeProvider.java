@@ -34,7 +34,6 @@ import appeng.recipes.transform.TransformRecipeBuilder;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.util.Addons;
@@ -281,7 +280,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
                 .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
                 .save(consumer, MEGACells.makeId("crafting/compression_card"));
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAParts.DECOMPRESSION_MODULE)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.DECOMPRESSION_MODULE)
                 .pattern("IAI")
                 .pattern("C#E")
                 .pattern("ILI")
@@ -302,13 +301,13 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
                 .save(consumer, MEGACells.makeId("network/mega_pattern_provider"));
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAParts.MEGA_PATTERN_PROVIDER)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.MEGA_PATTERN_PROVIDER)
                 .requires(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .unlockedBy("has_mega_pattern_provider", has(MEGABlocks.MEGA_PATTERN_PROVIDER))
                 .save(consumer, MEGACells.makeId("network/mega_pattern_provider_part"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGABlocks.MEGA_PATTERN_PROVIDER)
-                .requires(MEGAParts.MEGA_PATTERN_PROVIDER)
-                .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
+                .requires(MEGAItems.MEGA_PATTERN_PROVIDER)
+                .unlockedBy("has_cable_mega_pattern_provider", has(MEGAItems.MEGA_PATTERN_PROVIDER))
                 .save(consumer, MEGACells.makeId("network/mega_pattern_provider_block"));
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {

@@ -26,10 +26,10 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.decorative.AEDecorativeBlock;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
-import gripe._90.megacells.item.MEGACraftingBlockItem;
-import gripe._90.megacells.item.MEGAPatternProviderBlockItem;
+import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
 
 public final class MEGABlocks {
     public static void init() {

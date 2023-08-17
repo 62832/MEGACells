@@ -20,7 +20,6 @@ import appeng.core.localization.GuiText;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appbot.AppBotItems;
@@ -47,7 +46,6 @@ public final class MEGACells {
         MEGAItems.init();
         MEGABlocks.init();
         MEGABlockEntities.init();
-        MEGAParts.init();
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotItems.init();

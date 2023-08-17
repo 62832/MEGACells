@@ -32,7 +32,6 @@ import appeng.init.client.InitItemModelsProperties;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.util.Addons;
@@ -155,7 +154,7 @@ abstract class ModelProvider {
         }
 
         private void patternProviderPart() {
-            withExistingParent(MEGAParts.MEGA_PATTERN_PROVIDER.id().getPath(), CABLE_INTERFACE)
+            withExistingParent(MEGAItems.MEGA_PATTERN_PROVIDER.id().getPath(), CABLE_INTERFACE)
                     .texture("back", "part/mega_monitor_back")
                     .texture("front", "part/mega_pattern_provider")
                     .texture("sides", "part/mega_monitor_sides");

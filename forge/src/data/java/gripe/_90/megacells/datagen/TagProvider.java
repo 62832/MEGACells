@@ -23,7 +23,6 @@ import appeng.core.definitions.ItemDefinition;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.definition.MEGATags;
 
 abstract class TagProvider {
@@ -45,7 +44,7 @@ abstract class TagProvider {
                     .add(getKey(MEGABlocks.MEGA_ENERGY_CELL));
             tag(MEGATags.MEGA_PATTERN_PROVIDER)
                     .add(getKey(MEGABlocks.MEGA_PATTERN_PROVIDER))
-                    .add(getKey(MEGAParts.MEGA_PATTERN_PROVIDER));
+                    .add(getKey(MEGAItems.MEGA_PATTERN_PROVIDER));
         }
 
         private ResourceKey<Item> getKey(ItemDefinition<?> item) {

@@ -5,14 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.Util;
 import net.minecraft.world.item.Item;
 
+import appeng.api.parts.PartModels;
 import appeng.api.stacks.AEKeyType;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.EnergyCardItem;
 import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 import appeng.items.materials.UpgradeCardItem;
+import appeng.items.parts.PartItem;
+import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
@@ -21,6 +25,9 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.DecompressionPatternItem;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
+import gripe._90.megacells.item.part.DecompressionModulePart;
+import gripe._90.megacells.item.part.MEGAPatternProviderPart;
+import gripe._90.megacells.item.part.MEGAPatternProviderPartItem;
 
 public final class MEGAItems {
     public static void init() {
@@ -97,6 +104,19 @@ public final class MEGAItems {
 
     public static final ItemDefinition<DecompressionPatternItem> DECOMPRESSION_PATTERN =
             item("Decompression Pattern", "decompression_pattern", DecompressionPatternItem::new);
+
+    public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
+        PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
+        return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
+    });
+
+    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = Util.make(() -> {
+        PartModels.registerModels(PartModelsHelper.createModels(DecompressionModulePart.class));
+        return item(
+                "MEGA Decompression Module",
+                "decompression_module",
+                p -> new PartItem<>(p, DecompressionModulePart.class, DecompressionModulePart::new));
+    });
 
     public static List<ItemDefinition<?>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
