@@ -1,3 +1,9 @@
+sourceSets.create("data") {
+    val main = sourceSets.main.get()
+    compileClasspath += main.compileClasspath + main.output
+    runtimeClasspath += main.runtimeClasspath + main.output
+}
+
 loom {
     val modId: String by project
 
@@ -5,30 +11,25 @@ loom {
         create("data") {
             data()
             name("Minecraft Data")
+            source("data")
 
             programArgs("--all", "--mod", modId)
             programArgs("--output", file("src/generated/resources").absolutePath)
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
+            programArgs("--mixin.config", "megacells-data.mixins.json")
 
-            /*
+            @Suppress("UnstableApiUsage")
             mods {
                 create(modId) {
-                    sourceSet(sourceSets.create("data") {
-                        val main = sourceSets.main.get()
-                        compileClasspath += main.compileClasspath + main.output
-                        runtimeClasspath += main.runtimeClasspath + main.output
-                    })
+                    sourceSet("main")
+                    sourceSet("data")
                 }
             }
-             */
         }
     }
 
     forge {
-        convertAccessWideners.set(true)
-        extraAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
-
         mixinConfig("$modId-common.mixins.json")
         mixinConfig("$modId.mixins.json")
     }
@@ -71,7 +72,6 @@ repositories {
 
 dependencies {
     forge(libs.forge)
-    annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
 
     modImplementation(libs.ae2.forge)
 

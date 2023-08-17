@@ -22,7 +22,6 @@ dependencyResolutionManagement {
             library("fabric-loader", "net.fabricmc", "fabric-loader").version("0.14.21")
             library("fabric-api", "net.fabricmc.fabric-api", "fabric-api").version("0.83.1+$minecraftVersion")
             library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.3")
-            library("mixin", "org.spongepowered", "mixin").version("0.8.5")
 
             version("ae2", "15.0.7-beta")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")

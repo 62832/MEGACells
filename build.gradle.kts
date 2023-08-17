@@ -59,15 +59,8 @@ subprojects {
     configure<LoomGradleExtensionAPI> {
         silentMojangMappingsLicense()
 
-        val accessWidenerFile = project(":common").file("src/main/resources/$modId.accesswidener")
-
-        if (accessWidenerFile.exists()) {
-            accessWidenerPath.set(accessWidenerFile)
-        }
-
-        mixin {
-            defaultRefmapName.set("$modId-refmap.json")
-        }
+        @Suppress("UnstableApiUsage")
+        mixin.defaultRefmapName.set("$modId-refmap.json")
     }
 
     repositories {
