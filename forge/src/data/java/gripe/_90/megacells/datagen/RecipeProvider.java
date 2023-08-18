@@ -220,11 +220,11 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .pattern("cdc")
                 .pattern("aea")
                 .define('a', AEItems.SKY_DUST)
-                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
-                .define('c', MEGAItems.CELL_COMPONENT_4M)
+                .define('b', AEItems.SPATIAL_2_CELL_COMPONENT)
+                .define('c', MEGAItems.ACCUMULATION_PROCESSOR)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .define('e', AEItems.SPATIAL_2_CELL_COMPONENT)
-                .unlockedBy("has_cell_component_4m", has(MEGAItems.CELL_COMPONENT_4M))
+                .define('e', MEGAItems.CELL_COMPONENT_1M)
+                .unlockedBy("has_cell_component_1m", has(MEGAItems.CELL_COMPONENT_1M))
                 .unlockedBy("has_2_cubed_spatial_cell_component", has(AEItems.SPATIAL_2_CELL_COMPONENT))
                 .save(consumer, MEGACells.makeId("crafting/bulk_cell_component"));
 
