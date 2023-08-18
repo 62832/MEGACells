@@ -38,30 +38,30 @@ import gripe._90.megacells.util.Addons;
 @SuppressWarnings("deprecation")
 @OnlyIn(Dist.CLIENT)
 public class MEGACellsClient {
-    public MEGACellsClient() {
+    static void init() {
         initBuiltInModels();
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(this::initScreens);
-        bus.addListener(this::initRenderTypes);
-        bus.addListener(this::initModels);
-        bus.addListener(this::initItemColors);
+        bus.addListener(MEGACellsClient::initScreens);
+        bus.addListener(MEGACellsClient::initRenderTypes);
+        bus.addListener(MEGACellsClient::initModels);
+        bus.addListener(MEGACellsClient::initItemColors);
     }
 
-    private void initScreens(FMLClientSetupEvent ignoredEvent) {
+    private static void initScreens(FMLClientSetupEvent ignoredEvent) {
         InitScreens.register(
                 MEGAPatternProviderMenu.TYPE,
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
     }
 
-    private void initRenderTypes(FMLClientSetupEvent ignoredEvent) {
+    private static void initRenderTypes(FMLClientSetupEvent ignoredEvent) {
         for (var type : MEGACraftingUnitType.values()) {
             ItemBlockRenderTypes.setRenderLayer(type.getDefinition().block(), RenderType.cutout());
         }
     }
 
-    private void initBuiltInModels() {
+    private static void initBuiltInModels() {
         for (var type : MEGACraftingUnitType.values()) {
             BuiltInModelHooks.addBuiltInModel(
                     MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
@@ -69,7 +69,7 @@ public class MEGACellsClient {
         }
     }
 
-    private void initModels(ModelEvent.RegisterGeometryLoaders event) {
+    private static void initModels(ModelEvent.RegisterGeometryLoaders event) {
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
         ItemProperties.register(
@@ -83,7 +83,7 @@ public class MEGACellsClient {
                 });
     }
 
-    private void initItemColors(RegisterColorHandlersEvent.Item event) {
+    private static void initItemColors(RegisterColorHandlersEvent.Item event) {
         var cells = new ArrayList<>(MEGAItems.getItemCells());
         cells.addAll(MEGAItems.getFluidCells());
         cells.add(MEGAItems.BULK_ITEM_CELL);

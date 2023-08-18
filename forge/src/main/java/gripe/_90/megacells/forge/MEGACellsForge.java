@@ -4,10 +4,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
@@ -37,7 +37,9 @@ public class MEGACellsForge {
         bus.addListener(this::registerAll);
         bus.addListener(this::initUpgrades);
 
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> MEGACellsClient::new);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MEGACellsClient.init();
+        }
     }
 
     private void registerAll(RegisterEvent event) {
