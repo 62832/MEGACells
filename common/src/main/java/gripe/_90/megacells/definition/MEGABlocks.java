@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
-import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
@@ -56,7 +55,8 @@ public final class MEGABlocks {
                     .strength(5.0f, 12.0f)
                     .requiresCorrectToolForDrops()
                     .mapColor(MapColor.METAL)
-                    .sound(SoundType.METAL)));
+                    .sound(SoundType.METAL)),
+            (b, p) -> new AEBaseBlockItem(b, p.fireResistant()));
 
     public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block(
             "Superdense Energy Cell",
@@ -64,8 +64,11 @@ public final class MEGABlocks {
             () -> new EnergyCellBlock(12800000, 3200, 12800),
             EnergyCellBlockItem::new);
 
-    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT =
-            block("MEGA Crafting Unit", "mega_crafting_unit", () -> new CraftingUnitBlock(MEGACraftingUnitType.UNIT));
+    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block(
+            "MEGA Crafting Unit",
+            "mega_crafting_unit",
+            () -> new CraftingUnitBlock(MEGACraftingUnitType.UNIT),
+            AEBaseBlockItem::new);
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock(
             "MEGA Crafting Co-Processing Unit",
             "mega_crafting_accelerator",
@@ -118,29 +121,12 @@ public final class MEGABlocks {
     }
 
     private static <T extends Block> BlockDefinition<T> block(
-            String englishName, String id, Supplier<T> blockSupplier) {
-        return block(englishName, id, blockSupplier, null);
-    }
-
-    private static <T extends Block> BlockDefinition<T> block(
             String englishName,
             String id,
             Supplier<T> blockSupplier,
             BiFunction<Block, Item.Properties, BlockItem> itemFactory) {
         var block = blockSupplier.get();
-        var itemProperties = new Item.Properties();
-
-        BlockItem item;
-        if (itemFactory != null) {
-            item = itemFactory.apply(block, itemProperties);
-            if (item == null) {
-                throw new IllegalArgumentException("BlockItem factory for " + id + " returned null");
-            }
-        } else if (block instanceof AEBaseBlock) {
-            item = new AEBaseBlockItem(block, itemProperties);
-        } else {
-            item = new BlockItem(block, itemProperties);
-        }
+        var item = itemFactory.apply(block, new Item.Properties());
 
         var definition = new BlockDefinition<>(englishName, MEGACells.makeId(id), block, item);
         BLOCKS.add(definition);
