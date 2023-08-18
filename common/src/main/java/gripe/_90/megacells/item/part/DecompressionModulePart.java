@@ -97,18 +97,16 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
             for (var chain : decompressionService.getDecompressionChains()) {
                 var patternItems = decompressionService.getDecompressionPatterns(chain);
-                var decodedPatterns =
-                        patternItems.stream().map(p -> AEPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
-                patterns.addAll(decodedPatterns.toList());
+                var patterns = patternItems.stream().map(p -> AEPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
+                this.patterns.addAll(patterns.toList());
             }
 
-            var storage = grid.getStorageService();
+            var storage = grid.getStorageService().getInventory();
 
             for (var output : outputs.object2LongEntrySet()) {
                 var what = output.getKey();
                 var amount = output.getLongValue();
-                var inserted =
-                        storage.getInventory().insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
+                var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
                 if (inserted >= amount) {
                     outputs.removeLong(what);

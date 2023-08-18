@@ -2,6 +2,7 @@ package gripe._90.megacells.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
@@ -48,14 +49,14 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 var cell = cellHost.getOriginalCellInventory(i);
 
                 if (cell instanceof BulkCellInventory bulkCell && bulkCell.isCompressionEnabled()) {
-                    addChain(bulkCell);
+                    getChain(bulkCell).ifPresent(decompressionChains::add);
                 }
             }
         }
     }
 
-    private void addChain(BulkCellInventory cell) {
-        var chain = CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
+    private Optional<Object2IntMap<AEItemKey>> getChain(BulkCellInventory cell) {
+        return CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
             var keys = new ObjectArrayList<>(c.keySet());
             Collections.reverse(keys);
 
@@ -70,11 +71,10 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
             return decompressed;
         });
-        chain.ifPresent(decompressionChains::add);
     }
 
     public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {
-        return decompressionChains;
+        return Collections.unmodifiableSet(decompressionChains);
     }
 
     public Set<AEItemKey> getDecompressionPatterns(Object2IntMap<AEItemKey> compressionChain) {
@@ -94,6 +94,6 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             patterns.add(AEItemKey.of(pattern));
         }
 
-        return patterns;
+        return Collections.unmodifiableSet(patterns);
     }
 }
