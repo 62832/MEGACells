@@ -45,11 +45,11 @@ class RecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem());
-        component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, AEItems.ENDER_DUST.asItem());
-        component(consumer, MEGAItems.TIER_16M, MEGAItems.TIER_4M, AEItems.ENDER_DUST.asItem());
-        component(consumer, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem());
-        component(consumer, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem());
+        component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem(), null);
+        component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, null, ConventionTags.ENDER_PEARL_DUST);
+        component(consumer, MEGAItems.TIER_16M, MEGAItems.TIER_4M, null, ConventionTags.ENDER_PEARL_DUST);
+        component(consumer, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem(), null);
+        component(consumer, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem(), null);
 
         housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
@@ -320,14 +320,25 @@ class RecipeProvider extends FabricRecipeProvider {
     }
 
     private void component(
-            Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding, ItemLike binder) {
+            Consumer<FinishedRecipe> consumer,
+            StorageTier tier,
+            StorageTier preceding,
+            ItemLike binderItem,
+            TagKey<Item> binderTag) {
         var precedingComponent = preceding.componentSupplier().get();
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, tier.componentSupplier().get())
+        var recipe = ShapedRecipeBuilder.shaped(
+                        RecipeCategory.MISC, tier.componentSupplier().get())
                 .pattern("aba")
                 .pattern("cdc")
-                .pattern("aca")
-                .define('a', binder)
-                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                .pattern("aca");
+
+        if (binderItem != null) {
+            recipe.define('a', binderItem);
+        } else if (binderTag != null) {
+            recipe.define('a', binderTag);
+        }
+
+        recipe.define('b', MEGAItems.ACCUMULATION_PROCESSOR)
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
