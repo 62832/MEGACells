@@ -38,9 +38,9 @@ public final class ForgePlatform implements Platform {
 
     @Override
     public void initCompression() {
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE.loadRecipes(
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.loadRecipes(
                 event.getServer().getRecipeManager(), event.getServer().registryAccess()));
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.loadRecipes(
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.loadRecipes(
                 event.getServerResources().getRecipeManager(), event.getRegistryAccess()));
     }
 }

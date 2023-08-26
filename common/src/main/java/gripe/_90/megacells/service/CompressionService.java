@@ -20,23 +20,19 @@ import net.minecraft.world.item.crafting.RecipeType;
 import appeng.api.stacks.AEItemKey;
 
 public class CompressionService {
-    public static final CompressionService INSTANCE = new CompressionService();
-
     // Each chain is an ordered map with the items themselves as the keys and the values being the amount of either:
     // - the item itself, needed to compress to its next variant
     // - the next variant, when decompressing the item
     // This value is typically either 4 or 9 for any given item.
-    private final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
+    private static final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
 
-    private CompressionService() {}
-
-    public Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
+    public static Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
         return compressionChains.stream()
                 .filter(chain -> chain.containsKey(key))
                 .findFirst();
     }
 
-    public Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
+    public static Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
         return getChain(key)
                 .map(chain -> {
                     var keys = new ObjectArrayList<>(chain.keySet());
@@ -55,7 +51,7 @@ public class CompressionService {
                 .orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
-    public void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
+    public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
 
@@ -91,19 +87,20 @@ public class CompressionService {
         }
     }
 
-    private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private static boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return (recipe.getIngredients().size() == 4 || recipe.getIngredients().size() == 9)
                 && recipe.getIngredients().stream().distinct().count() <= 1
                 && recipe.getResultItem(access).getCount() == 1;
     }
 
-    private boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private static boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return (recipe.getResultItem(access).getCount() == 4
                         || recipe.getResultItem(access).getCount() == 9)
                 && recipe.getIngredients().size() == 1;
     }
 
-    private boolean isReversibleRecipe(CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
+    private static boolean isReversibleRecipe(
+            CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
         var compressible = false;
         var decompressible = false;
 
@@ -129,7 +126,7 @@ public class CompressionService {
         return false;
     }
 
-    private Object2IntMap<AEItemKey> generateChain(
+    private static Object2IntMap<AEItemKey> generateChain(
             Item baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
@@ -171,7 +168,7 @@ public class CompressionService {
         return fullChain;
     }
 
-    private Pair<Item, Integer> getNextVariant(Item item, List<CraftingRecipe> recipes, RegistryAccess access) {
+    private static Pair<Item, Integer> getNextVariant(Item item, List<CraftingRecipe> recipes, RegistryAccess access) {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
