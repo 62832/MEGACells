@@ -1,9 +1,3 @@
-sourceSets.create("data") {
-    val main = sourceSets.main.get()
-    compileClasspath += main.compileClasspath + main.output
-    runtimeClasspath += main.runtimeClasspath + main.output
-}
-
 loom {
     val modId: String by project
 
@@ -24,6 +18,7 @@ loom {
                 create(modId) {
                     sourceSet("main")
                     sourceSet("data")
+                    sourceSet(project(":common").sourceSets.getByName("data"))
                 }
             }
         }

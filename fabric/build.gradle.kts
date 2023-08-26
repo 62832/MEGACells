@@ -3,12 +3,7 @@ loom {
         create("data") {
             client()
             name("Minecraft Data")
-
-            source(sourceSets.create("data") {
-                val main = sourceSets.main.get()
-                compileClasspath += main.compileClasspath + main.output
-                runtimeClasspath += main.runtimeClasspath + main.output
-            })
+            source("data")
 
             property("fabric-api.datagen")
             property("fabric-api.datagen.modid", rootProject.property("modId").toString())

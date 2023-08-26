@@ -95,6 +95,14 @@ subprojects {
         "mappings"(project.extensions.getByName<LoomGradleExtensionAPI>("loom").officialMojangMappings())
     }
 
+    sourceSets {
+        create("data") {
+            val main = sourceSets.main.get()
+            compileClasspath += main.compileClasspath + main.output
+            runtimeClasspath += main.runtimeClasspath + main.output
+        }
+    }
+
     tasks {
         jar {
             from(rootProject.file("LICENSE")) {
@@ -182,6 +190,12 @@ for (platform in property("enabledPlatforms").toString().split(',')) {
                     srcDir(file("src/generated/resources"))
                     exclude("**/.cache")
                 }
+            }
+
+            getByName("data") {
+                val commonData = project(":common").sourceSets.getByName("data")
+                compileClasspath += commonData.output
+                runtimeClasspath += commonData.output
             }
         }
 
