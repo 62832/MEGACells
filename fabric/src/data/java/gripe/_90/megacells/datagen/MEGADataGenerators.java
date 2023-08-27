@@ -14,8 +14,9 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
         var pack = generator.createPack();
         var registries = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
 
-        var blockTags = pack.addProvider((FabricDataOutput output) -> new TagProvider.Blocks(output, registries));
-        pack.addProvider((FabricDataOutput output) -> new TagProvider.Items(output, registries, blockTags));
+        var blockTags = pack.addProvider((FabricDataOutput output) -> new CommonTagProvider.Blocks(output, registries));
+        pack.addProvider((FabricDataOutput output) ->
+                new CommonTagProvider.Items(output, registries, blockTags.contentsGetter()));
 
         pack.addProvider(ModelProvider::new);
         pack.addProvider(RecipeProvider::new);
