@@ -15,7 +15,6 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlockItem;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.SimpleModelLoader;
@@ -84,12 +83,7 @@ public class MEGACellsClient {
         customizers.put(MEGABlocks.CRAFTING_MONITOR.id().getPath(), model -> model instanceof MonitorBakedModel
                 ? model
                 : new AutoRotatingBakedModel(model));
-
-        for (var block : MEGABlocks.getBlocks()) {
-            if (!(block.block() instanceof CraftingUnitBlock)) {
-                customizers.put(block.id().getPath(), AutoRotatingBakedModel::new);
-            }
-        }
+        customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
         for (var location : modelRegistry.keySet()) {
             if (!location.getNamespace().equals(Utils.MODID)) {

@@ -17,7 +17,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.IAEAddonEntrypoint;
-import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlockItem;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.SimpleModelLoader;
@@ -74,12 +73,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
             customizers.put(MEGABlocks.CRAFTING_MONITOR.id().getPath(), model -> model instanceof MonitorBakedModel
                     ? model
                     : new AutoRotatingBakedModel(model));
-
-            for (var block : MEGABlocks.getBlocks()) {
-                if (!(block.block() instanceof CraftingUnitBlock)) {
-                    customizers.put(block.id().getPath(), AutoRotatingBakedModel::new);
-                }
-            }
+            customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
             for (var location : modelRegistry.keySet()) {
                 if (!location.getNamespace().equals(Utils.MODID)) {
