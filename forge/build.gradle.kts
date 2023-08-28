@@ -55,14 +55,6 @@ repositories {
             includeGroup("top.theillusivec4.curios")
         }
     }
-
-    maven {
-        name = "Progwml6"
-        url = uri("https://dvs1.progwml6.com/files/maven/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
 }
 
 val forgeVersion: String by project

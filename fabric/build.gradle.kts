@@ -69,14 +69,6 @@ repositories {
             includeGroup("com.github.emilyploszaj")
         }
     }
-
-    maven {
-        name = "Progwml6"
-        url = uri("https://dvs1.progwml6.com/files/maven/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
 }
 
 dependencies {

@@ -101,6 +101,7 @@ subprojects {
             url = uri("https://modmaven.dev/")
             content {
                 includeGroup("appeng")
+                includeGroup("mezz.jei")
             }
         }
 
