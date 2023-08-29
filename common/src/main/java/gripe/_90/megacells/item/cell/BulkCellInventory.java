@@ -24,7 +24,6 @@ import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import appeng.util.prioritylist.IPartitionList;
 
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.service.CompressionService;
@@ -38,7 +37,6 @@ public class BulkCellInventory implements StorageCell {
 
     private AEItemKey storedItem;
     private final AEItemKey filterItem;
-    private final IPartitionList partitionList;
 
     private final Object2IntMap<AEItemKey> compressed;
     private final Object2IntMap<AEItemKey> decompressed;
@@ -53,13 +51,7 @@ public class BulkCellInventory implements StorageCell {
         this.i = o;
         this.container = container;
 
-        var config = cell.getConfigInventory(i);
-        this.filterItem = (AEItemKey) config.getKey(0);
-
-        var builder = IPartitionList.builder();
-        builder.addAll(config.keySet());
-        this.partitionList = builder.build();
-
+        this.filterItem = (AEItemKey) cell.getConfigInventory(i).getKey(0);
         this.compressed = CompressionService.getVariants(filterItem, false);
         this.decompressed = CompressionService.getVariants(filterItem, true);
         this.unitFactor = decompressed.values().intStream().asLongStream().reduce(1, Math::multiplyExact);
@@ -125,12 +117,12 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (!compressionEnabled && (!partitionList.isListed(what) || storedItem != null && !storedItem.equals(what))) {
+        if (!compressionEnabled && (!filterItem.equals(what) || storedItem != null && !storedItem.equals(what))) {
             return 0;
         }
 
         if (compressionEnabled
-                && !partitionList.isListed(what)
+                && !filterItem.equals(what)
                 && !compressed.containsKey(item)
                 && !decompressed.containsKey(item)) {
             return 0;
@@ -288,7 +280,7 @@ public class BulkCellInventory implements StorageCell {
     @Override
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
         return what instanceof AEItemKey item
-                && (partitionList.isListed(item) || compressed.containsKey(item) || decompressed.containsKey(item));
+                && (filterItem.equals(what) || compressed.containsKey(item) || decompressed.containsKey(item));
     }
 
     @Override

@@ -88,7 +88,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = variants.get(variants.indexOf(variant) + 1);
-            var factor = compressionChain.getInt(decompressed);
+            var factor = compressionChain.getInt(variant);
 
             DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), variant, decompressed, factor);
             patterns.add(AEItemKey.of(pattern));
