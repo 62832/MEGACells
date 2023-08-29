@@ -1,4 +1,4 @@
-package gripe._90.megacells.util;
+package gripe._90.megacells.core;
 
 import net.minecraft.world.item.CreativeModeTab;
 

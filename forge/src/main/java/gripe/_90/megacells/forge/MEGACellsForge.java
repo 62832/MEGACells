@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGACreativeTab;
@@ -21,7 +22,6 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
-import gripe._90.megacells.util.Addons;
 
 @Mod(MEGACells.MODID)
 public class MEGACellsForge {

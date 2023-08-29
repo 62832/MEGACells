@@ -30,11 +30,11 @@ import appeng.datagen.providers.models.AE2BlockStateProvider;
 import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.util.Addons;
 
 abstract class ModelProvider {
     static class Items extends ItemModelProvider {

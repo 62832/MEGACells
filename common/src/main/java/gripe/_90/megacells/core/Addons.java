@@ -1,4 +1,4 @@
-package gripe._90.megacells.util;
+package gripe._90.megacells.core;
 
 public enum Addons {
     APPMEK("appmek"),

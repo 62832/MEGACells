@@ -26,9 +26,9 @@ import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.util.Addons;
 
 public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
     private static final TagKey<Item> OSMIUM = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));

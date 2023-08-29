@@ -39,10 +39,10 @@ import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.util.Addons;
 
 class ModelProvider extends FabricModelProvider {
     private static final TextureSlot LAYER3 = TextureSlot.create("layer3");

@@ -17,6 +17,8 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.core.Addons;
+import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -25,8 +27,6 @@ import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.service.DecompressionService;
-import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Platform;
 
 public final class MEGACells {
     private MEGACells() {}

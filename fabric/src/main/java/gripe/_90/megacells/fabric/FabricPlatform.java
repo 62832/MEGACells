@@ -5,10 +5,10 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.item.CreativeModeTab;
 
+import gripe._90.megacells.core.Addons;
+import gripe._90.megacells.core.Loaders;
+import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.service.CompressionService;
-import gripe._90.megacells.util.Addons;
-import gripe._90.megacells.util.Loaders;
-import gripe._90.megacells.util.Platform;
 
 public final class FabricPlatform implements Platform {
     @Override
