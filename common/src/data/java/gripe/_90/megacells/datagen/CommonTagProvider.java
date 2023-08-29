@@ -8,8 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 
 import appeng.api.features.P2PTunnelAttunement;
@@ -19,8 +18,8 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CommonTagProvider {
-    public static class ItemTags extends ItemTagsProvider {
-        public ItemTags(
+    public static class Items extends ItemTagsProvider {
+        public Items(
                 PackOutput output,
                 CompletableFuture<HolderLookup.Provider> registries,
                 CompletableFuture<TagLookup<Block>> blockTags) {
@@ -37,20 +36,11 @@ public class CommonTagProvider {
             tag(MEGATags.MEGA_PATTERN_PROVIDER)
                     .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem())
                     .add(MEGAItems.MEGA_PATTERN_PROVIDER.asItem());
-
-            tag(MEGATags.COMPRESSION_OVERRIDES)
-                    .add(Items.QUARTZ)
-                    .add(Items.AMETHYST_SHARD)
-                    .add(Items.GLOWSTONE_DUST)
-                    .add(Items.CLAY_BALL)
-                    .add(Items.MELON_SLICE)
-                    .add(Items.MAGMA_CREAM)
-                    .addOptionalTag(new ResourceLocation("functionalstorage", "ignore_crafting_check"));
         }
     }
 
-    public static class BlockTags extends IntrinsicHolderTagsProvider<Block> {
-        public BlockTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
+    public static class Blocks extends IntrinsicHolderTagsProvider<Block> {
+        public Blocks(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
             super(packOutput, Registries.BLOCK, registries, block -> BuiltInRegistries.BLOCK
                     .getResourceKey(block)
                     .orElseThrow());
@@ -59,7 +49,7 @@ public class CommonTagProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             for (var block : MEGABlocks.getBlocks()) {
-                tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
+                tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
             }
 
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
