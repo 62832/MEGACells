@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 import appeng.api.features.P2PTunnelAttunement;
@@ -36,15 +35,6 @@ public class CommonTagProvider {
             tag(MEGATags.MEGA_PATTERN_PROVIDER)
                     .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem())
                     .add(MEGAItems.MEGA_PATTERN_PROVIDER.asItem());
-
-            tag(MEGATags.COMPRESSION_OVERRIDES)
-                    .add(Items.QUARTZ)
-                    .add(Items.AMETHYST_SHARD)
-                    .add(Items.GLOWSTONE_DUST)
-                    .add(Items.CLAY_BALL)
-                    .add(Items.MELON_SLICE)
-                    .add(Items.MAGMA_CREAM)
-                    .add(Items.ICE, Items.PACKED_ICE);
         }
     }
 

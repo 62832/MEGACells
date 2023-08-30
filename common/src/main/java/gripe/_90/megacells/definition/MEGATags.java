@@ -27,7 +27,4 @@ public final class MEGATags {
 
     public static final TagKey<Item> MEGA_PATTERN_PROVIDER =
             TagKey.create(Registries.ITEM, MEGACells.makeId("mega_pattern_provider"));
-
-    public static final TagKey<Item> COMPRESSION_OVERRIDES =
-            TagKey.create(Registries.ITEM, MEGACells.makeId("compression_overrides"));
 }

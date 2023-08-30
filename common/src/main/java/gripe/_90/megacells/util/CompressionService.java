@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
@@ -18,11 +17,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 import appeng.api.stacks.AEItemKey;
 
-import gripe._90.megacells.definition.MEGATags;
-
 public class CompressionService {
     private static final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
-    private static final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
 
     public static Optional<CompressionChain> getChain(AEItemKey item) {
         return compressionChains.stream()
@@ -33,7 +29,6 @@ public class CompressionService {
     public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
-        overrides.clear();
 
         // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
         var allRecipes = recipeManager.getAllRecipesFor(RecipeType.CRAFTING);
@@ -54,8 +49,7 @@ public class CompressionService {
                 .toList();
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
-        for (var recipe :
-                Stream.concat(compressed.stream(), decompressed.stream()).toList()) {
+        for (var recipe : compressed) {
             var baseVariant = recipe.getResultItem(access).getItem();
 
             if (compressionChains.stream().noneMatch(chain -> chain.containsVariant(AEItemKey.of(baseVariant)))) {
@@ -97,16 +91,6 @@ public class CompressionService {
 
     private static CompressionVariant getNextVariant(
             Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
-        for (var override : overrides) {
-            if (override.smaller.equals(item) && compressed) {
-                return new CompressionVariant(override.larger, override.factor);
-            }
-
-            if (override.larger.equals(item) && !compressed) {
-                return new CompressionVariant(override.smaller, override.factor);
-            }
-        }
-
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
@@ -163,10 +147,6 @@ public class CompressionService {
 
     private static boolean isReversibleRecipe(
             CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
-        if (overrideRecipe(recipe, access)) {
-            return true;
-        }
-
         var compressible = false;
         var decompressible = false;
 
@@ -191,21 +171,4 @@ public class CompressionService {
 
         return false;
     }
-
-    private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        for (var item : recipe.getIngredients().get(0).getItems()) {
-            if (item.is(MEGATags.COMPRESSION_OVERRIDES)) {
-                var variant = recipe.getResultItem(access);
-                var compressed = isCompressionRecipe(recipe, access);
-                var factor = compressed ? recipe.getIngredients().size() : variant.getCount();
-
-                overrides.add(new Override(item.getItem(), variant.getItem(), compressed, factor));
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private record Override(Item smaller, Item larger, boolean compressed, int factor) {}
 }

@@ -204,7 +204,7 @@ public class BulkCellInventory implements StorageCell {
         if (storedItem != null) {
             var stackLimit = (long) Math.pow(2, 42);
 
-            if (compressionEnabled && storedItem.equals(filterItem)) {
+            if (compressionEnabled && storedItem.equals(filterItem) && !compressionChain.isEmpty()) {
                 var count = unitCount;
                 var chain = compressionChain.lastMultiplierSwapped();
 
