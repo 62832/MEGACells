@@ -1,12 +1,9 @@
-package gripe._90.megacells.service;
+package gripe._90.megacells.crafting;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
@@ -18,12 +15,12 @@ import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
 import appeng.api.stacks.AEItemKey;
 
-import gripe._90.megacells.crafting.DecompressionPatternEncoding;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
+import gripe._90.megacells.util.CompressionChain;
 
 public class DecompressionService implements IGridService, IGridServiceProvider {
-    private final Set<Object2IntMap<AEItemKey>> decompressionChains = new ObjectLinkedOpenHashSet<>();
+    private final Set<CompressionChain> decompressionChains = new ObjectLinkedOpenHashSet<>();
     private final List<IChestOrDrive> cellHosts = new ObjectArrayList<>();
 
     @Override
@@ -49,48 +46,29 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 var cell = cellHost.getOriginalCellInventory(i);
 
                 if (cell instanceof BulkCellInventory bulkCell && bulkCell.isCompressionEnabled()) {
-                    getChain(bulkCell).ifPresent(decompressionChains::add);
+                    decompressionChains.add(bulkCell.getDecompressionChain());
                 }
             }
         }
     }
 
-    private Optional<Object2IntMap<AEItemKey>> getChain(BulkCellInventory cell) {
-        return CompressionService.getChain(cell.getStoredItem()).map(c -> {
-            var keys = new ObjectArrayList<>(c.keySet());
-            Collections.reverse(keys);
-
-            var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-            var highest = keys.indexOf(cell.getHighestCompressed());
-
-            if (highest > -1) {
-                for (var key : keys.subList(highest, keys.size())) {
-                    decompressed.put(key, c.getInt(key));
-                }
-            }
-
-            return decompressed;
-        });
-    }
-
-    public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {
+    public Set<CompressionChain> getDecompressionChains() {
         return Collections.unmodifiableSet(decompressionChains);
     }
 
-    public Set<AEItemKey> getDecompressionPatterns(Object2IntMap<AEItemKey> compressionChain) {
-        var variants = new ObjectArrayList<>(compressionChain.keySet());
+    public Set<AEItemKey> getDecompressionPatterns(CompressionChain chain) {
         var patterns = new ObjectLinkedOpenHashSet<AEItemKey>();
 
-        for (var variant : variants) {
-            if (variant == variants.get(variants.size() - 1)) {
+        for (var variant : chain) {
+            if (variant == chain.last()) {
                 continue;
             }
 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
-            var decompressed = variants.get(variants.indexOf(variant) + 1);
-            var factor = compressionChain.getInt(variant);
+            var decompressed = chain.get(chain.indexOf(variant) + 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), variant, decompressed, factor);
+            DecompressionPatternEncoding.encode(
+                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), variant.factor());
             patterns.add(AEItemKey.of(pattern));
         }
 

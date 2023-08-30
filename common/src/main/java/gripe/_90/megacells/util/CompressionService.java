@@ -1,17 +1,11 @@
-package gripe._90.megacells.service;
+package gripe._90.megacells.util;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
@@ -27,44 +21,13 @@ import appeng.api.stacks.AEItemKey;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
-    // Each chain is an ordered map with the items themselves as the keys and the values being how much of the smallest
-    // "unit" item in the chain makes up each subsequent variant item.
-    // e.g. 1 nugget -> 9 nuggets per ingot -> 81 nuggets per block -> etc.
-    private static final Set<Object2IntMap<AEItemKey>> compressionChains = new ObjectLinkedOpenHashSet<>();
-
-    // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
-    // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
-    // based on its usually irreversible recipe.
+    private static final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
     private static final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
 
-    public static Optional<Object2IntMap<AEItemKey>> getChain(AEItemKey key) {
+    public static Optional<CompressionChain> getChain(AEItemKey item) {
         return compressionChains.stream()
-                .filter(chain -> chain.containsKey(key))
+                .filter(chain -> chain.containsVariant(item))
                 .findFirst();
-    }
-
-    public static Object2IntMap<AEItemKey> getVariants(AEItemKey key, boolean decompress) {
-        return getChain(key)
-                .map(chain -> {
-                    var keys = new ObjectArrayList<>(chain.keySet());
-
-                    // Reverse ordering when going from provided storage/filter variant to least-compressed "base unit"
-                    if (decompress) {
-                        Collections.reverse(keys);
-                    }
-
-                    // Split variant chain into separate compressed/decompressed chains, omitting the initial variant
-                    // provided but retaining the appropriate multipliers in the case of decompression
-                    var variants = new Object2IntLinkedOpenHashMap<AEItemKey>();
-
-                    for (var i = keys.indexOf(key) + 1; i < keys.size(); i++) {
-                        var multiplierIndex = i - (decompress ? 1 : 0);
-                        variants.put(keys.get(i), chain.getInt(keys.get(multiplierIndex)));
-                    }
-
-                    return variants;
-                })
-                .orElseGet(Object2IntLinkedOpenHashMap::new);
     }
 
     public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
@@ -95,59 +58,59 @@ public class CompressionService {
                 Stream.concat(compressed.stream(), decompressed.stream()).toList()) {
             var baseVariant = recipe.getResultItem(access).getItem();
 
-            if (compressionChains.stream().noneMatch(chain -> chain.containsKey(AEItemKey.of(baseVariant)))) {
+            if (compressionChains.stream().noneMatch(chain -> chain.containsVariant(AEItemKey.of(baseVariant)))) {
                 compressionChains.add(generateChain(baseVariant, compressed, decompressed, access));
             }
         }
     }
 
-    private static Object2IntMap<AEItemKey> generateChain(
+    private static CompressionChain generateChain(
             Item baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
             RegistryAccess access) {
-        var variants = new LinkedList<AEItemKey>();
+        var variants = new LinkedList<Item>();
         var multipliers = new LinkedList<Integer>();
 
-        variants.addFirst(AEItemKey.of(baseVariant));
+        variants.addFirst(baseVariant);
 
         for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
-            variants.addFirst(AEItemKey.of(lower.key()));
-            multipliers.addFirst(lower.value());
-            lower = getNextVariant(lower.key(), decompressed, false, access);
+            variants.addFirst(lower.item().getItem());
+            multipliers.addFirst(lower.factor());
+            lower = getNextVariant(lower.item().getItem(), decompressed, false, access);
         }
 
         multipliers.addFirst(1);
+        var chain = new CompressionChain();
 
-        var chain = IntStream.range(0, variants.size())
-                .boxed()
-                .collect(Collectors.toMap(
-                        variants::get, multipliers::get, (i, j) -> i, Object2IntLinkedOpenHashMap<AEItemKey>::new));
+        for (var i = 0; i < variants.size(); i++) {
+            chain.add(new CompressionVariant(variants.get(i), multipliers.get(i)));
+        }
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
-            chain.put(AEItemKey.of(higher.key()), (int) higher.value());
-            higher = getNextVariant(higher.key(), compressed, true, access);
+            chain.add(higher.item(), higher.factor());
+            higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }
 
         return chain;
     }
 
-    private static Pair<Item, Integer> getNextVariant(
+    private static CompressionVariant getNextVariant(
             Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
             if (override.smaller.equals(item) && compressed) {
-                return Pair.of(override.larger, override.factor);
+                return new CompressionVariant(override.larger, override.factor);
             }
 
             if (override.larger.equals(item) && !compressed) {
-                return Pair.of(override.smaller, override.factor);
+                return new CompressionVariant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    return Pair.of(
+                    return new CompressionVariant(
                             recipe.getResultItem(access).getItem(),
                             compressed
                                     ? recipe.getIngredients().size()

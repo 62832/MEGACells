@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
@@ -45,7 +44,7 @@ public class CommonTagProvider {
                     .add(Items.CLAY_BALL)
                     .add(Items.MELON_SLICE)
                     .add(Items.MAGMA_CREAM)
-                    .addOptionalTag(new ResourceLocation("functionalstorage", "ignore_crafting_check"));
+                    .add(Items.ICE, Items.PACKED_ICE);
         }
     }
 
