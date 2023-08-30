@@ -5,6 +5,7 @@ import java.util.List;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
+import appeng.items.tools.powered.AbstractPortableCell;
 
 import appbot.item.ManaCellItem;
 import appbot.item.PortableManaCellItem;
@@ -37,7 +38,7 @@ public final class AppBotItems {
         return List.of(MANA_CELL_1M, MANA_CELL_4M, MANA_CELL_16M, MANA_CELL_64M, MANA_CELL_256M);
     }
 
-    public static List<ItemDefinition<?>> getPortables() {
+    public static List<ItemDefinition<? extends AbstractPortableCell>> getPortables() {
         return List.of(
                 PORTABLE_MANA_CELL_1M,
                 PORTABLE_MANA_CELL_4M,

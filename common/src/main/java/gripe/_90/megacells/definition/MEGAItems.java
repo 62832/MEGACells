@@ -19,6 +19,7 @@ import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
+import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
@@ -126,7 +127,7 @@ public final class MEGAItems {
         return List.of(FLUID_CELL_1M, FLUID_CELL_4M, FLUID_CELL_16M, FLUID_CELL_64M, FLUID_CELL_256M);
     }
 
-    public static List<ItemDefinition<?>> getItemPortables() {
+    public static List<ItemDefinition<? extends AbstractPortableCell>> getItemPortables() {
         return List.of(
                 PORTABLE_ITEM_CELL_1M,
                 PORTABLE_ITEM_CELL_4M,
@@ -135,7 +136,7 @@ public final class MEGAItems {
                 PORTABLE_ITEM_CELL_256M);
     }
 
-    public static List<ItemDefinition<?>> getFluidPortables() {
+    public static List<ItemDefinition<? extends AbstractPortableCell>> getFluidPortables() {
         return List.of(
                 PORTABLE_FLUID_CELL_1M,
                 PORTABLE_FLUID_CELL_4M,

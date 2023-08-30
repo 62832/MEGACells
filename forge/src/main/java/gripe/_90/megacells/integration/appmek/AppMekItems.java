@@ -5,6 +5,7 @@ import java.util.List;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
+import appeng.items.tools.powered.AbstractPortableCell;
 
 import me.ramidzkh.mekae2.item.ChemicalStorageCell;
 
@@ -48,7 +49,7 @@ public final class AppMekItems {
         return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);
     }
 
-    public static List<ItemDefinition<?>> getPortables() {
+    public static List<ItemDefinition<? extends AbstractPortableCell>> getPortables() {
         return List.of(
                 PORTABLE_CHEMICAL_CELL_1M,
                 PORTABLE_CHEMICAL_CELL_4M,

@@ -11,11 +11,13 @@ import org.slf4j.LoggerFactory;
 import net.minecraft.resources.ResourceLocation;
 
 import appeng.api.client.StorageCellModels;
+import appeng.api.features.HotkeyAction;
 import appeng.api.networking.GridServices;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
+import appeng.hotkeys.HotkeyActions;
 
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Platform;
@@ -68,6 +70,11 @@ public final class MEGACells {
 
         StorageCells.addCellHandler(MEGABulkCell.HANDLER);
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, MEGACells.makeId("block/drive/cells/bulk_item_cell"));
+
+        MEGAItems.getItemPortables()
+                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
+        MEGAItems.getFluidPortables()
+                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
