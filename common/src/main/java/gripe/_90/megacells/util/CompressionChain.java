@@ -1,5 +1,6 @@
 package gripe._90.megacells.util;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -16,15 +17,16 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
         return this.stream().anyMatch(v -> v.item().equals(item));
     }
 
-    public long unitFactor(AEItemKey item) {
+    public BigInteger unitFactor(AEItemKey item) {
         var variant = this.stream().filter(v -> v.item().equals(item)).findFirst();
 
         if (variant.isEmpty()) {
-            return 1;
+            return BigInteger.ONE;
         }
 
         var subChain = this.subList(0, indexOf(variant.get()) + 1);
-        return subChain.stream().map(CompressionVariant::longFactor).reduce(1L, Math::multiplyExact);
+        var factor = subChain.stream().map(CompressionVariant::longFactor).reduce(1L, Math::multiplyExact);
+        return BigInteger.valueOf(factor);
     }
 
     public CompressionVariant last() {

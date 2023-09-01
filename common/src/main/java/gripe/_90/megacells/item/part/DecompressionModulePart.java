@@ -4,7 +4,6 @@ import java.util.List;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import appeng.api.config.Actionable;
 import appeng.api.crafting.IPatternDetails;
@@ -20,7 +19,6 @@ import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
-import appeng.crafting.pattern.AEPatternDecoder;
 import appeng.items.parts.PartModels;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
@@ -33,7 +31,6 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     @PartModels
     public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
 
-    private final List<IPatternDetails> patterns = new ObjectArrayList<>();
     private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();
 
     public DecompressionModulePart(IPartItem<?> partItem) {
@@ -47,7 +44,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public List<IPatternDetails> getAvailablePatterns() {
-        return patterns;
+        var grid = getMainNode().getGrid();
+        return grid != null ? grid.getService(DecompressionService.class).getPatterns() : List.of();
     }
 
     @Override
@@ -63,6 +61,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
         var output = pattern.getPrimaryOutput();
         outputs.mergeLong(output.what(), output.amount(), Long::sum);
+
+        getMainNode().ifPresent((grid, node) -> grid.getTickManager().alertDevice(node));
         return true;
     }
 
@@ -84,38 +84,23 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public TickingRequest getTickingRequest(IGridNode node) {
-        return new TickingRequest(1, 1, false, false);
+        return new TickingRequest(1, 1, !isBusy(), true);
     }
 
     @Override
     public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
-        patterns.clear();
-        var grid = getMainNode().getGrid();
+        var storage = node.getGrid().getStorageService().getInventory();
 
-        if (grid != null) {
-            var decompressionService = grid.getService(DecompressionService.class);
+        for (var output : outputs.object2LongEntrySet()) {
+            var what = output.getKey();
+            var amount = output.getLongValue();
+            var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
-            for (var chain : decompressionService.getDecompressionChains()) {
-                var patternItems = decompressionService.getDecompressionPatterns(chain);
-                var patterns = patternItems.stream().map(p -> AEPatternDecoder.INSTANCE.decodePattern(p, getLevel()));
-                this.patterns.addAll(patterns.toList());
+            if (inserted >= amount) {
+                outputs.removeLong(what);
+            } else if (inserted > 0) {
+                outputs.put(what, amount - inserted);
             }
-
-            var storage = grid.getStorageService().getInventory();
-
-            for (var output : outputs.object2LongEntrySet()) {
-                var what = output.getKey();
-                var amount = output.getLongValue();
-                var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
-
-                if (inserted >= amount) {
-                    outputs.removeLong(what);
-                } else if (inserted > 0) {
-                    outputs.put(what, amount - inserted);
-                }
-            }
-
-            ICraftingProvider.requestUpdate(getMainNode());
         }
 
         return TickRateModulation.URGENT;

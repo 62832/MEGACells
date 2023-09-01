@@ -11,22 +11,20 @@ import appeng.api.stacks.GenericStack;
 
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final AEItemKey input;
-    private final IInput[] inputs;
-    private final GenericStack[] outputs;
+    private final AEItemKey compressed;
+    private final long count;
+    private final AEItemKey decompressed;
+    private final int factor;
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
         var tag = Objects.requireNonNull(definition.getTag());
 
-        this.input = DecompressionPatternEncoding.getCompressed(tag);
+        this.compressed = DecompressionPatternEncoding.getCompressed(tag);
+        this.count = DecompressionPatternEncoding.getCount(tag);
 
-        var decompressed = DecompressionPatternEncoding.getDecompressed(tag);
-        var factor = DecompressionPatternEncoding.getFactor(tag);
-        var output = decompressed.toStack(factor);
-
-        this.inputs = new IInput[] {new Input()};
-        this.outputs = new GenericStack[] {GenericStack.fromItemStack(output)};
+        this.decompressed = DecompressionPatternEncoding.getDecompressed(tag);
+        this.factor = DecompressionPatternEncoding.getFactor(tag);
     }
 
     @Override
@@ -36,12 +34,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return inputs;
+        return new IInput[] {new Input(compressed, count)};
     }
 
     @Override
     public GenericStack[] getOutputs() {
-        return outputs;
+        return new GenericStack[] {new GenericStack(decompressed, count * factor)};
     }
 
     @Override
@@ -56,7 +54,7 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private class Input implements IInput {
+    private record Input(AEItemKey input, long multiplier) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
             return new GenericStack[] {new GenericStack(input, 1)};
@@ -64,7 +62,7 @@ public class DecompressionPattern implements IPatternDetails {
 
         @Override
         public long getMultiplier() {
-            return 1;
+            return multiplier;
         }
 
         @Override
