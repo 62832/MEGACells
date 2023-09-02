@@ -50,7 +50,8 @@ public class BulkCellInventory implements StorageCell {
                 : BigInteger.ZERO;
 
         compressionEnabled = cell.getUpgrades(i).isInstalled(COMPRESSION_CARD);
-        compressionChain = CompressionService.getChain(storedItem != null ? storedItem : filterItem)
+        compressionChain = CompressionService.INSTANCE
+                .getChain(storedItem != null ? storedItem : filterItem)
                 .orElseGet(CompressionChain::new);
         unitFactor = compressionChain.unitFactor(storedItem != null ? storedItem : filterItem);
     }

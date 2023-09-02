@@ -21,16 +21,20 @@ import appeng.api.stacks.AEItemKey;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
-    private static final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
-    private static final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
+    public static final CompressionService INSTANCE = new CompressionService();
 
-    public static Optional<CompressionChain> getChain(AEItemKey item) {
+    private final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
+    private final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
+
+    private CompressionService() {}
+
+    public Optional<CompressionChain> getChain(AEItemKey item) {
         return compressionChains.stream()
                 .filter(chain -> chain.containsVariant(item))
                 .findFirst();
     }
 
-    public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
+    public void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old variant cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
         overrides.clear();
@@ -63,7 +67,7 @@ public class CompressionService {
         });
     }
 
-    private static CompressionChain generateChain(
+    private CompressionChain generateChain(
             Item baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
@@ -94,7 +98,7 @@ public class CompressionService {
         return chain;
     }
 
-    private static CompressionVariant getNextVariant(
+    private CompressionVariant getNextVariant(
             Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
             if (compressed && override.smaller.equals(item)) {
@@ -121,19 +125,19 @@ public class CompressionService {
         return null;
     }
 
-    private static boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return recipe.getIngredients().size() == 1
                 && Set.of(4, 9).contains(recipe.getResultItem(access).getCount());
     }
 
-    private static boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
         return sameIngredient(recipe)
                 && recipe.getResultItem(access).getCount() == 1
                 && Set.of(4, 9).contains(recipe.getIngredients().size());
     }
 
     // All this for some fucking melons.
-    private static boolean sameIngredient(CraftingRecipe recipe) {
+    private boolean sameIngredient(CraftingRecipe recipe) {
         var ingredients = new ObjectArrayList<>(recipe.getIngredients());
 
         if (ingredients.isEmpty()) {
@@ -163,8 +167,7 @@ public class CompressionService {
         return true;
     }
 
-    private static boolean isReversibleRecipe(
-            CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
+    private boolean isReversibleRecipe(CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
         if (overrideRecipe(recipe, access)) {
             return true;
         }
@@ -194,7 +197,7 @@ public class CompressionService {
         return false;
     }
 
-    private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
         var compressed = isCompressionRecipe(recipe, access);
         var output = recipe.getResultItem(access);
 
