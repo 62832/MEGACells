@@ -62,8 +62,8 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             }
         }
 
-        if (!modules.isEmpty()) {
-            ICraftingProvider.requestUpdate(modules.get(0).getMainNode());
+        for (var module : modules) {
+            ICraftingProvider.requestUpdate(module.getMainNode());
         }
     }
 
@@ -81,13 +81,12 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 continue;
             }
 
-            var patternItem = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = chain.get(chain.indexOf(variant) + 1);
 
             DecompressionPatternEncoding.encode(
-                    patternItem.getOrCreateTag(), variant.item(), decompressed.item(), count, variant.factor());
-            var pattern = new DecompressionPattern(AEItemKey.of(patternItem.getItem(), patternItem.getTag()));
-            patterns.add(pattern);
+                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), count, variant.factor());
+            patterns.add(new DecompressionPattern(AEItemKey.of(pattern.getItem(), pattern.getTag())));
             count *= variant.factor();
         }
 

@@ -114,7 +114,7 @@ public class BulkCellInventory implements StorageCell {
     private void updateVariants(boolean cache) {
         availableVariants = gatherVariants();
 
-        if (cache) {
+        if (cache || availableVariants.size() > cachedVariants.size()) {
             cachedVariants = availableVariants.keySet();
         }
     }
