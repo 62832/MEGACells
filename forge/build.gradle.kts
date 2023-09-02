@@ -69,6 +69,7 @@ dependencies {
     forge(libs.forge)
 
     modImplementation(libs.ae2.forge)
+    modImplementation(libs.cloth.forge)
 
     modCompileOnly(libs.appmek)
     modCompileOnly(libs.mekanism)

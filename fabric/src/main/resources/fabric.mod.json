@@ -18,6 +18,7 @@
   "entrypoints": {
     "ae2": ["gripe._90.megacells.fabric.MEGACellsFabric"],
     "ae2:client": ["gripe._90.megacells.fabric.MEGACellsClient"],
+    "modmenu": ["gripe._90.megacells.integration.modmenu.ModMenuIntegration"],
 
     "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
   },
@@ -25,7 +26,8 @@
 
   "depends": {
     "minecraft": "$minecraftVersion",
-    "ae2": ">=$ae2Version"
+    "ae2": ">=$ae2Version",
+    "cloth-config": "*"
   },
   "suggests": {
     "ae2wtlib": ">=$ae2wtVersion",

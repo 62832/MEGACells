@@ -21,5 +21,7 @@ class LocalisationProvider extends LanguageProvider {
         for (var translation : MEGATranslations.values()) {
             add(translation.getTranslationKey(), translation.getEnglishText());
         }
+
+        add("text.autoconfig.%s.title".formatted(MEGACells.MODID), MEGATranslations.ModName.getEnglishText());
     }
 }

@@ -68,18 +68,17 @@ repositories {
 
 dependencies {
     modImplementation(libs.fabric.loader)
-    modApi(libs.fabric.api)
+    modImplementation(libs.fabric.api)
 
     modImplementation(libs.ae2.fabric)
+    modImplementation(libs.cloth.fabric)
 
     modCompileOnly(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
 
-    // Still seems to have issues in dev environments
-    // modImplementation(libs.ae2wtlib.fabric)
-    // modRuntimeOnly(libs.cloth.fabric)
+    // modRuntimeOnly(libs.ae2wtlib.fabric)
 
-    modRuntimeOnly(libs.modmenu)
+    modImplementation(libs.modmenu)
     modRuntimeOnly(libs.jei.fabric)
     modRuntimeOnly(libs.jade.fabric)
 }

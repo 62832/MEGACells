@@ -8,6 +8,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import appeng.api.stacks.AEItemKey;
 
+import gripe._90.megacells.definition.MEGAConfig;
+
 public class CompressionChain extends ObjectArrayList<CompressionVariant> {
     public void add(AEItemKey item, int factor) {
         this.add(new CompressionVariant(item, factor));
@@ -48,15 +50,14 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
     }
 
     public CompressionChain limited() {
-        // TODO: make this configurable
-        var variantLimit = 3;
+        var chainLength = MEGAConfig.INSTANCE.getCompressionChainLength();
 
-        if (size <= variantLimit) {
+        if (size <= chainLength) {
             return this;
         }
 
         var chain = new CompressionChain();
-        chain.addAll(this.subList(0, variantLimit));
+        chain.addAll(this.subList(0, chainLength));
         return chain;
     }
 

@@ -9,8 +9,10 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -25,12 +27,15 @@ import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
 
+import me.shedaniel.autoconfig.AutoConfig;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
@@ -48,6 +53,14 @@ public class MEGACellsClient {
         bus.addListener(MEGACellsClient::initRenderTypes);
         bus.addListener(MEGACellsClient::initModels);
         bus.addListener(MEGACellsClient::initItemColors);
+
+        // the absolute state
+        ModLoadingContext.get()
+                .registerExtensionPoint(
+                        ConfigScreenHandler.ConfigScreenFactory.class,
+                        () -> new ConfigScreenHandler.ConfigScreenFactory(
+                                (client, parent) -> AutoConfig.getConfigScreen(MEGAConfig.class, parent)
+                                        .get()));
     }
 
     private static void initScreens(FMLClientSetupEvent ignoredEvent) {

@@ -8,13 +8,14 @@ public enum MEGATranslations implements LocalizationEnum {
     AcceleratorThreads("Provides 4 co-processing threads per block.", Type.TOOLTIP),
     ALot("A lot.", Type.TOOLTIP),
     Compression("Compression: %s", Type.TOOLTIP),
+    CompressionChainLength("Bulk Compression chain length", Type.CONFIG),
     Contains("Contains: %s", Type.TOOLTIP),
-    CreativeTab("MEGA Cells", Type.GUI),
     Disabled("Disabled", Type.TOOLTIP),
     Empty("Empty", Type.TOOLTIP),
     Enabled("Enabled", Type.TOOLTIP),
     FilterChemicalUnsupported("Filter chemical unsupported!", Type.TOOLTIP),
     MismatchedFilter("Mismatched filter!", Type.TOOLTIP),
+    ModName("MEGA Cells", Type.GUI),
     PartitionedFor("Partitioned for: %s", Type.TOOLTIP),
     ProcessingOnly("Supports processing patterns only.", Type.TOOLTIP),
     Quantity("Quantity: %s", Type.TOOLTIP),
@@ -35,21 +36,20 @@ public enum MEGATranslations implements LocalizationEnum {
 
     @Override
     public String getTranslationKey() {
-        return String.format("%s.%s.%s", type.getRoot(), MEGACells.MODID, this.name());
+        return type == Type.CONFIG
+                ? type.root.formatted(MEGACells.MODID) + "." + name()
+                : String.format("%s.%s.%s", type.root, MEGACells.MODID, name());
     }
 
     private enum Type {
         GUI("gui"),
-        TOOLTIP("gui.tooltips");
+        TOOLTIP("gui.tooltips"),
+        CONFIG("text.autoconfig.%s.option");
 
         private final String root;
 
         Type(String root) {
             this.root = root;
-        }
-
-        private String getRoot() {
-            return root;
         }
     }
 }

@@ -24,6 +24,7 @@ import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.crafting.DecompressionService;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
@@ -45,6 +46,8 @@ public final class MEGACells {
     }
 
     public static void initCommon() {
+        MEGAConfig.load();
+
         MEGAItems.init();
         MEGABlocks.init();
         MEGABlockEntities.init();

@@ -17,7 +17,7 @@ public final class MEGACreativeTab {
 
     public static final CreativeModeTab TAB = MEGACells.PLATFORM
             .getCreativeTabBuilder()
-            .title(MEGATranslations.CreativeTab.text())
+            .title(MEGATranslations.ModName.text())
             .icon(MEGAItems.ITEM_CELL_256M::stack)
             .displayItems(MEGACreativeTab::populateTab)
             .build();
