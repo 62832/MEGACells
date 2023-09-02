@@ -23,9 +23,9 @@ dependencyResolutionManagement {
             library("fabric-api", "net.fabricmc.fabric-api", "fabric-api").version("0.83.1+$minecraftVersion")
             library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.3")
 
-            version("ae2", "15.0.7-beta")
+            version("ae2", "15.0.10")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
-            library("ae2-forge", "appeng", "appliedenergistics2-forge").version("15.0.9-beta")
+            library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
 
             // AE2WTLib
             val ae2wtVersion = "15.0.1-beta"

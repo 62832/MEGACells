@@ -27,6 +27,7 @@ import appeng.decorative.AEDecorativeBlock;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.block.MEGAInterfaceBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
 
@@ -105,6 +106,8 @@ public final class MEGABlocks {
             () -> new CraftingMonitorBlock(MEGACraftingUnitType.MONITOR),
             () -> AEParts.STORAGE_MONITOR);
 
+    public static final BlockDefinition<MEGAInterfaceBlock> MEGA_INTERFACE =
+            block("MEGA Interface", "mega_interface", () -> new MEGAInterfaceBlock(props), AEBaseBlockItem::new);
     public static final BlockDefinition<MEGAPatternProviderBlock> MEGA_PATTERN_PROVIDER = block(
             "MEGA Pattern Provider",
             "mega_pattern_provider",

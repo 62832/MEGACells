@@ -25,8 +25,9 @@ public final class MEGATags {
     public static final TagKey<Block> SKY_STEEL_BLOCK = TagKey.create(Registries.BLOCK, SKY_STEEL_BLOCK_TAG);
     public static final TagKey<Item> SKY_STEEL_BLOCK_ITEM = TagKey.create(Registries.ITEM, SKY_STEEL_BLOCK_TAG);
 
+    public static final TagKey<Item> MEGA_INTERFACE = TagKey.create(Registries.ITEM, MEGABlocks.MEGA_INTERFACE.id());
     public static final TagKey<Item> MEGA_PATTERN_PROVIDER =
-            TagKey.create(Registries.ITEM, MEGACells.makeId("mega_pattern_provider"));
+            TagKey.create(Registries.ITEM, MEGABlocks.MEGA_PATTERN_PROVIDER.id());
 
     public static final TagKey<Item> COMPRESSION_OVERRIDES =
             TagKey.create(Registries.ITEM, MEGACells.makeId("compression_overrides"));

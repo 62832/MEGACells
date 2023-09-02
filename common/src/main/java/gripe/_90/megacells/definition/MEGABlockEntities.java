@@ -21,6 +21,7 @@ import appeng.blockentity.networking.EnergyCellBlockEntity;
 import appeng.core.definitions.BlockDefinition;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.block.entity.MEGAInterfaceBlockEntity;
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 
 @SuppressWarnings({"unused", "unchecked"})
@@ -60,6 +61,8 @@ public final class MEGABlockEntities {
             CraftingMonitorBlockEntity::new,
             MEGABlocks.CRAFTING_MONITOR);
 
+    public static final BlockEntityType<MEGAInterfaceBlockEntity> MEGA_INTERFACE = create(
+            "mega_interface", MEGAInterfaceBlockEntity.class, MEGAInterfaceBlockEntity::new, MEGABlocks.MEGA_INTERFACE);
     public static final BlockEntityType<MEGAPatternProviderBlockEntity> MEGA_PATTERN_PROVIDER = create(
             "mega_pattern_provider",
             MEGAPatternProviderBlockEntity.class,

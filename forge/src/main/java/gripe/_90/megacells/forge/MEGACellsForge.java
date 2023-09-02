@@ -21,6 +21,7 @@ import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 @Mod(MEGACells.MODID)
@@ -63,6 +64,7 @@ public class MEGACellsForge {
         }
 
         if (event.getRegistryKey().equals(Registries.MENU)) {
+            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_interface"), MEGAInterfaceMenu.TYPE);
             ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
         }
     }

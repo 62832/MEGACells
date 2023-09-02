@@ -13,7 +13,10 @@ public class MEGAPatternProviderMenu extends PatternProviderMenu {
             .build("mega_pattern_provider");
 
     protected MEGAPatternProviderMenu(
-            MenuType<?> menuType, int id, Inventory playerInventory, PatternProviderLogicHost host) {
+            MenuType<MEGAPatternProviderMenu> menuType,
+            int id,
+            Inventory playerInventory,
+            PatternProviderLogicHost host) {
         super(menuType, id, playerInventory, host);
     }
 }

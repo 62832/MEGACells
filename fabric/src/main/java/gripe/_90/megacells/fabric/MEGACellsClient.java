@@ -15,6 +15,7 @@ import net.minecraft.world.level.ItemLike;
 
 import appeng.api.IAEAddonEntrypoint;
 import appeng.block.networking.EnergyCellBlockItem;
+import appeng.client.gui.implementations.InterfaceScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.SimpleModelLoader;
 import appeng.client.render.crafting.CraftingCubeModel;
@@ -32,6 +33,7 @@ import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 @Environment(EnvType.CLIENT)
@@ -45,10 +47,16 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     }
 
     private void initScreens() {
-        ClientLifecycleEvents.CLIENT_STARTED.register(client -> InitScreens.register(
-                MEGAPatternProviderMenu.TYPE,
-                PatternProviderScreen<MEGAPatternProviderMenu>::new,
-                "/screens/megacells/mega_pattern_provider.json"));
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            InitScreens.register(
+                    MEGAInterfaceMenu.TYPE,
+                    InterfaceScreen<MEGAInterfaceMenu>::new,
+                    "/screens/megacells/mega_interface.json");
+            InitScreens.register(
+                    MEGAPatternProviderMenu.TYPE,
+                    PatternProviderScreen<MEGAPatternProviderMenu>::new,
+                    "/screens/megacells/mega_pattern_provider.json");
+        });
     }
 
     private void initBlockModels() {

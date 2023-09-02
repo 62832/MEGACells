@@ -12,6 +12,7 @@ import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 public class MEGACellsFabric implements IAEAddonEntrypoint {
@@ -40,6 +41,7 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
             Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntity.getKey(), blockEntity.getValue());
         }
 
+        Registry.register(BuiltInRegistries.MENU, AppEng.makeId("mega_interface"), MEGAInterfaceMenu.TYPE);
         Registry.register(BuiltInRegistries.MENU, AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderMenu.TYPE);
     }
 

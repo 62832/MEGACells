@@ -7,21 +7,20 @@ import net.minecraft.world.item.ItemStack;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.core.AppEng;
-import appeng.helpers.patternprovider.PatternProviderLogic;
+import appeng.helpers.InterfaceLogic;
 import appeng.items.parts.PartModels;
 import appeng.menu.ISubMenu;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocator;
 import appeng.parts.PartModel;
-import appeng.parts.crafting.PatternProviderPart;
+import appeng.parts.misc.InterfacePart;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.menu.MEGAPatternProviderMenu;
+import gripe._90.megacells.menu.MEGAInterfaceMenu;
 
-public class MEGAPatternProviderPart extends PatternProviderPart {
-    private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_pattern_provider");
+public class MEGAInterfacePart extends InterfacePart {
+    private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_interface");
 
     @PartModels
     public static final PartModel MODELS_OFF = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_off"));
@@ -33,23 +32,23 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
     public static final PartModel MODELS_HAS_CHANNEL =
             new PartModel(MODEL_BASE, AppEng.makeId("part/interface_has_channel"));
 
-    public MEGAPatternProviderPart(IPartItem<?> partItem) {
+    public MEGAInterfacePart(IPartItem<?> partItem) {
         super(partItem);
     }
 
     @Override
-    public PatternProviderLogic createLogic() {
-        return MEGAPatternProviderBlock.createLogic(this.getMainNode(), this);
+    protected InterfaceLogic createLogic() {
+        return new InterfaceLogic(getMainNode(), this, getPartItem().asItem(), 18);
     }
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAPatternProviderMenu.TYPE, player, locator);
+        MenuOpener.open(MEGAInterfaceMenu.TYPE, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAPatternProviderMenu.TYPE, player, subMenu.getLocator());
+        MenuOpener.open(MEGAInterfaceMenu.TYPE, player, subMenu.getLocator());
     }
 
     @Override
@@ -65,6 +64,6 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public ItemStack getMainMenuIcon() {
-        return MEGAItems.MEGA_PATTERN_PROVIDER.stack();
+        return MEGAItems.MEGA_INTERFACE.stack();
     }
 }

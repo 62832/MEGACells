@@ -126,7 +126,8 @@ abstract class ModelProvider {
 
             cells.forEach(this::cellModel);
 
-            patternProviderPart();
+            interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE, MEGABlocks.MEGA_INTERFACE);
+            interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER, MEGABlocks.MEGA_PATTERN_PROVIDER);
         }
 
         private void cellModel(ItemDefinition<?> cell) {
@@ -153,10 +154,10 @@ abstract class ModelProvider {
             withExistingParent(path, DRIVE_CELL).texture("cell", path);
         }
 
-        private void patternProviderPart() {
-            withExistingParent(MEGAItems.MEGA_PATTERN_PROVIDER.id().getPath(), CABLE_INTERFACE)
+        private void interfaceOrProviderPart(ItemDefinition<?> part, BlockDefinition<?> equivalentBlock) {
+            withExistingParent(part.id().getPath(), CABLE_INTERFACE)
                     .texture("back", "part/mega_monitor_back")
-                    .texture("front", "part/mega_pattern_provider")
+                    .texture("front", "block/" + equivalentBlock.id().getPath())
                     .texture("sides", "part/mega_monitor_sides");
         }
     }
@@ -169,6 +170,7 @@ abstract class ModelProvider {
         @Override
         protected void registerStatesAndModels() {
             simpleBlockAndItem(MEGABlocks.SKY_STEEL_BLOCK);
+            simpleBlockAndItem(MEGABlocks.MEGA_INTERFACE);
 
             energyCell();
             patternProvider();
@@ -287,11 +289,11 @@ abstract class ModelProvider {
     }
 
     static class Parts extends net.minecraftforge.client.model.generators.ModelProvider<BlockModelBuilder> {
-        private static final ResourceLocation PATTERN_PROVIDER = AppEng.makeId("part/pattern_provider_base");
+        private static final ResourceLocation INTERFACE = AppEng.makeId("part/interface_base");
 
         public Parts(PackOutput output, ExistingFileHelper existing) {
             super(output, MEGACells.MODID, "part", BlockModelBuilder::new, existing);
-            existing.trackGenerated(PATTERN_PROVIDER, MODEL);
+            existing.trackGenerated(INTERFACE, MODEL);
         }
 
         @NotNull
@@ -302,13 +304,15 @@ abstract class ModelProvider {
 
         @Override
         protected void registerModels() {
-            patternProvider();
+            interfaceOrPatternProvider(MEGAItems.MEGA_INTERFACE);
+            interfaceOrPatternProvider(MEGAItems.MEGA_PATTERN_PROVIDER);
         }
 
-        private void patternProvider() {
-            withExistingParent("part/mega_pattern_provider", PATTERN_PROVIDER)
+        private void interfaceOrPatternProvider(ItemDefinition<?> part) {
+            var partName = part.id().getPath().substring(6);
+            withExistingParent("part/" + partName, INTERFACE)
                     .texture("back", "part/mega_monitor_back")
-                    .texture("front", "part/mega_pattern_provider")
+                    .texture("front", "block/" + partName)
                     .texture("particle", "part/mega_monitor_back")
                     .texture("sides", "part/mega_monitor_sides")
                     .texture("sidesStatus", "part/mega_monitor_sides_status");

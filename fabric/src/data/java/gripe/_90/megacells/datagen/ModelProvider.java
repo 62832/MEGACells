@@ -65,8 +65,8 @@ class ModelProvider extends FabricModelProvider {
     private static final TextureSlot SIDES = TextureSlot.create("sides");
     private static final TextureSlot SIDES_STATUS = TextureSlot.create("sidesStatus");
 
-    private static final ModelTemplate PATTERN_PROVIDER = new ModelTemplate(
-            Optional.of(AppEng.makeId("part/pattern_provider_base")),
+    private static final ModelTemplate INTERFACE = new ModelTemplate(
+            Optional.of(AppEng.makeId("part/interface_base")),
             Optional.empty(),
             SIDES,
             SIDES_STATUS,
@@ -74,7 +74,7 @@ class ModelProvider extends FabricModelProvider {
             TextureSlot.FRONT,
             TextureSlot.PARTICLE);
 
-    private static final ModelTemplate CABLE_PATTERN_PROVIDER = new ModelTemplate(
+    private static final ModelTemplate CABLE_INTERFACE = new ModelTemplate(
             Optional.of(AppEng.makeId("item/cable_interface")),
             Optional.empty(),
             SIDES,
@@ -91,6 +91,7 @@ class ModelProvider extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockModelGenerators generator) {
         generator.createTrivialCube(MEGABlocks.SKY_STEEL_BLOCK.block());
+        generator.createTrivialCube(MEGABlocks.MEGA_INTERFACE.block());
 
         energyCell(generator);
 
@@ -174,7 +175,8 @@ class ModelProvider extends FabricModelProvider {
     }
 
     private void generatePartModels(ItemModelGenerators generator) {
-        patternProviderPart(generator);
+        interfaceOrProviderPart(generator, MEGAItems.MEGA_INTERFACE);
+        interfaceOrProviderPart(generator, MEGAItems.MEGA_PATTERN_PROVIDER);
     }
 
     private void cellModel(ItemDefinition<?> cell, ItemModelGenerators generator) {
@@ -346,24 +348,25 @@ class ModelProvider extends FabricModelProvider {
         };
     }
 
-    private void patternProviderPart(ItemModelGenerators generator) {
-        var provider = MEGACells.makeId("part/mega_pattern_provider");
+    private void interfaceOrProviderPart(ItemModelGenerators generator, ItemDefinition<?> part) {
+        var partName = part.id().getPath().substring(6);
+        var frontTexture = MEGACells.makeId("block/" + partName);
         var monitorBack = MEGACells.makeId("part/mega_monitor_back");
         var monitorSides = MEGACells.makeId("part/mega_monitor_sides");
-        PATTERN_PROVIDER.create(
-                provider,
+        INTERFACE.create(
+                MEGACells.makeId("part/" + partName),
                 new TextureMapping()
                         .put(SIDES_STATUS, MEGACells.makeId("part/mega_monitor_sides_status"))
                         .put(SIDES, monitorSides)
                         .put(TextureSlot.BACK, monitorBack)
-                        .put(TextureSlot.FRONT, provider)
+                        .put(TextureSlot.FRONT, frontTexture)
                         .put(TextureSlot.PARTICLE, monitorBack),
                 generator.output);
-        CABLE_PATTERN_PROVIDER.create(
-                MEGACells.makeId("item/cable_mega_pattern_provider"),
+        CABLE_INTERFACE.create(
+                MEGACells.makeId("item/" + part.id().getPath()),
                 new TextureMapping()
                         .put(SIDES, monitorSides)
-                        .put(TextureSlot.FRONT, provider)
+                        .put(TextureSlot.FRONT, frontTexture)
                         .put(TextureSlot.BACK, monitorBack),
                 generator.output);
     }

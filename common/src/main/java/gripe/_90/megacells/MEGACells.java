@@ -88,6 +88,7 @@ public final class MEGACells {
     public static void initUpgrades() {
         var storageCellGroup = GuiText.StorageCells.getTranslationKey();
         var portableCellGroup = GuiText.PortableCells.getTranslationKey();
+        var interfaceGroup = GuiText.Interface.getTranslationKey();
         var wirelessTerminalGroup = GuiText.WirelessTerminals.getTranslationKey();
 
         for (var itemCell : MEGAItems.getItemCells()) {
@@ -117,6 +118,11 @@ public final class MEGACells {
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidPortable, 1, storageCellGroup);
             Upgrades.add(AEItems.VOID_CARD, fluidPortable, 1, storageCellGroup);
         }
+
+        Upgrades.add(AEItems.CRAFTING_CARD, MEGABlocks.MEGA_INTERFACE, 1, interfaceGroup);
+        Upgrades.add(AEItems.CRAFTING_CARD, MEGAItems.MEGA_INTERFACE, 1, interfaceGroup);
+        Upgrades.add(AEItems.FUZZY_CARD, MEGABlocks.MEGA_INTERFACE, 1, interfaceGroup);
+        Upgrades.add(AEItems.FUZZY_CARD, MEGAItems.MEGA_INTERFACE, 1, interfaceGroup);
 
         Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_TERMINAL, 2, wirelessTerminalGroup);
         Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_CRAFTING_TERMINAL, 2, wirelessTerminalGroup);

@@ -27,6 +27,7 @@ import gripe._90.megacells.crafting.DecompressionPatternItem;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
 import gripe._90.megacells.item.part.DecompressionModulePart;
+import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPartItem;
 
@@ -106,6 +107,13 @@ public final class MEGAItems {
     public static final ItemDefinition<DecompressionPatternItem> DECOMPRESSION_PATTERN =
             item("Decompression Pattern", "decompression_pattern", DecompressionPatternItem::new);
 
+    public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = Util.make(() -> {
+        PartModels.registerModels(PartModelsHelper.createModels(MEGAInterfacePart.class));
+        return item(
+                "MEGA Interface",
+                "cable_mega_interface",
+                p -> new PartItem<>(p, MEGAInterfacePart.class, MEGAInterfacePart::new));
+    });
     public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);

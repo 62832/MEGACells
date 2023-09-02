@@ -15,6 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.block.networking.EnergyCellBlockItem;
+import appeng.client.gui.implementations.InterfaceScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.crafting.CraftingCubeModel;
 import appeng.client.render.crafting.CraftingMonitorRenderer;
@@ -33,6 +34,7 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 @SuppressWarnings("deprecation")
@@ -49,6 +51,10 @@ public class MEGACellsClient {
     }
 
     private static void initScreens(FMLClientSetupEvent ignoredEvent) {
+        InitScreens.register(
+                MEGAInterfaceMenu.TYPE,
+                InterfaceScreen<MEGAInterfaceMenu>::new,
+                "/screens/megacells/mega_interface.json");
         InitScreens.register(
                 MEGAPatternProviderMenu.TYPE,
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,

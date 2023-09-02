@@ -287,6 +287,12 @@ public class CommonRecipeProvider {
                 .unlockedBy("has_compression_card", has(MEGAItems.COMPRESSION_CARD))
                 .save(consumer, MEGACells.makeId("crafting/decompression_module"));
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGABlocks.MEGA_INTERFACE)
+                .requires(AEBlocks.INTERFACE)
+                .requires(MEGAItems.ACCUMULATION_PROCESSOR)
+                .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
+                .unlockedBy("has_interface", has(ConventionTags.INTERFACE))
+                .save(consumer, MEGACells.makeId("network/mega_interface"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .requires(AEBlocks.PATTERN_PROVIDER)
                 .requires(MEGAItems.ACCUMULATION_PROCESSOR)
@@ -294,6 +300,14 @@ public class CommonRecipeProvider {
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
                 .save(consumer, MEGACells.makeId("network/mega_pattern_provider"));
 
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.MEGA_INTERFACE)
+                .requires(MEGABlocks.MEGA_INTERFACE)
+                .unlockedBy("has_mega_interface", has(MEGABlocks.MEGA_INTERFACE))
+                .save(consumer, MEGACells.makeId("network/mega_interface_part"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGABlocks.MEGA_INTERFACE)
+                .requires(MEGAItems.MEGA_INTERFACE)
+                .unlockedBy("has_cable_mega_interface", has(MEGAItems.MEGA_INTERFACE))
+                .save(consumer, MEGACells.makeId("network/mega_interface_block"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.MEGA_PATTERN_PROVIDER)
                 .requires(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .unlockedBy("has_mega_pattern_provider", has(MEGABlocks.MEGA_PATTERN_PROVIDER))
