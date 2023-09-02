@@ -47,16 +47,26 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
         return chain;
     }
 
-    public CompressionChain decompressFrom(AEItemKey item) {
-        var decompressionChain = new CompressionChain();
-        var variant = this.stream().filter(v -> v.item().equals(item)).findFirst();
+    public CompressionChain limited() {
+        // TODO: make this configurable
+        var variantLimit = 3;
 
-        if (variant.isPresent()) {
-            for (var i = indexOf(variant.get()); i >= 0; i--) {
-                decompressionChain.add(this.get(i));
-            }
+        if (size <= variantLimit) {
+            return this;
         }
 
-        return decompressionChain;
+        var chain = new CompressionChain();
+        chain.addAll(this.subList(0, variantLimit));
+        return chain;
+    }
+
+    public CompressionChain reversed() {
+        var chain = new CompressionChain();
+
+        for (var i = size - 1; i >= 0; i--) {
+            chain.add(this.get(i));
+        }
+
+        return chain;
     }
 }

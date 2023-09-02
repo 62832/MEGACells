@@ -72,22 +72,41 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
     }
 
     private Set<IPatternDetails> generatePatterns(BulkCellInventory cell) {
-        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
-        var chain = cell.getDecompressionChain();
-        var count = 1;
+        var fullChain = cell.getCompressionChain();
 
-        for (var variant : chain) {
-            if (variant == chain.last()) {
+        if (fullChain.isEmpty()) {
+            return Set.of();
+        }
+
+        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
+        var decompressionChain = fullChain.limited().reversed();
+
+        for (var variant : decompressionChain) {
+            if (variant == decompressionChain.last()) {
                 continue;
             }
 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
-            var decompressed = chain.get(chain.indexOf(variant) + 1);
+            var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
             DecompressionPatternEncoding.encode(
-                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), count, variant.factor());
+                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), variant.factor(), false);
             patterns.add(new DecompressionPattern(AEItemKey.of(pattern.getItem(), pattern.getTag())));
-            count *= variant.factor();
+        }
+
+        var compressionChain = fullChain.subList(decompressionChain.size() - 1, fullChain.size());
+
+        for (var variant : compressionChain) {
+            if (variant == compressionChain.get(0)) {
+                continue;
+            }
+
+            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
+
+            DecompressionPatternEncoding.encode(
+                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), variant.factor(), true);
+            patterns.add(new DecompressionPattern(AEItemKey.of(pattern.getItem(), pattern.getTag())));
         }
 
         return patterns;

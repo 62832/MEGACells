@@ -12,19 +12,18 @@ import appeng.api.stacks.GenericStack;
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
     private final AEItemKey compressed;
-    private final long count;
     private final AEItemKey decompressed;
     private final int factor;
+    private final boolean toCompress;
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
         var tag = Objects.requireNonNull(definition.getTag());
 
-        this.compressed = DecompressionPatternEncoding.getCompressed(tag);
-        this.count = DecompressionPatternEncoding.getCount(tag);
-
-        this.decompressed = DecompressionPatternEncoding.getDecompressed(tag);
-        this.factor = DecompressionPatternEncoding.getFactor(tag);
+        compressed = DecompressionPatternEncoding.getCompressed(tag);
+        decompressed = DecompressionPatternEncoding.getDecompressed(tag);
+        factor = DecompressionPatternEncoding.getFactor(tag);
+        toCompress = DecompressionPatternEncoding.getToCompress(tag);
     }
 
     @Override
@@ -34,12 +33,13 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return new IInput[] {new Input(compressed, count)};
+        return new IInput[] {toCompress ? new Input(decompressed, factor) : new Input(compressed, 1)};
     }
 
     @Override
     public GenericStack[] getOutputs() {
-        return new GenericStack[] {new GenericStack(decompressed, count * factor)};
+        return new GenericStack[] {toCompress ? new GenericStack(compressed, 1) : new GenericStack(decompressed, factor)
+        };
     }
 
     @Override

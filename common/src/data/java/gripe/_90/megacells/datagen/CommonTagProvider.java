@@ -36,7 +36,8 @@ public class CommonTagProvider {
                     .add(MEGABlocks.MEGA_ENERGY_CELL.asItem());
 
             tag(MEGATags.MEGA_INTERFACE).add(MEGABlocks.MEGA_INTERFACE.asItem(), MEGAItems.MEGA_INTERFACE.asItem());
-            tag(MEGATags.MEGA_PATTERN_PROVIDER).add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem(), MEGAItems.MEGA_PATTERN_PROVIDER.asItem());
+            tag(MEGATags.MEGA_PATTERN_PROVIDER)
+                    .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem(), MEGAItems.MEGA_PATTERN_PROVIDER.asItem());
 
             tag(MEGATags.COMPRESSION_OVERRIDES)
                     .add(Items.QUARTZ)
