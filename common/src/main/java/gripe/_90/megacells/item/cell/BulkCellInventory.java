@@ -108,7 +108,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || !filterItem.equals(storedItem)) {
+        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
             return 0;
         }
 
@@ -141,7 +141,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || !filterItem.equals(storedItem)) {
+        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
             return 0;
         }
 
