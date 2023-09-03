@@ -50,7 +50,7 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
     }
 
     public CompressionChain limited() {
-        var chainLength = MEGAConfig.INSTANCE.getCompressionChainLength();
+        var chainLength = MEGAConfig.INSTANCE.getCompressionChainLimit();
 
         if (size <= chainLength) {
             return this;

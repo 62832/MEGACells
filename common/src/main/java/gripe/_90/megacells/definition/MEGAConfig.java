@@ -10,15 +10,16 @@ import gripe._90.megacells.MEGACells;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 @Config(name = MEGACells.MODID)
-public class MEGAConfig implements ConfigData {
+public final class MEGAConfig implements ConfigData {
     @ConfigEntry.Gui.Excluded
     public static MEGAConfig INSTANCE;
 
+    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(min = 2, max = 12)
-    private int CompressionChainLength = 3;
+    private int CompressionChainLimit = 3;
 
-    public int getCompressionChainLength() {
-        return CompressionChainLength;
+    public int getCompressionChainLimit() {
+        return CompressionChainLimit;
     }
 
     public static void load() {
