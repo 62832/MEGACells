@@ -21,7 +21,7 @@
     {
       "name": "base",
       "from": [5, 5, 4],
-      "to": [11, 11, 5],
+      "to": [11, 11, 5.01],
       "faces": {
         "north": { "uv": [10, 0, 16, 6], "texture": "#side" },
         "east": { "uv": [15, 0, 16, 6], "texture": "#side" },
@@ -59,8 +59,8 @@
     },
     {
       "name": "internals",
-      "from": [6, 6, 4],
-      "to": [10, 10, 5],
+      "from": [6.01, 6.01, 4],
+      "to": [9.99, 9.99, 5],
       "faces": {
         "east": { "uv": [14, 1, 15, 5], "texture": "#side" },
         "west": { "uv": [14, 1, 15, 5], "texture": "#side" },
