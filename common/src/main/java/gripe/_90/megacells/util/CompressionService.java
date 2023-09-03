@@ -131,13 +131,17 @@ public class CompressionService {
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        return sameIngredient(recipe)
-                && recipe.getResultItem(access).getCount() == 1
-                && Set.of(4, 9).contains(recipe.getIngredients().size());
+        return recipe.getResultItem(access).getCount() == 1
+                && Set.of(4, 9).contains(recipe.getIngredients().size())
+                && sameIngredient(recipe);
     }
 
     // All this for some fucking melons.
     private boolean sameIngredient(CraftingRecipe recipe) {
+        if (recipe.getIngredients().stream().distinct().count() <= 1) {
+            return true;
+        }
+
         var ingredients = new ObjectArrayList<>(recipe.getIngredients());
 
         if (ingredients.isEmpty()) {
