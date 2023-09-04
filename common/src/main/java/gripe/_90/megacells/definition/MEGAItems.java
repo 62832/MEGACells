@@ -192,7 +192,7 @@ public final class MEGAItems {
                         tier.idleDrain(),
                         tier.bytes() / 1024,
                         tier.bytes() / 128,
-                        9,
+                        18,
                         AEKeyType.fluids()));
     }
 
