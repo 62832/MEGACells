@@ -24,8 +24,8 @@ import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.DecompressionPatternItem;
-import gripe._90.megacells.item.MEGABulkCell;
-import gripe._90.megacells.item.MEGAPortableCell;
+import gripe._90.megacells.item.cell.MEGABulkCell;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;

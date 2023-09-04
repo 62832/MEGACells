@@ -10,7 +10,7 @@ import me.ramidzkh.mekae2.ae2.MekanismKey;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 
-import gripe._90.megacells.item.MEGAPortableCell;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
 
 public class MEGAPortableChemicalCell extends MEGAPortableCell {
     public MEGAPortableChemicalCell(Properties props, StorageTier tier, int defaultColour) {

@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import gripe._90.megacells.MEGACells;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
@@ -19,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 import appeng.api.stacks.AEItemKey;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {

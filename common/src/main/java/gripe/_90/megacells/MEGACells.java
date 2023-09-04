@@ -29,7 +29,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.item.MEGABulkCell;
+import gripe._90.megacells.item.cell.MEGABulkCell;
 
 public final class MEGACells {
     private MEGACells() {}

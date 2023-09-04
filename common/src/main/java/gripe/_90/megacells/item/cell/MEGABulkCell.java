@@ -1,4 +1,4 @@
-package gripe._90.megacells.item;
+package gripe._90.megacells.item.cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,6 @@ import appeng.util.ConfigInventory;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.item.cell.BulkCellInventory;
 
 public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     public static final Handler HANDLER = new Handler();
@@ -44,6 +43,11 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(AEItemKey.filter(), is, 1);
+    }
+
+    @Override
+    public IUpgradeInventory getUpgrades(ItemStack is) {
+        return UpgradeInventories.forItem(is, 1);
     }
 
     @Override
@@ -112,11 +116,6 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
         }
 
         return Optional.of(new StorageCellTooltipComponent(upgrades, content, false, true));
-    }
-
-    @Override
-    public IUpgradeInventory getUpgrades(ItemStack is) {
-        return UpgradeInventories.forItem(is, 1);
     }
 
     @Override

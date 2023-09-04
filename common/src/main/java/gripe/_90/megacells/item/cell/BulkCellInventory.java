@@ -17,7 +17,6 @@ import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 
-import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.util.CompressionChain;
 import gripe._90.megacells.util.CompressionService;
 
@@ -27,7 +26,7 @@ public class BulkCellInventory implements StorageCell {
     private static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
     private final ISaveProvider container;
-    private final ItemStack i;
+    private final ItemStack stack;
 
     private AEItemKey storedItem;
     private final AEItemKey filterItem;
@@ -39,17 +38,17 @@ public class BulkCellInventory implements StorageCell {
 
     private boolean isPersisted = true;
 
-    public BulkCellInventory(MEGABulkCell cell, ItemStack o, ISaveProvider container) {
-        this.i = o;
+    public BulkCellInventory(MEGABulkCell cell, ItemStack stack, ISaveProvider container) {
+        this.stack = stack;
         this.container = container;
 
-        filterItem = (AEItemKey) cell.getConfigInventory(i).getKey(0);
+        filterItem = (AEItemKey) cell.getConfigInventory(this.stack).getKey(0);
         storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
         unitCount = !getTag().getString(UNIT_COUNT).isEmpty()
                 ? new BigInteger(getTag().getString(UNIT_COUNT))
                 : BigInteger.ZERO;
 
-        compressionEnabled = cell.getUpgrades(i).isInstalled(COMPRESSION_CARD);
+        compressionEnabled = cell.getUpgrades(this.stack).isInstalled(COMPRESSION_CARD);
         compressionChain = CompressionService.INSTANCE
                 .getChain(storedItem != null ? storedItem : filterItem)
                 .orElseGet(CompressionChain::new);
@@ -61,7 +60,7 @@ public class BulkCellInventory implements StorageCell {
     }
 
     private CompoundTag getTag() {
-        return i.getOrCreateTag();
+        return stack.getOrCreateTag();
     }
 
     @Override
@@ -231,6 +230,6 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public Component getDescription() {
-        return i.getHoverName();
+        return stack.getHoverName();
     }
 }
