@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import gripe._90.megacells.MEGACells;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
@@ -23,7 +24,14 @@ import gripe._90.megacells.definition.MEGATags;
 public class CompressionService {
     public static final CompressionService INSTANCE = new CompressionService();
 
+    // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
+    // dictating how much of the previous variant's item is needed to compress into that variant.
+    // This value is typically either 4 or 9 for any given item, or 1 for the smallest base variant.
     private final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
+
+    // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
+    // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
+    // based on its usually irreversible recipe.
     private final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
 
     private CompressionService() {}
@@ -65,6 +73,10 @@ public class CompressionService {
                 compressionChains.add(generateChain(baseVariant, compressed, decompressed, access));
             }
         });
+
+        if (!compressionChains.isEmpty()) {
+            MEGACells.LOGGER.info("Initialised bulk cell compression.");
+        }
     }
 
     private CompressionChain generateChain(
@@ -87,11 +99,11 @@ public class CompressionService {
         var chain = new CompressionChain();
 
         for (var i = 0; i < variants.size(); i++) {
-            chain.add(new CompressionVariant(variants.get(i), multipliers.get(i)));
+            chain.add(AEItemKey.of(variants.get(i)), multipliers.get(i));
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
-            chain.add(higher.item(), higher.factor());
+            chain.add(higher);
             higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }
 
