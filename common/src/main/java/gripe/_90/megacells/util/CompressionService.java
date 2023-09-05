@@ -6,13 +6,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 
@@ -138,33 +138,25 @@ public class CompressionService {
     }
 
     private boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        return recipe.getIngredients().size() == 1
+        return recipe.getIngredients().stream().filter(i -> !i.isEmpty()).count() == 1
                 && Set.of(4, 9).contains(recipe.getResultItem(access).getCount());
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
+        var ingredients =
+                recipe.getIngredients().stream().filter(i -> !i.isEmpty()).toList();
         return recipe.getResultItem(access).getCount() == 1
-                && Set.of(4, 9).contains(recipe.getIngredients().size())
-                && sameIngredient(recipe);
+                && Set.of(4, 9).contains(ingredients.size())
+                && sameIngredient(ingredients);
     }
 
     // All this for some fucking melons.
-    private boolean sameIngredient(CraftingRecipe recipe) {
-        if (recipe.getIngredients().stream().distinct().count() <= 1) {
+    private boolean sameIngredient(List<Ingredient> ingredients) {
+        if (ingredients.stream().distinct().count() <= 1) {
             return true;
         }
 
-        var ingredients = new ObjectArrayList<>(recipe.getIngredients());
-
-        if (ingredients.isEmpty()) {
-            return false;
-        }
-
-        var first = ingredients.remove(0).getItems();
-
-        if (first.length == 0) {
-            return false;
-        }
+        var first = ingredients.get(0).getItems();
 
         for (var ingredient : ingredients) {
             var stacks = ingredient.getItems();

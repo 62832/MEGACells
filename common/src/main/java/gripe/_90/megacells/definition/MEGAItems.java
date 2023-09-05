@@ -166,7 +166,7 @@ public final class MEGAItems {
                 p -> new StorageComponentItem(p, mb * 1024));
     }
 
-    public static ItemDefinition<BasicStorageCell> itemCell(StorageTier tier) {
+    private static ItemDefinition<BasicStorageCell> itemCell(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " MEGA Item Storage Cell",
                 "item_storage_cell_" + tier.namePrefix(),
@@ -181,7 +181,7 @@ public final class MEGAItems {
                         AEKeyType.items()));
     }
 
-    public static ItemDefinition<BasicStorageCell> fluidCell(StorageTier tier) {
+    private static ItemDefinition<BasicStorageCell> fluidCell(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " MEGA Fluid Storage Cell",
                 "fluid_storage_cell_" + tier.namePrefix(),
@@ -196,14 +196,14 @@ public final class MEGAItems {
                         AEKeyType.fluids()));
     }
 
-    public static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
+    private static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
                 "portable_item_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
     }
 
-    public static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
+    private static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
