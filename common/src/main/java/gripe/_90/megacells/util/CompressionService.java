@@ -43,7 +43,7 @@ public class CompressionService {
     }
 
     public void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
-        // Clear old variant cache in case of the server restarting or recipes being reloaded
+        // Clear old chain cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
         overrides.clear();
 
@@ -143,19 +143,19 @@ public class CompressionService {
     }
 
     private boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        var ingredients =
-                recipe.getIngredients().stream().filter(i -> !i.isEmpty()).toList();
+        var ingredients = recipe.getIngredients();
         return recipe.getResultItem(access).getCount() == 1
+                && ingredients.stream().noneMatch(Ingredient::isEmpty)
                 && Set.of(4, 9).contains(ingredients.size())
                 && sameIngredient(ingredients);
     }
 
-    // All this for some fucking melons.
     private boolean sameIngredient(List<Ingredient> ingredients) {
         if (ingredients.stream().distinct().count() <= 1) {
             return true;
         }
 
+        // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
         var first = ingredients.get(0).getItems();
 
         for (var ingredient : ingredients) {
@@ -206,14 +206,17 @@ public class CompressionService {
     }
 
     private boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        var compressed = isCompressionRecipe(recipe, access);
-        var output = recipe.getResultItem(access);
-
         for (var input : recipe.getIngredients().get(0).getItems()) {
             if (input.is(MEGATags.COMPRESSION_OVERRIDES)) {
+                // Less expensive to check for decompression rather than compression, and since this method is only
+                // being used on recipes that are candidates for either compression or decompression, this is fine.
+                var compressed = !isDecompressionRecipe(recipe, access);
+                var output = recipe.getResultItem(access);
+
                 var smaller = compressed ? input.getItem() : output.getItem();
                 var larger = compressed ? output.getItem() : input.getItem();
                 var factor = compressed ? recipe.getIngredients().size() : output.getCount();
+
                 overrides.add(new Override(smaller, larger, compressed, factor));
                 return true;
             }

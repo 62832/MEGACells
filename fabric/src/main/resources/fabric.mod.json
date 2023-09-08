@@ -22,7 +22,6 @@
 
     "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
   },
-  "mixins": ["megacells.mixins.json"],
 
   "depends": {
     "minecraft": "$minecraftVersion",

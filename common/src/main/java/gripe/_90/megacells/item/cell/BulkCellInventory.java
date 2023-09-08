@@ -144,8 +144,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        var itemCount = unitCount.divide(unitFactor);
-        if (!compressionEnabled && (itemCount.signum() < 1 || !what.equals(storedItem))) {
+        if (!compressionEnabled && (unitCount.divide(unitFactor).signum() < 1 || !what.equals(storedItem))) {
             return 0;
         }
 

@@ -90,8 +90,4 @@ tasks {
             expand(commonProps)
         }
     }
-
-    remapJar {
-        injectAccessWidener.set(true)
-    }
 }
