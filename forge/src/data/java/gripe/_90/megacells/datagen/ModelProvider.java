@@ -156,7 +156,7 @@ abstract class ModelProvider {
 
         private void interfaceOrProviderPart(ItemDefinition<?> part) {
             var partPath = part.id().getPath().substring(6);
-            withExistingParent(partPath, CABLE_INTERFACE)
+            withExistingParent(part.id().getPath(), CABLE_INTERFACE)
                     .texture("back", "part/" + partPath + "_back")
                     .texture("front", "part/" + partPath)
                     .texture("sides", "part/" + partPath + "_sides");

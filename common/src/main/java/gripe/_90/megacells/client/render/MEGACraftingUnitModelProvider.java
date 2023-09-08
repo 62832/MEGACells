@@ -16,6 +16,7 @@ import appeng.client.render.crafting.AbstractCraftingUnitModelProvider;
 import appeng.client.render.crafting.LightBakedModel;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.crafting.UnitBakedModel;
+import appeng.core.AppEng;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -36,9 +37,9 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     protected static final Material STORAGE_64M_LIGHT = texture("64m_storage_light");
     protected static final Material STORAGE_256M_LIGHT = texture("256m_storage_light");
     protected static final Material MONITOR_BASE = texture("monitor_base");
-    protected static final Material MONITOR_LIGHT_DARK = texture("monitor_light_dark");
-    protected static final Material MONITOR_LIGHT_MEDIUM = texture("monitor_light_medium");
-    protected static final Material MONITOR_LIGHT_BRIGHT = texture("monitor_light_bright");
+    protected static final Material MONITOR_LIGHT_DARK = monitorLight("dark");
+    protected static final Material MONITOR_LIGHT_MEDIUM = monitorLight("medium");
+    protected static final Material MONITOR_LIGHT_BRIGHT = monitorLight("bright");
 
     public MEGACraftingUnitModelProvider(MEGACraftingUnitType type) {
         super(type);
@@ -90,6 +91,12 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
 
     private static Material texture(String name) {
         var material = new Material(InventoryMenu.BLOCK_ATLAS, MEGACells.makeId("block/crafting/" + name));
+        MATERIALS.add(material);
+        return material;
+    }
+
+    private static Material monitorLight(String suffix) {
+        var material = new Material(InventoryMenu.BLOCK_ATLAS, AppEng.makeId("block/crafting/monitor_light_" + suffix));
         MATERIALS.add(material);
         return material;
     }
