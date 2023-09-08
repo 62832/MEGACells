@@ -126,8 +126,8 @@ abstract class ModelProvider {
 
             cells.forEach(this::cellModel);
 
-            interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE, MEGABlocks.MEGA_INTERFACE);
-            interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER, MEGABlocks.MEGA_PATTERN_PROVIDER);
+            interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);
+            interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER);
         }
 
         private void cellModel(ItemDefinition<?> cell) {
@@ -154,11 +154,12 @@ abstract class ModelProvider {
             withExistingParent(path, DRIVE_CELL).texture("cell", path);
         }
 
-        private void interfaceOrProviderPart(ItemDefinition<?> part, BlockDefinition<?> equivalentBlock) {
-            withExistingParent(part.id().getPath(), CABLE_INTERFACE)
-                    .texture("back", "part/mega_monitor_back")
-                    .texture("front", "block/" + equivalentBlock.id().getPath())
-                    .texture("sides", "part/mega_monitor_sides");
+        private void interfaceOrProviderPart(ItemDefinition<?> part) {
+            var partPath = part.id().getPath().substring(6);
+            withExistingParent(partPath, CABLE_INTERFACE)
+                    .texture("back", "part/" + partPath + "_back")
+                    .texture("front", "part/" + partPath)
+                    .texture("sides", "part/" + partPath + "_sides");
         }
     }
 
@@ -311,10 +312,10 @@ abstract class ModelProvider {
         private void interfaceOrPatternProvider(ItemDefinition<?> part) {
             var partName = part.id().getPath().substring(6);
             withExistingParent("part/" + partName, INTERFACE)
-                    .texture("back", "part/mega_monitor_back")
-                    .texture("front", "block/" + partName)
-                    .texture("particle", "part/mega_monitor_back")
-                    .texture("sides", "part/mega_monitor_sides")
+                    .texture("back", "part/" + partName + "_back")
+                    .texture("front", "part/" + partName)
+                    .texture("particle", "part/" + partName + "_back")
+                    .texture("sides", "part/" + partName + "_sides")
                     .texture("sidesStatus", "part/mega_monitor_sides_status");
         }
     }

@@ -350,24 +350,24 @@ class ModelProvider extends FabricModelProvider {
 
     private void interfaceOrProviderPart(ItemModelGenerators generator, ItemDefinition<?> part) {
         var partName = part.id().getPath().substring(6);
-        var frontTexture = MEGACells.makeId("block/" + partName);
-        var monitorBack = MEGACells.makeId("part/mega_monitor_back");
-        var monitorSides = MEGACells.makeId("part/mega_monitor_sides");
+        var front = MEGACells.makeId("part/" + partName);
+        var back = MEGACells.makeId("part/" + partName + "_back");
+        var sides = MEGACells.makeId("part/" + partName + "_sides");
         INTERFACE.create(
                 MEGACells.makeId("part/" + partName),
                 new TextureMapping()
                         .put(SIDES_STATUS, MEGACells.makeId("part/mega_monitor_sides_status"))
-                        .put(SIDES, monitorSides)
-                        .put(TextureSlot.BACK, monitorBack)
-                        .put(TextureSlot.FRONT, frontTexture)
-                        .put(TextureSlot.PARTICLE, monitorBack),
+                        .put(SIDES, sides)
+                        .put(TextureSlot.BACK, back)
+                        .put(TextureSlot.FRONT, front)
+                        .put(TextureSlot.PARTICLE, back),
                 generator.output);
         CABLE_INTERFACE.create(
                 MEGACells.makeId("item/" + part.id().getPath()),
                 new TextureMapping()
-                        .put(SIDES, monitorSides)
-                        .put(TextureSlot.FRONT, frontTexture)
-                        .put(TextureSlot.BACK, monitorBack),
+                        .put(SIDES, sides)
+                        .put(TextureSlot.FRONT, front)
+                        .put(TextureSlot.BACK, back),
                 generator.output);
     }
 
