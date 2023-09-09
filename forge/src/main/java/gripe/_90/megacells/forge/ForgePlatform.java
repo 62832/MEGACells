@@ -1,10 +1,8 @@
 package gripe._90.megacells.forge;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.LoadingModList;
@@ -16,9 +14,6 @@ import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.util.CompressionService;
 
 public final class ForgePlatform implements Platform {
-    private RecipeManager recipeManager;
-    private RegistryAccess registryAccess;
-
     @Override
     public Loaders getLoader() {
         return Loaders.FORGE;
@@ -44,18 +39,15 @@ public final class ForgePlatform implements Platform {
     @Override
     public void initCompression() {
         MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
-            recipeManager = event.getServer().getRecipeManager();
-            registryAccess = event.getServer().registryAccess();
-
-            CompressionService.INSTANCE.loadRecipes(recipeManager, registryAccess);
+            var server = event.getServer();
+            CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
         });
 
-        // Because RecipesUpdatedEvent is a client-side event for whatever reason...
-        MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) -> {
-            if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD
-                    && recipeManager != null
-                    && registryAccess != null) {
-                CompressionService.INSTANCE.loadRecipes(recipeManager, registryAccess);
+        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            // Only rebuild cache in the event of a data pack /reload and not when a new player joins
+            if (event.getPlayer() == null) {
+                var server = event.getPlayerList().getServer();
+                CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
             }
         });
     }
