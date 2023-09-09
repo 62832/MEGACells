@@ -75,7 +75,7 @@ public class CompressionService {
         });
 
         if (!compressionChains.isEmpty()) {
-            MEGACells.LOGGER.info("Initialised bulk cell compression.");
+            MEGACells.LOGGER.info("(Re-)initialised bulk cell compression.");
         }
     }
 
