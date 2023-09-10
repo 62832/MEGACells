@@ -228,6 +228,12 @@ public class BulkCellInventory implements StorageCell {
     }
 
     @Override
+    public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
+        return what instanceof AEItemKey item
+                && (item.equals(storedItem) || item.equals(filterItem) || compressionChain.containsVariant(item));
+    }
+
+    @Override
     public Component getDescription() {
         return stack.getHoverName();
     }
