@@ -17,17 +17,17 @@ public class MEGADataGenerators {
     public static void onGatherData(GatherDataEvent event) {
         var pack = event.getGenerator().getVanillaPack(true);
         var existing = event.getExistingFileHelper();
-        var registries = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
-
-        var blockTags = pack.addProvider(output -> new CommonTagProvider.BlockTags(output, registries));
-        pack.addProvider(output -> new CommonTagProvider.ItemTags(output, registries, blockTags.contentsGetter()));
 
         pack.addProvider(output -> new ModelProvider.Items(output, existing));
         pack.addProvider(output -> new ModelProvider.Blocks(output, existing));
         pack.addProvider(output -> new ModelProvider.Parts(output, existing));
 
-        pack.addProvider(RecipeProvider::new);
-        pack.addProvider(LootTableProvider::new);
+        var registries = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
+        var blockTags = pack.addProvider(output -> new CommonTagProvider.BlockTags(output, registries));
+        pack.addProvider(output -> new CommonTagProvider.ItemTags(output, registries, blockTags.contentsGetter()));
+
+        pack.addProvider(CommonLootTableProvider::new);
         pack.addProvider(CommonLanguageProvider::new);
+        pack.addProvider(RecipeProvider::new);
     }
 }
