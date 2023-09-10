@@ -28,6 +28,6 @@ public class MEGADataGenerators {
 
         pack.addProvider(RecipeProvider::new);
         pack.addProvider(LootTableProvider::new);
-        pack.addProvider(LocalisationProvider::new);
+        pack.addProvider(CommonLanguageProvider::new);
     }
 }
