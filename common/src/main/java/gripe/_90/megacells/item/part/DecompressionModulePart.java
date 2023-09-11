@@ -68,7 +68,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public boolean isBusy() {
-        return !outputs.isEmpty();
+        return false;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     @Override
     public TickingRequest getTickingRequest(IGridNode node) {
-        return new TickingRequest(1, 1, !isBusy(), true);
+        return new TickingRequest(1, 1, outputs.isEmpty(), true);
     }
 
     @Override
