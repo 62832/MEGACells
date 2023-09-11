@@ -2,6 +2,7 @@ package gripe._90.megacells.crafting;
 
 import java.util.Objects;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appeng.api.crafting.IPatternDetails;
@@ -11,17 +12,21 @@ import appeng.api.stacks.GenericStack;
 
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final AEItemKey compressed;
-    private final AEItemKey decompressed;
+    private final AEItemKey base;
+    private final AEItemKey variant;
     private final int factor;
     private final boolean toCompress;
+
+    public DecompressionPattern(ItemStack stack) {
+        this(Objects.requireNonNull(AEItemKey.of(stack)));
+    }
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
         var tag = Objects.requireNonNull(definition.getTag());
 
-        compressed = DecompressionPatternEncoding.getCompressed(tag);
-        decompressed = DecompressionPatternEncoding.getDecompressed(tag);
+        base = DecompressionPatternEncoding.getBase(tag);
+        variant = DecompressionPatternEncoding.getVariant(tag);
         factor = DecompressionPatternEncoding.getFactor(tag);
         toCompress = DecompressionPatternEncoding.getToCompress(tag);
     }
@@ -33,13 +38,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return new IInput[] {toCompress ? new Input(decompressed, factor) : new Input(compressed, 1)};
+        return new IInput[] {toCompress ? new Input(base, factor) : new Input(variant, 1)};
     }
 
     @Override
     public GenericStack[] getOutputs() {
-        return new GenericStack[] {toCompress ? new GenericStack(compressed, 1) : new GenericStack(decompressed, factor)
-        };
+        return new GenericStack[] {toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor)};
     }
 
     @Override

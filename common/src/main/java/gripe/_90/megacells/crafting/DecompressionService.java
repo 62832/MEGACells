@@ -15,7 +15,6 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
 import appeng.api.networking.crafting.ICraftingProvider;
-import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
@@ -89,9 +88,8 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
-            DecompressionPatternEncoding.encode(
-                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), variant.factor(), false);
-            patterns.add(new DecompressionPattern(AEItemKey.of(pattern.getItem(), pattern.getTag())));
+            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
+            patterns.add(new DecompressionPattern(pattern));
         }
 
         var compressionChain = fullChain.subList(decompressionChain.size() - 1, fullChain.size());
@@ -104,9 +102,8 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
 
-            DecompressionPatternEncoding.encode(
-                    pattern.getOrCreateTag(), variant.item(), decompressed.item(), variant.factor(), true);
-            patterns.add(new DecompressionPattern(AEItemKey.of(pattern.getItem(), pattern.getTag())));
+            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
+            patterns.add(new DecompressionPattern(pattern));
         }
 
         return patterns;
