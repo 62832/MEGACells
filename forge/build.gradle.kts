@@ -11,7 +11,7 @@ loom {
             programArgs("--output", file("src/generated/resources").absolutePath)
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
-            programArgs("--mixin.config", "megacells-data.mixins.json")
+            programArgs("--mixin.config", "$modId.data.mixins.json")
 
             @Suppress("UnstableApiUsage")
             mods {
@@ -25,7 +25,7 @@ loom {
     }
 
     forge {
-        mixinConfig("$modId.mixins.json")
+        mixinConfig("$modId.forge.mixins.json")
     }
 }
 

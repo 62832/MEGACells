@@ -4,7 +4,7 @@ import net.fabricmc.loom.task.RemapJarTask
 plugins {
     java
     `maven-publish`
-    alias(libs.plugins.archLoom) apply false
+    alias(libs.plugins.loom) apply false
     alias(libs.plugins.vineflower) apply false
     alias(libs.plugins.architectury)
     alias(libs.plugins.shadow)
@@ -36,7 +36,7 @@ tasks {
 subprojects {
     apply(plugin = "java")
     apply(plugin = rootProject.libs.plugins.architectury.get().pluginId)
-    apply(plugin = rootProject.libs.plugins.archLoom.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.loom.get().pluginId)
     apply(plugin = rootProject.libs.plugins.vineflower.get().pluginId)
     apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
 

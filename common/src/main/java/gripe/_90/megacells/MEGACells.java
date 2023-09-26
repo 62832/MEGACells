@@ -60,6 +60,9 @@ public final class MEGACells {
 
         MEGACells.PLATFORM.initCompression();
         GridServices.register(DecompressionService.class, DecompressionService.class);
+
+        MEGACells.PLATFORM.addVillagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20);
+        MEGACells.PLATFORM.addVillagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50);
     }
 
     private static void initStorageCells() {

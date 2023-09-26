@@ -1,12 +1,23 @@
 package gripe._90.megacells.forge;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.LoadingModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+
+import appeng.init.InitVillager;
 
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Loaders;
@@ -50,5 +61,16 @@ public final class ForgePlatform implements Platform {
                 CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
             }
         });
+    }
+
+    @Override
+    public void addVillagerTrade(ItemLike item, int cost, int quantity, int xp) {
+        var offers = VillagerTrades.TRADES.computeIfAbsent(InitVillager.PROFESSION, k -> new Int2ObjectOpenHashMap<>());
+        var masterEntries = offers.computeIfAbsent(5, k -> new VillagerTrades.ItemListing[0]);
+        masterEntries = ArrayUtils.add(
+                masterEntries,
+                (i, j) -> new MerchantOffer(
+                        new ItemStack(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
+        offers.put(5, masterEntries);
     }
 }
