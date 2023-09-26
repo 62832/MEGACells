@@ -111,7 +111,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (!compressionEnabled && (!what.equals(filterItem) || !what.equals(storedItem))) {
+        if (!compressionEnabled && !what.equals(filterItem)) {
             return 0;
         }
 
