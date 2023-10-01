@@ -1,7 +1,13 @@
 package gripe._90.megacells.integration.appmek.item;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import appeng.api.stacks.GenericStack;
+import appeng.core.AEConfig;
+import appeng.items.storage.StorageCellTooltipComponent;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,6 +78,28 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
                 lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
         }
+    }
+
+    @NotNull
+    @Override
+    public Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack is) {
+        var inv = HANDLER.getCellInventory(is, null);
+
+        if (inv == null) {
+            return Optional.empty();
+        }
+
+        var content = new ArrayList<GenericStack>();
+
+        if (AEConfig.instance().isTooltipShowCellContent()) {
+            if (inv.getStoredChemical() != null) {
+                content.add(new GenericStack(inv.getStoredChemical(), inv.getChemAmount()));
+            } else if (inv.getFilterItem() != null) {
+                content.add(new GenericStack(inv.getFilterItem(), 0));
+            }
+        }
+
+        return Optional.of(new StorageCellTooltipComponent(List.of(), content, false, true));
     }
 
     public static class Handler implements ICellHandler {

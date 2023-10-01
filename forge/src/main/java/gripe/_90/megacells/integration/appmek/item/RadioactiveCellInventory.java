@@ -93,6 +93,14 @@ public class RadioactiveCellInventory implements StorageCell {
         return CellState.NOT_EMPTY;
     }
 
+    public AEKey getStoredChemical() {
+        return storedChemical;
+    }
+
+    public long getChemAmount() {
+        return chemAmount;
+    }
+
     public AEKey getFilterItem() {
         var config = getConfigInventory().keySet().stream().toList();
         if (config.isEmpty()) {
