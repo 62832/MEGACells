@@ -13,13 +13,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
-import appeng.recipes.handlers.InscriberProcessType;
-import appeng.recipes.handlers.InscriberRecipeBuilder;
 
 import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
@@ -64,13 +61,18 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
             chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
             chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
 
-            // TODO
-            InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, AppMekItems.RADIOACTIVE_CELL_COMPONENT, 1)
-                    .setMode(InscriberProcessType.PRESS)
-                    .setTop(Ingredient.of(AEItems.CELL_COMPONENT_256K))
-                    .setBottom(Ingredient.of(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
-                    .save(consumer, MEGACells.makeId("inscriber/radioactive_cell_component"));
-
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CELL_COMPONENT)
+                    .pattern("aba")
+                    .pattern("cdc")
+                    .pattern("aea")
+                    .define('a', AEItems.SKY_DUST)
+                    .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                    .define('c', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
+                    .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                    .define('e', AEItems.CELL_COMPONENT_256K)
+                    .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
+                    .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
+                    .save(consumer, MEGACells.makeId("crafting/radioactive_cell_component"));
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
                     .pattern("aba")
                     .pattern("bcb")

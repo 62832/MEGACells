@@ -23,7 +23,6 @@ import appeng.util.ConfigInventory;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.integration.appmek.item.cell.RadioactiveCellInventory;
 
 public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchItem {
     public static final Handler HANDLER = new Handler();
@@ -62,11 +61,10 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
             if (filterItem != null) {
                 if (containedType == null) {
                     lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
-                } else {
-                    if (!containedType.equals(filterItem)) {
-                        lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
-                    }
+                } else if (!containedType.equals(filterItem)) {
+                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
+
                 if (inv.isBlackListed(filterItem)) {
                     lines.add(MEGATranslations.FilterChemicalUnsupported.text().withStyle(ChatFormatting.DARK_RED));
                 }

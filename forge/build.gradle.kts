@@ -70,10 +70,10 @@ dependencies {
     modImplementation(libs.ae2.forge)
     modImplementation(libs.cloth.forge)
 
-    modCompileOnly(libs.appmek)
+    modImplementation(libs.appmek)
     modCompileOnly(libs.mekanism)
     modCompileOnly(variantOf(libs.mekanism) { classifier("generators") })
-    // modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
+    modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
     modCompileOnly(libs.appbot.forge)
     modRuntimeOnly(libs.botania.forge)

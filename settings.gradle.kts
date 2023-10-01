@@ -39,7 +39,7 @@ dependencyResolutionManagement {
             library("ae2wtlib-forge", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("${ae2wtVersion}g-forge")
 
             library("architectury-forge", "dev.architectury", "architectury-forge").version("9.1.10")
-            library("curios", "top.theillusivec4.curios", "curios-forge").version("5.2.0-beta.3+$minecraftVersion")
+            library("curios", "top.theillusivec4.curios", "curios-forge").version("5.2.0+$minecraftVersion")
 
             // Applied Botanics
             val appbotVersion = "1.4.2"
@@ -55,9 +55,9 @@ dependencyResolutionManagement {
             library("patchouli-forge", "vazkii.patchouli", "Patchouli").version("$minecraftVersion-81-FORGE")
 
             // Applied Mekanistics
-            version("appmek", "1.3.4")
+            version("appmek", "1.4.0")
             library("appmek", "maven.modrinth", "applied-mekanistics").versionRef("appmek")
-            library("mekanism", "mekanism", "Mekanism").version("1.19.2-10.3.5.474")
+            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.4.0.14")
 
             // Runtime mods
             version("jei", "15.2.0.23")

@@ -104,8 +104,7 @@ abstract class ModelProvider {
                 basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
                 cells.addAll(AppMekItems.getCells());
-                // TODO
-                AppMekItems.getPortables().forEach(p -> portableModel(p, "chemical", PORTABLE_CELL_ITEM_HOUSING));
+                AppMekItems.getPortables().forEach(this::portableChemCell);
 
                 basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT.asItem());
                 cells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
@@ -147,6 +146,16 @@ abstract class ModelProvider {
                     .texture("layer1", PORTABLE_CELL_LED)
                     .texture("layer2", housingTexture)
                     .texture("layer3", "item/cell/portable/portable_cell_side_%s".formatted(tierSuffix));
+        }
+
+        private void portableChemCell(ItemDefinition<?> portable) {
+            singleTexture(
+                            portable.id().getPath(),
+                            mcLoc("item/generated"),
+                            "layer0",
+                            MEGACells.makeId(
+                                    "item/cell/portable/" + portable.id().getPath()))
+                    .texture("layer1", PORTABLE_CELL_LED);
         }
 
         private void driveCell(String texture) {

@@ -1,4 +1,4 @@
-package gripe._90.megacells.integration.appmek.item.cell;
+package gripe._90.megacells.integration.appmek.item;
 
 import java.util.Objects;
 
@@ -21,8 +21,6 @@ import me.ramidzkh.mekae2.ae2.MekanismKey;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
-
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 
 public class RadioactiveCellInventory implements StorageCell {
 
