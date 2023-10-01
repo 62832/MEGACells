@@ -112,6 +112,8 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
         if (AEConfig.instance().isTooltipShowCellContent()) {
             if (inv.getStoredItem() != null) {
                 content.add(new GenericStack(inv.getStoredItem(), inv.getStoredQuantity()));
+            } else if (inv.getFilterItem() != null) {
+                content.add(new GenericStack(inv.getFilterItem(), 0));
             }
         }
 
