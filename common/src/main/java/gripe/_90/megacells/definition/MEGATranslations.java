@@ -24,7 +24,12 @@ public enum MEGATranslations implements LocalizationEnum {
     CompressionChainLimitTooltip(
             "The maximum number of variants that a compression-enabled Bulk Cell may report as being stored.",
             Type.CONFIG_TOOLTIP,
-            CompressionChainLimit);
+            CompressionChainLimit),
+    AllowSpentWaste("(AppMek) Allow Spent Nuclear Waste", Type.CONFIG_OPTION),
+    AllowSpentWasteToolltip(
+            "Whether the MEGA Radioactive Cell should be able to store Spent Nuclear Waste.",
+            Type.CONFIG_TOOLTIP,
+            AllowSpentWaste);
 
     private final String englishText;
     private final Type type;

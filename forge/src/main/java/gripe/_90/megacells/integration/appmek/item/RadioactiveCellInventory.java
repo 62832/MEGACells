@@ -22,6 +22,8 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
+import gripe._90.megacells.definition.MEGAConfig;
+
 public class RadioactiveCellInventory implements StorageCell {
 
     private static final String KEY = "key";
@@ -115,8 +117,11 @@ public class RadioactiveCellInventory implements StorageCell {
 
     public boolean isBlackListed(AEKey what) {
         if (what instanceof MekanismKey key) {
-            return ChemicalAttributeValidator.DEFAULT.process(key.getStack())
-                    || key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical();
+            if (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()) {
+                return !MEGAConfig.INSTANCE.isSpentWasteAllowed();
+            } else {
+                return ChemicalAttributeValidator.DEFAULT.process(key.getStack());
+            }
         } else {
             return true;
         }

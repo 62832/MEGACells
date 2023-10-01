@@ -18,8 +18,15 @@ public final class MEGAConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 2, max = 12)
     private int CompressionChainLimit = 3;
 
+    @ConfigEntry.Gui.Tooltip
+    private boolean AllowSpentWaste = false;
+
     public int getCompressionChainLimit() {
         return CompressionChainLimit;
+    }
+
+    public boolean isSpentWasteAllowed() {
+        return AllowSpentWaste;
     }
 
     public static void load() {
