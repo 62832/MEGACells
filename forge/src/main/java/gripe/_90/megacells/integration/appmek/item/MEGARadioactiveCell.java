@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import appeng.api.stacks.GenericStack;
-import appeng.core.AEConfig;
-import appeng.items.storage.StorageCellTooltipComponent;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
+import appeng.api.stacks.GenericStack;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.api.storage.cells.ISaveProvider;
+import appeng.core.AEConfig;
 import appeng.core.localization.Tooltips;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
+import appeng.items.storage.StorageCellTooltipComponent;
 import appeng.util.ConfigInventory;
 
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
