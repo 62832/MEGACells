@@ -77,8 +77,7 @@ public class MEGACells {
         }
 
         if (event.getRegistryKey().equals(Registry.MENU_REGISTRY)) {
-            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"),
-                    MEGAPatternProviderBlock.MENU);
+            ForgeRegistries.MENU_TYPES.register(AppEng.makeId("mega_pattern_provider"), MEGAPatternProviderBlock.MENU);
         }
     }
 
@@ -95,10 +94,10 @@ public class MEGACells {
     }
 
     private void initCompression() {
-        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> CompressionService.INSTANCE
-                .loadRecipes(event.getServer().getRecipeManager()));
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE
-                .loadRecipes(event.getServerResources().getRecipeManager()));
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) ->
+                CompressionService.INSTANCE.loadRecipes(event.getServer().getRecipeManager()));
+        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent event) -> CompressionService.INSTANCE.loadRecipes(
+                event.getServerResources().getRecipeManager()));
 
         GridServices.register(DecompressionService.class, DecompressionService.class);
         PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);

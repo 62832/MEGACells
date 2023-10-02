@@ -8,11 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.networking.IGridNode;
@@ -29,6 +24,11 @@ import appeng.me.storage.DriveWatcher;
 import gripe._90.megacells.crafting.DecompressionPatternEncoding;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
+
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
 public class DecompressionService implements IGridService, IGridServiceProvider {
     private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
@@ -61,22 +61,22 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     @Override
     public void addNode(IGridNode node) {
-        if (node.getOwner()instanceof ChestBlockEntity chest) {
+        if (node.getOwner() instanceof ChestBlockEntity chest) {
             chests.add(chest);
         }
 
-        if (node.getOwner()instanceof DriveBlockEntity drive) {
+        if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.add(drive);
         }
     }
 
     @Override
     public void removeNode(IGridNode node) {
-        if (node.getOwner()instanceof ChestBlockEntity chest) {
+        if (node.getOwner() instanceof ChestBlockEntity chest) {
             chests.remove(chest);
         }
 
-        if (node.getOwner()instanceof DriveBlockEntity drive) {
+        if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.remove(drive);
         }
     }
@@ -112,21 +112,24 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
     private Object2IntMap<AEItemKey> getChain(BulkCellInventory cell) {
         if (cell.compressionEnabled) {
-            return CompressionService.INSTANCE.getChain(cell.getStoredItem()).map(c -> {
-                var keys = new ObjectArrayList<>(c.keySet());
-                Collections.reverse(keys);
+            return CompressionService.INSTANCE
+                    .getChain(cell.getStoredItem())
+                    .map(c -> {
+                        var keys = new ObjectArrayList<>(c.keySet());
+                        Collections.reverse(keys);
 
-                var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                var highest = keys.indexOf(cell.getHighestCompressed());
+                        var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
+                        var highest = keys.indexOf(cell.getHighestCompressed());
 
-                if (highest > -1) {
-                    for (var key : keys.subList(highest, keys.size())) {
-                        decompressed.put(key, c.getInt(key));
-                    }
-                }
+                        if (highest > -1) {
+                            for (var key : keys.subList(highest, keys.size())) {
+                                decompressed.put(key, c.getInt(key));
+                            }
+                        }
 
-                return decompressed;
-            }).orElseGet(Object2IntLinkedOpenHashMap::new);
+                        return decompressed;
+                    })
+                    .orElseGet(Object2IntLinkedOpenHashMap::new);
         }
 
         return new Object2IntLinkedOpenHashMap<>();

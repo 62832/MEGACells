@@ -50,9 +50,10 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
             if (storedItem != null) {
                 lines.add(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
                 var quantity = inv.getStoredQuantity();
-                lines.add(Tooltips.of(MEGATranslations.Quantity.text(quantity < Long.MAX_VALUE
-                        ? Tooltips.ofNumber(quantity)
-                        : MEGATranslations.ALot.text().withStyle(Tooltips.NUMBER_TEXT))));
+                lines.add(Tooltips.of(MEGATranslations.Quantity.text(
+                        quantity < Long.MAX_VALUE
+                                ? Tooltips.ofNumber(quantity)
+                                : MEGATranslations.ALot.text().withStyle(Tooltips.NUMBER_TEXT))));
             } else {
                 lines.add(Tooltips.of(MEGATranslations.Empty.text()));
             }
@@ -73,9 +74,10 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
                 }
             }
 
-            lines.add(Tooltips.of(MEGATranslations.Compression.text(inv.compressionEnabled
-                    ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
-                    : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
+            lines.add(Tooltips.of(MEGATranslations.Compression.text(
+                    inv.compressionEnabled
+                            ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
+                            : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
         }
     }
 
@@ -90,12 +92,10 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
     }
 
     @Override
-    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
-    }
+    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {}
 
     public static class Handler implements ICellHandler {
-        private Handler() {
-        }
+        private Handler() {}
 
         @Override
         public boolean isCell(ItemStack is) {

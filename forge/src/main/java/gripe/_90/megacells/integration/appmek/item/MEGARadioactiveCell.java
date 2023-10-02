@@ -36,14 +36,12 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
     }
 
     @Override
-    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {
-    }
+    public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {}
 
     @Override
-    public void appendHoverText(ItemStack is, Level level, @NotNull List<Component> lines,
-            @NotNull TooltipFlag advancedTooltips) {
+    public void appendHoverText(
+            ItemStack is, Level level, @NotNull List<Component> lines, @NotNull TooltipFlag advancedTooltips) {
         Preconditions.checkArgument(is.getItem() == this);
         RadioactiveCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
     }
-
 }

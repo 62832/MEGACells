@@ -48,7 +48,9 @@ public class MEGACellsClient {
     }
 
     private void initScreens(FMLClientSetupEvent ignoredEvent) {
-        InitScreens.register(MEGAPatternProviderBlock.MENU, PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
+        InitScreens.register(
+                MEGAPatternProviderBlock.MENU,
+                PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
     }
 
@@ -60,14 +62,15 @@ public class MEGACellsClient {
 
     private void initModels(ModelEvent.RegisterGeometryLoaders event) {
         for (var type : MEGACraftingUnitType.values()) {
-            event.register("block/crafting/" + type.getAffix() + "_formed",
+            event.register(
+                    "block/crafting/" + type.getAffix() + "_formed",
                     new SimpleModelLoader<>(() -> new CraftingCubeModel(new MEGACraftingUnitModelProvider(type))));
         }
 
         BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
-        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
-                (is, level, entity, seed) -> {
+        ItemProperties.register(
+                MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"), (is, level, entity, seed) -> {
                     var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
 
                     double curPower = energyCell.getAECurrentPower(is);
@@ -80,9 +83,9 @@ public class MEGACellsClient {
     private void initModelRotation(ModelEvent.BakingCompleted event) {
         var modelRegistry = event.getModels();
         var customizers = new HashMap<String, Function<BakedModel, BakedModel>>();
-        customizers.put(MEGABlocks.CRAFTING_MONITOR.id().getPath(), model -> model instanceof MonitorBakedModel
-                ? model
-                : new AutoRotatingBakedModel(model));
+        customizers.put(
+                MEGABlocks.CRAFTING_MONITOR.id().getPath(),
+                model -> model instanceof MonitorBakedModel ? model : new AutoRotatingBakedModel(model));
         customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
         for (var location : modelRegistry.keySet()) {

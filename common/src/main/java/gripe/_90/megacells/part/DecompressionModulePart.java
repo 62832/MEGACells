@@ -2,10 +2,6 @@ package gripe._90.megacells.part;
 
 import java.util.List;
 
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-
 import appeng.api.config.Actionable;
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.networking.GridFlags;
@@ -29,6 +25,10 @@ import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.service.DecompressionService;
 import gripe._90.megacells.util.Utils;
 
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
     @PartModels
     public static final IPartModel MODEL = new PartModel(Utils.makeId("part/decompression_module"));
@@ -38,7 +38,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
 
     public DecompressionModulePart(IPartItem<?> partItem) {
         super(partItem);
-        getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL)
+        getMainNode()
+                .setFlags(GridFlags.REQUIRE_CHANNEL)
                 .addService(IGridTickable.class, this)
                 .addService(ICraftingProvider.class, this)
                 .setIdlePowerUsage(10.0);
@@ -106,8 +107,8 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
             for (var output : outputs.object2LongEntrySet()) {
                 var what = output.getKey();
                 var amount = output.getLongValue();
-                var inserted = storage.getInventory().insert(what, amount, Actionable.MODULATE,
-                        IActionSource.ofMachine(this));
+                var inserted =
+                        storage.getInventory().insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
                 if (inserted >= amount) {
                     outputs.removeLong(what);

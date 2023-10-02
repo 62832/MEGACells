@@ -57,29 +57,123 @@ class RecipeProvider extends FabricRecipeProvider {
         housing(consumer, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
         housing(consumer, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
 
-        cell(consumer, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
-        cell(consumer, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, IRON_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
-        cell(consumer, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.ITEM_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING,
+                IRON_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                COPPER_INGOT);
+        cell(
+                consumer,
+                MEGAItems.FLUID_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING,
+                COPPER_INGOT);
 
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(consumer, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_ITEM_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_1M,
+                MEGAItems.CELL_COMPONENT_1M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_4M,
+                MEGAItems.CELL_COMPONENT_4M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_16M,
+                MEGAItems.CELL_COMPONENT_16M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_64M,
+                MEGAItems.CELL_COMPONENT_64M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(
+                consumer,
+                MEGAItems.PORTABLE_FLUID_CELL_256M,
+                MEGAItems.CELL_COMPONENT_256M,
+                MEGAItems.MEGA_FLUID_CELL_HOUSING);
 
-        specialisedComponent(consumer, MEGAItems.CELL_COMPONENT_16M, AEItems.SPATIAL_16_CELL_COMPONENT, MEGAItems.BULK_CELL_COMPONENT);
+        specialisedComponent(
+                consumer,
+                MEGAItems.CELL_COMPONENT_16M,
+                AEItems.SPATIAL_16_CELL_COMPONENT,
+                MEGAItems.BULK_CELL_COMPONENT);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(MEGAItems.BULK_ITEM_CELL)
@@ -179,8 +273,8 @@ class RecipeProvider extends FabricRecipeProvider {
         manaCells(consumer, AppBotItems.MANA_CELL_256M, AppBotItems.PORTABLE_MANA_CELL_256M, MEGAItems.TIER_256M);
     }
 
-    private static void component(Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding,
-            ItemLike binder) {
+    private static void component(
+            Consumer<FinishedRecipe> consumer, StorageTier tier, StorageTier preceding, ItemLike binder) {
         var precedingComponent = preceding.componentSupplier().get();
         ShapedRecipeBuilder.shaped(tier.componentSupplier().get())
                 .pattern("aba")
@@ -191,20 +285,29 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_" + Registry.ITEM.getKey(precedingComponent).getPath(), has(precedingComponent))
-                .save(consumer,
-                        Utils.makeId("cells/" + Registry.ITEM.getKey(tier.componentSupplier().get()).getPath()));
+                .save(
+                        consumer,
+                        Utils.makeId("cells/"
+                                + Registry.ITEM
+                                        .getKey(tier.componentSupplier().get())
+                                        .getPath()));
     }
 
-    private static void specialisedComponent(Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom,
-            ItemDefinition<?> output) {
+    private static void specialisedComponent(
+            Consumer<FinishedRecipe> consumer, ItemLike top, ItemLike bottom, ItemDefinition<?> output) {
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, output, 1)
                 .setMode(InscriberProcessType.PRESS)
-                .setTop(Ingredient.of(top)).setBottom(Ingredient.of(bottom))
+                .setTop(Ingredient.of(top))
+                .setBottom(Ingredient.of(bottom))
                 .save(consumer, Utils.makeId("inscriber/" + output.id().getPath()));
     }
 
-    private static void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
-            ItemDefinition<?> housing, String housingMaterial) {
+    private static void cell(
+            Consumer<FinishedRecipe> consumer,
+            ItemDefinition<?> cell,
+            ItemDefinition<?> component,
+            ItemDefinition<?> housing,
+            String housingMaterial) {
         ShapedRecipeBuilder.shaped(cell)
                 .pattern("aba")
                 .pattern("bcb")
@@ -224,7 +327,10 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
-    private static void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component,
+    private static void portable(
+            Consumer<FinishedRecipe> consumer,
+            ItemDefinition<?> cell,
+            ItemDefinition<?> component,
             ItemDefinition<?> housing) {
         ShapelessRecipeBuilder.shapeless(cell)
                 .requires(AEBlocks.CHEST)
@@ -257,8 +363,8 @@ class RecipeProvider extends FabricRecipeProvider {
                 .save(consumer, Utils.makeId("crafting/" + unit.id().getPath()));
     }
 
-    private static void manaCells(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable,
-            StorageTier tier) {
+    private static void manaCells(
+            Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> portable, StorageTier tier) {
         var component = tier.componentSupplier().get();
         var componentPath = Registry.ITEM.getKey(component).getPath();
         ShapelessRecipeBuilder.shapeless(cell)

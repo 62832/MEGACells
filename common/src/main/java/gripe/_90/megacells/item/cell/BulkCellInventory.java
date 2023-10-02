@@ -8,10 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +24,10 @@ import appeng.util.prioritylist.IPartitionList;
 
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.service.CompressionService;
+
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public class BulkCellInventory implements StorageCell {
     private static final String KEY = "key";
@@ -134,8 +134,10 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !partitionList.isListed(what)
-                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+        if (compressionEnabled
+                && !partitionList.isListed(what)
+                && !compressed.containsKey(item)
+                && !decompressed.containsKey(item)) {
             return 0;
         }
 
@@ -163,8 +165,11 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !storedItem.equals(what) && !filterItem.equals(what)
-                && !compressed.containsKey(item) && !decompressed.containsKey(item)) {
+        if (compressionEnabled
+                && !storedItem.equals(what)
+                && !filterItem.equals(what)
+                && !compressed.containsKey(item)
+                && !decompressed.containsKey(item)) {
             return 0;
         }
 
@@ -198,8 +203,8 @@ public class BulkCellInventory implements StorageCell {
         }
     }
 
-    private BigInteger compressedTransferFactor(Object2IntMap<AEItemKey> variants, long baseFactor,
-            Function<List<?>, Pair<Integer, Integer>> subLister) {
+    private BigInteger compressedTransferFactor(
+            Object2IntMap<AEItemKey> variants, long baseFactor, Function<List<?>, Pair<Integer, Integer>> subLister) {
         var variantKeys = new LinkedList<>(variants.keySet());
         var toStored = new Object2IntLinkedOpenHashMap<>(variants);
 
@@ -260,7 +265,9 @@ public class BulkCellInventory implements StorageCell {
                     allVariants.put(storedItem, decompressed.getInt(decompressedKeys.getLast()));
                     allVariants.putAll(compressed);
                 } else if (!compressed.isEmpty()) {
-                    allVariants.put(storedItem, compressed.values().intStream().findFirst().orElseThrow());
+                    allVariants.put(
+                            storedItem,
+                            compressed.values().intStream().findFirst().orElseThrow());
                     allVariants.putAll(compressed);
                 } else {
                     allVariants.put(storedItem, 1);

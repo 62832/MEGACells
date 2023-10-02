@@ -33,7 +33,8 @@ abstract class TagProvider {
 
         @Override
         protected void generateTags() {
-            MEGABlocks.getBlocks().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block()));
+            MEGABlocks.getBlocks()
+                    .forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block()));
         }
     }
 }

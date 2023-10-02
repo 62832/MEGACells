@@ -53,10 +53,17 @@ public class InitUpgrades {
 
         Upgrades.add(MEGAItems.COMPRESSION_CARD, MEGAItems.BULK_ITEM_CELL, 1);
 
-        for (var portableCell : List.of(AEItems.PORTABLE_ITEM_CELL1K, AEItems.PORTABLE_ITEM_CELL4K,
-                AEItems.PORTABLE_ITEM_CELL16K, AEItems.PORTABLE_ITEM_CELL64K, AEItems.PORTABLE_ITEM_CELL256K,
-                AEItems.PORTABLE_FLUID_CELL1K, AEItems.PORTABLE_FLUID_CELL4K, AEItems.PORTABLE_FLUID_CELL16K,
-                AEItems.PORTABLE_FLUID_CELL64K, AEItems.PORTABLE_FLUID_CELL256K)) {
+        for (var portableCell : List.of(
+                AEItems.PORTABLE_ITEM_CELL1K,
+                AEItems.PORTABLE_ITEM_CELL4K,
+                AEItems.PORTABLE_ITEM_CELL16K,
+                AEItems.PORTABLE_ITEM_CELL64K,
+                AEItems.PORTABLE_ITEM_CELL256K,
+                AEItems.PORTABLE_FLUID_CELL1K,
+                AEItems.PORTABLE_FLUID_CELL4K,
+                AEItems.PORTABLE_FLUID_CELL16K,
+                AEItems.PORTABLE_FLUID_CELL64K,
+                AEItems.PORTABLE_FLUID_CELL256K)) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
 

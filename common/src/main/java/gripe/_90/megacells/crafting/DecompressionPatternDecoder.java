@@ -11,8 +11,7 @@ import gripe._90.megacells.util.Utils;
 public class DecompressionPatternDecoder implements IPatternDetailsDecoder {
     public static final DecompressionPatternDecoder INSTANCE = new DecompressionPatternDecoder();
 
-    private DecompressionPatternDecoder() {
-    }
+    private DecompressionPatternDecoder() {}
 
     @Override
     public boolean isEncodedPattern(ItemStack stack) {
@@ -21,7 +20,9 @@ public class DecompressionPatternDecoder implements IPatternDetailsDecoder {
 
     @Override
     public MEGADecompressionPattern decodePattern(AEItemKey what, Level level) {
-        if (level == null || what == null || !(what.getItem() instanceof MEGADecompressionPattern.Item)
+        if (level == null
+                || what == null
+                || !(what.getItem() instanceof MEGADecompressionPattern.Item)
                 || !(what.hasTag())) {
             return null;
         }

@@ -29,8 +29,8 @@ public class MEGADecompressionPattern implements IPatternDetails {
         var factor = DecompressionPatternEncoding.getFactor(tag);
         var output = decompressed.toStack(factor);
 
-        this.inputs = new IInput[] { new Input() };
-        this.outputs = new GenericStack[] { GenericStack.fromItemStack(output) };
+        this.inputs = new IInput[] {new Input()};
+        this.outputs = new GenericStack[] {GenericStack.fromItemStack(output)};
     }
 
     @Override
@@ -50,7 +50,8 @@ public class MEGADecompressionPattern implements IPatternDetails {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && obj.getClass() == getClass()
+        return obj != null
+                && obj.getClass() == getClass()
                 && ((MEGADecompressionPattern) obj).definition.equals(definition);
     }
 
@@ -62,7 +63,7 @@ public class MEGADecompressionPattern implements IPatternDetails {
     private class Input implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
-            return new GenericStack[] { new GenericStack(input, 1) };
+            return new GenericStack[] {new GenericStack(input, 1)};
         }
 
         @Override

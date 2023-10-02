@@ -11,8 +11,7 @@ import gripe._90.megacells.util.service.Platform;
 public final class FabricPlatform implements Platform {
     @Override
     public CreativeModeTab getCreativeTab() {
-        return FabricItemGroupBuilder.build(Utils.makeId("tab"),
-                () -> new ItemStack(MEGAItems.ITEM_CELL_256M));
+        return FabricItemGroupBuilder.build(Utils.makeId("tab"), () -> new ItemStack(MEGAItems.ITEM_CELL_256M));
     }
 
     @Override

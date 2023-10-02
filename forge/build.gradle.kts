@@ -61,33 +61,27 @@ val forgeVersion: String by project
 val ae2Version: String by project
 
 dependencies {
-    val minecraftVersion: String by project
+    forge(libs.forge)
 
-    forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
-    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    modImplementation(libs.ae2.forge)
+    modImplementation(libs.cloth.forge)
 
-    modImplementation("appeng:appliedenergistics2-forge:$ae2Version")
-    modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
-    modImplementation("curse.maven:appmek-574300:${property("appmekFile")}")
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}")
+    modImplementation(libs.appmek)
+    modCompileOnly(libs.mekanism)
+    modCompileOnly(variantOf(libs.mekanism) { classifier("generators") })
+    modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
-    val mekanismVersion: String by project
-    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion")
-    modCompileOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:generators")
-    modRuntimeOnly("mekanism:Mekanism:$minecraftVersion-$mekanismVersion:all")
+    modCompileOnly(libs.appbot.forge)
+    modRuntimeOnly(libs.botania.forge)
+    modRuntimeOnly(libs.patchouli.forge)
 
-    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FORGE")
-    modRuntimeOnly("vazkii.patchouli:Patchouli:$minecraftVersion-${property("patchouliVersion")}")
+    modImplementation(libs.ae2wtlib.forge)
+    modRuntimeOnly(libs.cloth.forge)
+    modRuntimeOnly(libs.architectury.forge)
+    modRuntimeOnly(libs.curios)
 
-    modRuntimeOnly("dev.architectury:architectury-forge:${property("architecturyVersion")}")
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:${property("clothVersion")}")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:$minecraftVersion-${property("curiosVersion")}")
-
-    modRuntimeOnly("mezz.jei:jei-$minecraftVersion-forge:${property("jeiVersion")}") {
-        isTransitive = false
-    }
-
-    modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
+    modRuntimeOnly(libs.jei.forge) { isTransitive = false }
+    modRuntimeOnly(libs.jade.forge)
 }
 
 sourceSets {

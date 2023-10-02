@@ -66,12 +66,17 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
         TextureAtlasSprite ringSideVer = spriteGetter.apply(RING_SIDE_VER);
 
         return switch (this.type) {
-            case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer,
-                    spriteGetter.apply(UNIT_BASE));
+            case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, spriteGetter.apply(UNIT_BASE));
             case ACCELERATOR, STORAGE_1M, STORAGE_4M, STORAGE_16M, STORAGE_64M, STORAGE_256M -> new LightBakedModel(
-                    ringCorner, ringSideHor, ringSideVer, spriteGetter.apply(LIGHT_BASE),
+                    ringCorner,
+                    ringSideHor,
+                    ringSideVer,
+                    spriteGetter.apply(LIGHT_BASE),
                     this.getLightMaterial(spriteGetter));
-            case MONITOR -> new MonitorBakedModel(ringCorner, ringSideHor, ringSideVer,
+            case MONITOR -> new MonitorBakedModel(
+                    ringCorner,
+                    ringSideHor,
+                    ringSideVer,
                     spriteGetter.apply(UNIT_BASE),
                     spriteGetter.apply(MONITOR_BASE),
                     spriteGetter.apply(MONITOR_LIGHT_DARK),

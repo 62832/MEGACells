@@ -41,8 +41,7 @@ import gripe._90.megacells.definition.MEGATranslations;
 
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
     public static final BooleanProperty OMNIDIRECTIONAL = BooleanProperty.create("omnidirectional");
-    public static final MenuType<Menu> MENU = MenuTypeBuilder
-            .create(Menu::new, PatternProviderLogicHost.class)
+    public static final MenuType<Menu> MENU = MenuTypeBuilder.create(Menu::new, PatternProviderLogicHost.class)
             .requirePermission(SecurityPermissions.BUILD)
             .build("mega_pattern_provider");
 
@@ -70,8 +69,8 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
-            boolean isMoving) {
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         var be = this.getBlockEntity(level, pos);
         if (be != null) {
             be.getLogic().updateRedstoneState();
@@ -79,9 +78,13 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     }
 
     @Override
-    public InteractionResult onActivated(Level level, BlockPos pos, Player p,
+    public InteractionResult onActivated(
+            Level level,
+            BlockPos pos,
+            Player p,
             InteractionHand hand,
-            @Nullable ItemStack heldItem, BlockHitResult hit) {
+            @Nullable ItemStack heldItem,
+            BlockHitResult hit) {
         if (InteractionUtil.isInAlternateUseMode(p)) {
             return InteractionResult.PASS;
         }

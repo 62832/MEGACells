@@ -18,8 +18,7 @@ import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
 public class RadioactiveCellHandler implements ICellHandler {
     public static final RadioactiveCellHandler INSTANCE = new RadioactiveCellHandler();
 
-    private RadioactiveCellHandler() {
-    }
+    private RadioactiveCellHandler() {}
 
     @Override
     public boolean isCell(ItemStack is) {
@@ -42,8 +41,10 @@ public class RadioactiveCellHandler implements ICellHandler {
         var filterItem = handler.getFilterItem();
 
         lines.add(Tooltips.bytesUsed(handler.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
-        lines.add(Tooltips.of(containedType != null ? MEGATranslations.Contains.text(containedType.getDisplayName())
-                : MEGATranslations.Empty.text()));
+        lines.add(Tooltips.of(
+                containedType != null
+                        ? MEGATranslations.Contains.text(containedType.getDisplayName())
+                        : MEGATranslations.Empty.text()));
 
         if (filterItem != null) {
             if (containedType == null) {

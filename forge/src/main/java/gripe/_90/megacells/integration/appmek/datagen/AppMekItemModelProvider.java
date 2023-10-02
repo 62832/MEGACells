@@ -46,8 +46,8 @@ public class AppMekItemModelProvider extends ItemModelProvider {
     }
 
     private void driveCell(String texture) {
-        withExistingParent("block/drive/cells/" + texture, DRIVE_CELL).texture("cell",
-                Utils.makeId("block/drive/cells/" + texture));
+        withExistingParent("block/drive/cells/" + texture, DRIVE_CELL)
+                .texture("cell", Utils.makeId("block/drive/cells/" + texture));
     }
 
     private void cell(ItemDefinition<?> cell) {

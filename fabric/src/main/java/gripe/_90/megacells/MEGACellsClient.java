@@ -51,7 +51,8 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
 
     private void initScreens() {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            InitScreens.register(MEGAPatternProviderBlock.MENU,
+            InitScreens.register(
+                    MEGAPatternProviderBlock.MENU,
                     PatternProviderScreen<MEGAPatternProviderBlock.Menu>::new,
                     "/screens/megacells/mega_pattern_provider.json");
         });
@@ -70,9 +71,9 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
 
         ModelsReloadCallback.EVENT.register(modelRegistry -> {
             var customizers = new HashMap<String, Function<BakedModel, BakedModel>>();
-            customizers.put(MEGABlocks.CRAFTING_MONITOR.id().getPath(), model -> model instanceof MonitorBakedModel
-                    ? model
-                    : new AutoRotatingBakedModel(model));
+            customizers.put(
+                    MEGABlocks.CRAFTING_MONITOR.id().getPath(),
+                    model -> model instanceof MonitorBakedModel ? model : new AutoRotatingBakedModel(model));
             customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
             for (var location : modelRegistry.keySet()) {
@@ -92,8 +93,8 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     }
 
     private void initItemModels() {
-        ItemProperties.register(MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"),
-                (is, level, entity, seed) -> {
+        ItemProperties.register(
+                MEGABlocks.MEGA_ENERGY_CELL.asItem(), AppEng.makeId("fill_level"), (is, level, entity, seed) -> {
                     var energyCell = (EnergyCellBlockItem) MEGABlocks.MEGA_ENERGY_CELL.asItem();
 
                     double curPower = energyCell.getAECurrentPower(is);

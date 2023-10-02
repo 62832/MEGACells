@@ -37,8 +37,8 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
     public static final PartModel MODELS_ON = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_on"));
 
     @PartModels
-    public static final PartModel MODELS_HAS_CHANNEL = new PartModel(MODEL_BASE,
-            AppEng.makeId("part/interface_has_channel"));
+    public static final PartModel MODELS_HAS_CHANNEL =
+            new PartModel(MODEL_BASE, AppEng.makeId("part/interface_has_channel"));
 
     public MEGAPatternProviderPart(IPartItem<?> partItem) {
         super(partItem);

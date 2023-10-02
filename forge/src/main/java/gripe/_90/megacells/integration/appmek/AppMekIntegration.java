@@ -34,19 +34,24 @@ public final class AppMekIntegration {
             Upgrades.add(AEItems.VOID_CARD, portable, 1, storageCellGroup);
         });
 
-        for (var portable : List.of(AMItems.PORTABLE_CHEMICAL_CELL_1K, AMItems.PORTABLE_CHEMICAL_CELL_4K,
-                AMItems.PORTABLE_CHEMICAL_CELL_16K, AMItems.PORTABLE_CHEMICAL_CELL_64K,
+        for (var portable : List.of(
+                AMItems.PORTABLE_CHEMICAL_CELL_1K,
+                AMItems.PORTABLE_CHEMICAL_CELL_4K,
+                AMItems.PORTABLE_CHEMICAL_CELL_16K,
+                AMItems.PORTABLE_CHEMICAL_CELL_64K,
                 AMItems.PORTABLE_CHEMICAL_CELL_256K)) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portable.get(), 2, portableCellGroup);
         }
     }
 
     public static void initStorageCells() {
-        Stream.of(AppMekItems.getCells(), AppMekItems.getPortables()).flatMap(Collection::stream)
+        Stream.of(AppMekItems.getCells(), AppMekItems.getPortables())
+                .flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, Utils.makeId("block/drive/cells/mega_chemical_cell")));
 
         StorageCells.addCellHandler(RadioactiveCellHandler.INSTANCE);
-        StorageCellModels.registerModel(AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
+        StorageCellModels.registerModel(
+                AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
                 Utils.makeId("block/drive/cells/radioactive_chemical_cell"));
     }
 }

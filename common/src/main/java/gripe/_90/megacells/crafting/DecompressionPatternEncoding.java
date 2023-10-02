@@ -26,8 +26,7 @@ public class DecompressionPatternEncoding {
         return nbt.getInt(NBT_FACTOR);
     }
 
-    public static void encode(CompoundTag tag, AEItemKey compressed, AEItemKey decompressed,
-            int factor) {
+    public static void encode(CompoundTag tag, AEItemKey compressed, AEItemKey decompressed, int factor) {
         tag.put(NBT_COMPRESSED, compressed.toTag());
         tag.put(NBT_DECOMPRESSED, decompressed.toTag());
         tag.putInt(NBT_FACTOR, factor);

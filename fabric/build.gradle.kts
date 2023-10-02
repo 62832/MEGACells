@@ -72,27 +72,20 @@ repositories {
 }
 
 dependencies {
-    val minecraftVersion: String by project
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
 
-    modImplementation("net.fabricmc:fabric-loader:${property("fabricLoaderVersion")}")
-    modApi("net.fabricmc.fabric-api:fabric-api:${property("fabricApiVersion")}+$minecraftVersion")
+    modImplementation(libs.ae2.fabric)
 
-    modImplementation("appeng:appliedenergistics2-fabric:${property("ae2Version")}")
-    // modImplementation("curse.maven:ae2wtlib-459929:${property("ae2wtFile")}")
+    modCompileOnly(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi") }
+    modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi") }
 
-    modImplementation("curse.maven:applied-botanics-addon-610632:${property("appbotFile")}") {
-        exclude(group = "dev.emi", module = "emi")
-    }
+    // modRuntimeOnly(libs.ae2wtlib.fabric)
+    // modRuntimeOnly(libs.cloth.fabric)
 
-    modRuntimeOnly("vazkii.botania:Botania:$minecraftVersion-${property("botaniaVersion")}-FABRIC") {
-        exclude(group = "dev.emi", module = "emi")
-    }
-
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${property("clothVersion")}")
-
-    modRuntimeOnly("com.terraformersmc:modmenu:${property("modMenuVersion")}")
-    modRuntimeOnly("mezz.jei:jei-$minecraftVersion-fabric:${property("jeiVersion")}")
-    modRuntimeOnly("curse.maven:jade-324717:${property("jadeFile")}")
+    modRuntimeOnly(libs.modmenu)
+    modRuntimeOnly(libs.jei.fabric)
+    modRuntimeOnly(libs.jade.fabric)
 }
 
 tasks {

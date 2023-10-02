@@ -38,7 +38,8 @@ public class MEGAPortableCell extends PortableCellItem {
 
     @Override
     public ResourceLocation getRecipeId() {
-        return Utils.makeId("cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
+        return Utils.makeId(
+                "cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
 
     @Override

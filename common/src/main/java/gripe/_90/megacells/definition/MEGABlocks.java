@@ -41,33 +41,77 @@ public final class MEGABlocks {
         return Collections.unmodifiableList(BLOCKS);
     }
 
-    private static final BlockBehaviour.Properties props = BlockBehaviour.Properties.of(Material.METAL)
-            .strength(2.2f, 11.0f)
-            .sound(SoundType.METAL);
+    private static final BlockBehaviour.Properties props =
+            BlockBehaviour.Properties.of(Material.METAL).strength(2.2f, 11.0f).sound(SoundType.METAL);
 
     // spotless:off
-    public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block("Superdense Energy Cell", "mega_energy_cell", () -> new EnergyCellBlock(12800000, 3200, 12800), EnergyCellBlockItem::new);
+    public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block(
+            "Superdense Energy Cell",
+            "mega_energy_cell",
+            () -> new EnergyCellBlock(12800000, 3200, 12800),
+            EnergyCellBlockItem::new);
 
-    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block("MEGA Crafting Unit", "mega_crafting_unit", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT), null);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock("MEGA Crafting Co-Processing Unit", "mega_crafting_accelerator", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR), () -> AEItems.ENGINEERING_PROCESSOR);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock("1M MEGA Crafting Storage", "1m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_1M), () -> MEGAItems.CELL_COMPONENT_1M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock("4M MEGA Crafting Storage", "4m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_4M), () -> MEGAItems.CELL_COMPONENT_4M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_16M = craftingBlock("16M MEGA Crafting Storage", "16m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_16M), () -> MEGAItems.CELL_COMPONENT_16M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = craftingBlock("64M MEGA Crafting Storage", "64m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_64M), () -> MEGAItems.CELL_COMPONENT_64M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock("256M MEGA Crafting Storage", "256m_crafting_storage", () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_256M), () -> MEGAItems.CELL_COMPONENT_256M);
-    public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock("MEGA Crafting Monitor", "mega_crafting_monitor", () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR), () -> AEParts.STORAGE_MONITOR);
+    public static final BlockDefinition<CraftingUnitBlock> MEGA_CRAFTING_UNIT = block(
+            "MEGA Crafting Unit",
+            "mega_crafting_unit",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.UNIT),
+            null);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock(
+            "MEGA Crafting Co-Processing Unit",
+            "mega_crafting_accelerator",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.ACCELERATOR),
+            () -> AEItems.ENGINEERING_PROCESSOR);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock(
+            "1M MEGA Crafting Storage",
+            "1m_crafting_storage",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_1M),
+            () -> MEGAItems.CELL_COMPONENT_1M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock(
+            "4M MEGA Crafting Storage",
+            "4m_crafting_storage",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_4M),
+            () -> MEGAItems.CELL_COMPONENT_4M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_16M = craftingBlock(
+            "16M MEGA Crafting Storage",
+            "16m_crafting_storage",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_16M),
+            () -> MEGAItems.CELL_COMPONENT_16M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = craftingBlock(
+            "64M MEGA Crafting Storage",
+            "64m_crafting_storage",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_64M),
+            () -> MEGAItems.CELL_COMPONENT_64M);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock(
+            "256M MEGA Crafting Storage",
+            "256m_crafting_storage",
+            () -> new CraftingUnitBlock(props, MEGACraftingUnitType.STORAGE_256M),
+            () -> MEGAItems.CELL_COMPONENT_256M);
+    public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock(
+            "MEGA Crafting Monitor",
+            "mega_crafting_monitor",
+            () -> new CraftingMonitorBlock(props, MEGACraftingUnitType.MONITOR),
+            () -> AEParts.STORAGE_MONITOR);
 
-    public static final BlockDefinition<MEGAPatternProviderBlock> MEGA_PATTERN_PROVIDER = block("MEGA Pattern Provider", "mega_pattern_provider", () -> new MEGAPatternProviderBlock(props), MEGAPatternProviderBlock.Item::new);
+    public static final BlockDefinition<MEGAPatternProviderBlock> MEGA_PATTERN_PROVIDER = block(
+            "MEGA Pattern Provider",
+            "mega_pattern_provider",
+            () -> new MEGAPatternProviderBlock(props),
+            MEGAPatternProviderBlock.Item::new);
     // spotless:on
 
-    private static <T extends Block> BlockDefinition<T> craftingBlock(String englishName, String id,
-            Supplier<T> blockSupplier,
-            Supplier<ItemLike> disassemblyExtra) {
-        return block(englishName, id, blockSupplier,
+    private static <T extends Block> BlockDefinition<T> craftingBlock(
+            String englishName, String id, Supplier<T> blockSupplier, Supplier<ItemLike> disassemblyExtra) {
+        return block(
+                englishName,
+                id,
+                blockSupplier,
                 (block, props) -> new MEGACraftingBlockItem(block, props, disassemblyExtra));
     }
 
-    private static <T extends Block> BlockDefinition<T> block(String englishName, String id, Supplier<T> blockSupplier,
+    private static <T extends Block> BlockDefinition<T> block(
+            String englishName,
+            String id,
+            Supplier<T> blockSupplier,
             BiFunction<Block, Item.Properties, BlockItem> itemFactory) {
 
         // Create block and matching item

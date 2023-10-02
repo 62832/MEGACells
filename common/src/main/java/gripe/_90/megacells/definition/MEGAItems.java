@@ -38,15 +38,17 @@ public final class MEGAItems {
     public static final CreativeModeTab CREATIVE_TAB = Utils.PLATFORM.getCreativeTab();
 
     // spotless:off
-    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
-    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING =
+            item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING =
+            item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
 
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_1M = component(1);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_4M = component(4);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_16M = component(16);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_64M = component(64);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_256M = component(256);
-    
+
     public static final StorageTier TIER_1M = tier(1, CELL_COMPONENT_1M);
     public static final StorageTier TIER_4M = tier(2, CELL_COMPONENT_4M);
     public static final StorageTier TIER_16M = tier(3, CELL_COMPONENT_16M);
@@ -65,8 +67,10 @@ public final class MEGAItems {
     public static final ItemDefinition<BasicStorageCell> FLUID_CELL_64M = fluidCell(TIER_64M);
     public static final ItemDefinition<BasicStorageCell> FLUID_CELL_256M = fluidCell(TIER_256M);
 
-    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", MEGABulkCell::new);
+    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT =
+            item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
+    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL =
+            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", MEGABulkCell::new);
 
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = itemPortable(TIER_1M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = itemPortable(TIER_4M);
@@ -80,9 +84,12 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = fluidPortable(TIER_64M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = fluidPortable(TIER_256M);
 
-    public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD = item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
-    public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
-    public static final ItemDefinition<MEGADecompressionPattern.Item> DECOMPRESSION_PATTERN = item("Decompression Pattern", "decompression_pattern", MEGADecompressionPattern.Item::new);
+    public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD =
+            item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
+    public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD =
+            item("Compression Card", "compression_card", UpgradeCardItem::new);
+    public static final ItemDefinition<MEGADecompressionPattern.Item> DECOMPRESSION_PATTERN =
+            item("Decompression Pattern", "decompression_pattern", MEGADecompressionPattern.Item::new);
     // spotless:on
 
     public static List<ItemDefinition<?>> getItemCells() {
@@ -94,53 +101,82 @@ public final class MEGAItems {
     }
 
     public static List<ItemDefinition<?>> getItemPortables() {
-        return List.of(PORTABLE_ITEM_CELL_1M, PORTABLE_ITEM_CELL_4M, PORTABLE_ITEM_CELL_16M, PORTABLE_ITEM_CELL_64M,
+        return List.of(
+                PORTABLE_ITEM_CELL_1M,
+                PORTABLE_ITEM_CELL_4M,
+                PORTABLE_ITEM_CELL_16M,
+                PORTABLE_ITEM_CELL_64M,
                 PORTABLE_ITEM_CELL_256M);
     }
 
     public static List<ItemDefinition<?>> getFluidPortables() {
-        return List.of(PORTABLE_FLUID_CELL_1M, PORTABLE_FLUID_CELL_4M, PORTABLE_FLUID_CELL_16M, PORTABLE_FLUID_CELL_64M,
+        return List.of(
+                PORTABLE_FLUID_CELL_1M,
+                PORTABLE_FLUID_CELL_4M,
+                PORTABLE_FLUID_CELL_16M,
+                PORTABLE_FLUID_CELL_64M,
                 PORTABLE_FLUID_CELL_256M);
     }
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
-        return new StorageTier(index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier,
-                component::asItem);
+        return new StorageTier(
+                index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier, component::asItem);
     }
 
     private static ItemDefinition<StorageComponentItem> component(int mb) {
-        return item(mb + "M MEGA Storage Component", "cell_component_" + mb + "m",
+        return item(
+                mb + "M MEGA Storage Component",
+                "cell_component_" + mb + "m",
                 p -> new StorageComponentItem(p, mb * 1024));
     }
 
     public static ItemDefinition<BasicStorageCell> itemCell(StorageTier tier) {
-        return item(tier.namePrefix().toUpperCase() + " MEGA Item Storage Cell",
+        return item(
+                tier.namePrefix().toUpperCase() + " MEGA Item Storage Cell",
                 "item_storage_cell_" + tier.namePrefix(),
-                p -> new BasicStorageCell(p.stacksTo(1), tier.componentSupplier().get(), MEGA_ITEM_CELL_HOUSING,
-                        tier.idleDrain(), tier.bytes() / 1024, tier.bytes() / 128, 63, AEKeyType.items()));
+                p -> new BasicStorageCell(
+                        p.stacksTo(1),
+                        tier.componentSupplier().get(),
+                        MEGA_ITEM_CELL_HOUSING,
+                        tier.idleDrain(),
+                        tier.bytes() / 1024,
+                        tier.bytes() / 128,
+                        63,
+                        AEKeyType.items()));
     }
 
     public static ItemDefinition<BasicStorageCell> fluidCell(StorageTier tier) {
-        return item(tier.namePrefix().toUpperCase() + " MEGA Fluid Storage Cell",
+        return item(
+                tier.namePrefix().toUpperCase() + " MEGA Fluid Storage Cell",
                 "fluid_storage_cell_" + tier.namePrefix(),
-                p -> new BasicStorageCell(p.stacksTo(1), tier.componentSupplier().get(), MEGA_FLUID_CELL_HOUSING,
-                        tier.idleDrain(), tier.bytes() / 1024, tier.bytes() / 128, 9, AEKeyType.fluids()));
+                p -> new BasicStorageCell(
+                        p.stacksTo(1),
+                        tier.componentSupplier().get(),
+                        MEGA_FLUID_CELL_HOUSING,
+                        tier.idleDrain(),
+                        tier.bytes() / 1024,
+                        tier.bytes() / 128,
+                        9,
+                        AEKeyType.fluids()));
     }
 
     public static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
-        return item(tier.namePrefix().toUpperCase() + " Portable Item Cell", "portable_item_cell_" + tier.namePrefix(),
+        return item(
+                tier.namePrefix().toUpperCase() + " Portable Item Cell",
+                "portable_item_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE));
     }
 
     public static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
-        return item(tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
+        return item(
+                tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE));
     }
 
-    public static <T extends Item> ItemDefinition<T> item(String englishName, String id,
-            Function<Item.Properties, T> factory) {
+    public static <T extends Item> ItemDefinition<T> item(
+            String englishName, String id, Function<Item.Properties, T> factory) {
         Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
         T item = factory.apply(p);
 
