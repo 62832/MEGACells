@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
 
@@ -190,6 +192,10 @@ for (platform in property("enabledPlatforms").toString().split(',')) {
         }
 
         tasks {
+            withType<Copy> {
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+
             processResources {
                 val commonProps by extra { mapOf(
                         "version"           to project.version,
@@ -200,6 +206,12 @@ for (platform in property("enabledPlatforms").toString().split(',')) {
                 }
 
                 inputs.properties(commonProps)
+
+                from(fileTree(project(":common").file("src/generated/resources"))) {
+                    val conventionTags = ObjectMapper().readValue(file("convention_tags.json"), object: TypeReference<Map<String, String>>() {})
+                    expand(conventionTags)
+                    exclude("**/.cache")
+                }
             }
 
             shadowJar {

@@ -75,7 +75,7 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
             }
 
             lines.add(Tooltips.of(MEGATranslations.Compression.text(
-                    inv.compressionEnabled
+                    inv.isCompressionEnabled()
                             ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                             : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
         }

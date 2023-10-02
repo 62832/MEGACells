@@ -1,4 +1,4 @@
-package gripe._90.megacells.service;
+package gripe._90.megacells.crafting;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -10,10 +10,11 @@ import java.util.Set;
 
 import net.minecraft.world.item.ItemStack;
 
+import appeng.api.crafting.IPatternDetails;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
-import appeng.api.stacks.AEItemKey;
+import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.storage.MEStorage;
 import appeng.api.storage.cells.StorageCell;
 import appeng.blockentity.storage.ChestBlockEntity;
@@ -21,12 +22,10 @@ import appeng.blockentity.storage.DriveBlockEntity;
 import appeng.me.storage.DelegatingMEInventory;
 import appeng.me.storage.DriveWatcher;
 
-import gripe._90.megacells.crafting.DecompressionPatternEncoding;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
+import gripe._90.megacells.item.part.DecompressionModulePart;
 
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
@@ -55,9 +54,10 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         }
     }
 
-    private final Set<Object2IntMap<AEItemKey>> decompressionChains = new ObjectLinkedOpenHashSet<>();
     private final List<ChestBlockEntity> chests = new ObjectArrayList<>();
     private final List<DriveBlockEntity> drives = new ObjectArrayList<>();
+    private final List<IPatternDetails> patterns = new ObjectArrayList<>();
+    private final List<DecompressionModulePart> modules = new ObjectArrayList<>();
 
     @Override
     public void addNode(IGridNode node) {
@@ -67,6 +67,10 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
 
         if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.add(drive);
+        }
+
+        if (node.getOwner() instanceof DecompressionModulePart module) {
+            modules.add(module);
         }
     }
 
@@ -79,24 +83,40 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         if (node.getOwner() instanceof DriveBlockEntity drive) {
             drives.remove(drive);
         }
+
+        if (node.getOwner() instanceof DecompressionModulePart module) {
+            modules.remove(module);
+        }
     }
 
     @Override
     public void onServerStartTick() {
-        decompressionChains.clear();
+        patterns.clear();
 
-        try {
-            for (var chest : chests) {
-                addChain(getCellByChest(chest));
+        for (var chest : chests) {
+            var cell = getCellByChest(chest);
+
+            if (cell instanceof BulkCellInventory bulkCell && bulkCell.isCompressionEnabled()) {
+                patterns.addAll(generatePatterns(bulkCell));
             }
+        }
 
-            for (var drive : drives) {
-                for (int i = 0; i < drive.getCellCount(); i++) {
-                    addChain(getCellByDriveSlot(drive, i));
+        for (var drive : drives) {
+            for (var i = 0; i < drive.getCellCount(); i++) {
+                try {
+                    var cell = getCellByDriveSlot(drive, i);
+
+                    if (cell instanceof BulkCellInventory bulkCell && bulkCell.isCompressionEnabled()) {
+                        patterns.addAll(generatePatterns(bulkCell));
+                    }
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
                 }
             }
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to invoke DecompressionService method handles", e);
+        }
+
+        for (var module : modules) {
+            ICraftingProvider.requestUpdate(module.getMainNode());
         }
     }
 
@@ -110,62 +130,44 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         return watchers[slot] != null ? (StorageCell) DRIVE_DELEGATE_HANDLE.invoke(watchers[slot]) : null;
     }
 
-    private Object2IntMap<AEItemKey> getChain(BulkCellInventory cell) {
-        if (cell.compressionEnabled) {
-            return CompressionService.INSTANCE
-                    .getChain(cell.getStoredItem())
-                    .map(c -> {
-                        var keys = new ObjectArrayList<>(c.keySet());
-                        Collections.reverse(keys);
-
-                        var decompressed = new Object2IntLinkedOpenHashMap<AEItemKey>();
-                        var highest = keys.indexOf(cell.getHighestCompressed());
-
-                        if (highest > -1) {
-                            for (var key : keys.subList(highest, keys.size())) {
-                                decompressed.put(key, c.getInt(key));
-                            }
-                        }
-
-                        return decompressed;
-                    })
-                    .orElseGet(Object2IntLinkedOpenHashMap::new);
-        }
-
-        return new Object2IntLinkedOpenHashMap<>();
+    public List<IPatternDetails> getPatterns() {
+        return Collections.unmodifiableList(patterns);
     }
 
-    private void addChain(StorageCell cell) {
-        if (!(cell instanceof BulkCellInventory bulkCell)) {
-            return;
+    private Set<IPatternDetails> generatePatterns(BulkCellInventory cell) {
+        var fullChain = cell.getCompressionChain();
+
+        if (fullChain.isEmpty()) {
+            return Set.of();
         }
 
-        var chain = getChain(bulkCell);
+        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
+        var decompressionChain = fullChain.reversed();
 
-        if (!chain.isEmpty()) {
-            decompressionChains.add(chain);
-        }
-    }
-
-    public Set<Object2IntMap<AEItemKey>> getDecompressionChains() {
-        return decompressionChains;
-    }
-
-    public Set<AEItemKey> getDecompressionPatterns(Object2IntMap<AEItemKey> compressionChain) {
-        var variants = new ObjectArrayList<>(compressionChain.keySet());
-        var patterns = new ObjectLinkedOpenHashSet<AEItemKey>();
-
-        for (var variant : variants) {
-            if (variant == variants.get(variants.size() - 1)) {
+        for (var variant : decompressionChain) {
+            if (variant == decompressionChain.last()) {
                 continue;
             }
 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
-            var decompressed = variants.get(variants.indexOf(variant) + 1);
-            var factor = compressionChain.getInt(decompressed);
+            var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), variant, decompressed, factor);
-            patterns.add(AEItemKey.of(pattern));
+            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
+            patterns.add(new DecompressionPattern(pattern));
+        }
+
+        var compressionChain = fullChain.subList(decompressionChain.size() - 1, fullChain.size());
+
+        for (var variant : compressionChain) {
+            if (variant == compressionChain.get(0)) {
+                continue;
+            }
+
+            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
+
+            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
+            patterns.add(new DecompressionPattern(pattern));
         }
 
         return patterns;

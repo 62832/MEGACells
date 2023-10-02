@@ -11,8 +11,8 @@ import appeng.core.definitions.ItemDefinition;
 import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 
-import gripe._90.megacells.part.DecompressionModulePart;
-import gripe._90.megacells.part.MEGAPatternProviderPart;
+import gripe._90.megacells.item.part.DecompressionModulePart;
+import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 
 public final class MEGAParts {
 

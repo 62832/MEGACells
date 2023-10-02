@@ -2,8 +2,6 @@ package gripe._90.megacells.crafting;
 
 import java.util.Objects;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -11,26 +9,26 @@ import appeng.api.crafting.IPatternDetails;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
-import appeng.items.AEBaseItem;
 
-public class MEGADecompressionPattern implements IPatternDetails {
+public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final AEItemKey input;
-    private final IInput[] inputs;
-    private final GenericStack[] outputs;
+    private final AEItemKey base;
+    private final AEItemKey variant;
+    private final int factor;
+    private final boolean toCompress;
 
-    public MEGADecompressionPattern(AEItemKey definition) {
+    public DecompressionPattern(ItemStack stack) {
+        this(Objects.requireNonNull(AEItemKey.of(stack)));
+    }
+
+    public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
         var tag = Objects.requireNonNull(definition.getTag());
 
-        this.input = DecompressionPatternEncoding.getCompressed(tag);
-
-        var decompressed = DecompressionPatternEncoding.getDecompressed(tag);
-        var factor = DecompressionPatternEncoding.getFactor(tag);
-        var output = decompressed.toStack(factor);
-
-        this.inputs = new IInput[] {new Input()};
-        this.outputs = new GenericStack[] {GenericStack.fromItemStack(output)};
+        base = DecompressionPatternEncoding.getBase(tag);
+        variant = DecompressionPatternEncoding.getVariant(tag);
+        factor = DecompressionPatternEncoding.getFactor(tag);
+        toCompress = DecompressionPatternEncoding.getToCompress(tag);
     }
 
     @Override
@@ -40,19 +38,19 @@ public class MEGADecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return inputs;
+        return new IInput[] {toCompress ? new Input(base, factor) : new Input(variant, 1)};
     }
 
     @Override
     public GenericStack[] getOutputs() {
-        return outputs;
+        return new GenericStack[] {toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor)};
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj != null
                 && obj.getClass() == getClass()
-                && ((MEGADecompressionPattern) obj).definition.equals(definition);
+                && ((DecompressionPattern) obj).definition.equals(definition);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class MEGADecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private class Input implements IInput {
+    private record Input(AEItemKey input, long multiplier) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
             return new GenericStack[] {new GenericStack(input, 1)};
@@ -68,7 +66,7 @@ public class MEGADecompressionPattern implements IPatternDetails {
 
         @Override
         public long getMultiplier() {
-            return 1;
+            return multiplier;
         }
 
         @Override
@@ -79,17 +77,6 @@ public class MEGADecompressionPattern implements IPatternDetails {
         @Override
         public AEKey getRemainingKey(AEKey template) {
             return null;
-        }
-    }
-
-    public static class Item extends AEBaseItem {
-        public Item(Properties properties) {
-            super(properties);
-        }
-
-        @Override
-        public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
-            // Don't show in creative mode, this isn't meant to be used as an item anyway
         }
     }
 }

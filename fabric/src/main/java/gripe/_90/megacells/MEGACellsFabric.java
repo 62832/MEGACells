@@ -5,13 +5,12 @@ import net.minecraft.core.Registry;
 
 import appeng.api.IAEAddonEntrypoint;
 import appeng.api.behaviors.GenericInternalInventory;
-import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.core.Addons;
-import gripe._90.megacells.crafting.DecompressionPatternDecoder;
+import gripe._90.megacells.crafting.DecompressionService;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -19,8 +18,7 @@ import gripe._90.megacells.definition.MEGAParts;
 import gripe._90.megacells.init.InitStorageCells;
 import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.service.CompressionService;
-import gripe._90.megacells.service.DecompressionService;
+import gripe._90.megacells.util.CompressionService;
 
 public class MEGACellsFabric implements IAEAddonEntrypoint {
     @Override
@@ -79,6 +77,5 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
         });
 
         GridServices.register(DecompressionService.class, DecompressionService.class);
-        PatternDetailsHelper.registerDecoder(DecompressionPatternDecoder.INSTANCE);
     }
 }

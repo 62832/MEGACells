@@ -6,19 +6,22 @@ import net.minecraft.nbt.CompoundTag;
 
 import appeng.api.stacks.AEItemKey;
 
-public class DecompressionPatternEncoding {
-    private static final String NBT_COMPRESSED = "compressed";
-    private static final String NBT_DECOMPRESSED = "decompressed";
-    private static final String NBT_FACTOR = "factor";
+import gripe._90.megacells.util.CompressionVariant;
 
-    public static AEItemKey getCompressed(CompoundTag nbt) {
-        Objects.requireNonNull(nbt, "Pattern must have a compressed tag.");
-        return AEItemKey.fromTag(nbt.getCompound(NBT_COMPRESSED));
+public class DecompressionPatternEncoding {
+    private static final String NBT_BASE = "base";
+    private static final String NBT_VARIANT = "variant";
+    private static final String NBT_FACTOR = "factor";
+    private static final String NBT_TO_COMPRESS = "toCompress";
+
+    public static AEItemKey getBase(CompoundTag nbt) {
+        Objects.requireNonNull(nbt, "Pattern must have a base tag.");
+        return AEItemKey.fromTag(nbt.getCompound(NBT_BASE));
     }
 
-    public static AEItemKey getDecompressed(CompoundTag nbt) {
-        Objects.requireNonNull(nbt, "Pattern must have a decompressed tag.");
-        return AEItemKey.fromTag(nbt.getCompound(NBT_DECOMPRESSED));
+    public static AEItemKey getVariant(CompoundTag nbt) {
+        Objects.requireNonNull(nbt, "Pattern must have a variant tag.");
+        return AEItemKey.fromTag(nbt.getCompound(NBT_VARIANT));
     }
 
     public static int getFactor(CompoundTag nbt) {
@@ -26,9 +29,15 @@ public class DecompressionPatternEncoding {
         return nbt.getInt(NBT_FACTOR);
     }
 
-    public static void encode(CompoundTag tag, AEItemKey compressed, AEItemKey decompressed, int factor) {
-        tag.put(NBT_COMPRESSED, compressed.toTag());
-        tag.put(NBT_DECOMPRESSED, decompressed.toTag());
-        tag.putInt(NBT_FACTOR, factor);
+    public static boolean getToCompress(CompoundTag nbt) {
+        Objects.requireNonNull(nbt, "Pattern must have a toCompress tag.");
+        return nbt.getBoolean(NBT_TO_COMPRESS);
+    }
+
+    public static void encode(CompoundTag tag, AEItemKey base, CompressionVariant variant, boolean toCompress) {
+        tag.put(NBT_VARIANT, variant.item().toTag());
+        tag.put(NBT_BASE, base.toTag());
+        tag.putInt(NBT_FACTOR, variant.factor());
+        tag.putBoolean(NBT_TO_COMPRESS, toCompress);
     }
 }
