@@ -192,10 +192,6 @@ for (platform in property("enabledPlatforms").toString().split(',')) {
         }
 
         tasks {
-            withType<Copy> {
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
-            }
-
             processResources {
                 val commonProps by extra { mapOf(
                         "version"           to project.version,
@@ -212,6 +208,12 @@ for (platform in property("enabledPlatforms").toString().split(',')) {
                     expand(conventionTags)
                     exclude("**/.cache")
                 }
+
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+
+            withType<Jar> {
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }
 
             shadowJar {
