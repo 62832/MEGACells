@@ -31,7 +31,7 @@ import appeng.items.storage.StorageTier;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
 
-import gripe._90.megacells.MEGACellsFabric;
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAParts;
@@ -185,7 +185,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('c', MEGAItems.BULK_CELL_COMPONENT)
                 .define('d', Items.NETHERITE_INGOT)
                 .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
-                .save(consumer, MEGACellsFabric.makeId("cells/standard/bulk_item_cell"));
+                .save(consumer, MEGACells.makeId("cells/standard/bulk_item_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")
@@ -195,7 +195,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('b', AEItems.ENGINEERING_PROCESSOR)
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .unlockedBy("has_engineering_processor", has(AEItems.ENGINEERING_PROCESSOR))
-                .save(consumer, MEGACellsFabric.makeId("crafting/mega_energy_cell"));
+                .save(consumer, MEGACells.makeId("crafting/mega_energy_cell"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .pattern("aba")
@@ -206,7 +206,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('c', AEParts.SMART_CABLE.item(AEColor.TRANSPARENT))
                 .define('d', AEItems.ENGINEERING_PROCESSOR)
                 .unlockedBy("has_logic_processor", has(AEItems.LOGIC_PROCESSOR))
-                .save(consumer, MEGACellsFabric.makeId("crafting/mega_crafting_unit"));
+                .save(consumer, MEGACells.makeId("crafting/mega_crafting_unit"));
         craftingBlock(consumer, MEGABlocks.CRAFTING_ACCELERATOR, AEItems.ENGINEERING_PROCESSOR);
         craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_1M, MEGAItems.CELL_COMPONENT_1M);
         craftingBlock(consumer, MEGABlocks.CRAFTING_STORAGE_4M, MEGAItems.CELL_COMPONENT_4M);
@@ -220,20 +220,20 @@ class RecipeProvider extends FabricRecipeProvider {
                 .requires(MEGABlocks.MEGA_ENERGY_CELL)
                 .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
                 .unlockedBy("has_mega_energy_cell", has(MEGABlocks.MEGA_ENERGY_CELL))
-                .save(consumer, MEGACellsFabric.makeId("crafting/greater_energy_card"));
+                .save(consumer, MEGACells.makeId("crafting/greater_energy_card"));
         ShapelessRecipeBuilder.shapeless(MEGAItems.GREATER_ENERGY_CARD)
                 .requires(AEItems.ENERGY_CARD)
                 .requires(MEGABlocks.MEGA_ENERGY_CELL)
                 .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
                 .unlockedBy("has_mega_energy_cell", has(MEGABlocks.MEGA_ENERGY_CELL))
-                .save(consumer, MEGACellsFabric.makeId("crafting/greater_energy_card_upgraded"));
+                .save(consumer, MEGACells.makeId("crafting/greater_energy_card_upgraded"));
 
         ShapelessRecipeBuilder.shapeless(MEGAItems.COMPRESSION_CARD)
                 .requires(AEItems.ADVANCED_CARD)
                 .requires(AEItems.MATTER_BALL)
                 .unlockedBy("has_advanced_card", has(AEItems.ADVANCED_CARD))
                 .unlockedBy("has_matter_ball", has(AEItems.MATTER_BALL))
-                .save(consumer, MEGACellsFabric.makeId("crafting/compression_card"));
+                .save(consumer, MEGACells.makeId("crafting/compression_card"));
         ShapedRecipeBuilder.shaped(MEGAParts.DECOMPRESSION_MODULE)
                 .pattern("ICI")
                 .pattern("E#E")
@@ -244,7 +244,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('L', AEItems.LOGIC_PROCESSOR)
                 .define('#', MEGAItems.COMPRESSION_CARD)
                 .unlockedBy("has_compression_card", has(MEGAItems.COMPRESSION_CARD))
-                .save(consumer, MEGACellsFabric.makeId("crafting/decompression_module"));
+                .save(consumer, MEGACells.makeId("crafting/decompression_module"));
 
         ShapedRecipeBuilder.shaped(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .pattern("ICI")
@@ -255,16 +255,16 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('P', AEBlocks.PATTERN_PROVIDER)
                 .define('V', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_pattern_provider", has(ConventionTags.PATTERN_PROVIDER))
-                .save(consumer, MEGACellsFabric.makeId("network/mega_pattern_provider"));
+                .save(consumer, MEGACells.makeId("network/mega_pattern_provider"));
 
         ShapelessRecipeBuilder.shapeless(MEGAParts.MEGA_PATTERN_PROVIDER)
                 .requires(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .unlockedBy("has_mega_pattern_provider", has(MEGABlocks.MEGA_PATTERN_PROVIDER))
-                .save(consumer, MEGACellsFabric.makeId("network/mega_pattern_provider_part"));
+                .save(consumer, MEGACells.makeId("network/mega_pattern_provider_part"));
         ShapelessRecipeBuilder.shapeless(MEGABlocks.MEGA_PATTERN_PROVIDER)
                 .requires(MEGAParts.MEGA_PATTERN_PROVIDER)
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAParts.MEGA_PATTERN_PROVIDER))
-                .save(consumer, MEGACellsFabric.makeId("network/mega_pattern_provider_block"));
+                .save(consumer, MEGACells.makeId("network/mega_pattern_provider_block"));
 
         manaCells(consumer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
         manaCells(consumer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
@@ -287,7 +287,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_" + Registry.ITEM.getKey(precedingComponent).getPath(), has(precedingComponent))
                 .save(
                         consumer,
-                        MEGACellsFabric.makeId("cells/"
+                        MEGACells.makeId("cells/"
                                 + Registry.ITEM
                                         .getKey(tier.componentSupplier().get())
                                         .getPath()));
@@ -299,9 +299,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .setMode(InscriberProcessType.PRESS)
                 .setTop(Ingredient.of(top))
                 .setBottom(Ingredient.of(bottom))
-                .save(
-                        consumer,
-                        MEGACellsFabric.makeId("inscriber/" + output.id().getPath()));
+                .save(consumer, MEGACells.makeId("inscriber/" + output.id().getPath()));
     }
 
     private static void cell(
@@ -319,18 +317,14 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('c', component)
                 .define('d', placeholderTag(housingMaterial))
                 .unlockedBy("has_" + component.id().getPath(), has(component))
-                .save(
-                        consumer,
-                        MEGACellsFabric.makeId("cells/standard/" + cell.id().getPath()));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cell.id().getPath()));
 
         ShapelessRecipeBuilder.shapeless(cell)
                 .requires(housing)
                 .requires(component)
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_" + housing.id().getPath(), has(housing))
-                .save(
-                        consumer,
-                        MEGACellsFabric.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
     private static void portable(
@@ -346,9 +340,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_" + housing.id().getPath(), has(housing))
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-                .save(
-                        consumer,
-                        MEGACellsFabric.makeId("cells/portable/" + cell.id().getPath()));
+                .save(consumer, MEGACells.makeId("cells/portable/" + cell.id().getPath()));
     }
 
     private static void housing(Consumer<FinishedRecipe> consumer, ItemDefinition<?> housing, String housingMaterial) {
@@ -360,7 +352,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .define('b', AEItems.SKY_DUST)
                 .define('d', placeholderTag(housingMaterial))
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
-                .save(consumer, MEGACellsFabric.makeId("cells/" + housing.id().getPath()));
+                .save(consumer, MEGACells.makeId("cells/" + housing.id().getPath()));
     }
 
     private static void craftingBlock(Consumer<FinishedRecipe> consumer, BlockDefinition<?> unit, ItemLike part) {
@@ -368,7 +360,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .requires(MEGABlocks.MEGA_CRAFTING_UNIT)
                 .requires(part)
                 .unlockedBy("has_mega_crafting_unit", has(MEGABlocks.MEGA_CRAFTING_UNIT))
-                .save(consumer, MEGACellsFabric.makeId("crafting/" + unit.id().getPath()));
+                .save(consumer, MEGACells.makeId("crafting/" + unit.id().getPath()));
     }
 
     private static void manaCells(
@@ -380,9 +372,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .requires(tier.componentSupplier().get())
                 .unlockedBy("has_" + componentPath, has(component))
                 .unlockedBy("has_mega_mana_cell_housing", has(AppBotItems.MEGA_MANA_CELL_HOUSING))
-                .save(
-                        consumer,
-                        MEGACellsFabric.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
         ShapelessRecipeBuilder.shapeless(portable)
                 .requires(AEBlocks.CHEST)
                 .requires(component)
@@ -393,7 +383,7 @@ class RecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .save(
                         consumer,
-                        MEGACellsFabric.makeId("cells/portable/" + portable.id().getPath()));
+                        MEGACells.makeId("cells/portable/" + portable.id().getPath()));
     }
 
     private static Ingredient placeholderTag(String placeholder) {

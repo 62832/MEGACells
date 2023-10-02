@@ -77,7 +77,7 @@ dependencies {
 
     modImplementation(libs.ae2.fabric)
 
-    modCompileOnly(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi") }
+    modImplementation(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi") }
 
     // modRuntimeOnly(libs.ae2wtlib.fabric)

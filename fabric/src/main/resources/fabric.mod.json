@@ -25,7 +25,6 @@
 
   "depends": {
     "minecraft": "$minecraftVersion",
-    "java": ">=$javaVersion",
     "ae2": ">=$ae2Version"
   },
   "suggests": {

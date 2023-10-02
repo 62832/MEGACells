@@ -41,17 +41,3 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
     versionRange = "[$appbotVersion,)"
     ordering = "AFTER"
     side = "BOTH"
-
-[[dependencies.megacells]]
-    modId = "forge"
-    mandatory = true
-    versionRange = "[$loaderVersion,)"
-    ordering = "NONE"
-    side = "BOTH"
-
-[[dependencies.megacells]]
-    modId = "minecraft"
-    mandatory = true
-    versionRange = "[$minecraftVersion]"
-    ordering = "NONE"
-    side = "BOTH"

@@ -71,7 +71,7 @@ dependencies {
     modCompileOnly(variantOf(libs.mekanism) { classifier("generators") })
     modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
-    modCompileOnly(libs.appbot.forge)
+    modImplementation(libs.appbot.forge)
     modRuntimeOnly(libs.botania.forge)
     modRuntimeOnly(libs.patchouli.forge)
 
@@ -97,8 +97,8 @@ tasks.processResources {
     filesMatching("META-INF/mods.toml") {
         val commonProps: Map<String, *> by extra
         expand(commonProps + mapOf(
-                "loaderVersion" to forgeVersion.substringBefore('.'),
-                "ae2VersionEnd" to ae2Version.substringBefore('.').toInt() + 1
+                "loaderVersion" to libs.forge.get().version!!.substringBefore('.'),
+                "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1
         ))
     }
 }

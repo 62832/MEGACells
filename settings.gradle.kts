@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
             library("fabric-loader", "net.fabricmc", "fabric-loader").version("0.14.9")
             library("fabric-api", "net.fabricmc.fabric-api", "fabric-api").version("0.72.0+$minecraftVersion")
-            library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-43.1.65")
+            library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-43.2.8")
 
             version("ae2", "12.9.3")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
@@ -57,7 +57,7 @@ dependencyResolutionManagement {
             // Applied Mekanistics
             version("appmek", "1.3.5")
             library("appmek", "maven.modrinth", "applied-mekanistics").versionRef("appmek")
-            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.3.5.474")
+            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.3.9.13")
 
             // Runtime mods
             version("jei", "11.3.0.262")
