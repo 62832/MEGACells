@@ -17,6 +17,7 @@ import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -29,11 +30,10 @@ import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
-import gripe._90.megacells.util.Utils;
 
-@Mod(Utils.MODID)
-public class MEGACells {
-    public MEGACells() {
+@Mod(gripe._90.megacells.MEGACells.MODID)
+public class MEGACellsForge {
+    public MEGACellsForge() {
         initAll();
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -51,11 +51,11 @@ public class MEGACells {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        if (Utils.PLATFORM.isModLoaded("appmek")) {
+        if (gripe._90.megacells.MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             AppMekItems.init();
         }
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (gripe._90.megacells.MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotItems.init();
         }
     }
@@ -86,7 +86,7 @@ public class MEGACells {
         event.enqueueWork(InitUpgrades::init);
 
         event.enqueueWork(() -> {
-            if (Utils.PLATFORM.isModLoaded("appmek")) {
+            if (gripe._90.megacells.MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
                 AppMekIntegration.initUpgrades();
                 AppMekIntegration.initStorageCells();
             }

@@ -8,15 +8,15 @@ import appeng.items.storage.StorageTier;
 
 import me.ramidzkh.mekae2.item.ChemicalStorageCell;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.item.MEGAPortableChemicalCell;
 import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
-import gripe._90.megacells.util.Utils;
 
 public final class AppMekItems {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised Applied Mekanistics integration.");
+        MEGACells.LOGGER.info("Initialised Applied Mekanistics integration.");
     }
 
     public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING =

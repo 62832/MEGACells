@@ -23,9 +23,9 @@ import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.util.Utils;
 
 public class AppMekRecipeProvider extends RecipeProvider {
     public AppMekRecipeProvider(DataGenerator generator) {
@@ -42,7 +42,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .define('b', AEItems.SKY_DUST)
                 .define('d', ItemTags.create(new ResourceLocation("forge", "ingots/osmium")))
                 .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
-                .save(consumer, Utils.makeId("cells/mega_chemical_cell_housing"));
+                .save(consumer, MEGACells.makeId("cells/mega_chemical_cell_housing"));
 
         cell(consumer, AppMekItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
         cell(consumer, AppMekItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
@@ -60,7 +60,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .setMode(InscriberProcessType.PRESS)
                 .setTop(Ingredient.of(AEItems.CELL_COMPONENT_256K))
                 .setBottom(Ingredient.of(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
-                .save(consumer, Utils.makeId("inscriber/radioactive_cell_component"));
+                .save(consumer, MEGACells.makeId("inscriber/radioactive_cell_component"));
         ShapedRecipeBuilder.shaped(AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
                 .pattern("aba")
                 .pattern("bcb")
@@ -71,7 +71,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .define('d', MekanismItems.HDPE_SHEET)
                 .define('e', MekanismItems.POLONIUM_PELLET)
                 .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT))
-                .save(consumer, Utils.makeId("cells/standard/radioactive_chemical_cell"));
+                .save(consumer, MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
     }
 
     private void cell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
@@ -84,13 +84,13 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .define('c', component)
                 .define('d', ItemTags.create(new ResourceLocation("forge", "ingots/osmium")))
                 .unlockedBy("has_" + component.id().getPath(), has(component))
-                .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath()));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cell.id().getPath()));
         ShapelessRecipeBuilder.shapeless(cell)
                 .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                 .requires(component)
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING))
-                .save(consumer, Utils.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
+                .save(consumer, MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
     private void portable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
@@ -102,7 +102,7 @@ public class AppMekRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
-                .save(consumer, Utils.makeId("cells/portable/" + cell.id().getPath()));
+                .save(consumer, MEGACells.makeId("cells/portable/" + cell.id().getPath()));
     }
 
     @Override

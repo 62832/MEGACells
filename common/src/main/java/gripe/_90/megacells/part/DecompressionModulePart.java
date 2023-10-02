@@ -20,10 +20,10 @@ import appeng.items.parts.PartModels;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.service.DecompressionService;
-import gripe._90.megacells.util.Utils;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -31,7 +31,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
     @PartModels
-    public static final IPartModel MODEL = new PartModel(Utils.makeId("part/decompression_module"));
+    public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
 
     private final List<IPatternDetails> patterns = new ObjectArrayList<>();
     private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();

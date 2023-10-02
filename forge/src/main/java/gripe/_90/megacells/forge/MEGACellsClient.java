@@ -27,15 +27,16 @@ import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.util.Utils;
 
 public class MEGACellsClient {
     public MEGACellsClient() {
@@ -89,7 +90,7 @@ public class MEGACellsClient {
         customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
         for (var location : modelRegistry.keySet()) {
-            if (!location.getNamespace().equals(Utils.MODID)) {
+            if (!location.getNamespace().equals(MEGACells.MODID)) {
                 continue;
             }
 
@@ -111,13 +112,13 @@ public class MEGACellsClient {
         var portables = new ArrayList<>(MEGAItems.getItemPortables());
         portables.addAll(MEGAItems.getFluidPortables());
 
-        if (Utils.PLATFORM.isModLoaded("appmek")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             cells.addAll(AppMekItems.getCells());
             portables.addAll(AppMekItems.getPortables());
             cells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
         }
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             portables.addAll(AppBotItems.getPortables());
         }

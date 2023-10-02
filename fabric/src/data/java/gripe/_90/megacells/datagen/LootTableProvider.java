@@ -12,8 +12,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
+import gripe._90.megacells.MEGACellsFabric;
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.util.Utils;
 
 class LootTableProvider extends SimpleFabricLootTableProvider {
     LootTableProvider(FabricDataGenerator dataGenerator) {
@@ -24,7 +24,7 @@ class LootTableProvider extends SimpleFabricLootTableProvider {
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         MEGABlocks.getBlocks()
                 .forEach(block -> consumer.accept(
-                        Utils.makeId("blocks/" + block.id().getPath()),
+                        MEGACellsFabric.makeId("blocks/" + block.id().getPath()),
                         LootTable.lootTable()
                                 .withPool(LootPool.lootPool()
                                         .setRolls(ConstantValue.exactly(1))

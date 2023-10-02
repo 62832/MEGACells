@@ -18,15 +18,15 @@ import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.MEGADecompressionPattern;
 import gripe._90.megacells.item.MEGABulkCell;
 import gripe._90.megacells.item.MEGAPortableCell;
-import gripe._90.megacells.util.Utils;
 
 public final class MEGAItems {
     public static void init() {
         // controls static load order
-        Utils.LOGGER.info("Initialised items.");
+        MEGACells.LOGGER.info("Initialised items.");
     }
 
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
@@ -35,7 +35,7 @@ public final class MEGAItems {
         return Collections.unmodifiableList(ITEMS);
     }
 
-    public static final CreativeModeTab CREATIVE_TAB = Utils.PLATFORM.getCreativeTab();
+    public static final CreativeModeTab CREATIVE_TAB = MEGACells.PLATFORM.getCreativeTab();
 
     // spotless:off
     public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING =
@@ -180,7 +180,7 @@ public final class MEGAItems {
         Item.Properties p = new Item.Properties().tab(CREATIVE_TAB);
         T item = factory.apply(p);
 
-        ItemDefinition<T> definition = new ItemDefinition<>(englishName, Utils.makeId(id), item);
+        ItemDefinition<T> definition = new ItemDefinition<>(englishName, MEGACells.makeId(id), item);
         ITEMS.add(definition);
 
         return definition;

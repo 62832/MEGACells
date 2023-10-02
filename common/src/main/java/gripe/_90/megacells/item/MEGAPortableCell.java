@@ -11,7 +11,7 @@ import appeng.items.storage.StorageTier;
 import appeng.items.tools.powered.PortableCellItem;
 import appeng.menu.me.common.MEStorageMenu;
 
-import gripe._90.megacells.util.Utils;
+import gripe._90.megacells.MEGACells;
 
 public class MEGAPortableCell extends PortableCellItem {
     private final StorageTier tier;
@@ -38,7 +38,7 @@ public class MEGAPortableCell extends PortableCellItem {
 
     @Override
     public ResourceLocation getRecipeId() {
-        return Utils.makeId(
+        return MEGACells.makeId(
                 "cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
 

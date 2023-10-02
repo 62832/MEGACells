@@ -10,6 +10,7 @@ import appeng.api.networking.GridServices;
 import appeng.core.AppEng;
 
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.crafting.DecompressionPatternDecoder;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -20,9 +21,8 @@ import gripe._90.megacells.init.InitUpgrades;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.service.CompressionService;
 import gripe._90.megacells.service.DecompressionService;
-import gripe._90.megacells.util.Utils;
 
-public class MEGACells implements IAEAddonEntrypoint {
+public class MEGACellsFabric implements IAEAddonEntrypoint {
     @Override
     public void onAe2Initialized() {
         initAll();
@@ -41,7 +41,7 @@ public class MEGACells implements IAEAddonEntrypoint {
         MEGAParts.init();
         MEGABlockEntities.init();
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotItems.init();
         }
     }

@@ -15,8 +15,8 @@ import appeng.client.render.crafting.LightBakedModel;
 import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.crafting.UnitBakedModel;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
-import gripe._90.megacells.util.Utils;
 
 public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
     private static final List<Material> MATERIALS = new ArrayList<>();
@@ -86,7 +86,7 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     }
 
     private static Material texture(String name) {
-        var material = new Material(InventoryMenu.BLOCK_ATLAS, Utils.makeId("block/crafting/" + name));
+        var material = new Material(InventoryMenu.BLOCK_ATLAS, MEGACells.makeId("block/crafting/" + name));
         MATERIALS.add(material);
         return material;
     }

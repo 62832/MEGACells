@@ -11,8 +11,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.util.Utils;
 
 public class AppMekItemModelProvider extends ItemModelProvider {
     static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
@@ -20,7 +20,7 @@ public class AppMekItemModelProvider extends ItemModelProvider {
     static final ResourceLocation DRIVE_CELL = AppEng.makeId("block/drive/drive_cell");
 
     public AppMekItemModelProvider(DataGenerator gen, ExistingFileHelper efh) {
-        super(gen, Utils.MODID, efh);
+        super(gen, MEGACells.MODID, efh);
         efh.trackGenerated(STORAGE_CELL_LED, TEXTURE);
         efh.trackGenerated(PORTABLE_CELL_LED, TEXTURE);
         efh.trackGenerated(DRIVE_CELL, MODEL);
@@ -47,7 +47,7 @@ public class AppMekItemModelProvider extends ItemModelProvider {
 
     private void driveCell(String texture) {
         withExistingParent("block/drive/cells/" + texture, DRIVE_CELL)
-                .texture("cell", Utils.makeId("block/drive/cells/" + texture));
+                .texture("cell", MEGACells.makeId("block/drive/cells/" + texture));
     }
 
     private void cell(ItemDefinition<?> cell) {
@@ -64,7 +64,7 @@ public class AppMekItemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String subfolder) {
         String path = item.id().getPath();
-        return singleTexture(path, mcLoc("item/generated"), "layer0", Utils.makeId("item/" + subfolder + path));
+        return singleTexture(path, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + subfolder + path));
     }
 
     @NotNull

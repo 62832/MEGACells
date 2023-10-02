@@ -1,4 +1,4 @@
-package gripe._90.megacells.util;
+package gripe._90.megacells;
 
 import java.util.ServiceLoader;
 
@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import net.minecraft.resources.ResourceLocation;
 
-import gripe._90.megacells.util.service.Platform;
+import gripe._90.megacells.core.Platform;
 
-public final class Utils {
-    private Utils() {}
+public final class MEGACells {
+    private MEGACells() {}
 
     public static final String MODID = "megacells";
 

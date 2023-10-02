@@ -1,9 +1,11 @@
-package gripe._90.megacells.util.service;
+package gripe._90.megacells.core;
 
 import net.minecraft.world.item.CreativeModeTab;
 
 public interface Platform {
+    Loaders getLoader();
+
     CreativeModeTab getCreativeTab();
 
-    boolean isModLoaded(String modId);
+    boolean isAddonLoaded(Addons addon);
 }

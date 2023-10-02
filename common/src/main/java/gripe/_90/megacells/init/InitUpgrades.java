@@ -6,10 +6,11 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
-import gripe._90.megacells.util.Utils;
 
 public class InitUpgrades {
     public static void init() {
@@ -67,11 +68,11 @@ public class InitUpgrades {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
         }
 
-        if (Utils.PLATFORM.isModLoaded("ae2wtlib")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.AE2WTLIB)) {
             AE2WTIntegration.initUpgrades();
         }
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             AppBotIntegration.initUpgrades();
         }
     }

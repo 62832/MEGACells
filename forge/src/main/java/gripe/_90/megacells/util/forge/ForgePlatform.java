@@ -8,14 +8,21 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.LoadingModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
+import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.core.Addons;
+import gripe._90.megacells.core.Loaders;
+import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.util.Utils;
-import gripe._90.megacells.util.service.Platform;
 
 public final class ForgePlatform implements Platform {
     @Override
+    public Loaders getLoader() {
+        return Loaders.FORGE;
+    }
+
+    @Override
     public CreativeModeTab getCreativeTab() {
-        return new CreativeModeTab(Utils.MODID + ".tab") {
+        return new CreativeModeTab(MEGACells.MODID + ".tab") {
             @Override
             public @NotNull ItemStack makeIcon() {
                 return new ItemStack(MEGAItems.ITEM_CELL_256M);
@@ -24,12 +31,12 @@ public final class ForgePlatform implements Platform {
     }
 
     @Override
-    public boolean isModLoaded(String modId) {
+    public boolean isAddonLoaded(Addons addon) {
         if (ModList.get() == null) {
             return LoadingModList.get().getMods().stream()
                     .map(ModInfo::getModId)
-                    .anyMatch(modId::equals);
+                    .anyMatch(addon.getModId()::equals);
         }
-        return ModList.get().isLoaded(modId);
+        return ModList.get().isLoaded(addon.getModId());
     }
 }

@@ -33,11 +33,11 @@ import appeng.items.tools.powered.PortableCellItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
+import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.util.Utils;
 
 @Environment(EnvType.CLIENT)
 public class MEGACellsClient implements IAEAddonEntrypoint {
@@ -61,7 +61,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
     private void initBlockModels() {
         for (var type : MEGACraftingUnitType.values()) {
             ModelLoadingRegistry.INSTANCE.registerResourceProvider(resourceManager -> new SimpleModelLoader<>(
-                    Utils.makeId("block/crafting/" + type.getAffix() + "_formed"),
+                    MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
                     () -> new CraftingCubeModel(new MEGACraftingUnitModelProvider(type))));
 
             BlockRenderLayerMap.INSTANCE.putBlock(type.getDefinition().block(), RenderType.cutout());
@@ -77,7 +77,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
             customizers.put(MEGABlocks.MEGA_PATTERN_PROVIDER.id().getPath(), AutoRotatingBakedModel::new);
 
             for (var location : modelRegistry.keySet()) {
-                if (!location.getNamespace().equals(Utils.MODID)) {
+                if (!location.getNamespace().equals(MEGACells.MODID)) {
                     continue;
                 }
 
@@ -112,7 +112,7 @@ public class MEGACellsClient implements IAEAddonEntrypoint {
         var portables = new ArrayList<>(MEGAItems.getItemPortables());
         portables.addAll(MEGAItems.getFluidPortables());
 
-        if (Utils.PLATFORM.isModLoaded("appbot")) {
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             cells.addAll(AppBotItems.getCells());
             portables.addAll(AppBotItems.getPortables());
         }
