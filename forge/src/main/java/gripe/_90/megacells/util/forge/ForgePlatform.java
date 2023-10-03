@@ -10,16 +10,10 @@ import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.Addons;
-import gripe._90.megacells.core.Loaders;
 import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGAItems;
 
 public final class ForgePlatform implements Platform {
-    @Override
-    public Loaders getLoader() {
-        return Loaders.FORGE;
-    }
-
     @Override
     public CreativeModeTab getCreativeTab() {
         return new CreativeModeTab(MEGACells.MODID + ".tab") {
