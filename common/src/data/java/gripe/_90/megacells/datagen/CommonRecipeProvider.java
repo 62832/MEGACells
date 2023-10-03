@@ -35,6 +35,7 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
+import org.jetbrains.annotations.NotNull;
 
 public class CommonRecipeProvider extends RecipeProvider {
     public CommonRecipeProvider(PackOutput output) {
@@ -453,5 +454,11 @@ public class CommonRecipeProvider extends RecipeProvider {
                 .save(
                         consumer,
                         MEGACells.makeId("cells/portable/" + portable.id().getPath()));
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "Common Recipes";
     }
 }
