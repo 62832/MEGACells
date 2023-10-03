@@ -7,8 +7,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
@@ -19,12 +19,11 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CommonTagProvider {
-    public static class ItemTags extends ItemTagsProvider {
-        public ItemTags(
-                PackOutput output,
-                CompletableFuture<HolderLookup.Provider> registries,
-                CompletableFuture<TagLookup<Block>> blockTags) {
-            super(output, registries, blockTags);
+    public static class ItemTags extends IntrinsicHolderTagsProvider<Item> {
+        public ItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(output, Registries.ITEM, registries, item -> BuiltInRegistries.ITEM
+                    .getResourceKey(item)
+                    .orElseThrow());
         }
 
         @Override
@@ -52,8 +51,8 @@ public class CommonTagProvider {
     }
 
     public static class BlockTags extends IntrinsicHolderTagsProvider<Block> {
-        public BlockTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
-            super(packOutput, Registries.BLOCK, registries, block -> BuiltInRegistries.BLOCK
+        public BlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(output, Registries.BLOCK, registries, block -> BuiltInRegistries.BLOCK
                     .getResourceKey(block)
                     .orElseThrow());
         }

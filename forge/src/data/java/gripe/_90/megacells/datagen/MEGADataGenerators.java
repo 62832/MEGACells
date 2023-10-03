@@ -1,9 +1,5 @@
 package gripe._90.megacells.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
-import net.minecraft.Util;
-import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,19 +11,20 @@ import gripe._90.megacells.MEGACells;
 public class MEGADataGenerators {
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {
-        var pack = event.getGenerator().getVanillaPack(true);
+        var generator = event.getGenerator();
+        var output = generator.getPackOutput();
+
         var existing = event.getExistingFileHelper();
+        generator.addProvider(event.includeClient(), new ModelProvider.Items(output, existing));
+        generator.addProvider(event.includeClient(), new ModelProvider.Blocks(output, existing));
+        generator.addProvider(event.includeClient(), new ModelProvider.Parts(output, existing));
 
-        pack.addProvider(output -> new ModelProvider.Items(output, existing));
-        pack.addProvider(output -> new ModelProvider.Blocks(output, existing));
-        pack.addProvider(output -> new ModelProvider.Parts(output, existing));
+        var registries = event.getLookupProvider();
+        generator.addProvider(event.includeServer(), new CommonTagProvider.BlockTags(output, registries));
+        generator.addProvider(event.includeServer(), new CommonTagProvider.ItemTags(output, registries));
 
-        var registries = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
-        var blockTags = pack.addProvider(output -> new CommonTagProvider.BlockTags(output, registries));
-        pack.addProvider(output -> new CommonTagProvider.ItemTags(output, registries, blockTags.contentsGetter()));
-
-        pack.addProvider(CommonLootTableProvider::new);
-        pack.addProvider(CommonLanguageProvider::new);
-        pack.addProvider(RecipeProvider::new);
+        generator.addProvider(event.includeClient(), new CommonLanguageProvider(output));
+        generator.addProvider(event.includeServer(), new CommonLootTableProvider(output));
+        generator.addProvider(event.includeServer(), new RecipeProvider(output));
     }
 }

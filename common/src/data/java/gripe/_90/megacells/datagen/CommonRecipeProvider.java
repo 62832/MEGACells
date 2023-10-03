@@ -167,7 +167,7 @@ public class CommonRecipeProvider {
                 .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
                 .save(consumer, MEGACells.makeId("crafting/sky_steel_block"));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.SKY_STEEL_INGOT, 9)
-                .requires(MEGATags.SKY_STEEL_BLOCK_ITEM)
+                .requires(MEGABlocks.SKY_STEEL_BLOCK)
                 .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
                 .save(consumer, MEGACells.makeId("crafting/sky_steel_ingot_from_sky_steel_block"));
 
