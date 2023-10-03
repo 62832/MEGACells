@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -27,17 +28,15 @@ import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 
-public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
+public class ForgeRecipeProvider extends RecipeProvider {
     private static final TagKey<Item> OSMIUM = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
 
-    public RecipeProvider(PackOutput output) {
+    public ForgeRecipeProvider(PackOutput output) {
         super(output);
     }
 
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
-        CommonRecipeProvider.buildRecipes(consumer);
-
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                     .pattern("aba")

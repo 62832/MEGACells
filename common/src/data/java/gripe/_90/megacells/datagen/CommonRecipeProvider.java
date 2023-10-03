@@ -1,12 +1,12 @@
 package gripe._90.megacells.datagen;
 
-import static net.minecraft.data.recipes.RecipeProvider.has;
-
 import java.util.function.Consumer;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.FluidTags;
@@ -36,8 +36,13 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 
-public class CommonRecipeProvider {
-    public static void buildRecipes(Consumer<FinishedRecipe> consumer) {
+public class CommonRecipeProvider extends RecipeProvider {
+    public CommonRecipeProvider(PackOutput output) {
+        super(output);
+    }
+
+    @Override
+    public void buildRecipes(Consumer<FinishedRecipe> consumer) {
         component(consumer, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem(), null);
         component(consumer, MEGAItems.TIER_4M, MEGAItems.TIER_1M, null, ConventionTags.ENDER_PEARL_DUST);
         component(consumer, MEGAItems.TIER_16M, MEGAItems.TIER_4M, null, ConventionTags.ENDER_PEARL_DUST);

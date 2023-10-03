@@ -25,6 +25,8 @@ public class MEGADataGenerators {
 
         generator.addProvider(event.includeClient(), new CommonLanguageProvider(output));
         generator.addProvider(event.includeServer(), new CommonLootTableProvider(output));
-        generator.addProvider(event.includeServer(), new RecipeProvider(output));
+        generator.addProvider(event.includeServer(), new CommonRecipeProvider(output));
+
+        generator.addProvider(event.includeServer(), new ForgeRecipeProvider(output));
     }
 }
