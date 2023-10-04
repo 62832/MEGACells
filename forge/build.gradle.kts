@@ -12,6 +12,7 @@ loom {
             programArgs("--existing", project(":common").file("src/main/resources").absolutePath)
             programArgs("--existing", file("src/main/resources").absolutePath)
             programArgs("--mixin.config", "$modId.data.mixins.json")
+            programArgs("--mixin.config", "$modId.data.forge.mixins.json")
 
             @Suppress("UnstableApiUsage")
             mods {

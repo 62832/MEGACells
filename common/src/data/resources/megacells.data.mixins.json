@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "gripe._90.megacells.mixin.data",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["TextureSlotAccessor", "forge.MainMixin"],
+  "mixins": ["TextureSlotAccessor"],
   "injectors": {
     "defaultRequire": 1
   }

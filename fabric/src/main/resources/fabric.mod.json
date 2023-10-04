@@ -18,9 +18,7 @@
   "entrypoints": {
     "ae2": ["gripe._90.megacells.fabric.MEGACellsFabric"],
     "ae2:client": ["gripe._90.megacells.fabric.MEGACellsClient"],
-    "modmenu": ["gripe._90.megacells.integration.modmenu.ModMenuIntegration"],
-
-    "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
+    "modmenu": ["gripe._90.megacells.integration.modmenu.ModMenuIntegration"]
   },
 
   "depends": {

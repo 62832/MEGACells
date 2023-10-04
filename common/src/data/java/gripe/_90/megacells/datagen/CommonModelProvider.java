@@ -58,7 +58,7 @@ import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.mixin.data.TextureSlotAccessor;
 
 public class CommonModelProvider implements DataProvider {
-    private static final TextureSlot LAYER3 = textureSlot("layer3");
+    private static final TextureSlot LAYER3 = TextureSlotAccessor.invokeCreate("layer3");
     private static final ModelTemplate PORTABLE = new ModelTemplate(
             Optional.of(new ResourceLocation("minecraft:item/generated")),
             Optional.empty(),
@@ -67,12 +67,12 @@ public class CommonModelProvider implements DataProvider {
             TextureSlot.LAYER2,
             LAYER3);
 
-    private static final TextureSlot CELL = textureSlot("cell");
+    private static final TextureSlot CELL = TextureSlotAccessor.invokeCreate("cell");
     private static final ModelTemplate DRIVE_CELL =
             new ModelTemplate(Optional.of(AppEng.makeId("block/drive/drive_cell")), Optional.empty(), CELL);
 
-    private static final TextureSlot SIDES = textureSlot("sides");
-    private static final TextureSlot SIDES_STATUS = textureSlot("sidesStatus");
+    private static final TextureSlot SIDES = TextureSlotAccessor.invokeCreate("sides");
+    private static final TextureSlot SIDES_STATUS = TextureSlotAccessor.invokeCreate("sidesStatus");
     private static final ModelTemplate INTERFACE = new ModelTemplate(
             Optional.of(AppEng.makeId("part/interface_base")),
             Optional.empty(),
@@ -95,12 +95,6 @@ public class CommonModelProvider implements DataProvider {
 
     public CommonModelProvider(PackOutput output) {
         this.output = output;
-    }
-
-    private static TextureSlot textureSlot(String key) {
-        return MEGACells.PLATFORM.getLoader() == Loaders.FABRIC
-                ? TextureSlot.create(key)
-                : TextureSlotAccessor.invokeCreate(key);
     }
 
     @NotNull

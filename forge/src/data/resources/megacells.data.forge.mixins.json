@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "gripe._90.megacells.mixin.data.forge",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": ["MainMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -62,7 +62,7 @@ subprojects {
         silentMojangMappingsLicense()
 
         @Suppress("UnstableApiUsage")
-        mixin.defaultRefmapName.set("$modId-refmap.json")
+        mixin.defaultRefmapName.set("$modId.refmap.json")
     }
 
     repositories {
