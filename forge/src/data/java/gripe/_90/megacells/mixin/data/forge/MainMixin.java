@@ -1,4 +1,4 @@
-package gripe._90.megacells.mixin.data;
+package gripe._90.megacells.mixin.data.forge;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

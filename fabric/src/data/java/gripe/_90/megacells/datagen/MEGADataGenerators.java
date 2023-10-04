@@ -15,6 +15,6 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
         pack.addProvider((FabricDataOutput output) -> new CommonLanguageProvider(output));
         pack.addProvider((FabricDataOutput output) -> new CommonLootTableProvider(output));
         pack.addProvider((FabricDataOutput output) -> new CommonRecipeProvider(output));
-        pack.addProvider(ModelProvider::new);
+        pack.addProvider((FabricDataOutput output) -> new CommonModelProvider(output));
     }
 }

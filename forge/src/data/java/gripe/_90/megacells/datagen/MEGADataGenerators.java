@@ -14,19 +14,16 @@ public class MEGADataGenerators {
         var generator = event.getGenerator();
         var output = generator.getPackOutput();
 
-        var existing = event.getExistingFileHelper();
-        generator.addProvider(event.includeClient(), new ModelProvider.Items(output, existing));
-        generator.addProvider(event.includeClient(), new ModelProvider.Blocks(output, existing));
-        generator.addProvider(event.includeClient(), new ModelProvider.Parts(output, existing));
-
         var registries = event.getLookupProvider();
         generator.addProvider(event.includeServer(), new CommonTagProvider.BlockTags(output, registries));
         generator.addProvider(event.includeServer(), new CommonTagProvider.ItemTags(output, registries));
 
+        generator.addProvider(event.includeClient(), new CommonModelProvider(output));
         generator.addProvider(event.includeClient(), new CommonLanguageProvider(output));
         generator.addProvider(event.includeServer(), new CommonLootTableProvider(output));
         generator.addProvider(event.includeServer(), new CommonRecipeProvider(output));
 
         generator.addProvider(event.includeServer(), new ForgeRecipeProvider(output));
+        generator.addProvider(event.includeClient(), new ForgeModelProvider(output, event.getExistingFileHelper()));
     }
 }

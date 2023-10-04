@@ -2,6 +2,8 @@ package gripe._90.megacells.datagen;
 
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -35,7 +37,6 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import org.jetbrains.annotations.NotNull;
 
 public class CommonRecipeProvider extends RecipeProvider {
     public CommonRecipeProvider(PackOutput output) {
