@@ -70,7 +70,6 @@ public final class AppMekItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
                 "portable_chemical_cell_" + tier.namePrefix(),
-                p -> new ChemicalPortableCellItem(
-                        18 + tier.index() * 9, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, tier, p, 0x33528D));
+                p -> new ChemicalPortableCellItem(18, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, tier, p, 0x33528D));
     }
 }
