@@ -8,14 +8,11 @@ import net.minecraft.world.item.ItemStack;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import appeng.util.ConfigInventory;
-import appeng.util.prioritylist.IPartitionList;
 
 import me.ramidzkh.mekae2.ae2.MekanismKey;
 import me.ramidzkh.mekae2.ae2.MekanismKeyType;
@@ -29,67 +26,50 @@ public class RadioactiveCellInventory implements StorageCell {
     private static final String KEY = "key";
     private static final String COUNT = "count";
 
-    public static final int MAX_BYTES = 256;
+    static final int MAX_BYTES = 256;
     private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
 
     private final ISaveProvider container;
-    private final ItemStack i;
-    private final MEGARadioactiveCell cellType;
+    private final ItemStack stack;
 
     private AEKey storedChemical;
+    private final MekanismKey filterChemical;
     private long chemAmount;
-    private final IPartitionList partitionList;
     private boolean isPersisted = true;
 
-    public RadioactiveCellInventory(MEGARadioactiveCell cellType, ItemStack o, ISaveProvider container) {
-        this.i = o;
-        this.cellType = cellType;
+    public RadioactiveCellInventory(MEGARadioactiveCell cell, ItemStack stack, ISaveProvider container) {
+        this.stack = stack;
         this.container = container;
 
-        this.storedChemical = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
-        this.chemAmount = getTag().getLong(COUNT);
+        var filter = cell.getConfigInventory(this.stack).getKey(0);
+        filterChemical = filter instanceof MekanismKey chemical ? chemical : null;
 
-        var builder = IPartitionList.builder();
-        var config = getConfigInventory();
-        builder.addAll(config.keySet());
-        this.partitionList = builder.build();
+        storedChemical = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
+        chemAmount = getTag().getLong(COUNT);
     }
 
     private CompoundTag getTag() {
-        return this.i.getOrCreateTag();
-    }
-
-    public static RadioactiveCellInventory createInventory(ItemStack o, ISaveProvider container) {
-        Objects.requireNonNull(o, "Cannot create cell inventory for null itemstack");
-
-        if (!(o.getItem() instanceof MEGARadioactiveCell cellType)) {
-            return null;
-        }
-
-        return new RadioactiveCellInventory(cellType, o, container);
-    }
-
-    private static boolean isCellEmpty(RadioactiveCellInventory inv) {
-        if (inv != null) {
-            return inv.getAvailableStacks().isEmpty();
-        }
-        return true;
+        return stack.getOrCreateTag();
     }
 
     @Override
     public CellState getStatus() {
-        if (this.chemAmount == 0) {
+        if (chemAmount == 0) {
             return CellState.EMPTY;
         }
-        if (this.chemAmount == MAX_MB) {
+
+        if (chemAmount == MAX_MB) {
             return CellState.FULL;
         }
-        if (this.chemAmount > MAX_MB / 2) {
+
+        if (chemAmount > MAX_MB / 2) {
             return CellState.TYPES_FULL;
         }
-        if (!this.storedChemical.equals(getFilterItem())) {
+
+        if (!storedChemical.equals(getFilterChemical())) {
             return CellState.FULL;
         }
+
         return CellState.NOT_EMPTY;
     }
 
@@ -101,26 +81,17 @@ public class RadioactiveCellInventory implements StorageCell {
         return chemAmount;
     }
 
-    public AEKey getFilterItem() {
-        var config = getConfigInventory().keySet().stream().toList();
-        if (config.isEmpty()) {
-            return null;
-        } else {
-            return config.get(0);
-        }
+    public AEKey getFilterChemical() {
+        return filterChemical;
     }
 
     public long getUsedBytes() {
-        return this.chemAmount / MekanismKeyType.TYPE.getAmountPerByte();
+        return chemAmount / MekanismKeyType.TYPE.getAmountPerByte();
     }
 
     @Override
     public double getIdleDrain() {
         return 250.0f;
-    }
-
-    private ConfigInventory getConfigInventory() {
-        return this.cellType.getConfigInventory(this.i);
     }
 
     public boolean isBlackListed(AEKey what) {
@@ -141,35 +112,29 @@ public class RadioactiveCellInventory implements StorageCell {
             return 0;
         }
 
-        if (!this.partitionList.isListed(what) || isBlackListed(what)) {
+        if (!what.equals(filterChemical) || isBlackListed(what)) {
             return 0;
         }
 
-        if (what instanceof AEItemKey itemKey) {
-            var meInventory = createInventory(itemKey.toStack(), null);
-            if (!isCellEmpty(meInventory)) {
-                return 0;
-            }
-        }
-
-        if (this.storedChemical != null && !this.storedChemical.equals(what)) {
+        if (storedChemical != null && !storedChemical.equals(what)) {
             return 0;
         }
 
-        if (this.chemAmount == MAX_MB) {
+        if (chemAmount == MAX_MB) {
             return 0;
         }
 
-        long remainingAmount = Math.max(0, MAX_MB - this.chemAmount);
+        long remainingAmount = Math.max(0, MAX_MB - chemAmount);
         if (amount > remainingAmount) {
             amount = remainingAmount;
         }
 
         if (mode == Actionable.MODULATE) {
-            if (this.storedChemical == null) {
-                this.storedChemical = what;
+            if (storedChemical == null) {
+                storedChemical = what;
             }
-            this.chemAmount += amount;
+
+            chemAmount += amount;
             saveChanges();
         }
 
@@ -181,19 +146,21 @@ public class RadioactiveCellInventory implements StorageCell {
         var extractAmount = Math.min(Integer.MAX_VALUE, amount);
 
         var currentCount = this.chemAmount;
-        if (this.chemAmount > 0 && Objects.equals(this.storedChemical, what)) {
+        if (chemAmount > 0 && Objects.equals(storedChemical, what)) {
             if (extractAmount >= currentCount) {
                 if (mode == Actionable.MODULATE) {
-                    this.storedChemical = null;
-                    this.chemAmount = 0;
+                    storedChemical = null;
+                    chemAmount = 0;
                     saveChanges();
                 }
+
                 return currentCount;
             } else {
                 if (mode == Actionable.MODULATE) {
-                    this.chemAmount -= extractAmount;
+                    chemAmount -= extractAmount;
                     saveChanges();
                 }
+
                 return extractAmount;
             }
         }
@@ -201,41 +168,47 @@ public class RadioactiveCellInventory implements StorageCell {
     }
 
     protected void saveChanges() {
-        this.isPersisted = false;
-        if (this.container != null) {
-            this.container.saveChanges();
+        isPersisted = false;
+
+        if (container != null) {
+            container.saveChanges();
         } else {
             // if there is no ISaveProvider, store to NBT immediately
-            this.persist();
+            persist();
         }
     }
 
     @Override
     public void persist() {
-        if (this.isPersisted) {
+        if (isPersisted) {
             return;
         }
 
-        if (this.storedChemical == null || this.chemAmount < 0) {
-            this.getTag().remove(KEY);
-            this.getTag().remove(COUNT);
+        if (storedChemical == null || chemAmount < 0) {
+            getTag().remove(KEY);
+            getTag().remove(COUNT);
         } else {
-            this.getTag().put(KEY, this.storedChemical.toTagGeneric());
-            this.getTag().putLong(COUNT, this.chemAmount);
+            getTag().put(KEY, storedChemical.toTagGeneric());
+            getTag().putLong(COUNT, chemAmount);
         }
 
-        this.isPersisted = true;
+        isPersisted = true;
     }
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (this.storedChemical != null && this.chemAmount > 0) {
-            out.add(this.storedChemical, this.chemAmount);
+        if (storedChemical != null && chemAmount > 0) {
+            out.add(storedChemical, chemAmount);
         }
     }
 
     @Override
+    public boolean canFitInsideCell() {
+        return filterChemical == null && storedChemical == null && chemAmount == 0;
+    }
+
+    @Override
     public Component getDescription() {
-        return i.getHoverName();
+        return stack.getHoverName();
     }
 }

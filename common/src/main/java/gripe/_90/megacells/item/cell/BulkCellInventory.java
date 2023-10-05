@@ -42,7 +42,9 @@ public class BulkCellInventory implements StorageCell {
         this.stack = stack;
         this.container = container;
 
-        filterItem = (AEItemKey) cell.getConfigInventory(this.stack).getKey(0);
+        var filter = cell.getConfigInventory(this.stack).getKey(0);
+        filterItem = filter instanceof AEItemKey item ? item : null;
+
         storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
         unitCount = !getTag().getString(UNIT_COUNT).isEmpty()
                 ? new BigInteger(getTag().getString(UNIT_COUNT))
@@ -191,7 +193,7 @@ public class BulkCellInventory implements StorageCell {
             return;
         }
 
-        if (storedItem == null || unitCount.signum() == -1) {
+        if (storedItem == null || unitCount.signum() < 1) {
             getTag().remove(KEY);
             getTag().remove(UNIT_COUNT);
         } else {
@@ -231,6 +233,11 @@ public class BulkCellInventory implements StorageCell {
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
         return what instanceof AEItemKey item
                 && (item.equals(storedItem) || item.equals(filterItem) || compressionChain.containsVariant(item));
+    }
+
+    @Override
+    public boolean canFitInsideCell() {
+        return filterItem == null && storedItem == null && unitCount.signum() < 1;
     }
 
     @Override

@@ -2,6 +2,7 @@ package gripe._90.megacells.integration.appmek.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +57,7 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
 
         if (inv != null) {
             var containedType = inv.getAvailableStacks().getFirstKey();
-            var filterItem = inv.getFilterItem();
+            var filterItem = inv.getFilterChemical();
 
             lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
             lines.add(Tooltips.of(
@@ -94,8 +95,8 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
         if (AEConfig.instance().isTooltipShowCellContent()) {
             if (inv.getStoredChemical() != null) {
                 content.add(new GenericStack(inv.getStoredChemical(), inv.getChemAmount()));
-            } else if (inv.getFilterItem() != null) {
-                content.add(new GenericStack(inv.getFilterItem(), 0));
+            } else if (inv.getFilterChemical() != null) {
+                content.add(new GenericStack(inv.getFilterChemical(), 0));
             }
         }
 
@@ -113,7 +114,8 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
         @Nullable
         @Override
         public RadioactiveCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider container) {
-            return RadioactiveCellInventory.createInventory(is, container);
+            Objects.requireNonNull(is, "Cannot create cell inventory for null itemstack");
+            return isCell(is) ? new RadioactiveCellInventory((MEGARadioactiveCell) is.getItem(), is, container) : null;
         }
     }
 }
