@@ -81,7 +81,6 @@ dependencies {
     modRuntimeOnly(libs.patchouli.forge)
 
     modImplementation(libs.ae2wtlib.forge)
-    modRuntimeOnly(libs.cloth.forge)
     modRuntimeOnly(libs.architectury.forge)
     modRuntimeOnly(libs.curios)
 

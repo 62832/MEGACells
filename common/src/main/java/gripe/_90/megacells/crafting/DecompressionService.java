@@ -7,6 +7,7 @@ import java.util.Set;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.crafting.IPatternDetails;
@@ -26,7 +27,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
     private final List<DecompressionModulePart> modules = new ObjectArrayList<>();
 
     @Override
-    public void addNode(IGridNode node) {
+    public void addNode(IGridNode node, CompoundTag savedData) {
         if (node.getOwner() instanceof IChestOrDrive cellHost) {
             cellHosts.add(cellHost);
         }
