@@ -6,7 +6,7 @@ loom {
             source("data")
 
             property("fabric-api.datagen")
-            property("fabric-api.datagen.modid", "${property("modId")}-data")
+            property("fabric-api.datagen.modid", "${project.property("modId")}-data")
             property("fabric-api.datagen.output-dir", file("src/generated/resources").absolutePath)
             property("fabric-api.datagen.strict-validation")
         }
