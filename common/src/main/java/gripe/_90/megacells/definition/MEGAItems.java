@@ -26,6 +26,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.DecompressionPatternItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCellItem;
+import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;
@@ -125,6 +126,11 @@ public final class MEGAItems {
                 "MEGA Decompression Module",
                 "decompression_module",
                 p -> new PartItem<>(p, DecompressionModulePart.class, DecompressionModulePart::new));
+    });
+
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = Util.make(() -> {
+        PartModels.registerModels(PartModelsHelper.createModels(CellDockPart.class));
+        return item("ME Cell Dock", "cell_dock", p -> new PartItem<>(p, CellDockPart.class, CellDockPart::new));
     });
 
     public static List<ItemDefinition<?>> getItemCells() {
