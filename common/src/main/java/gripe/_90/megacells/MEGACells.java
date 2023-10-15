@@ -29,7 +29,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appbot.AppBotItems;
-import gripe._90.megacells.item.cell.MEGABulkCell;
+import gripe._90.megacells.item.cell.BulkCellItem;
 
 public final class MEGACells {
     private MEGACells() {}
@@ -74,7 +74,7 @@ public final class MEGACells {
                 .forEach(
                         c -> StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_fluid_cell")));
 
-        StorageCells.addCellHandler(MEGABulkCell.HANDLER);
+        StorageCells.addCellHandler(BulkCellItem.HANDLER);
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, MEGACells.makeId("block/drive/cells/bulk_item_cell"));
 
         MEGAItems.getItemPortables()

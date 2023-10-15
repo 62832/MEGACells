@@ -13,10 +13,10 @@ import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
 
-public class MEGAPortableCell extends PortableCellItem {
+public class MEGAPortableCellItem extends PortableCellItem {
     private final StorageTier tier;
 
-    public MEGAPortableCell(
+    public MEGAPortableCellItem(
             Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu, int defaultColour) {
         super(
                 keyType,

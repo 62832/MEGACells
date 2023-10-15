@@ -38,10 +38,11 @@ public class BulkCellInventory implements StorageCell {
 
     private boolean isPersisted = true;
 
-    public BulkCellInventory(MEGABulkCell cell, ItemStack stack, ISaveProvider container) {
+    BulkCellInventory(ItemStack stack, ISaveProvider container) {
         this.stack = stack;
         this.container = container;
 
+        var cell = (BulkCellItem) stack.getItem();
         var filter = cell.getConfigInventory(this.stack).getKey(0);
         filterItem = filter instanceof AEItemKey item ? item : null;
 

@@ -2,7 +2,6 @@ package gripe._90.megacells.item.cell;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,10 +32,10 @@ import appeng.util.ConfigInventory;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 
-public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
+public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
     public static final Handler HANDLER = new Handler();
 
-    public MEGABulkCell(Properties properties) {
+    public BulkCellItem(Properties properties) {
         super(properties.stacksTo(1));
     }
 
@@ -133,14 +132,13 @@ public class MEGABulkCell extends AEBaseItem implements ICellWorkbenchItem {
 
         @Override
         public boolean isCell(ItemStack is) {
-            return is != null && is.getItem() instanceof MEGABulkCell;
+            return is != null && is.getItem() instanceof BulkCellItem;
         }
 
         @Nullable
         @Override
-        public BulkCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider container) {
-            Objects.requireNonNull(is, "Cannot create cell inventory for null itemstack");
-            return isCell(is) ? new BulkCellInventory((MEGABulkCell) is.getItem(), is, container) : null;
+        public BulkCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider host) {
+            return isCell(is) ? new BulkCellInventory(is, host) : null;
         }
     }
 }

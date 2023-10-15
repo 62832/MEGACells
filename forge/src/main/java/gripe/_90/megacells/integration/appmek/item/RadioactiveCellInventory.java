@@ -37,10 +37,11 @@ public class RadioactiveCellInventory implements StorageCell {
     private long chemAmount;
     private boolean isPersisted = true;
 
-    public RadioactiveCellInventory(MEGARadioactiveCell cell, ItemStack stack, ISaveProvider container) {
+    RadioactiveCellInventory(ItemStack stack, ISaveProvider container) {
         this.stack = stack;
         this.container = container;
 
+        var cell = (RadioactiveCellItem) stack.getItem();
         var filter = cell.getConfigInventory(this.stack).getKey(0);
         filterChemical = filter instanceof MekanismKey chemical ? chemical : null;
 

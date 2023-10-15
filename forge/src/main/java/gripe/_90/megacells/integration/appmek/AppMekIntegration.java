@@ -14,7 +14,7 @@ import me.ramidzkh.mekae2.AMItems;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
+import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 
 public final class AppMekIntegration {
     public static void initUpgrades() {
@@ -50,7 +50,7 @@ public final class AppMekIntegration {
                 .forEach(c ->
                         StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_chemical_cell")));
 
-        StorageCells.addCellHandler(MEGARadioactiveCell.HANDLER);
+        StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
         StorageCellModels.registerModel(
                 AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
                 MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
