@@ -48,6 +48,7 @@ import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 @OnlyIn(Dist.CLIENT)
 public class MEGACellsClient {
     static void init() {
+        initConfigScreen();
         initBuiltInModels();
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -55,14 +56,6 @@ public class MEGACellsClient {
         bus.addListener(MEGACellsClient::initRenderTypes);
         bus.addListener(MEGACellsClient::initModels);
         bus.addListener(MEGACellsClient::initItemColors);
-
-        // the absolute state
-        ModLoadingContext.get()
-                .registerExtensionPoint(
-                        ConfigScreenHandler.ConfigScreenFactory.class,
-                        () -> new ConfigScreenHandler.ConfigScreenFactory(
-                                (client, parent) -> AutoConfig.getConfigScreen(MEGAConfig.class, parent)
-                                        .get()));
     }
 
     private static void initScreens(FMLClientSetupEvent ignoredEvent) {
@@ -126,5 +119,15 @@ public class MEGACellsClient {
 
         event.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
         event.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
+    }
+
+    private static void initConfigScreen() {
+        // the absolute state
+        ModLoadingContext.get()
+                .registerExtensionPoint(
+                        ConfigScreenHandler.ConfigScreenFactory.class,
+                        () -> new ConfigScreenHandler.ConfigScreenFactory(
+                                (client, parent) -> AutoConfig.getConfigScreen(MEGAConfig.class, parent)
+                                        .get()));
     }
 }

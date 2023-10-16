@@ -25,7 +25,7 @@ import appeng.menu.me.common.MEStorageMenu;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.crafting.DecompressionPatternItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
-import gripe._90.megacells.item.cell.MEGAPortableCellItem;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
@@ -88,17 +88,17 @@ public final class MEGAItems {
     public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL =
             item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
 
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_ITEM_CELL_1M = itemPortable(TIER_1M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_ITEM_CELL_4M = itemPortable(TIER_4M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_ITEM_CELL_16M = itemPortable(TIER_16M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_ITEM_CELL_64M = itemPortable(TIER_64M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_ITEM_CELL_256M = itemPortable(TIER_256M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = itemPortable(TIER_1M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = itemPortable(TIER_4M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_16M = itemPortable(TIER_16M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_64M = itemPortable(TIER_64M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_256M = itemPortable(TIER_256M);
 
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_FLUID_CELL_1M = fluidPortable(TIER_1M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_FLUID_CELL_4M = fluidPortable(TIER_4M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_FLUID_CELL_16M = fluidPortable(TIER_16M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_FLUID_CELL_64M = fluidPortable(TIER_64M);
-    public static final ItemDefinition<MEGAPortableCellItem> PORTABLE_FLUID_CELL_256M = fluidPortable(TIER_256M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_1M = fluidPortable(TIER_1M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_4M = fluidPortable(TIER_4M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_16M = fluidPortable(TIER_16M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = fluidPortable(TIER_64M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = fluidPortable(TIER_256M);
 
     public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD =
             item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
@@ -202,20 +202,18 @@ public final class MEGAItems {
                         AEKeyType.fluids()));
     }
 
-    private static ItemDefinition<MEGAPortableCellItem> itemPortable(StorageTier tier) {
+    private static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
                 "portable_item_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCellItem(
-                        p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
+                p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
     }
 
-    private static ItemDefinition<MEGAPortableCellItem> fluidPortable(StorageTier tier) {
+    private static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCellItem(
-                        p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x00F1C5));
+                p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0xF1C5));
     }
 
     public static <T extends Item> ItemDefinition<T> item(

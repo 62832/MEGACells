@@ -2,6 +2,7 @@ package gripe._90.megacells.item.part;
 
 import java.util.List;
 
+import appeng.api.networking.IGridNodeListener;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,7 @@ public class CellDockPart extends AEBasePart
     private final AppEngCellInventory cellInventory = new AppEngCellInventory(this, 1);
     private DriveWatcher cellWatcher;
     private boolean isCached = false;
+    private boolean wasOnline = false;
     private int priority = 0;
 
     public CellDockPart(IPartItem<?> partItem) {
@@ -75,6 +77,17 @@ public class CellDockPart extends AEBasePart
         data.put("cell", cell);
 
         data.putInt("priority", priority);
+    }
+
+    @Override
+    protected void onMainNodeStateChanged(IGridNodeListener.State reason) {
+        super.onMainNodeStateChanged(reason);
+        var online = getMainNode().isOnline();
+
+        if (online != wasOnline) {
+            wasOnline = online;
+            IStorageProvider.requestUpdate(getMainNode());
+        }
     }
 
     @Override
