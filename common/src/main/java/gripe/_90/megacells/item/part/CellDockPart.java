@@ -1,23 +1,35 @@
 package gripe._90.megacells.item.part;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.invoke.VarHandle;
 import java.util.List;
 
-import appeng.api.networking.IGridNodeListener;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 
 import appeng.api.implementations.blockentities.IChestOrDrive;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.GridFlags;
+import appeng.api.networking.IGridNodeListener;
+import appeng.api.orientation.BlockOrientation;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
@@ -28,6 +40,9 @@ import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.StorageCell;
 import appeng.blockentity.inventory.AppEngCellInventory;
+import appeng.client.render.BakedModelUnwrapper;
+import appeng.client.render.model.DriveBakedModel;
+import appeng.core.definitions.AEBlocks;
 import appeng.helpers.IPriorityHost;
 import appeng.items.parts.PartModels;
 import appeng.me.storage.DriveWatcher;
@@ -45,9 +60,32 @@ import gripe._90.megacells.menu.CellDockMenu;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IPriorityHost, IStorageProvider {
-    // TODO
     @PartModels
-    public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
+    public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/cell_dock"));
+
+    private static final VarHandle LED_RENDER_TYPE;
+    private static final MethodHandle LED_RENDER;
+
+    static {
+        try {
+            var cellLedRenderer = Class.forName("appeng.client.render.tesr.CellLedRenderer");
+            var lookup = MethodHandles.privateLookupIn(cellLedRenderer, MethodHandles.lookup());
+
+            LED_RENDER_TYPE = lookup.findStaticVarHandle(cellLedRenderer, "RENDER_LAYER", RenderType.class);
+            LED_RENDER = lookup.findStatic(
+                    cellLedRenderer,
+                    "renderLed",
+                    MethodType.methodType(
+                            void.class,
+                            IChestOrDrive.class,
+                            int.class,
+                            VertexConsumer.class,
+                            PoseStack.class,
+                            float.class));
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private final AppEngCellInventory cellInventory = new AppEngCellInventory(this, 1);
     private DriveWatcher cellWatcher;
@@ -55,9 +93,17 @@ public class CellDockPart extends AEBasePart
     private boolean wasOnline = false;
     private int priority = 0;
 
+    // Client-side cell attributes to display the proper dynamic model without synchronising the entire cell's inventory
+    // when a dock comes into view
+    private Item clientCell = Items.AIR;
+    private CellState clientCellState = CellState.ABSENT;
+
     public CellDockPart(IPartItem<?> partItem) {
         super(partItem);
-        getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL).addService(IStorageProvider.class, this);
+        getMainNode()
+                .setIdlePowerUsage(0.5)
+                .setFlags(GridFlags.REQUIRE_CHANNEL)
+                .addService(IStorageProvider.class, this);
         cellInventory.setFilter(new CellInventoryFilter());
     }
 
@@ -80,6 +126,62 @@ public class CellDockPart extends AEBasePart
     }
 
     @Override
+    public boolean readFromStream(FriendlyByteBuf data) {
+        var changed = super.readFromStream(data);
+
+        var oldCell = clientCell;
+        var oldCellState = clientCellState;
+
+        clientCell = BuiltInRegistries.ITEM.get(data.readResourceLocation());
+        clientCellState = data.readEnum(CellState.class);
+
+        return changed || oldCell != clientCell || oldCellState != clientCellState;
+    }
+
+    @Override
+    public void writeToStream(FriendlyByteBuf data) {
+        super.writeToStream(data);
+        data.writeResourceLocation(BuiltInRegistries.ITEM.getKey(getCell().getItem()));
+        data.writeEnum(clientCellState = getCellStatus(0));
+    }
+
+    @Override
+    public void readVisualStateFromNBT(CompoundTag data) {
+        super.readVisualStateFromNBT(data);
+
+        try {
+            this.clientCell = BuiltInRegistries.ITEM.get(new ResourceLocation(data.getString("cellId")));
+        } catch (Exception e) {
+            MEGACells.LOGGER.warn("Couldn't read cell item for {} from {}", this, data);
+            this.clientCell = Items.AIR;
+        }
+
+        try {
+            this.clientCellState = CellState.valueOf(data.getString("cellStatus"));
+        } catch (Exception e) {
+            MEGACells.LOGGER.warn("Couldn't read cell status for {} from {}", this, data);
+            this.clientCellState = CellState.ABSENT;
+        }
+    }
+
+    @Override
+    public void writeVisualStateToNBT(CompoundTag data) {
+        super.writeVisualStateToNBT(data);
+        data.putString(
+                "cellId", BuiltInRegistries.ITEM.getKey(getCell().getItem()).toString());
+        data.putString("cellStatus", getCellStatus(0).name());
+    }
+
+    private void recalculateDisplay() {
+        var cellState = getCellStatus(0);
+
+        if (clientCellState != cellState) {
+            getHost().markForUpdate();
+            clientCellState = cellState;
+        }
+    }
+
+    @Override
     protected void onMainNodeStateChanged(IGridNodeListener.State reason) {
         super.onMainNodeStateChanged(reason);
         var online = getMainNode().isOnline();
@@ -87,6 +189,7 @@ public class CellDockPart extends AEBasePart
         if (online != wasOnline) {
             wasOnline = online;
             IStorageProvider.requestUpdate(getMainNode());
+            recalculateDisplay();
         }
     }
 
@@ -143,7 +246,9 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public CellState getCellStatus(int slot) {
-        return slot == 0 && cellWatcher != null ? cellWatcher.getStatus() : CellState.ABSENT;
+        return isClientSide()
+                ? clientCellState
+                : slot == 0 && cellWatcher != null ? cellWatcher.getStatus() : CellState.ABSENT;
     }
 
     @Override
@@ -177,18 +282,20 @@ public class CellDockPart extends AEBasePart
         if (!isCached) {
             cellWatcher = null;
             cellInventory.setHandler(0, null);
+            var power = 0.5;
 
             if (!getCell().isEmpty()) {
-                isCached = true;
                 var cell = StorageCells.getCellInventory(getCell(), this::onCellContentChanged);
 
                 if (cell != null) {
-                    cellWatcher = new DriveWatcher(cell, () -> {});
+                    cellWatcher = new DriveWatcher(cell, this::recalculateDisplay);
                     cellInventory.setHandler(0, cell);
-
-                    getMainNode().setIdlePowerUsage(0.5 + cell.getIdleDrain());
+                    power += cell.getIdleDrain();
                 }
             }
+
+            getMainNode().setIdlePowerUsage(power);
+            isCached = true;
         }
     }
 
@@ -223,7 +330,6 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public void getBoxes(IPartCollisionHelper bch) {
-        // TODO
         bch.addBox(3, 3, 12, 13, 13, 16);
         bch.addBox(5, 5, 11, 11, 11, 12);
     }
@@ -234,6 +340,11 @@ public class CellDockPart extends AEBasePart
     }
 
     @Override
+    public boolean requireDynamicRender() {
+        return clientCell != Items.AIR;
+    }
+
+    @Override
     public void renderDynamic(
             float partialTicks,
             PoseStack poseStack,
@@ -241,6 +352,28 @@ public class CellDockPart extends AEBasePart
             int combinedLightIn,
             int combinedOverlayIn) {
         // TODO
+        var driveModel = Minecraft.getInstance()
+                .getModelManager()
+                .getBlockModelShaper()
+                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
+        var cellModel =
+                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(clientCell);
+
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
+
+        var orientation = BlockOrientation.get(getSide());
+        poseStack.mulPose(orientation.getQuaternion());
+        poseStack.translate(-0.5, -0.5, -0.5);
+
+        try {
+            var ledBuffer = buffers.getBuffer((RenderType) LED_RENDER_TYPE.get());
+            LED_RENDER.invoke(this, 0, ledBuffer, poseStack, partialTicks);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+        poseStack.popPose();
     }
 
     private static class CellInventoryFilter implements IAEItemFilter {
