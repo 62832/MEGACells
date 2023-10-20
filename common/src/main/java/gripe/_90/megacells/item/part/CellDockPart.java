@@ -14,10 +14,13 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -65,23 +68,31 @@ public class CellDockPart extends AEBasePart
 
     private static final VarHandle LED_RENDER_TYPE;
     private static final MethodHandle LED_RENDER;
+    private static final MethodHandle CELL_MODEL;
 
     static {
         try {
-            var cellLedRenderer = Class.forName("appeng.client.render.tesr.CellLedRenderer");
-            var lookup = MethodHandles.privateLookupIn(cellLedRenderer, MethodHandles.lookup());
+            var lookup = MethodHandles.lookup();
 
-            LED_RENDER_TYPE = lookup.findStaticVarHandle(cellLedRenderer, "RENDER_LAYER", RenderType.class);
-            LED_RENDER = lookup.findStatic(
-                    cellLedRenderer,
-                    "renderLed",
-                    MethodType.methodType(
-                            void.class,
-                            IChestOrDrive.class,
-                            int.class,
-                            VertexConsumer.class,
-                            PoseStack.class,
-                            float.class));
+            var cellLedRenderer = Class.forName("appeng.client.render.tesr.CellLedRenderer");
+            LED_RENDER_TYPE = MethodHandles.privateLookupIn(cellLedRenderer, lookup)
+                    .findStaticVarHandle(cellLedRenderer, "RENDER_LAYER", RenderType.class);
+            LED_RENDER = MethodHandles.privateLookupIn(cellLedRenderer, lookup)
+                    .findStatic(
+                            cellLedRenderer,
+                            "renderLed",
+                            MethodType.methodType(
+                                    void.class,
+                                    IChestOrDrive.class,
+                                    int.class,
+                                    VertexConsumer.class,
+                                    PoseStack.class,
+                                    float.class));
+
+            var cellModel = Class.forName("appeng.client.render.tesr.ChestBlockEntityRenderer$FaceRotatingModel");
+            CELL_MODEL = MethodHandles.privateLookupIn(cellModel, lookup)
+                    .findConstructor(
+                            cellModel, MethodType.methodType(void.class, BakedModel.class, BlockOrientation.class));
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -265,6 +276,7 @@ public class CellDockPart extends AEBasePart
     @Override
     public void saveChanges() {
         getHost().markForSave();
+        getHost().markForUpdate();
     }
 
     @Override
@@ -275,7 +287,6 @@ public class CellDockPart extends AEBasePart
         }
 
         IStorageProvider.requestUpdate(getMainNode());
-        getHost().markForSave();
     }
 
     private void updateState() {
@@ -311,8 +322,9 @@ public class CellDockPart extends AEBasePart
     @Override
     public void setPriority(int newValue) {
         priority = newValue;
+        getHost().markForSave();
+
         isCached = false;
-        saveChanges();
         updateState();
 
         IStorageProvider.requestUpdate(getMainNode());
@@ -341,7 +353,7 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public boolean requireDynamicRender() {
-        return clientCell != Items.AIR;
+        return true;
     }
 
     @Override
@@ -351,7 +363,10 @@ public class CellDockPart extends AEBasePart
             MultiBufferSource buffers,
             int combinedLightIn,
             int combinedOverlayIn) {
-        // TODO
+        if (getLevel() == null || clientCell == Items.AIR) {
+            return;
+        }
+
         var driveModel = Minecraft.getInstance()
                 .getModelManager()
                 .getBlockModelShaper()
@@ -362,11 +377,30 @@ public class CellDockPart extends AEBasePart
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
 
-        var orientation = BlockOrientation.get(getSide());
+        var front = getSide() == Direction.UP || getSide() == Direction.DOWN ? Direction.NORTH : Direction.UP;
+        var orientation = BlockOrientation.get(front, getSide());
+
         poseStack.mulPose(orientation.getQuaternion());
-        poseStack.translate(-0.5, -0.5, -0.5);
+        poseStack.translate(-3.0 / 16, 5.0 / 16, -5.0 / 16);
 
         try {
+            var cellBuffer = buffers.getBuffer(RenderType.cutout());
+            var cell = CELL_MODEL.invoke(cellModel, orientation);
+            Minecraft.getInstance()
+                    .getBlockRenderer()
+                    .getModelRenderer()
+                    .tesselateBlock(
+                            getLevel(),
+                            (BakedModel) cell,
+                            getBlockEntity().getBlockState(),
+                            getBlockEntity().getBlockPos(),
+                            poseStack,
+                            cellBuffer,
+                            false,
+                            RandomSource.create(),
+                            0L,
+                            combinedOverlayIn);
+
             var ledBuffer = buffers.getBuffer((RenderType) LED_RENDER_TYPE.get());
             LED_RENDER.invoke(this, 0, ledBuffer, poseStack, partialTicks);
         } catch (Throwable e) {
