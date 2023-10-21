@@ -367,13 +367,6 @@ public class CellDockPart extends AEBasePart
             return;
         }
 
-        var driveModel = Minecraft.getInstance()
-                .getModelManager()
-                .getBlockModelShaper()
-                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-        var cellModel =
-                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(clientCell);
-
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
 
@@ -381,7 +374,14 @@ public class CellDockPart extends AEBasePart
         var orientation = BlockOrientation.get(front, getSide());
 
         poseStack.mulPose(orientation.getQuaternion());
-        poseStack.translate(-3.0 / 16, 5.0 / 16, -5.0 / 16);
+        poseStack.translate(-3F / 16, 5F / 16, -4F / 16);
+
+        var driveModel = Minecraft.getInstance()
+                .getModelManager()
+                .getBlockModelShaper()
+                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
+        var cellModel =
+                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(clientCell);
 
         try {
             var cellBuffer = buffers.getBuffer(RenderType.cutout());
