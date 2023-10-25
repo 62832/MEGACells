@@ -1,12 +1,13 @@
 package gripe._90.megacells.util;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
@@ -27,12 +28,12 @@ public class CompressionService {
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
     // This value is typically either 4 or 9 for any given item, or 1 for the smallest base variant.
-    private final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
+    private final Set<CompressionChain> compressionChains = new ObjectOpenHashSet<>();
 
     // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
     // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
     // based on its usually irreversible recipe.
-    private final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
+    private final Set<Override> overrides = new ObjectOpenHashSet<>();
 
     private CompressionService() {}
 
@@ -180,26 +181,19 @@ public class CompressionService {
             return true;
         }
 
-        var compressible = false;
-        var decompressible = false;
-
-        var input = recipe.getIngredients().get(0);
-        var output = recipe.getResultItem(access);
+        var testInput = recipe.getIngredients().get(0).getItems();
+        var testOutput = recipe.getResultItem(access).getItem();
 
         for (var candidate : candidates) {
-            for (var item : candidate.getIngredients().get(0).getItems()) {
-                if (item.getItem().equals(output.getItem())) {
-                    compressible = true;
-                }
-            }
+            var input = candidate.getIngredients().get(0).getItems();
+            var output = candidate.getResultItem(access).getItem();
 
-            for (var item : input.getItems()) {
-                if (item.getItem().equals(candidate.getResultItem(access).getItem())) {
-                    decompressible = true;
-                }
-            }
+            var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput));
+            var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output));
 
-            if (compressible && decompressible) return true;
+            if (compressible && decompressible) {
+                return true;
+            }
         }
 
         return false;
@@ -217,7 +211,7 @@ public class CompressionService {
                 var larger = compressed ? output.getItem() : input.getItem();
                 var factor = compressed ? recipe.getIngredients().size() : output.getCount();
 
-                overrides.add(new Override(smaller, larger, compressed, factor));
+                overrides.add(new Override(smaller, larger, factor));
                 return true;
             }
         }
@@ -225,5 +219,5 @@ public class CompressionService {
         return false;
     }
 
-    private record Override(Item smaller, Item larger, boolean compressed, int factor) {}
+    private record Override(Item smaller, Item larger, int factor) {}
 }

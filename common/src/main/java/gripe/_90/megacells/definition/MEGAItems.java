@@ -200,7 +200,8 @@ public final class MEGAItems {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
                 "portable_item_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCellItem(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
+                p -> new MEGAPortableCellItem(
+                        p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x353535));
     }
 
     private static ItemDefinition<MEGAPortableCellItem> fluidPortable(StorageTier tier) {

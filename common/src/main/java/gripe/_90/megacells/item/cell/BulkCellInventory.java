@@ -118,7 +118,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !compressionChain.containsVariant(item)) {
+        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item)) {
             return 0;
         }
 
@@ -151,7 +151,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !compressionChain.containsVariant(item)) {
+        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item)) {
             return 0;
         }
 
