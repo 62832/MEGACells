@@ -1,6 +1,8 @@
 package gripe._90.megacells.util;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -61,13 +63,15 @@ public class CompressionService {
         // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
         var compressed = compressedCandidates.stream()
                 .filter(recipe -> isReversibleRecipe(recipe, decompressedCandidates, access))
+                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
                 .toList();
         var decompressed = decompressedCandidates.stream()
                 .filter(recipe -> isReversibleRecipe(recipe, compressedCandidates, access))
+                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
                 .toList();
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
-        Stream.concat(compressed.stream(), decompressed.stream()).forEach(recipe -> {
+        Stream.of(compressed, decompressed).flatMap(Collection::stream).forEach(recipe -> {
             var baseVariant = recipe.getResultItem(access).getItem();
 
             if (compressionChains.stream().noneMatch(chain -> chain.containsVariant(AEItemKey.of(baseVariant)))) {
