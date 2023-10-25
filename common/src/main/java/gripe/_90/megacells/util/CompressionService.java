@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 import appeng.api.stacks.AEItemKey;
 
@@ -152,12 +153,14 @@ public class CompressionService {
         return recipe.getResultItem(access).getCount() == 1
                 && ingredients.stream().noneMatch(Ingredient::isEmpty)
                 && Set.of(4, 9).contains(ingredients.size())
-                && sameIngredient(ingredients);
+                && sameIngredient(recipe);
     }
 
-    private boolean sameIngredient(List<Ingredient> ingredients) {
-        if (ingredients.stream().distinct().count() <= 1) {
-            return true;
+    private boolean sameIngredient(CraftingRecipe recipe) {
+        var ingredients = recipe.getIngredients();
+
+        if (recipe instanceof ShapedRecipe) {
+            return ingredients.stream().distinct().count() <= 1;
         }
 
         // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
