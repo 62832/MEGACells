@@ -81,5 +81,5 @@
   "text.autoconfig.megacells.option.AllowSpentWaste.@Tooltip": "MEGA 放射元件是否能够储存衰变核废料。",
   "text.autoconfig.megacells.option.CompressionChainLimit": "批量压缩链限制",
   "text.autoconfig.megacells.option.CompressionChainLimit.@Tooltip": "启用压缩的大容量元件可以报告为已存储的变体的最大数量。",
-  "text.autoconfig.megacells.title": "巨型单元"
+  "text.autoconfig.megacells.title": "巨型元件"
 }
