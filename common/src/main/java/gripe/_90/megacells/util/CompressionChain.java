@@ -27,8 +27,7 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
         }
 
         var subChain = this.subList(0, indexOf(variant.get()) + 1);
-        var factor = subChain.stream().map(CompressionVariant::longFactor).reduce(1L, Math::multiplyExact);
-        return BigInteger.valueOf(factor);
+        return subChain.stream().map(v -> BigInteger.valueOf(v.factor())).reduce(BigInteger.ONE, BigInteger::multiply);
     }
 
     public CompressionVariant last() {
