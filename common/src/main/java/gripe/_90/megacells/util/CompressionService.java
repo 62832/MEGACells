@@ -91,7 +91,7 @@ public class CompressionService {
             List<CraftingRecipe> decompressed,
             RegistryAccess access) {
         var variants = new LinkedList<Item>();
-        var multipliers = new LinkedList<Integer>();
+        var multipliers = new LinkedList<Byte>();
 
         variants.addFirst(baseVariant);
 
@@ -101,7 +101,7 @@ public class CompressionService {
             lower = getNextVariant(lower.item().getItem(), decompressed, false, access);
         }
 
-        multipliers.addFirst(1);
+        multipliers.addFirst((byte) 1);
         var chain = new CompressionChain();
 
         for (var i = 0; i < variants.size(); i++) {
@@ -131,11 +131,10 @@ public class CompressionService {
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    return new CompressionVariant(
-                            recipe.getResultItem(access).getItem(),
-                            compressed
+                    return new CompressionVariant(recipe.getResultItem(access).getItem(), (byte)
+                            (compressed
                                     ? recipe.getIngredients().size()
-                                    : recipe.getResultItem(access).getCount());
+                                    : recipe.getResultItem(access).getCount()));
                 }
             }
         }
@@ -216,7 +215,7 @@ public class CompressionService {
 
                 var smaller = compressed ? input.getItem() : output.getItem();
                 var larger = compressed ? output.getItem() : input.getItem();
-                var factor = compressed ? recipe.getIngredients().size() : output.getCount();
+                var factor = (byte) (compressed ? recipe.getIngredients().size() : output.getCount());
 
                 overrides.add(new Override(smaller, larger, factor));
                 return true;
@@ -226,5 +225,5 @@ public class CompressionService {
         return false;
     }
 
-    private record Override(Item smaller, Item larger, int factor) {}
+    private record Override(Item smaller, Item larger, byte factor) {}
 }

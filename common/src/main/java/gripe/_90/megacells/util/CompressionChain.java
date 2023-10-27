@@ -11,7 +11,7 @@ import appeng.api.stacks.AEItemKey;
 import gripe._90.megacells.definition.MEGAConfig;
 
 public class CompressionChain extends ObjectArrayList<CompressionVariant> {
-    public void add(AEItemKey item, int factor) {
+    public void add(AEItemKey item, byte factor) {
         this.add(new CompressionVariant(item, factor));
     }
 
