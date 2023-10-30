@@ -1,20 +1,14 @@
 package gripe._90.megacells.item.part;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.lang.invoke.VarHandle;
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -43,9 +37,7 @@ import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.StorageCell;
 import appeng.blockentity.inventory.AppEngCellInventory;
-import appeng.client.render.BakedModelUnwrapper;
-import appeng.client.render.model.DriveBakedModel;
-import appeng.core.definitions.AEBlocks;
+import appeng.client.render.tesr.CellLedRenderer;
 import appeng.helpers.IPriorityHost;
 import appeng.items.parts.PartModels;
 import appeng.me.storage.DriveWatcher;
@@ -65,38 +57,6 @@ public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IPriorityHost, IStorageProvider {
     @PartModels
     public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/cell_dock"));
-
-    private static final VarHandle LED_RENDER_TYPE;
-    private static final MethodHandle LED_RENDER;
-    private static final MethodHandle CELL_MODEL;
-
-    static {
-        try {
-            var lookup = MethodHandles.lookup();
-
-            var cellLedRenderer = Class.forName("appeng.client.render.tesr.CellLedRenderer");
-            LED_RENDER_TYPE = MethodHandles.privateLookupIn(cellLedRenderer, lookup)
-                    .findStaticVarHandle(cellLedRenderer, "RENDER_LAYER", RenderType.class);
-            LED_RENDER = MethodHandles.privateLookupIn(cellLedRenderer, lookup)
-                    .findStatic(
-                            cellLedRenderer,
-                            "renderLed",
-                            MethodType.methodType(
-                                    void.class,
-                                    IChestOrDrive.class,
-                                    int.class,
-                                    VertexConsumer.class,
-                                    PoseStack.class,
-                                    float.class));
-
-            var cellModel = Class.forName("appeng.client.render.tesr.ChestBlockEntityRenderer$FaceRotatingModel");
-            CELL_MODEL = MethodHandles.privateLookupIn(cellModel, lookup)
-                    .findConstructor(
-                            cellModel, MethodType.methodType(void.class, BakedModel.class, BlockOrientation.class));
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private final AppEngCellInventory cellInventory = new AppEngCellInventory(this, 1);
     private DriveWatcher cellWatcher;
@@ -376,36 +336,21 @@ public class CellDockPart extends AEBasePart
         poseStack.mulPose(orientation.getQuaternion());
         poseStack.translate(-3F / 16, 5F / 16, -4F / 16);
 
-        var driveModel = Minecraft.getInstance()
-                .getModelManager()
-                .getBlockModelShaper()
-                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-        var cellModel =
-                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(clientCell);
-
-        try {
-            var cellBuffer = buffers.getBuffer(RenderType.cutout());
-            var cell = CELL_MODEL.invoke(cellModel, orientation);
-            Minecraft.getInstance()
-                    .getBlockRenderer()
-                    .getModelRenderer()
-                    .tesselateBlock(
-                            getLevel(),
-                            (BakedModel) cell,
-                            getBlockEntity().getBlockState(),
-                            getBlockEntity().getBlockPos(),
-                            poseStack,
-                            cellBuffer,
-                            false,
-                            RandomSource.create(),
-                            0L,
-                            combinedOverlayIn);
-
-            var ledBuffer = buffers.getBuffer((RenderType) LED_RENDER_TYPE.get());
-            LED_RENDER.invoke(this, 0, ledBuffer, poseStack, partialTicks);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
+        Minecraft.getInstance()
+                .getBlockRenderer()
+                .getModelRenderer()
+                .tesselateBlock(
+                        getLevel(),
+                        MEGACells.PLATFORM.createWrappedCellModel(clientCell, orientation),
+                        getBlockEntity().getBlockState(),
+                        getBlockEntity().getBlockPos(),
+                        poseStack,
+                        buffers.getBuffer(RenderType.cutout()),
+                        false,
+                        RandomSource.create(),
+                        0L,
+                        combinedOverlayIn);
+        CellLedRenderer.renderLed(this, 0, buffers.getBuffer(CellLedRenderer.RENDER_LAYER), poseStack, partialTicks);
 
         poseStack.popPose();
     }
