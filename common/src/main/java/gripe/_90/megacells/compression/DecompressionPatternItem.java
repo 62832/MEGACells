@@ -1,4 +1,4 @@
-package gripe._90.megacells.crafting;
+package gripe._90.megacells.compression;
 
 import org.jetbrains.annotations.Nullable;
 

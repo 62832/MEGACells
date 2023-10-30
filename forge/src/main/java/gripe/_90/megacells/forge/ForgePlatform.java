@@ -38,10 +38,10 @@ import appeng.client.render.model.DriveBakedModel;
 import appeng.core.definitions.AEBlocks;
 import appeng.init.InitVillager;
 
+import gripe._90.megacells.compression.CompressionService;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Loaders;
 import gripe._90.megacells.core.Platform;
-import gripe._90.megacells.util.CompressionService;
 
 public final class ForgePlatform implements Platform {
     @Override

@@ -1,4 +1,4 @@
-package gripe._90.megacells.util;
+package gripe._90.megacells.compression;
 
 import java.math.BigInteger;
 import java.util.Collections;

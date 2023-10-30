@@ -77,11 +77,10 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                     }
                 }
             } else {
-                if (storedItem != null) {
-                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
-                } else {
-                    lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
-                }
+                lines.add(
+                        storedItem != null
+                                ? MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED)
+                                : Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
 
             lines.add(Tooltips.of(MEGATranslations.Compression.text(

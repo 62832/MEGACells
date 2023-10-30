@@ -17,8 +17,8 @@ import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 
-import gripe._90.megacells.util.CompressionChain;
-import gripe._90.megacells.util.CompressionService;
+import gripe._90.megacells.compression.CompressionChain;
+import gripe._90.megacells.compression.CompressionService;
 
 public class BulkCellInventory implements StorageCell {
     private static final String KEY = "key";

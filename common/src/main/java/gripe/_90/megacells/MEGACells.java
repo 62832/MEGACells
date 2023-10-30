@@ -19,9 +19,9 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 import appeng.hotkeys.HotkeyActions;
 
+import gripe._90.megacells.compression.DecompressionService;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Platform;
-import gripe._90.megacells.crafting.DecompressionService;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAConfig;

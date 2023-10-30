@@ -23,7 +23,7 @@ import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.crafting.DecompressionPatternItem;
+import gripe._90.megacells.compression.DecompressionPatternItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.CellDockPart;
