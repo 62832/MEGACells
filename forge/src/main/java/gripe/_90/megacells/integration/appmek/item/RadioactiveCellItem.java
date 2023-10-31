@@ -37,6 +37,7 @@ public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchIte
         super(properties.stacksTo(1));
     }
 
+    @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
     }

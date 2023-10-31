@@ -1,4 +1,4 @@
-package gripe._90.megacells.crafting;
+package gripe._90.megacells.compression;
 
 import java.util.Objects;
 
@@ -11,6 +11,11 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 
 public class DecompressionPattern implements IPatternDetails {
+    static final String NBT_BASE = "base";
+    static final String NBT_VARIANT = "variant";
+    static final String NBT_FACTOR = "factor";
+    static final String NBT_TO_COMPRESS = "toCompress";
+
     private final AEItemKey definition;
     private final AEItemKey base;
     private final AEItemKey variant;
@@ -23,12 +28,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
-        var tag = Objects.requireNonNull(definition.getTag());
 
-        base = DecompressionPatternEncoding.getBase(tag);
-        variant = DecompressionPatternEncoding.getVariant(tag);
-        factor = DecompressionPatternEncoding.getFactor(tag);
-        toCompress = DecompressionPatternEncoding.getToCompress(tag);
+        var tag = Objects.requireNonNull(definition.getTag());
+        base = AEItemKey.fromTag(tag.getCompound(NBT_BASE));
+        variant = AEItemKey.fromTag(tag.getCompound(NBT_VARIANT));
+        factor = tag.getInt(NBT_FACTOR);
+        toCompress = tag.getBoolean(NBT_TO_COMPRESS);
     }
 
     @Override

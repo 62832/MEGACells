@@ -1,4 +1,4 @@
-package gripe._90.megacells.crafting;
+package gripe._90.megacells.compression;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +16,7 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
 import appeng.api.networking.crafting.ICraftingProvider;
+import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
@@ -89,7 +90,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
+            encodePattern(pattern.getOrCreateTag(), decompressed.item(), variant, false);
             patterns.add(new DecompressionPattern(pattern));
         }
 
@@ -103,10 +104,17 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
             var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
             var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
+            encodePattern(pattern.getOrCreateTag(), decompressed.item(), variant, true);
             patterns.add(new DecompressionPattern(pattern));
         }
 
         return patterns;
+    }
+
+    private void encodePattern(CompoundTag tag, AEItemKey base, CompressionVariant variant, boolean toCompress) {
+        tag.put(DecompressionPattern.NBT_VARIANT, variant.item().toTag());
+        tag.put(DecompressionPattern.NBT_BASE, base.toTag());
+        tag.putInt(DecompressionPattern.NBT_FACTOR, variant.factor());
+        tag.putBoolean(DecompressionPattern.NBT_TO_COMPRESS, toCompress);
     }
 }

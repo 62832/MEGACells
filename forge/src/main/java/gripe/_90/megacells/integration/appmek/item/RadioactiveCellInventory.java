@@ -96,15 +96,10 @@ public class RadioactiveCellInventory implements StorageCell {
     }
 
     public boolean isBlackListed(AEKey what) {
-        if (what instanceof MekanismKey key) {
-            if (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()) {
-                return !MEGAConfig.INSTANCE.isSpentWasteAllowed();
-            } else {
-                return ChemicalAttributeValidator.DEFAULT.process(key.getStack());
-            }
-        } else {
-            return true;
-        }
+        return !(what instanceof MekanismKey key)
+                || (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()
+                        ? !MEGAConfig.INSTANCE.isSpentWasteAllowed()
+                        : ChemicalAttributeValidator.DEFAULT.process(key.getStack()));
     }
 
     @Override
