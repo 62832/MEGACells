@@ -47,6 +47,10 @@ public abstract class ItemEntityMixin extends Entity {
 
             if (state.is(FluidTags.LAVA)) {
                 mega$lavaImmune = mega$lavaTicks++ <= 200 || LavaTransformLogic.allIngredientsPresent(self);
+
+                if (mega$lavaTicks > 200 && LavaTransformLogic.allIngredientsPresent(self)) {
+                    mega$lavaTicks = 0;
+                }
             }
         }
     }

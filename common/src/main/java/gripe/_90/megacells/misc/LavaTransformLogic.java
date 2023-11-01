@@ -40,18 +40,15 @@ public final class LavaTransformLogic {
                 continue;
             }
 
-            var missing = recipe.ingredients.stream()
-                    .filter(ingredient -> {
-                        for (var stack : ingredient.getItems()) {
-                            if (items.contains(stack.getItem())) {
-                                return false;
-                            }
-                        }
+            return recipe.ingredients.stream().noneMatch(ingredient -> {
+                for (var stack : ingredient.getItems()) {
+                    if (items.contains(stack.getItem())) {
+                        return false;
+                    }
+                }
 
-                        return true;
-                    })
-                    .toList();
-            return missing.isEmpty();
+                return true;
+            });
         }
 
         return false;
