@@ -1,10 +1,6 @@
 {
   "required": true,
-  "minVersion": "0.8",
+  "minVersion": "0.8.5",
   "package": "gripe._90.megacells.mixin.data",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": ["TextureSlotAccessor"],
-  "injectors": {
-    "defaultRequire": 1
-  }
+  "mixins": ["TextureSlotAccessor"]
 }
