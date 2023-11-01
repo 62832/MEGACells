@@ -36,7 +36,7 @@ public abstract class ItemEntityMixin extends Entity {
 
     @SuppressWarnings({"resource", "DataFlowIssue"})
     @Inject(method = "tick", at = @At("RETURN"))
-    private void countDownLavaTicks(CallbackInfo ci) {
+    private void lavaTimeout(CallbackInfo ci) {
         var self = (ItemEntity) (Object) this;
 
         if (LavaTransformLogic.canTransformInLava(self)) {
