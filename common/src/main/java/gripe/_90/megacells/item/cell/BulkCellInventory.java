@@ -17,8 +17,8 @@ import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 
-import gripe._90.megacells.compression.CompressionChain;
-import gripe._90.megacells.compression.CompressionService;
+import gripe._90.megacells.misc.CompressionChain;
+import gripe._90.megacells.misc.CompressionService;
 
 public class BulkCellInventory implements StorageCell {
     private static final String KEY = "key";
@@ -231,7 +231,7 @@ public class BulkCellInventory implements StorageCell {
                     var compressionFactor = BigInteger.valueOf(variant.factor());
                     var key = variant.item();
 
-                    if (count.divide(compressionFactor).signum() == 1 && variant != chain.last()) {
+                    if (count.divide(compressionFactor).signum() == 1 && variant != chain.get(chain.size() - 1)) {
                         out.add(key, count.remainder(compressionFactor).longValue());
                         count = count.divide(compressionFactor);
                     } else {

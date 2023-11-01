@@ -1,4 +1,4 @@
-package gripe._90.megacells.compression;
+package gripe._90.megacells.misc;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -10,9 +10,9 @@ import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGAConfig;
 
-public class CompressionChain extends ObjectArrayList<CompressionVariant> {
+public class CompressionChain extends ObjectArrayList<CompressionService.Variant> {
     public void add(AEItemKey item, byte factor) {
-        this.add(new CompressionVariant(item, factor));
+        this.add(new CompressionService.Variant(item, factor));
     }
 
     public boolean containsVariant(AEItemKey item) {
@@ -30,15 +30,11 @@ public class CompressionChain extends ObjectArrayList<CompressionVariant> {
         return subChain.stream().map(v -> BigInteger.valueOf(v.factor())).reduce(BigInteger.ONE, BigInteger::multiply);
     }
 
-    public CompressionVariant last() {
-        return get(size - 1);
-    }
-
     public CompressionChain lastMultiplierSwapped() {
-        var multipliers = this.stream().map(CompressionVariant::factor).collect(Collectors.toList());
+        var multipliers = this.stream().map(CompressionService.Variant::factor).collect(Collectors.toList());
         Collections.rotate(multipliers, -1);
 
-        var items = this.stream().map(CompressionVariant::item).toList();
+        var items = this.stream().map(CompressionService.Variant::item).toList();
         var chain = new CompressionChain();
 
         for (var i = 0; i < items.size(); i++) {

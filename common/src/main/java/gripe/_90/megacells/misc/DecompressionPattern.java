@@ -1,4 +1,4 @@
-package gripe._90.megacells.compression;
+package gripe._90.megacells.misc;
 
 import java.util.Objects;
 

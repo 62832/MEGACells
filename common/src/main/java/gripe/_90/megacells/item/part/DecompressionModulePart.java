@@ -24,8 +24,8 @@ import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.compression.DecompressionPattern;
-import gripe._90.megacells.compression.DecompressionService;
+import gripe._90.megacells.misc.DecompressionPattern;
+import gripe._90.megacells.misc.DecompressionService;
 
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IGridTickable {
     @PartModels

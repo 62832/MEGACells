@@ -1,4 +1,4 @@
-package gripe._90.megacells.compression;
+package gripe._90.megacells.misc;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -83,14 +82,14 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         var decompressionChain = fullChain.limited().reversed();
 
         for (var variant : decompressionChain) {
-            if (variant == decompressionChain.last()) {
+            if (variant == decompressionChain.get(decompressionChain.size() - 1)) {
                 continue;
             }
 
-            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var pattern = MEGAItems.DECOMPRESSION_PATTERN.stack();
             var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
-            encodePattern(pattern.getOrCreateTag(), decompressed.item(), variant, false);
+            encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
             patterns.add(new DecompressionPattern(pattern));
         }
 
@@ -101,17 +100,17 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 continue;
             }
 
-            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var pattern = MEGAItems.DECOMPRESSION_PATTERN.stack();
             var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
 
-            encodePattern(pattern.getOrCreateTag(), decompressed.item(), variant, true);
+            encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
             patterns.add(new DecompressionPattern(pattern));
         }
 
         return patterns;
     }
 
-    private void encodePattern(CompoundTag tag, AEItemKey base, CompressionVariant variant, boolean toCompress) {
+    private void encode(CompoundTag tag, AEItemKey base, CompressionService.Variant variant, boolean toCompress) {
         tag.put(DecompressionPattern.NBT_VARIANT, variant.item().toTag());
         tag.put(DecompressionPattern.NBT_BASE, base.toTag());
         tag.putInt(DecompressionPattern.NBT_FACTOR, variant.factor());

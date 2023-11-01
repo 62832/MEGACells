@@ -1,4 +1,4 @@
-package gripe._90.megacells.compression;
+package gripe._90.megacells.misc;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -116,22 +116,21 @@ public class CompressionService {
         return chain;
     }
 
-    private CompressionVariant getNextVariant(
-            Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
+    private Variant getNextVariant(Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
             if (compressed && override.smaller.equals(item)) {
-                return new CompressionVariant(override.larger, override.factor);
+                return new Variant(override.larger, override.factor);
             }
 
             if (!compressed && override.larger.equals(item)) {
-                return new CompressionVariant(override.smaller, override.factor);
+                return new Variant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    return new CompressionVariant(recipe.getResultItem(access).getItem(), (byte)
+                    return new Variant(recipe.getResultItem(access).getItem(), (byte)
                             (compressed
                                     ? recipe.getIngredients().size()
                                     : recipe.getResultItem(access).getCount()));
@@ -223,6 +222,12 @@ public class CompressionService {
         }
 
         return false;
+    }
+
+    public record Variant(AEItemKey item, byte factor) {
+        private Variant(Item item, byte factor) {
+            this(AEItemKey.of(item), factor);
+        }
     }
 
     private record Override(Item smaller, Item larger, byte factor) {}
