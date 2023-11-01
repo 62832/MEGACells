@@ -29,6 +29,9 @@ loom {
         mixinConfig("$modId.mixins.json")
         mixinConfig("$modId.forge.mixins.json")
     }
+
+    @Suppress("UnstableApiUsage")
+    mixin.add(sourceSets.main.get(), "$modId.forge.refmap.json")
 }
 
 repositories {
