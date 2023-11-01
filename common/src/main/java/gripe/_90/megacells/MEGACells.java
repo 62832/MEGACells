@@ -61,6 +61,8 @@ public final class MEGACells {
         PLATFORM.initCompression();
         GridServices.register(DecompressionService.class, DecompressionService.class);
 
+        PLATFORM.initLavaTransform();
+
         PLATFORM.addVillagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20);
         PLATFORM.addVillagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50);
     }

@@ -42,6 +42,7 @@ import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Loaders;
 import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.misc.CompressionService;
+import gripe._90.megacells.misc.LavaTransformLogic;
 
 public final class ForgePlatform implements Platform {
     @Override
@@ -79,6 +80,14 @@ public final class ForgePlatform implements Platform {
                 var server = event.getPlayerList().getServer();
                 CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
             }
+        });
+    }
+
+    @Override
+    public void initLavaTransform() {
+        MinecraftForge.EVENT_BUS.addListener((ServerStartedEvent event) -> LavaTransformLogic.clearCache());
+        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            if (event.getPlayer() == null) LavaTransformLogic.clearCache();
         });
     }
 

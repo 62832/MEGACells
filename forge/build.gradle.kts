@@ -26,6 +26,7 @@ loom {
     }
 
     forge {
+        mixinConfig("$modId.mixins.json")
         mixinConfig("$modId.forge.mixins.json")
     }
 }

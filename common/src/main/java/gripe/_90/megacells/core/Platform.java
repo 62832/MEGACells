@@ -16,6 +16,8 @@ public interface Platform {
 
     void initCompression();
 
+    void initLavaTransform();
+
     void addVillagerTrade(ItemLike item, int cost, int quantity, int xp);
 
     BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation);
