@@ -62,12 +62,12 @@
   "item.megacells.decompression_module": "Модуль декомпрессии",
   "item.megacells.decompression_pattern": "Декомпрессионный поставщик",
 
-  "item.megacells.accumulation_processor": "Accumulation Processor",
-  "item.megacells.accumulation_processor_press": "Inscriber Accumulation Press",
-  "item.megacells.printed_accumulation_processor": "Printed Accumulation Circuit",
+  "item.megacells.accumulation_processor": "Аккумулирующий процессор",
+  "item.megacells.accumulation_processor_press": "Аккумулирующий пресс",
+  "item.megacells.printed_accumulation_processor": "Печатная аккумулирующая схема",
 
-  "item.megacells.cell_dock": "ME Cell Dock",
-  "item.megacells.sky_steel_ingot": "Sky Steel Ingot",
+  "item.megacells.cell_dock": "МЭ станция для ячеек",
+  "item.megacells.sky_steel_ingot": "Небесный стальной слиток",
 
   "block.megacells.1m_crafting_storage": "МЕГА хранилище для изготовления на 1M",
   "block.megacells.4m_crafting_storage": "МЕГА хранилище для изготовления на 4M",
@@ -80,7 +80,7 @@
   "block.megacells.mega_energy_cell": "Сверхплотное энергохранилище",
   "block.megacells.mega_pattern_provider": "МЕГА поставщик шаблонов",
   "block.megacells.mega_interface": "МЕГА интерфейс",
-  "block.megacells.sky_steel_block": "Sky Steel Block",
+  "block.megacells.sky_steel_block": "Небесный стальной блок",
 
   "gui.tooltips.megacells.ALot": "Много.",
   "gui.tooltips.megacells.AcceleratorThreads": "Обеспечивает 4 потока совместной обработки на блок.",
