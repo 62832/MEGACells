@@ -45,8 +45,7 @@ public class BulkCellInventory implements StorageCell {
         this.container = container;
 
         var cell = (BulkCellItem) stack.getItem();
-        var filter = cell.getConfigInventory(this.stack).getKey(0);
-        filterItem = filter instanceof AEItemKey item ? item : null;
+        filterItem = (AEItemKey) cell.getConfigInventory(this.stack).getKey(0);
 
         storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
         unitCount = !getTag().getString(UNIT_COUNT).isEmpty()

@@ -10,6 +10,8 @@ import appeng.api.orientation.BlockOrientation;
 public interface Platform {
     Loaders getLoader();
 
+    boolean isClient();
+
     CreativeModeTab.Builder getCreativeTabBuilder();
 
     boolean isAddonLoaded(Addons addon);
@@ -20,5 +22,7 @@ public interface Platform {
 
     void addVillagerTrade(ItemLike item, int cost, int quantity, int xp);
 
-    BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation);
+    interface Client {
+        BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation);
+    }
 }

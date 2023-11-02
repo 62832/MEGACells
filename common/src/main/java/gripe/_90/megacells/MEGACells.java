@@ -40,6 +40,9 @@ public final class MEGACells {
 
     public static final Platform PLATFORM =
             ServiceLoader.load(Platform.class).findFirst().orElseThrow();
+    public static final Platform.Client PLATFORM_CLIENT = PLATFORM.isClient()
+            ? ServiceLoader.load(Platform.Client.class).findFirst().orElseThrow()
+            : null;
 
     public static ResourceLocation makeId(String path) {
         return new ResourceLocation(MODID, path);
@@ -56,7 +59,14 @@ public final class MEGACells {
             AppBotItems.init();
         }
 
-        initStorageCells();
+        StorageCells.addCellHandler(BulkCellItem.HANDLER);
+
+        MEGAItems.getItemPortables()
+                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
+        MEGAItems.getFluidPortables()
+                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
+
+        initStorageCellModels();
 
         PLATFORM.initCompression();
         GridServices.register(DecompressionService.class, DecompressionService.class);
@@ -67,7 +77,7 @@ public final class MEGACells {
         PLATFORM.addVillagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50);
     }
 
-    private static void initStorageCells() {
+    private static void initStorageCellModels() {
         Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
                 .flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_item_cell")));
@@ -75,13 +85,7 @@ public final class MEGACells {
                 .flatMap(Collection::stream)
                 .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_fluid_cell")));
 
-        StorageCells.addCellHandler(BulkCellItem.HANDLER);
         StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
-
-        MEGAItems.getItemPortables()
-                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
-        MEGAItems.getFluidPortables()
-                .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
 
         if (PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())

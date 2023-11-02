@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -311,11 +313,13 @@ public class CellDockPart extends AEBasePart
         return MODEL;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean requireDynamicRender() {
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderDynamic(
             float partialTicks,
@@ -341,7 +345,7 @@ public class CellDockPart extends AEBasePart
                 .getModelRenderer()
                 .tesselateBlock(
                         getLevel(),
-                        MEGACells.PLATFORM.createWrappedCellModel(clientCell, orientation),
+                        MEGACells.PLATFORM_CLIENT.createWrappedCellModel(clientCell, orientation),
                         getBlockEntity().getBlockState(),
                         getBlockEntity().getBlockPos(),
                         poseStack,

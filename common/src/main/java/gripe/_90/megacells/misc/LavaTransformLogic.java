@@ -32,23 +32,17 @@ public final class LavaTransformLogic {
                 .toList();
 
         for (var recipe : level.getRecipeManager().getAllRecipesFor(TransformRecipe.TYPE)) {
-            if (!recipe.circumstance.isFluidTag(FluidTags.LAVA)) {
-                continue;
-            }
-
-            if (recipe.ingredients.isEmpty()) {
-                continue;
-            }
-
-            return recipe.ingredients.stream().noneMatch(ingredient -> {
-                for (var stack : ingredient.getItems()) {
-                    if (items.contains(stack.getItem())) {
-                        return false;
+            if (recipe.circumstance.isFluidTag(FluidTags.LAVA)) {
+                return recipe.ingredients.stream().noneMatch(ingredient -> {
+                    for (var stack : ingredient.getItems()) {
+                        if (items.contains(stack.getItem())) {
+                            return false;
+                        }
                     }
-                }
 
-                return true;
-            });
+                    return true;
+                });
+            }
         }
 
         return false;

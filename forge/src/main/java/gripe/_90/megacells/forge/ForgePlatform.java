@@ -23,11 +23,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.LoadingModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 
@@ -48,6 +50,11 @@ public final class ForgePlatform implements Platform {
     @Override
     public Loaders getLoader() {
         return Loaders.FORGE;
+    }
+
+    @Override
+    public boolean isClient() {
+        return FMLEnvironment.dist == Dist.CLIENT;
     }
 
     @Override
@@ -102,43 +109,45 @@ public final class ForgePlatform implements Platform {
         offers.put(5, masterEntries);
     }
 
-    @Override
-    public BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation) {
-        var driveModel = Minecraft.getInstance()
-                .getModelManager()
-                .getBlockModelShaper()
-                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-        var cellModel =
-                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(cell);
+    public static class Client implements Platform.Client {
+        @Override
+        public BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation) {
+            var driveModel = Minecraft.getInstance()
+                    .getModelManager()
+                    .getBlockModelShaper()
+                    .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
+            var cellModel = BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class)
+                    .getCellChassisModel(cell);
 
-        return new DelegateBakedModel(cellModel) {
-            @NotNull
-            @Override
-            public List<BakedQuad> getQuads(
-                    @Nullable BlockState state,
-                    @Nullable Direction side,
-                    @NotNull RandomSource rand,
-                    @NotNull ModelData extraData,
-                    RenderType renderType) {
-                if (side != null) {
-                    side = orientation.resultingRotate(side); // This fixes the incorrect lightmap position
+            return new DelegateBakedModel(cellModel) {
+                @NotNull
+                @Override
+                public List<BakedQuad> getQuads(
+                        @Nullable BlockState state,
+                        @Nullable Direction side,
+                        @NotNull RandomSource rand,
+                        @NotNull ModelData extraData,
+                        RenderType renderType) {
+                    if (side != null) {
+                        side = orientation.resultingRotate(side); // This fixes the incorrect lightmap position
+                    }
+                    List<BakedQuad> quads = new ArrayList<>(super.getQuads(state, side, rand, extraData, renderType));
+
+                    for (int i = 0; i < quads.size(); i++) {
+                        BakedQuad quad = quads.get(i);
+                        quads.set(
+                                i,
+                                new BakedQuad(
+                                        quad.getVertices(),
+                                        quad.getTintIndex(),
+                                        orientation.rotate(quad.getDirection()),
+                                        quad.getSprite(),
+                                        quad.isShade()));
+                    }
+
+                    return quads;
                 }
-                List<BakedQuad> quads = new ArrayList<>(super.getQuads(state, side, rand, extraData, renderType));
-
-                for (int i = 0; i < quads.size(); i++) {
-                    BakedQuad quad = quads.get(i);
-                    quads.set(
-                            i,
-                            new BakedQuad(
-                                    quad.getVertices(),
-                                    quad.getTintIndex(),
-                                    orientation.rotate(quad.getDirection()),
-                                    quad.getSprite(),
-                                    quad.isShade()));
-                }
-
-                return quads;
-            }
-        };
+            };
+        }
     }
 }

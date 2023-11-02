@@ -3,6 +3,7 @@ package gripe._90.megacells.fabric;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
@@ -35,6 +36,11 @@ public final class FabricPlatform implements Platform {
     @Override
     public Loaders getLoader() {
         return Loaders.FABRIC;
+    }
+
+    @Override
+    public boolean isClient() {
+        return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
     }
 
     @Override
@@ -72,15 +78,17 @@ public final class FabricPlatform implements Platform {
                 builder -> builder.add(new VillagerTrades.ItemsForEmeralds(item.asItem(), cost, quantity, xp)));
     }
 
-    @Override
-    public BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation) {
-        var driveModel = Minecraft.getInstance()
-                .getModelManager()
-                .getBlockModelShaper()
-                .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-        var cellModel =
-                BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class).getCellChassisModel(cell);
-        return new WrappedCellModel(cellModel, orientation);
+    public static class Client implements Platform.Client {
+        @Override
+        public BakedModel createWrappedCellModel(Item cell, BlockOrientation orientation) {
+            var driveModel = Minecraft.getInstance()
+                    .getModelManager()
+                    .getBlockModelShaper()
+                    .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
+            var cellModel = BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class)
+                    .getCellChassisModel(cell);
+            return new WrappedCellModel(cellModel, orientation);
+        }
     }
 
     private static class WrappedCellModel extends ForwardingBakedModel {

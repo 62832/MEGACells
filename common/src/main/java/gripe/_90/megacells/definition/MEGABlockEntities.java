@@ -96,8 +96,7 @@ public final class MEGABlockEntities {
         return type;
     }
 
-    @FunctionalInterface
-    interface BlockEntityFactory<T extends AEBaseBlockEntity> {
+    private interface BlockEntityFactory<T extends AEBaseBlockEntity> {
         T create(BlockEntityType<T> type, BlockPos pos, BlockState state);
     }
 }
