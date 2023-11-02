@@ -37,10 +37,11 @@ public class RadioactiveCellInventory implements StorageCell {
     private long chemAmount;
     private boolean isPersisted = true;
 
-    public RadioactiveCellInventory(MEGARadioactiveCell cell, ItemStack stack, ISaveProvider container) {
+    RadioactiveCellInventory(ItemStack stack, ISaveProvider container) {
         this.stack = stack;
         this.container = container;
 
+        var cell = (RadioactiveCellItem) stack.getItem();
         var filter = cell.getConfigInventory(this.stack).getKey(0);
         filterChemical = filter instanceof MekanismKey chemical ? chemical : null;
 
@@ -95,15 +96,10 @@ public class RadioactiveCellInventory implements StorageCell {
     }
 
     public boolean isBlackListed(AEKey what) {
-        if (what instanceof MekanismKey key) {
-            if (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()) {
-                return !MEGAConfig.INSTANCE.isSpentWasteAllowed();
-            } else {
-                return ChemicalAttributeValidator.DEFAULT.process(key.getStack());
-            }
-        } else {
-            return true;
-        }
+        return !(what instanceof MekanismKey key)
+                || (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()
+                        ? !MEGAConfig.INSTANCE.isSpentWasteAllowed()
+                        : ChemicalAttributeValidator.DEFAULT.process(key.getStack()));
     }
 
     @Override

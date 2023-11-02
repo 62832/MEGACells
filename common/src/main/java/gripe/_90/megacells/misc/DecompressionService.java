@@ -1,4 +1,4 @@
-package gripe._90.megacells.crafting;
+package gripe._90.megacells.misc;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.Set;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -15,6 +15,7 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridService;
 import appeng.api.networking.IGridServiceProvider;
 import appeng.api.networking.crafting.ICraftingProvider;
+import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
@@ -26,7 +27,7 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
     private final List<DecompressionModulePart> modules = new ObjectArrayList<>();
 
     @Override
-    public void addNode(IGridNode node) {
+    public void addNode(IGridNode node, CompoundTag savedData) {
         if (node.getOwner() instanceof IChestOrDrive cellHost) {
             cellHosts.add(cellHost);
         }
@@ -81,14 +82,14 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
         var decompressionChain = fullChain.limited().reversed();
 
         for (var variant : decompressionChain) {
-            if (variant == decompressionChain.last()) {
+            if (variant == decompressionChain.get(decompressionChain.size() - 1)) {
                 continue;
             }
 
-            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var pattern = MEGAItems.DECOMPRESSION_PATTERN.stack();
             var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
+            encode(pattern.getOrCreateTag(), decompressed.item(), variant, false);
             patterns.add(new DecompressionPattern(pattern));
         }
 
@@ -99,13 +100,20 @@ public class DecompressionService implements IGridService, IGridServiceProvider 
                 continue;
             }
 
-            var pattern = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+            var pattern = MEGAItems.DECOMPRESSION_PATTERN.stack();
             var decompressed = compressionChain.get(compressionChain.indexOf(variant) - 1);
 
-            DecompressionPatternEncoding.encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
+            encode(pattern.getOrCreateTag(), decompressed.item(), variant, true);
             patterns.add(new DecompressionPattern(pattern));
         }
 
         return patterns;
+    }
+
+    private void encode(CompoundTag tag, AEItemKey base, CompressionService.Variant variant, boolean toCompress) {
+        tag.put(DecompressionPattern.NBT_VARIANT, variant.item().toTag());
+        tag.put(DecompressionPattern.NBT_BASE, base.toTag());
+        tag.putInt(DecompressionPattern.NBT_FACTOR, variant.factor());
+        tag.putBoolean(DecompressionPattern.NBT_TO_COMPRESS, toCompress);
     }
 }

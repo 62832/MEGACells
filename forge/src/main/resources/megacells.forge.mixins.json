@@ -1,8 +1,7 @@
 {
   "required": true,
-  "minVersion": "0.8",
+  "minVersion": "0.8.5",
   "package": "gripe._90.megacells.mixin.forge",
-  "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": ["client.BuiltInModelHooksAccessor", "client.ModelBakeryMixin"],
   "injectors": {

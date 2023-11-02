@@ -1,12 +1,15 @@
-package gripe._90.megacells.util;
+package gripe._90.megacells.misc;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 import appeng.api.stacks.AEItemKey;
 
@@ -27,12 +31,12 @@ public class CompressionService {
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
     // This value is typically either 4 or 9 for any given item, or 1 for the smallest base variant.
-    private final Set<CompressionChain> compressionChains = new ObjectLinkedOpenHashSet<>();
+    private final Set<CompressionChain> compressionChains = new ObjectOpenHashSet<>();
 
     // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
     // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
     // based on its usually irreversible recipe.
-    private final Set<Override> overrides = new ObjectLinkedOpenHashSet<>();
+    private final Set<Override> overrides = new ObjectOpenHashSet<>();
 
     private CompressionService() {}
 
@@ -60,13 +64,15 @@ public class CompressionService {
         // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
         var compressed = compressedCandidates.stream()
                 .filter(recipe -> isReversibleRecipe(recipe, decompressedCandidates, access))
+                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
                 .toList();
         var decompressed = decompressedCandidates.stream()
                 .filter(recipe -> isReversibleRecipe(recipe, compressedCandidates, access))
+                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
                 .toList();
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
-        Stream.concat(compressed.stream(), decompressed.stream()).forEach(recipe -> {
+        Stream.of(compressed, decompressed).flatMap(Collection::stream).forEach(recipe -> {
             var baseVariant = recipe.getResultItem(access).getItem();
 
             if (compressionChains.stream().noneMatch(chain -> chain.containsVariant(AEItemKey.of(baseVariant)))) {
@@ -85,7 +91,7 @@ public class CompressionService {
             List<CraftingRecipe> decompressed,
             RegistryAccess access) {
         var variants = new LinkedList<Item>();
-        var multipliers = new LinkedList<Integer>();
+        var multipliers = new LinkedList<Byte>();
 
         variants.addFirst(baseVariant);
 
@@ -95,7 +101,7 @@ public class CompressionService {
             lower = getNextVariant(lower.item().getItem(), decompressed, false, access);
         }
 
-        multipliers.addFirst(1);
+        multipliers.addFirst((byte) 1);
         var chain = new CompressionChain();
 
         for (var i = 0; i < variants.size(); i++) {
@@ -110,26 +116,24 @@ public class CompressionService {
         return chain;
     }
 
-    private CompressionVariant getNextVariant(
-            Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
+    private Variant getNextVariant(Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
             if (compressed && override.smaller.equals(item)) {
-                return new CompressionVariant(override.larger, override.factor);
+                return new Variant(override.larger, override.factor);
             }
 
             if (!compressed && override.larger.equals(item)) {
-                return new CompressionVariant(override.smaller, override.factor);
+                return new Variant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().get(0).getItems()) {
                 if (input.getItem().equals(item)) {
-                    return new CompressionVariant(
-                            recipe.getResultItem(access).getItem(),
-                            compressed
+                    return new Variant(recipe.getResultItem(access).getItem(), (byte)
+                            (compressed
                                     ? recipe.getIngredients().size()
-                                    : recipe.getResultItem(access).getCount());
+                                    : recipe.getResultItem(access).getCount()));
                 }
             }
         }
@@ -147,12 +151,14 @@ public class CompressionService {
         return recipe.getResultItem(access).getCount() == 1
                 && ingredients.stream().noneMatch(Ingredient::isEmpty)
                 && Set.of(4, 9).contains(ingredients.size())
-                && sameIngredient(ingredients);
+                && sameIngredient(recipe);
     }
 
-    private boolean sameIngredient(List<Ingredient> ingredients) {
-        if (ingredients.stream().distinct().count() <= 1) {
-            return true;
+    private boolean sameIngredient(CraftingRecipe recipe) {
+        var ingredients = recipe.getIngredients();
+
+        if (recipe instanceof ShapedRecipe) {
+            return ingredients.stream().distinct().count() <= 1;
         }
 
         // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
@@ -180,26 +186,19 @@ public class CompressionService {
             return true;
         }
 
-        var compressible = false;
-        var decompressible = false;
-
-        var input = recipe.getIngredients().get(0);
-        var output = recipe.getResultItem(access);
+        var testInput = recipe.getIngredients().get(0).getItems();
+        var testOutput = recipe.getResultItem(access).getItem();
 
         for (var candidate : candidates) {
-            for (var item : candidate.getIngredients().get(0).getItems()) {
-                if (item.getItem().equals(output.getItem())) {
-                    compressible = true;
-                }
-            }
+            var input = candidate.getIngredients().get(0).getItems();
+            var output = candidate.getResultItem(access).getItem();
 
-            for (var item : input.getItems()) {
-                if (item.getItem().equals(candidate.getResultItem(access).getItem())) {
-                    decompressible = true;
-                }
-            }
+            var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput));
+            var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output));
 
-            if (compressible && decompressible) return true;
+            if (compressible && decompressible) {
+                return true;
+            }
         }
 
         return false;
@@ -215,9 +214,9 @@ public class CompressionService {
 
                 var smaller = compressed ? input.getItem() : output.getItem();
                 var larger = compressed ? output.getItem() : input.getItem();
-                var factor = compressed ? recipe.getIngredients().size() : output.getCount();
+                var factor = (byte) (compressed ? recipe.getIngredients().size() : output.getCount());
 
-                overrides.add(new Override(smaller, larger, compressed, factor));
+                overrides.add(new Override(smaller, larger, factor));
                 return true;
             }
         }
@@ -225,5 +224,11 @@ public class CompressionService {
         return false;
     }
 
-    private record Override(Item smaller, Item larger, boolean compressed, int factor) {}
+    public record Variant(AEItemKey item, byte factor) {
+        private Variant(Item item, byte factor) {
+            this(AEItemKey.of(item), factor);
+        }
+    }
+
+    private record Override(Item smaller, Item larger, byte factor) {}
 }

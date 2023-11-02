@@ -31,6 +31,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.client.gui.CellDockScreen;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGABlockEntities;
@@ -39,6 +40,7 @@ import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.menu.CellDockMenu;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
@@ -46,6 +48,7 @@ import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 @OnlyIn(Dist.CLIENT)
 public class MEGACellsClient {
     static void init() {
+        initConfigScreen();
         initBuiltInModels();
 
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -53,14 +56,6 @@ public class MEGACellsClient {
         bus.addListener(MEGACellsClient::initRenderTypes);
         bus.addListener(MEGACellsClient::initModels);
         bus.addListener(MEGACellsClient::initItemColors);
-
-        // the absolute state
-        ModLoadingContext.get()
-                .registerExtensionPoint(
-                        ConfigScreenHandler.ConfigScreenFactory.class,
-                        () -> new ConfigScreenHandler.ConfigScreenFactory(
-                                (client, parent) -> AutoConfig.getConfigScreen(MEGAConfig.class, parent)
-                                        .get()));
     }
 
     private static void initScreens(FMLClientSetupEvent ignoredEvent) {
@@ -72,6 +67,7 @@ public class MEGACellsClient {
                 MEGAPatternProviderMenu.TYPE,
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
+        InitScreens.register(CellDockMenu.TYPE, CellDockScreen::new, "/screens/megacells/cell_dock.json");
     }
 
     private static void initRenderTypes(FMLClientSetupEvent ignoredEvent) {
@@ -123,5 +119,15 @@ public class MEGACellsClient {
 
         event.register(BasicStorageCell::getColor, cells.toArray(new ItemLike[0]));
         event.register(PortableCellItem::getColor, portables.toArray(new ItemLike[0]));
+    }
+
+    private static void initConfigScreen() {
+        // the absolute state
+        ModLoadingContext.get()
+                .registerExtensionPoint(
+                        ConfigScreenHandler.ConfigScreenFactory.class,
+                        () -> new ConfigScreenHandler.ConfigScreenFactory(
+                                (client, parent) -> AutoConfig.getConfigScreen(MEGAConfig.class, parent)
+                                        .get()));
     }
 }

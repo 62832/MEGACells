@@ -2,7 +2,6 @@ package gripe._90.megacells.integration.appmek.item;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,13 +30,14 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
 import gripe._90.megacells.definition.MEGATranslations;
 
-public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchItem {
+public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchItem {
     public static final Handler HANDLER = new Handler();
 
-    public MEGARadioactiveCell(Properties properties) {
+    public RadioactiveCellItem(Properties properties) {
         super(properties.stacksTo(1));
     }
 
+    @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
     }
@@ -108,14 +108,13 @@ public class MEGARadioactiveCell extends AEBaseItem implements ICellWorkbenchIte
 
         @Override
         public boolean isCell(ItemStack is) {
-            return is != null && is.getItem() instanceof MEGARadioactiveCell;
+            return is != null && is.getItem() instanceof RadioactiveCellItem;
         }
 
         @Nullable
         @Override
-        public RadioactiveCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider container) {
-            Objects.requireNonNull(is, "Cannot create cell inventory for null itemstack");
-            return isCell(is) ? new RadioactiveCellInventory((MEGARadioactiveCell) is.getItem(), is, container) : null;
+        public RadioactiveCellInventory getCellInventory(ItemStack is, @Nullable ISaveProvider host) {
+            return isCell(is) ? new RadioactiveCellInventory(is, host) : null;
         }
     }
 }

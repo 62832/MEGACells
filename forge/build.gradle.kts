@@ -26,8 +26,12 @@ loom {
     }
 
     forge {
+        mixinConfig("$modId.mixins.json")
         mixinConfig("$modId.forge.mixins.json")
     }
+
+    @Suppress("UnstableApiUsage")
+    mixin.add(sourceSets.main.get(), "$modId.forge.refmap.json")
 }
 
 repositories {
@@ -81,7 +85,6 @@ dependencies {
     modRuntimeOnly(libs.patchouli.forge)
 
     modImplementation(libs.ae2wtlib.forge)
-    modRuntimeOnly(libs.cloth.forge)
     modRuntimeOnly(libs.architectury.forge)
     modRuntimeOnly(libs.curios)
 

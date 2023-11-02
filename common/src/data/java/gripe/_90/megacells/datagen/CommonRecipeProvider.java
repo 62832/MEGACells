@@ -183,9 +183,9 @@ public class CommonRecipeProvider extends RecipeProvider {
                 MEGACells.makeId("transform/sky_steel_ingot"),
                 MEGAItems.SKY_STEEL_INGOT,
                 2,
-                TransformCircumstance.fluid(FluidTags.WATER),
-                Ingredient.of(ConventionTags.IRON_INGOT),
+                TransformCircumstance.fluid(FluidTags.LAVA),
                 Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
+                Ingredient.of(ConventionTags.IRON_INGOT),
                 Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
 
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)

@@ -6,7 +6,7 @@ loom {
             source("data")
 
             property("fabric-api.datagen")
-            property("fabric-api.datagen.modid", "${property("modId")}-data")
+            property("fabric-api.datagen.modid", "${project.property("modId")}-data")
             property("fabric-api.datagen.output-dir", file("src/generated/resources").absolutePath)
             property("fabric-api.datagen.strict-validation")
         }
@@ -72,13 +72,13 @@ dependencies {
 
     modImplementation(libs.ae2.fabric)
     modImplementation(libs.cloth.fabric)
+    modImplementation(libs.modmenu)
 
     modCompileOnly(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
 
     // modRuntimeOnly(libs.ae2wtlib.fabric)
 
-    modImplementation(libs.modmenu)
     modRuntimeOnly(libs.jei.fabric)
     modRuntimeOnly(libs.jade.fabric)
 }

@@ -23,9 +23,10 @@ import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.crafting.DecompressionPatternItem;
-import gripe._90.megacells.item.cell.MEGABulkCell;
+import gripe._90.megacells.item.DecompressionPatternItem;
+import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
+import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;
@@ -84,8 +85,8 @@ public final class MEGAItems {
 
     public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT =
             item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<MEGABulkCell> BULK_ITEM_CELL =
-            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", MEGABulkCell::new);
+    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL =
+            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
 
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = itemPortable(TIER_1M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = itemPortable(TIER_4M);
@@ -125,6 +126,11 @@ public final class MEGAItems {
                 "MEGA Decompression Module",
                 "decompression_module",
                 p -> new PartItem<>(p, DecompressionModulePart.class, DecompressionModulePart::new));
+    });
+
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = Util.make(() -> {
+        PartModels.registerModels(PartModelsHelper.createModels(CellDockPart.class));
+        return item("ME Cell Dock", "cell_dock", p -> new PartItem<>(p, CellDockPart.class, CellDockPart::new));
     });
 
     public static List<ItemDefinition<?>> getItemCells() {
@@ -207,8 +213,7 @@ public final class MEGAItems {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCell(
-                        p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x00F1C5));
+                p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0xF1C5));
     }
 
     public static <T extends Item> ItemDefinition<T> item(

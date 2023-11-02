@@ -13,7 +13,7 @@ import me.ramidzkh.mekae2.item.ChemicalStorageCell;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.appmek.item.MEGARadioactiveCell;
+import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 
 public final class AppMekItems {
     public static void init() {
@@ -43,8 +43,8 @@ public final class AppMekItems {
 
     public static final ItemDefinition<MaterialItem> RADIOACTIVE_CELL_COMPONENT =
             MEGAItems.item("MEGA Radioactive Storage Component", "radioactive_cell_component", MaterialItem::new);
-    public static final ItemDefinition<MEGARadioactiveCell> RADIOACTIVE_CHEMICAL_CELL = MEGAItems.item(
-            "MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", MEGARadioactiveCell::new);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL = MEGAItems.item(
+            "MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", RadioactiveCellItem::new);
 
     public static List<ItemDefinition<?>> getCells() {
         return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);

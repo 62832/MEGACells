@@ -1,4 +1,4 @@
-package gripe._90.megacells.crafting;
+package gripe._90.megacells.item;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -9,6 +9,7 @@ import appeng.api.stacks.AEItemKey;
 import appeng.crafting.pattern.EncodedPatternItem;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.misc.DecompressionPattern;
 
 public class DecompressionPatternItem extends EncodedPatternItem {
     public DecompressionPatternItem(Properties properties) {
