@@ -2,13 +2,15 @@ package gripe._90.megacells.misc;
 
 import java.util.Objects;
 
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
+
+import gripe._90.megacells.definition.MEGAItems;
 
 public class DecompressionPattern implements IPatternDetails {
     static final String NBT_BASE = "base";
@@ -19,12 +21,8 @@ public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
     private final AEItemKey base;
     private final AEItemKey variant;
-    private final int factor;
+    private final byte factor;
     private final boolean toCompress;
-
-    public DecompressionPattern(ItemStack stack) {
-        this(Objects.requireNonNull(AEItemKey.of(stack)));
-    }
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
@@ -32,8 +30,23 @@ public class DecompressionPattern implements IPatternDetails {
         var tag = Objects.requireNonNull(definition.getTag());
         base = AEItemKey.fromTag(tag.getCompound(NBT_BASE));
         variant = AEItemKey.fromTag(tag.getCompound(NBT_VARIANT));
-        factor = tag.getInt(NBT_FACTOR);
+        factor = tag.getByte(NBT_FACTOR);
         toCompress = tag.getBoolean(NBT_TO_COMPRESS);
+    }
+
+    public DecompressionPattern(AEItemKey base, CompressionService.Variant variant, boolean toCompress) {
+        this.base = base;
+        this.variant = variant.item();
+        this.factor = variant.factor();
+        this.toCompress = toCompress;
+
+        var tag = new CompoundTag();
+        tag.put(NBT_BASE, this.base.toTag());
+        tag.put(NBT_VARIANT, this.variant.toTag());
+        tag.putByte(NBT_FACTOR, this.factor);
+        tag.putBoolean(NBT_TO_COMPRESS, this.toCompress);
+
+        definition = AEItemKey.of(MEGAItems.DECOMPRESSION_PATTERN, tag);
     }
 
     @Override

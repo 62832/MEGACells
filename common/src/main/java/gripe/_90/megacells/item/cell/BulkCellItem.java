@@ -71,10 +71,8 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
             if (filterItem != null) {
                 if (storedItem == null) {
                     lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
-                } else {
-                    if (!storedItem.equals(filterItem)) {
-                        lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
-                    }
+                } else if (!storedItem.equals(filterItem)) {
+                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
             } else {
                 lines.add(
