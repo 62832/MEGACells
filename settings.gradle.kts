@@ -10,9 +10,8 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            plugin("loom", "dev.architectury.loom").version("1.3-SNAPSHOT")
+            plugin("loom", "dev.architectury.loom").version("1.4-SNAPSHOT")
             plugin("architectury", "architectury-plugin").version("3.4-SNAPSHOT")
-            plugin("vineflower", "io.github.juuxel.loom-vineflower").version("1.11.0")
             plugin("shadow", "com.github.johnrengelman.shadow").version("8.1.1")
             plugin("spotless", "com.diffplug.spotless").version("6.20.0")
 
