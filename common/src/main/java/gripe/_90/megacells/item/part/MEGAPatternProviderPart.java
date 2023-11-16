@@ -18,7 +18,7 @@ import appeng.parts.crafting.PatternProviderPart;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.menu.MEGAPatternProviderMenu;
+import gripe._90.megacells.definition.MEGAMenus;
 
 public class MEGAPatternProviderPart extends PatternProviderPart {
     private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_pattern_provider");
@@ -44,12 +44,12 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAPatternProviderMenu.TYPE, player, locator);
+        MenuOpener.open(MEGAMenus.MEGA_PATTERN_PROVIDER, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAPatternProviderMenu.TYPE, player, subMenu.getLocator());
+        MenuOpener.returnTo(MEGAMenus.MEGA_PATTERN_PROVIDER, player, subMenu.getLocator());
     }
 
     @Override

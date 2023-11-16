@@ -1,22 +1,14 @@
 package gripe._90.megacells.menu;
 
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
 
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
-import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.menu.implementations.PatternProviderMenu;
 
-public class MEGAPatternProviderMenu extends PatternProviderMenu {
-    public static final MenuType<MEGAPatternProviderMenu> TYPE = MenuTypeBuilder.create(
-                    MEGAPatternProviderMenu::new, PatternProviderLogicHost.class)
-            .build("mega_pattern_provider");
+import gripe._90.megacells.definition.MEGAMenus;
 
-    protected MEGAPatternProviderMenu(
-            MenuType<MEGAPatternProviderMenu> menuType,
-            int id,
-            Inventory playerInventory,
-            PatternProviderLogicHost host) {
-        super(menuType, id, playerInventory, host);
+public class MEGAPatternProviderMenu extends PatternProviderMenu {
+    public MEGAPatternProviderMenu(int id, Inventory playerInventory, PatternProviderLogicHost host) {
+        super(MEGAMenus.MEGA_PATTERN_PROVIDER, id, playerInventory, host);
     }
 }

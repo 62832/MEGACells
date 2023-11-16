@@ -32,8 +32,7 @@ public class DecompressionPatternItem extends EncodedPatternItem {
         try {
             return new DecompressionPattern(what);
         } catch (Exception e) {
-            MEGACells.LOGGER.warn(
-                    "Could not decode an invalid decompression pattern %s: %s".formatted(what.getTag(), e));
+            MEGACells.LOGGER.warn("Could not decode invalid decompression pattern %s: %s".formatted(what.getTag(), e));
             return null;
         }
     }

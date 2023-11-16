@@ -17,7 +17,7 @@ import appeng.parts.misc.InterfacePart;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.menu.MEGAInterfaceMenu;
+import gripe._90.megacells.definition.MEGAMenus;
 
 public class MEGAInterfacePart extends InterfacePart {
     private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_interface");
@@ -43,12 +43,12 @@ public class MEGAInterfacePart extends InterfacePart {
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAInterfaceMenu.TYPE, player, locator);
+        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.open(MEGAInterfaceMenu.TYPE, player, subMenu.getLocator());
+        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, subMenu.getLocator());
     }
 
     @Override

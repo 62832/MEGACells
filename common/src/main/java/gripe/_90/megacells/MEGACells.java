@@ -1,32 +1,29 @@
 package gripe._90.megacells;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.ServiceLoader;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.features.HotkeyAction;
 import appeng.api.networking.GridServices;
 import appeng.api.storage.StorageCells;
-import appeng.api.upgrades.Upgrades;
-import appeng.core.definitions.AEItems;
-import appeng.core.localization.GuiText;
+import appeng.client.render.crafting.CraftingMonitorRenderer;
 import appeng.hotkeys.HotkeyActions;
+import appeng.items.storage.BasicStorageCell;
+import appeng.items.tools.powered.PortableCellItem;
 
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGABlockEntities;
-import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.misc.DecompressionService;
@@ -40,9 +37,6 @@ public final class MEGACells {
 
     public static final Platform PLATFORM =
             ServiceLoader.load(Platform.class).findFirst().orElseThrow();
-    public static final Platform.Client PLATFORM_CLIENT = PLATFORM.isClient()
-            ? ServiceLoader.load(Platform.Client.class).findFirst().orElseThrow()
-            : null;
 
     public static ResourceLocation makeId(String path) {
         return new ResourceLocation(MODID, path);
@@ -51,13 +45,9 @@ public final class MEGACells {
     public static void initCommon() {
         MEGAConfig.load();
 
-        MEGAItems.init();
-        MEGABlocks.init();
-        MEGABlockEntities.init();
-
-        if (PLATFORM.isAddonLoaded(Addons.APPBOT)) {
-            AppBotItems.init();
-        }
+        PLATFORM.initItems();
+        PLATFORM.register();
+        PLATFORM.initUpgrades();
 
         StorageCells.addCellHandler(BulkCellItem.HANDLER);
 
@@ -65,8 +55,6 @@ public final class MEGACells {
                 .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
         MEGAItems.getFluidPortables()
                 .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
-
-        initStorageCellModels();
 
         PLATFORM.initCompression();
         GridServices.register(DecompressionService.class, DecompressionService.class);
@@ -77,91 +65,36 @@ public final class MEGACells {
         PLATFORM.addVillagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50);
     }
 
-    private static void initStorageCellModels() {
-        Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
-                .flatMap(Collection::stream)
-                .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_item_cell")));
-        Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables())
-                .flatMap(Collection::stream)
-                .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_fluid_cell")));
+    public static class Client {
+        private Client() {}
 
-        StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
+        public static final Platform.Client PLATFORM =
+                ServiceLoader.load(Platform.Client.class).findFirst().orElseThrow();
 
-        if (PLATFORM.isAddonLoaded(Addons.APPBOT)) {
-            Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
+        public static void initClient() {
+            PLATFORM.initScreens();
+            PLATFORM.initEnergyCellProps();
+            PLATFORM.initCraftingUnitModels();
+
+            Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
                     .flatMap(Collection::stream)
-                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_mana_cell")));
-        }
-    }
+                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_item_cell")));
+            Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables())
+                    .flatMap(Collection::stream)
+                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_fluid_cell")));
 
-    // has to be done post-registration
-    public static void initUpgrades() {
-        var storageCellGroup = GuiText.StorageCells.getTranslationKey();
-        var portableCellGroup = GuiText.PortableCells.getTranslationKey();
-        var interfaceGroup = GuiText.Interface.getTranslationKey();
-        var wirelessTerminalGroup = GuiText.WirelessTerminals.getTranslationKey();
+            StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
 
-        for (var itemCell : MEGAItems.getItemCells()) {
-            Upgrades.add(AEItems.FUZZY_CARD, itemCell, 1, storageCellGroup);
-            Upgrades.add(AEItems.INVERTER_CARD, itemCell, 1, storageCellGroup);
-            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemCell, 1, storageCellGroup);
-            Upgrades.add(AEItems.VOID_CARD, itemCell, 1, storageCellGroup);
-        }
+            if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
+                Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
+                        .flatMap(Collection::stream)
+                        .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_mana_cell")));
+            }
 
-        for (var fluidCell : MEGAItems.getFluidCells()) {
-            Upgrades.add(AEItems.INVERTER_CARD, fluidCell, 1, storageCellGroup);
-            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidCell, 1, storageCellGroup);
-            Upgrades.add(AEItems.VOID_CARD, fluidCell, 1, storageCellGroup);
-        }
+            BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
 
-        for (var itemPortable : MEGAItems.getItemPortables()) {
-            Upgrades.add(AEItems.FUZZY_CARD, itemPortable, 1, portableCellGroup);
-            Upgrades.add(AEItems.INVERTER_CARD, itemPortable, 1, portableCellGroup);
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, itemPortable, 2, portableCellGroup);
-            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemPortable, 1, storageCellGroup);
-            Upgrades.add(AEItems.VOID_CARD, itemPortable, 1, storageCellGroup);
-        }
-
-        for (var fluidPortable : MEGAItems.getFluidPortables()) {
-            Upgrades.add(AEItems.INVERTER_CARD, fluidPortable, 1, portableCellGroup);
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, fluidPortable, 2, portableCellGroup);
-            Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidPortable, 1, storageCellGroup);
-            Upgrades.add(AEItems.VOID_CARD, fluidPortable, 1, storageCellGroup);
-        }
-
-        Upgrades.add(AEItems.CRAFTING_CARD, MEGABlocks.MEGA_INTERFACE, 1, interfaceGroup);
-        Upgrades.add(AEItems.CRAFTING_CARD, MEGAItems.MEGA_INTERFACE, 1, interfaceGroup);
-        Upgrades.add(AEItems.FUZZY_CARD, MEGABlocks.MEGA_INTERFACE, 1, interfaceGroup);
-        Upgrades.add(AEItems.FUZZY_CARD, MEGAItems.MEGA_INTERFACE, 1, interfaceGroup);
-
-        Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_TERMINAL, 2, wirelessTerminalGroup);
-        Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.WIRELESS_CRAFTING_TERMINAL, 2, wirelessTerminalGroup);
-
-        Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.COLOR_APPLICATOR, 2);
-        Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, AEItems.MATTER_CANNON, 2);
-
-        Upgrades.add(MEGAItems.COMPRESSION_CARD, MEGAItems.BULK_ITEM_CELL, 1);
-
-        for (var portableCell : List.of(
-                AEItems.PORTABLE_ITEM_CELL1K,
-                AEItems.PORTABLE_ITEM_CELL4K,
-                AEItems.PORTABLE_ITEM_CELL16K,
-                AEItems.PORTABLE_ITEM_CELL64K,
-                AEItems.PORTABLE_ITEM_CELL256K,
-                AEItems.PORTABLE_FLUID_CELL1K,
-                AEItems.PORTABLE_FLUID_CELL4K,
-                AEItems.PORTABLE_FLUID_CELL16K,
-                AEItems.PORTABLE_FLUID_CELL64K,
-                AEItems.PORTABLE_FLUID_CELL256K)) {
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
-        }
-
-        if (PLATFORM.isAddonLoaded(Addons.AE2WTLIB)) {
-            AE2WTIntegration.initUpgrades();
-        }
-
-        if (PLATFORM.isAddonLoaded(Addons.APPBOT)) {
-            AppBotIntegration.initUpgrades();
+            PLATFORM.initItemColours(BasicStorageCell::getColor, MEGACells.PLATFORM.getAllCells());
+            PLATFORM.initItemColours(PortableCellItem::getColor, MEGACells.PLATFORM.getAllPortables());
         }
     }
 }

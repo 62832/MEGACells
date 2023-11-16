@@ -32,6 +32,8 @@ dependencyResolutionManagement {
             library("cloth-fabric", "me.shedaniel.cloth", "cloth-config-fabric").versionRef("cloth-config")
             library("cloth-forge", "me.shedaniel.cloth", "cloth-config-forge").versionRef("cloth-config")
 
+            library("modmenu", "com.terraformersmc", "modmenu").version("7.2.1")
+
             // AE2WTLib
             val ae2wtVersion = "15.0.1-beta"
             version("ae2wtlib", ae2wtVersion)
@@ -55,7 +57,7 @@ dependencyResolutionManagement {
             library("patchouli-forge", "vazkii.patchouli", "Patchouli").version("$minecraftVersion-81-FORGE")
 
             // Applied Mekanistics
-            version("appmek", "1.4.0")
+            version("appmek", "1.4.2")
             library("appmek", "maven.modrinth", "applied-mekanistics").versionRef("appmek")
             library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.4.0.14")
 
@@ -66,8 +68,6 @@ dependencyResolutionManagement {
 
             library("jade-fabric", "curse.maven", "jade-324717").version("4653227")
             library("jade-forge", "curse.maven", "jade-324717").version("4654448")
-
-            library("modmenu", "com.terraformersmc", "modmenu").version("7.2.1")
         }
     }
 }

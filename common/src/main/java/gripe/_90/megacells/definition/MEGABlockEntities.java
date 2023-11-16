@@ -1,12 +1,10 @@
 package gripe._90.megacells.definition;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +32,7 @@ public final class MEGABlockEntities {
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
 
     public static Map<ResourceLocation, BlockEntityType<?>> getBlockEntityTypes() {
-        return ImmutableMap.copyOf(BLOCK_ENTITY_TYPES);
+        return Collections.unmodifiableMap(BLOCK_ENTITY_TYPES);
     }
 
     public static final BlockEntityType<EnergyCellBlockEntity> MEGA_ENERGY_CELL = create(
@@ -75,7 +73,9 @@ public final class MEGABlockEntities {
             Class<T> entityClass,
             BlockEntityFactory<T> factory,
             BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
-        Preconditions.checkArgument(blockDefinitions.length > 0);
+        if (blockDefinitions.length == 0) {
+            throw new IllegalArgumentException();
+        }
 
         var blocks = Arrays.stream(blockDefinitions).map(BlockDefinition::block).toArray(AEBaseEntityBlock[]::new);
 
@@ -83,7 +83,7 @@ public final class MEGABlockEntities {
         var type = BlockEntityType.Builder.of(
                         (blockPos, blockState) -> factory.create(typeHolder.get(), blockPos, blockState), blocks)
                 .build(null);
-        typeHolder.set(type); // Makes it available to the supplier used above
+        typeHolder.set(type);
         BLOCK_ENTITY_TYPES.put(MEGACells.makeId(id), type);
 
         AEBaseBlockEntity.registerBlockEntityItem(type, blockDefinitions[0].asItem());

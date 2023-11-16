@@ -53,7 +53,7 @@ import appeng.util.inv.filter.IAEItemFilter;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.menu.CellDockMenu;
+import gripe._90.megacells.definition.MEGAMenus;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IPriorityHost, IStorageProvider {
@@ -169,7 +169,7 @@ public class CellDockPart extends AEBasePart
     @Override
     public boolean onPartActivate(Player player, InteractionHand hand, Vec3 pos) {
         if (!player.getCommandSenderWorld().isClientSide()) {
-            MenuOpener.open(CellDockMenu.TYPE, player, MenuLocators.forPart(this));
+            MenuOpener.open(MEGAMenus.CELL_DOCK, player, MenuLocators.forPart(this));
         }
 
         return true;
@@ -294,7 +294,7 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(CellDockMenu.TYPE, player, MenuLocators.forPart(this));
+        MenuOpener.returnTo(MEGAMenus.CELL_DOCK, player, MenuLocators.forPart(this));
     }
 
     @Override
@@ -345,7 +345,7 @@ public class CellDockPart extends AEBasePart
                 .getModelRenderer()
                 .tesselateBlock(
                         getLevel(),
-                        MEGACells.PLATFORM_CLIENT.createWrappedCellModel(clientCell, orientation),
+                        MEGACells.Client.PLATFORM.createCellModel(clientCell, orientation),
                         getBlockEntity().getBlockState(),
                         getBlockEntity().getBlockPos(),
                         poseStack,

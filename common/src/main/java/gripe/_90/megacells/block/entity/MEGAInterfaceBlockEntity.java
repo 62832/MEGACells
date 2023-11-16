@@ -13,7 +13,7 @@ import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocator;
 
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.menu.MEGAInterfaceMenu;
+import gripe._90.megacells.definition.MEGAMenus;
 
 public class MEGAInterfaceBlockEntity extends InterfaceBlockEntity {
     public MEGAInterfaceBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
@@ -27,12 +27,12 @@ public class MEGAInterfaceBlockEntity extends InterfaceBlockEntity {
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAInterfaceMenu.TYPE, player, locator);
+        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAInterfaceMenu.TYPE, player, subMenu.getLocator());
+        MenuOpener.returnTo(MEGAMenus.MEGA_INTERFACE, player, subMenu.getLocator());
     }
 
     @Override
