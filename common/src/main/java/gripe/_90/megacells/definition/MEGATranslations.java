@@ -26,7 +26,7 @@ public enum MEGATranslations implements LocalizationEnum {
             Type.CONFIG_TOOLTIP,
             CompressionChainLimit),
     AllowSpentWaste("(AppMek) Allow Spent Nuclear Waste", Type.CONFIG_OPTION),
-    AllowSpentWasteToolltip(
+    AllowSpentWasteTooltip(
             "Whether the MEGA Radioactive Cell should be able to store Spent Nuclear Waste.",
             Type.CONFIG_TOOLTIP,
             AllowSpentWaste);
