@@ -14,6 +14,10 @@ val modId: String by project
 val modVersion = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
 val minecraftVersion: String = libs.versions.minecraft.get()
 
+val platforms by extra {
+    property("enabledPlatforms").toString().split(',')
+}
+
 tasks {
     register("releaseInfo") {
         doLast {
@@ -117,6 +121,11 @@ subprojects {
     }
 
     spotless {
+        kotlinGradle {
+            target("*.kts")
+            diktat()
+        }
+
         java {
             target("src/**/java/**/*.java")
             endWithNewline()
@@ -141,12 +150,13 @@ subprojects {
         json {
             target("src/**/resources/**/*.json")
             targetExclude("src/generated/resources/**")
-            prettier().config(mapOf("parser" to "json"))
+            jackson()
+            endWithNewline()
         }
     }
 }
 
-for (platform in property("enabledPlatforms").toString().split(',')) {
+for (platform in platforms) {
     project(":$platform") {
         apply(plugin = rootProject.libs.plugins.shadow.get().pluginId)
 

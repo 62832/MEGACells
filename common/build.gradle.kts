@@ -1,6 +1,5 @@
 architectury {
-    val platforms = property("enabledPlatforms").toString().split(',')
-    println("Platforms: $platforms")
+    val platforms: List<String> by rootProject.extra
     common(platforms)
 }
 

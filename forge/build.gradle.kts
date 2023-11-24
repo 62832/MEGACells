@@ -95,9 +95,10 @@ dependencies {
 tasks.processResources {
     val commonProps: Map<String, *> by extra
     val forgeProps = mapOf(
-            "appmekVersion" to libs.versions.appmek.get(),
-            "loaderVersion" to libs.forge.get().version!!.substringAfter('-').substringBefore('.'),
-            "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1
+        "appmekVersion" to libs.versions.appmek.get(),
+        "loaderVersion" to libs.forge.get().version!!.substringAfter('-')
+            .substringBefore('.'),
+        "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1
     )
 
     inputs.properties(commonProps)

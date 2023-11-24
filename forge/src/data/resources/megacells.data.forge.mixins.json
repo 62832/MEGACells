@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8.5",
   "package": "gripe._90.megacells.mixin.data.forge",
-  "mixins": ["MainMixin"],
+  "mixins": [ "MainMixin" ],
   "injectors": {
     "defaultRequire": 1
   }
