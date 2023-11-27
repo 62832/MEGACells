@@ -80,7 +80,7 @@ dependencies {
     modCompileOnly(variantOf(libs.mekanism) { classifier("generators") })
     modRuntimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
-    modCompileOnly(libs.appbot.forge)
+    modImplementation(libs.appbot.forge)
     modRuntimeOnly(libs.botania.forge)
     modRuntimeOnly(libs.patchouli.forge)
 

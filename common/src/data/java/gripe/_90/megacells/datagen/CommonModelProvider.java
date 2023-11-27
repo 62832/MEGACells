@@ -184,8 +184,7 @@ public class CommonModelProvider implements DataProvider {
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             flatItem(AppBotItems.MEGA_MANA_CELL_HOUSING, output);
             AppBotItems.getCells().forEach(cell -> cellModel(cell, output));
-
-            // TODO: portables
+            AppBotItems.getPortables().forEach(portable -> portableModel(portable, output));
             driveCell("mega_mana_cell", output);
         }
 
@@ -204,6 +203,15 @@ public class CommonModelProvider implements DataProvider {
                 TextureMapping.layered(
                         MEGACells.makeId("item/cell/standard/" + cell.id().getPath()),
                         AppEng.makeId("item/storage_cell_led")),
+                output);
+    }
+
+    private void portableModel(ItemDefinition<?> portable, BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
+        ModelTemplates.TWO_LAYERED_ITEM.create(
+                ModelLocationUtils.getModelLocation(portable.asItem()),
+                TextureMapping.layered(
+                        MEGACells.makeId("item/cell/portable/" + portable.id().getPath()),
+                        AppEng.makeId("item/portable_cell_led")),
                 output);
     }
 
