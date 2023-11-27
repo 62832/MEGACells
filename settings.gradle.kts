@@ -21,9 +21,9 @@ dependencyResolutionManagement {
 
             library("fabric-loader", "net.fabricmc", "fabric-loader").version("0.14.21")
             library("fabric-api", "net.fabricmc.fabric-api", "fabric-api").version("0.83.1+$minecraftVersion")
-            library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.3")
+            library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.47")
 
-            version("ae2", "15.0.14")
+            version("ae2", "15.0.15")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
             library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
 
@@ -48,12 +48,12 @@ dependencyResolutionManagement {
             library("appbot-fabric", "maven.modrinth", "applied-botanics").version("$appbotVersion-fabric")
             library("appbot-forge", "maven.modrinth", "applied-botanics").version("$appbotVersion-forge")
 
-            val botaniaVersion = "441"
+            val botaniaVersion = "442"
             val botaniaSnapshot = true
             library("botania-fabric", "vazkii.botania", "Botania").version("$minecraftVersion-$botaniaVersion-FABRIC${if (botaniaSnapshot) "-SNAPSHOT" else ""}")
             library("botania-forge", "vazkii.botania", "Botania").version("$minecraftVersion-$botaniaVersion-FORGE${if (botaniaSnapshot) "-SNAPSHOT" else ""}")
 
-            library("patchouli-forge", "vazkii.patchouli", "Patchouli").version("$minecraftVersion-81-FORGE")
+            library("patchouli-forge", "vazkii.patchouli", "Patchouli").version("$minecraftVersion-83-FORGE")
 
             // Applied Mekanistics
             version("appmek", "1.4.2")
@@ -65,8 +65,8 @@ dependencyResolutionManagement {
             library("jei-fabric", "mezz.jei", "jei-$minecraftVersion-fabric").versionRef("jei")
             library("jei-forge", "mezz.jei", "jei-$minecraftVersion-forge").versionRef("jei")
 
-            library("jade-fabric", "curse.maven", "jade-324717").version("4653227")
-            library("jade-forge", "curse.maven", "jade-324717").version("4654448")
+            library("jade-fabric", "maven.modrinth", "jade").version("ckXpheui")
+            library("jade-forge", "maven.modrinth", "jade").version("5gvujWrb")
         }
     }
 }
