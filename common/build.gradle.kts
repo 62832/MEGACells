@@ -10,4 +10,5 @@ dependencies {
     modCompileOnly(libs.cloth.fabric)
     modCompileOnly(libs.ae2wtlib.fabric)
     modCompileOnly(libs.appbot.fabric)
+    modCompileOnly(libs.botania.fabric) { isTransitive = false }
 }

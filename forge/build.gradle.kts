@@ -52,15 +52,6 @@ repositories {
     }
 
     maven {
-        name = "BlameJared"
-        url = uri("https://maven.blamejared.com")
-        content {
-            includeGroup("vazkii.botania")
-            includeGroup("vazkii.patchouli")
-        }
-    }
-
-    maven {
         name = "TheIllusiveC4"
         url = uri("https://maven.theillusivec4.top/")
         content {

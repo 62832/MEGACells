@@ -2,6 +2,7 @@ package gripe._90.megacells.forge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,6 +37,8 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.ConditionalRecipe;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -203,6 +209,24 @@ public final class ForgePlatform implements Platform {
                 (i, j) -> new MerchantOffer(
                         new ItemStack(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
         offers.put(5, masterEntries);
+    }
+
+    @Override
+    public void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, FinishedRecipe recipe, Addons addon, ResourceLocation id) {
+        ConditionalRecipe.builder()
+                .addCondition(new ModLoadedCondition(addon.getModId()))
+                .addRecipe(recipe)
+                .build(writer, id);
+    }
+
+    @Override
+    public void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, RecipeBuilder builder, Addons addon, ResourceLocation id) {
+        ConditionalRecipe.builder()
+                .addCondition(new ModLoadedCondition(addon.getModId()))
+                .addRecipe(builder::save)
+                .build(writer, id);
     }
 
     public static class Client implements Platform.Client {

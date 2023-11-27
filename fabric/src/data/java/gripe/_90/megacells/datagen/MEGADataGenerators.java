@@ -13,10 +13,10 @@ public class MEGADataGenerators implements DataGeneratorEntrypoint {
 
         pack.addProvider(CommonTagProvider.BlockTags::new);
         pack.addProvider(CommonTagProvider.ItemTags::new);
+        pack.addProvider(FabricRecipeProvider::new);
 
         pack.addProvider((FabricDataOutput output) -> new CommonLanguageProvider(output));
         pack.addProvider((FabricDataOutput output) -> new CommonLootTableProvider(output));
-        pack.addProvider((FabricDataOutput output) -> new CommonRecipeProvider(output));
         pack.addProvider((FabricDataOutput output) -> new CommonModelProvider(output));
     }
 

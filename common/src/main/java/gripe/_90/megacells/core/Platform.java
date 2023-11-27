@@ -2,10 +2,14 @@ package gripe._90.megacells.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -148,6 +152,12 @@ public interface Platform {
     void initLavaTransform();
 
     void addVillagerTrade(ItemLike item, int cost, int quantity, int xp);
+
+    void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, FinishedRecipe recipe, Addons addon, ResourceLocation id);
+
+    void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, RecipeBuilder builder, Addons addon, ResourceLocation id);
 
     interface Client {
         void initScreens();

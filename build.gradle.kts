@@ -78,6 +78,15 @@ subprojects {
         }
 
         maven {
+            name = "BlameJared"
+            url = uri("https://maven.blamejared.com")
+            content {
+                includeGroup("vazkii.botania")
+                includeGroup("vazkii.patchouli")
+            }
+        }
+
+        maven {
             name = "Modrinth Maven"
             url = uri("https://api.modrinth.com/maven")
             content {

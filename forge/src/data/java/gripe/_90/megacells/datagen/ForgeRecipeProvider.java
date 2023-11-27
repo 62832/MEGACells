@@ -15,8 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -133,9 +131,6 @@ public class ForgeRecipeProvider extends RecipeProvider {
     }
 
     private void appmekRecipe(Consumer<FinishedRecipe> consumer, ResourceLocation id, RecipeBuilder builder) {
-        ConditionalRecipe.builder()
-                .addCondition(new ModLoadedCondition(Addons.APPMEK.getModId()))
-                .addRecipe(builder::save)
-                .build(consumer, id);
+        MEGACells.PLATFORM.addIntegrationRecipe(consumer, builder, Addons.APPMEK, id);
     }
 }

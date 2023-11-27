@@ -2,6 +2,7 @@ package gripe._90.megacells.fabric;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -11,6 +12,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
+import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColor;
@@ -20,6 +24,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.CreativeModeTab;
@@ -110,6 +117,32 @@ public final class FabricPlatform implements Platform {
                 InitVillager.PROFESSION,
                 5,
                 builder -> builder.add(new VillagerTrades.ItemsForEmeralds(item.asItem(), cost, quantity, xp)));
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Override
+    public void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, FinishedRecipe recipe, Addons addon, ResourceLocation id) {
+        Consumer<FinishedRecipe> withConditions = json -> {
+            FabricDataGenHelper.addConditions(
+                    json, new ConditionJsonProvider[] {DefaultResourceConditions.allModsLoaded(addon.getModId())});
+            writer.accept(json);
+        };
+
+        withConditions.accept(recipe);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    @Override
+    public void addIntegrationRecipe(
+            Consumer<FinishedRecipe> writer, RecipeBuilder builder, Addons addon, ResourceLocation id) {
+        Consumer<FinishedRecipe> withConditions = json -> {
+            FabricDataGenHelper.addConditions(
+                    json, new ConditionJsonProvider[] {DefaultResourceConditions.allModsLoaded(addon.getModId())});
+            writer.accept(json);
+        };
+
+        builder.save(withConditions, id);
     }
 
     public static class Client implements Platform.Client {
