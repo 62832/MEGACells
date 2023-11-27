@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "megacells-data",
   "version": "1",
-  "mixins": [ "megacells.data.mixins.json" ],
+  "mixins": ["megacells.data.mixins.json"],
   "entrypoints": {
-    "fabric-datagen": [ "gripe._90.megacells.datagen.MEGADataGenerators" ]
+    "fabric-datagen": ["gripe._90.megacells.datagen.MEGADataGenerators"]
   }
 }

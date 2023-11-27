@@ -1,9 +1,9 @@
 {
   "$schema": "../schema.json",
-  "includes": [ "../common/common.json", "../common/player_inventory.json" ],
+  "includes": ["../common/common.json", "../common/player_inventory.json"],
   "background": {
     "texture": "guis/megacells/mega_interface.png",
-    "srcRect": [ 0, 0, 176, 238 ]
+    "srcRect": [0, 0, 176, 238]
   },
   "slots": {
     "CONFIG": {

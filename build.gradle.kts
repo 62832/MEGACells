@@ -150,7 +150,8 @@ subprojects {
         json {
             target("src/**/resources/**/*.json")
             targetExclude("src/generated/resources/**")
-            jackson()
+            biome()
+            indentWithSpaces(2)
             endWithNewline()
         }
     }
