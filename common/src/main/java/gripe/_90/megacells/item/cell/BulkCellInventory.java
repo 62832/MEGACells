@@ -3,7 +3,6 @@ package gripe._90.megacells.item.cell;
 import static gripe._90.megacells.definition.MEGAItems.COMPRESSION_CARD;
 
 import java.math.BigInteger;
-import java.util.Objects;
 import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
@@ -88,11 +87,11 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public CellState getStatus() {
-        if (unitCount.signum() < 1) {
+        if (storedItem == null || unitCount.signum() < 1) {
             return CellState.EMPTY;
         }
 
-        if (!Objects.equals(storedItem, filterItem)) {
+        if (!storedItem.equals(filterItem)) {
             return CellState.FULL;
         }
 
@@ -161,7 +160,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || !Objects.equals(storedItem, filterItem)) {
+        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
             return 0;
         }
 
@@ -194,7 +193,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || !Objects.equals(storedItem, filterItem)) {
+        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
             return 0;
         }
 
