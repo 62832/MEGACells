@@ -331,12 +331,17 @@ public class CellDockPart extends AEBasePart
             return;
         }
 
-        poseStack.pushPose();
-        poseStack.translate(0.5, 0.5, 0.5);
-
         var front = getSide() == Direction.UP || getSide() == Direction.DOWN ? Direction.NORTH : Direction.UP;
         var orientation = BlockOrientation.get(front, getSide());
 
+        var cellModel = MEGACells.Client.PLATFORM.createCellModel(clientCell, orientation);
+
+        if (cellModel == null) {
+            return;
+        }
+
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(orientation.getQuaternion());
         poseStack.translate(-3F / 16, 5F / 16, -4F / 16);
 
@@ -345,7 +350,7 @@ public class CellDockPart extends AEBasePart
                 .getModelRenderer()
                 .tesselateBlock(
                         getLevel(),
-                        MEGACells.Client.PLATFORM.createCellModel(clientCell, orientation),
+                        cellModel,
                         getBlockEntity().getBlockState(),
                         getBlockEntity().getBlockPos(),
                         poseStack,

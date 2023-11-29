@@ -268,14 +268,18 @@ public final class ForgePlatform implements Platform {
 
         @Override
         public BakedModel createCellModel(Item cell, BlockOrientation orientation) {
-            var driveModel = Minecraft.getInstance()
-                    .getModelManager()
-                    .getBlockModelShaper()
-                    .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-            var cellModel = BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class)
-                    .getCellChassisModel(cell);
+            var driveModel = BakedModelUnwrapper.unwrap(
+                    Minecraft.getInstance()
+                            .getModelManager()
+                            .getBlockModelShaper()
+                            .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState()),
+                    DriveBakedModel.class);
 
-            return new DelegateBakedModel(cellModel) {
+            if (driveModel == null) {
+                return null;
+            }
+
+            return new DelegateBakedModel(driveModel.getCellChassisModel(cell)) {
                 @NotNull
                 @Override
                 public List<BakedQuad> getQuads(
@@ -292,14 +296,13 @@ public final class ForgePlatform implements Platform {
 
                     for (int i = 0; i < quads.size(); i++) {
                         var quad = quads.get(i);
-                        quads.set(
-                                i,
-                                new BakedQuad(
-                                        quad.getVertices(),
-                                        quad.getTintIndex(),
-                                        orientation.rotate(quad.getDirection()),
-                                        quad.getSprite(),
-                                        quad.isShade()));
+                        var baked = new BakedQuad(
+                                quad.getVertices(),
+                                quad.getTintIndex(),
+                                orientation.rotate(quad.getDirection()),
+                                quad.getSprite(),
+                                quad.isShade());
+                        quads.set(i, baked);
                     }
 
                     return quads;

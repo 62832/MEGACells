@@ -174,42 +174,41 @@ public final class FabricPlatform implements Platform {
 
         @Override
         public BakedModel createCellModel(Item cell, BlockOrientation orientation) {
-            var driveModel = Minecraft.getInstance()
-                    .getModelManager()
-                    .getBlockModelShaper()
-                    .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState());
-            var cellModel = BakedModelUnwrapper.unwrap(driveModel, DriveBakedModel.class)
-                    .getCellChassisModel(cell);
-            return new WrappedCellModel(cellModel, orientation);
+            var driveModel = BakedModelUnwrapper.unwrap(
+                    Minecraft.getInstance()
+                            .getModelManager()
+                            .getBlockModelShaper()
+                            .getBlockModel(AEBlocks.DRIVE.block().defaultBlockState()),
+                    DriveBakedModel.class);
+            return driveModel == null ? null : new WrappedCellModel(driveModel.getCellChassisModel(cell), orientation);
         }
     }
 
     private static class WrappedCellModel extends ForwardingBakedModel {
-        private final BlockOrientation r;
+        private final BlockOrientation orientation;
 
-        private WrappedCellModel(BakedModel base, BlockOrientation r) {
+        private WrappedCellModel(BakedModel base, BlockOrientation orientation) {
             wrapped = base;
-            this.r = r;
+            this.orientation = orientation;
         }
 
         @Override
         public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand) {
             if (side != null) {
-                side = r.resultingRotate(side); // This fixes the incorrect lightmap position
+                side = orientation.resultingRotate(side); // This fixes the incorrect lightmap position
             }
 
             var quads = new ArrayList<>(super.getQuads(state, side, rand));
 
             for (int i = 0; i < quads.size(); i++) {
                 var quad = quads.get(i);
-                quads.set(
-                        i,
-                        new BakedQuad(
-                                quad.getVertices(),
-                                quad.getTintIndex(),
-                                r.rotate(quad.getDirection()),
-                                quad.getSprite(),
-                                quad.isShade()));
+                var baked = new BakedQuad(
+                        quad.getVertices(),
+                        quad.getTintIndex(),
+                        orientation.rotate(quad.getDirection()),
+                        quad.getSprite(),
+                        quad.isShade());
+                quads.set(i, baked);
             }
 
             return quads;
