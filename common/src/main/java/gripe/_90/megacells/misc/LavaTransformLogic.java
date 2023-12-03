@@ -33,7 +33,7 @@ public final class LavaTransformLogic {
 
         for (var recipe : level.getRecipeManager().getAllRecipesFor(TransformRecipe.TYPE)) {
             if (recipe.circumstance.isFluidTag(FluidTags.LAVA)) {
-                return recipe.ingredients.stream().noneMatch(ingredient -> {
+                return recipe.getIngredients().stream().noneMatch(ingredient -> {
                     for (var stack : ingredient.getItems()) {
                         if (items.contains(stack.getItem())) {
                             return false;
@@ -48,6 +48,7 @@ public final class LavaTransformLogic {
         return false;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private static Set<Item> getLavaTransformableItems(Level level) {
         if (lavaCache.isEmpty()) {
             for (var recipe : level.getRecipeManager().getAllRecipesFor(TransformRecipe.TYPE)) {

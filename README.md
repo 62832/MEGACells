@@ -1,20 +1,17 @@
-<center>
-  <h2 align="center">
-    <a href="https://github.com/62832/MEGACells"><img src="https://raw.githubusercontent.com/62832/MEGACells/1.20/img/MEGACELLS.png" alt="MEGA Cells"></a>
-    <p>ME Greater Accumulation: For when kilobytes just won't do.</p>
+<h2 align="center">
+
+  [![MEGA Cells][logo]][this]
+  <br>
+  ME Greater Accumulation: For when kilobytes just won't do.
 
   [![CurseForge Total Downloads][badge_curseforge]][curseforge]
   [![Modrinth Total Downloads][badge_modrinth]][modrinth]
 
-  </h2>
-</center>
-
-<center>
-  <div align="center">
-    <img src="https://raw.githubusercontent.com/62832/MEGACells/1.20/img/scr_cpus.png" alt="Crafting CPUs screenshot" width=360>
-    <img src="https://raw.githubusercontent.com/62832/MEGACells/1.20/img/scr_cells.png" alt="Storage cells screenshot" width=360>
-  </div>
-</center>
+</h2>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/62832/MEGACells/1.20/img/scr_cpus.png" alt="Crafting CPUs screenshot" width=360>
+  <img src="https://raw.githubusercontent.com/62832/MEGACells/1.20/img/scr_cells.png" alt="Storage cells screenshot" width=360>
+</div>
 <br>
 
 ## ![About][header_about]
@@ -38,6 +35,7 @@ All code is licensed under [LGPLv3][lgpl-v3], in adherence to the same license u
 All assets are licensed under [CC BY-NC-SA 3.0][by-nc-sa-3.0], in adherence to the same license used by AE2 and with most deriving from AE2's own assets.
 
 <!-- Images -->
+[logo]: https://raw.githubusercontent.com/62832/MEGACells/1.20/img/MEGACELLS.png
 [badge_curseforge]: https://img.shields.io/badge/dynamic/json?color=e04e14&label=CurseForge&style=for-the-badge&query=downloads.total&url=https%3A%2F%2Fapi.cfwidget.com%2F622112&logo=curseforge
 [badge_modrinth]: https://img.shields.io/modrinth/dt/jjuIRIVr?color=5da545&label=Modrinth&style=for-the-badge&logo=modrinth
 [header_about]: https://raw.githubusercontent.com/62832/MEGACells/1.20/img/header_about.png
@@ -45,6 +43,7 @@ All assets are licensed under [CC BY-NC-SA 3.0][by-nc-sa-3.0], in adherence to t
 [header_license]: https://raw.githubusercontent.com/62832/MEGACells/1.20/img/header_license.png
 
 <!-- Links -->
+[this]: https://github.com/62832/MEGACells
 [curseforge]: https://www.curseforge.com/minecraft/mc-mods/mega-cells
 [modrinth]: https://modrinth.com/mod/mega
 [ae2]: https://github.com/AppliedEnergistics/Applied-Energistics-2

@@ -19,22 +19,23 @@ import gripe._90.megacells.misc.LavaTransformLogic;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin extends Entity {
-    public ItemEntityMixin(EntityType<?> entityType, Level level) {
-        super(entityType, level);
+    @SuppressWarnings("unused")
+    public ItemEntityMixin(EntityType<?> type, Level level) {
+        super(type, level);
     }
 
     @Unique
-    private boolean mega$lavaImmune = false;
+    private boolean mega$lavaImmune;
 
     @Unique
-    private int mega$lavaTicks = 0;
+    private int mega$lavaTicks;
 
     @Inject(method = "fireImmune", at = @At("RETURN"), cancellable = true)
     private void handleLavaTransform(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(cir.getReturnValue() || mega$lavaImmune);
     }
 
-    @SuppressWarnings({"resource", "DataFlowIssue"})
+    @SuppressWarnings("resource")
     @Inject(method = "tick", at = @At("RETURN"))
     private void lavaTimeout(CallbackInfo ci) {
         var self = (ItemEntity) (Object) this;

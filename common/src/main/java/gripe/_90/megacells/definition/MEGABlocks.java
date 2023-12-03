@@ -43,12 +43,6 @@ public final class MEGABlocks {
         return Collections.unmodifiableList(BLOCKS);
     }
 
-    private static final BlockBehaviour.Properties props = BlockBehaviour.Properties.of()
-            .strength(2.2f, 11.0f)
-            .mapColor(MapColor.METAL)
-            .sound(SoundType.METAL)
-            .forceSolidOn();
-
     public static final BlockDefinition<AEDecorativeBlock> SKY_STEEL_BLOCK = block(
             "Sky Steel Block",
             "sky_steel_block",
@@ -107,11 +101,11 @@ public final class MEGABlocks {
             () -> AEParts.STORAGE_MONITOR);
 
     public static final BlockDefinition<MEGAInterfaceBlock> MEGA_INTERFACE =
-            block("MEGA Interface", "mega_interface", () -> new MEGAInterfaceBlock(props), AEBaseBlockItem::new);
+            block("MEGA Interface", "mega_interface", MEGAInterfaceBlock::new, AEBaseBlockItem::new);
     public static final BlockDefinition<MEGAPatternProviderBlock> MEGA_PATTERN_PROVIDER = block(
             "MEGA Pattern Provider",
             "mega_pattern_provider",
-            () -> new MEGAPatternProviderBlock(props),
+            MEGAPatternProviderBlock::new,
             MEGAPatternProviderBlockItem::new);
 
     private static <T extends Block> BlockDefinition<T> craftingBlock(

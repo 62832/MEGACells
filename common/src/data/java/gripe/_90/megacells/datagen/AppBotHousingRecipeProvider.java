@@ -20,8 +20,8 @@ import vazkii.botania.common.item.BotaniaItems;
 import vazkii.botania.data.recipes.TerrestrialAgglomerationProvider;
 
 public class AppBotHousingRecipeProvider extends TerrestrialAgglomerationProvider {
-    public AppBotHousingRecipeProvider(PackOutput packOutput) {
-        super(packOutput);
+    public AppBotHousingRecipeProvider(PackOutput output) {
+        super(output);
     }
 
     @Override

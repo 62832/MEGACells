@@ -22,8 +22,7 @@ public final class MEGACreativeTab {
             .displayItems(MEGACreativeTab::populateTab)
             .build();
 
-    private static void populateTab(
-            CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    private static void populateTab(CreativeModeTab.ItemDisplayParameters ignored, CreativeModeTab.Output output) {
         var itemDefs = new ArrayList<ItemDefinition<?>>();
         itemDefs.addAll(MEGAItems.getItems());
         itemDefs.addAll(MEGABlocks.getBlocks());

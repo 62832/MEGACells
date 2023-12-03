@@ -8,6 +8,8 @@ import java.util.function.Function;
 import net.minecraft.Util;
 import net.minecraft.world.item.Item;
 
+import appeng.api.parts.IPart;
+import appeng.api.parts.IPartItem;
 import appeng.api.parts.PartModels;
 import appeng.api.stacks.AEKeyType;
 import appeng.core.definitions.ItemDefinition;
@@ -108,30 +110,21 @@ public final class MEGAItems {
     public static final ItemDefinition<DecompressionPatternItem> DECOMPRESSION_PATTERN =
             item("Decompression Pattern", "decompression_pattern", DecompressionPatternItem::new);
 
-    public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(MEGAInterfacePart.class));
-        return item(
-                "MEGA Interface",
-                "cable_mega_interface",
-                p -> new PartItem<>(p, MEGAInterfacePart.class, MEGAInterfacePart::new));
-    });
+    public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE =
+            part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
     public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
     });
 
-    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(DecompressionModulePart.class));
-        return item(
-                "MEGA Decompression Module",
-                "decompression_module",
-                p -> new PartItem<>(p, DecompressionModulePart.class, DecompressionModulePart::new));
-    });
+    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
+            "MEGA Decompression Module",
+            "decompression_module",
+            DecompressionModulePart.class,
+            DecompressionModulePart::new);
 
-    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(CellDockPart.class));
-        return item("ME Cell Dock", "cell_dock", p -> new PartItem<>(p, CellDockPart.class, CellDockPart::new));
-    });
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
+            part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
 
     public static List<ItemDefinition<?>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
@@ -214,6 +207,12 @@ public final class MEGAItems {
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0xF1C5));
+    }
+
+    private static <T extends IPart> ItemDefinition<PartItem<T>> part(
+            String englishName, String id, Class<T> partClass, Function<IPartItem<T>, T> factory) {
+        PartModels.registerModels(PartModelsHelper.createModels(partClass));
+        return item(englishName, id, p -> new PartItem<>(p, partClass, factory));
     }
 
     public static <T extends Item> ItemDefinition<T> item(

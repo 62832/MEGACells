@@ -3,6 +3,7 @@ package gripe._90.megacells.item.cell;
 import static gripe._90.megacells.definition.MEGAItems.COMPRESSION_CARD;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
@@ -124,7 +125,8 @@ public class BulkCellInventory implements StorageCell {
         }
 
         var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
-        var decompressionChain = compressionChain.limited().reversed();
+        var decompressionChain = compressionChain.limited();
+        Collections.reverse(decompressionChain);
 
         for (var variant : decompressionChain) {
             if (variant == decompressionChain.get(decompressionChain.size() - 1)) {

@@ -8,11 +8,13 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 import gripe._90.megacells.MEGACells;
 
-@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal", "FieldMayBeFinal"})
 @Config(name = MEGACells.MODID)
 public final class MEGAConfig implements ConfigData {
     @ConfigEntry.Gui.Excluded
     public static MEGAConfig INSTANCE;
+
+    private MEGAConfig() {}
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(min = 2, max = 12)

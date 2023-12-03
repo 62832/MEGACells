@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 
+import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseEntityBlock;
 import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
@@ -17,27 +18,27 @@ import appeng.util.InteractionUtil;
 import gripe._90.megacells.block.entity.MEGAInterfaceBlockEntity;
 
 public class MEGAInterfaceBlock extends AEBaseEntityBlock<MEGAInterfaceBlockEntity> {
-    public MEGAInterfaceBlock(Properties props) {
-        super(props);
+    public MEGAInterfaceBlock() {
+        super(AEBaseBlock.metalProps());
     }
 
     @Override
     public InteractionResult onActivated(
             Level level,
             BlockPos pos,
-            Player p,
+            Player player,
             InteractionHand hand,
             @Nullable ItemStack heldItem,
             BlockHitResult hit) {
-        if (InteractionUtil.isInAlternateUseMode(p)) {
+        if (InteractionUtil.isInAlternateUseMode(player)) {
             return InteractionResult.PASS;
         }
 
-        var be = getBlockEntity(level, pos);
+        var be = this.getBlockEntity(level, pos);
 
         if (be != null) {
             if (!level.isClientSide()) {
-                be.openMenu(p, MenuLocators.forBlockEntity(be));
+                be.openMenu(player, MenuLocators.forBlockEntity(be));
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide());
