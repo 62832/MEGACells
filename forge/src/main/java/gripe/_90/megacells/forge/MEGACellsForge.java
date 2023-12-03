@@ -5,11 +5,13 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.Addons;
+import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 
 @Mod(MEGACells.MODID)
 public class MEGACellsForge {
     public MEGACellsForge() {
+        MEGAConfig.load();
         MEGACells.initCommon();
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {

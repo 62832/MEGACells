@@ -124,9 +124,11 @@ public class BulkCellInventory implements StorageCell {
             return Set.of();
         }
 
-        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
-        var decompressionChain = compressionChain.limited();
+        var decompressionChain = new CompressionChain();
+        decompressionChain.addAll(compressionChain);
         Collections.reverse(decompressionChain);
+
+        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
 
         for (var variant : decompressionChain) {
             if (variant == decompressionChain.get(decompressionChain.size() - 1)) {
@@ -134,21 +136,10 @@ public class BulkCellInventory implements StorageCell {
             }
 
             var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
-            patterns.add(new DecompressionPattern(decompressed.item(), variant, false));
+            patterns.add(new DecompressionPattern(decompressed.item(), variant));
         }
 
-        var remainingChain = compressionChain.subList(decompressionChain.size() - 1, compressionChain.size());
-
-        for (var variant : remainingChain) {
-            if (variant == remainingChain.get(0)) {
-                continue;
-            }
-
-            var decompressed = remainingChain.get(remainingChain.indexOf(variant) - 1);
-            patterns.add(new DecompressionPattern(decompressed.item(), variant, true));
-        }
-
-        return patterns;
+        return Collections.unmodifiableSet(patterns);
     }
 
     @Override
@@ -264,7 +255,7 @@ public class BulkCellInventory implements StorageCell {
         if (storedItem != null) {
             if (compressionEnabled && storedItem.equals(filterItem) && !compressionChain.isEmpty()) {
                 var count = unitCount;
-                var chain = compressionChain.limited().lastMultiplierSwapped();
+                var chain = compressionChain.lastMultiplierSwapped();
 
                 for (var variant : chain) {
                     var compressionFactor = BigInteger.valueOf(variant.factor());

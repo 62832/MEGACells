@@ -22,7 +22,6 @@ import appeng.items.tools.powered.PortableCellItem;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGABlockEntities;
-import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appbot.AppBotItems;
 import gripe._90.megacells.item.cell.BulkCellItem;
@@ -43,8 +42,6 @@ public final class MEGACells {
     }
 
     public static void initCommon() {
-        MEGAConfig.load();
-
         PLATFORM.initItems();
         PLATFORM.register();
         PLATFORM.initUpgrades();

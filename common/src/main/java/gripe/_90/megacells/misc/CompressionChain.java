@@ -9,8 +9,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import appeng.api.stacks.AEItemKey;
 
-import gripe._90.megacells.definition.MEGAConfig;
-
 public class CompressionChain extends ObjectArrayList<CompressionService.Variant> {
     public void add(AEItemKey item, byte factor) {
         add(new CompressionService.Variant(item, factor));
@@ -42,13 +40,6 @@ public class CompressionChain extends ObjectArrayList<CompressionService.Variant
             chain.add(items.get(i), multipliers.get(i));
         }
 
-        return chain;
-    }
-
-    public CompressionChain limited() {
-        var chainLength = MEGAConfig.INSTANCE.getCompressionChainLimit();
-        var chain = new CompressionChain();
-        chain.addAll(size <= chainLength ? this : subList(0, chainLength));
         return chain;
     }
 }

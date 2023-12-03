@@ -46,7 +46,6 @@ jobs:
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
             appbot(optional){curseforge:610632}{modrinth:545hUrw9}
             ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
-            cloth-config(required){curseforge:348521}{modrinth:9s6osm5g}
 
           files: fabric/build/libs/*[0-9].jar
       - name: Publish release files (Forge)

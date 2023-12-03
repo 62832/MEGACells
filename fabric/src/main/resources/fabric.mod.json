@@ -14,14 +14,12 @@
   "environment": "*",
   "entrypoints": {
     "ae2": ["gripe._90.megacells.fabric.MEGACellsFabric"],
-    "ae2:client": ["gripe._90.megacells.fabric.MEGACellsClient"],
-    "modmenu": ["gripe._90.megacells.integration.modmenu.ModMenuIntegration"]
+    "ae2:client": ["gripe._90.megacells.fabric.MEGACellsClient"]
   },
   "mixins": ["megacells.mixins.json"],
   "depends": {
     "minecraft": "$minecraftVersion",
-    "ae2": ">=$ae2Version",
-    "cloth-config": "*"
+    "ae2": ">=$ae2Version"
   },
   "suggests": {
     "ae2wtlib": ">=$ae2wtVersion",
