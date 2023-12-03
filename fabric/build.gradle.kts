@@ -62,8 +62,6 @@ dependencies {
     modImplementation(libs.fabric.api)
 
     modImplementation(libs.ae2.fabric)
-    modImplementation(libs.cloth.fabric)
-    modImplementation(libs.modmenu)
 
     modImplementation(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
@@ -72,6 +70,7 @@ dependencies {
 
     modRuntimeOnly(libs.jei.fabric)
     modRuntimeOnly(libs.jade.fabric)
+    modRuntimeOnly(libs.modmenu)
 }
 
 tasks {

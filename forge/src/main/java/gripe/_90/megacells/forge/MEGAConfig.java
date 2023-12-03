@@ -1,4 +1,4 @@
-package gripe._90.megacells.definition;
+package gripe._90.megacells.forge;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;

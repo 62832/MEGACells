@@ -19,7 +19,7 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
-import gripe._90.megacells.definition.MEGAConfig;
+import gripe._90.megacells.forge.MEGAConfig;
 
 public class RadioactiveCellInventory implements StorageCell {
 

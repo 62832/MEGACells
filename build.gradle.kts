@@ -12,7 +12,7 @@ plugins {
 
 val modId: String by project
 val modVersion = (System.getenv("MEGA_VERSION") ?: "v0.0.0").substring(1)
-val minecraftVersion: String = libs.versions.minecraft.get()
+val minecraftVersion = libs.versions.minecraft.get()
 
 val platforms by extra {
     property("enabledPlatforms").toString().split(',')

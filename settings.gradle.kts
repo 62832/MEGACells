@@ -28,10 +28,7 @@ dependencyResolutionManagement {
             library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
 
             version("cloth-config", "11.1.106")
-            library("cloth-fabric", "me.shedaniel.cloth", "cloth-config-fabric").versionRef("cloth-config")
             library("cloth-forge", "me.shedaniel.cloth", "cloth-config-forge").versionRef("cloth-config")
-
-            library("modmenu", "com.terraformersmc", "modmenu").version("7.2.1")
 
             // AE2WTLib
             val ae2wtVersion = "15.0.1-beta"
@@ -67,6 +64,8 @@ dependencyResolutionManagement {
 
             library("jade-fabric", "maven.modrinth", "jade").version("ckXpheui")
             library("jade-forge", "maven.modrinth", "jade").version("5gvujWrb")
+
+            library("modmenu", "com.terraformersmc", "modmenu").version("7.2.1")
         }
     }
 }

@@ -71,7 +71,6 @@ import gripe._90.megacells.core.Loaders;
 import gripe._90.megacells.core.Platform;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
-import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
