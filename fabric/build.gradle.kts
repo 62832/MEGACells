@@ -66,7 +66,8 @@ dependencies {
     modImplementation(libs.appbot.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
     modRuntimeOnly(libs.botania.fabric) { exclude(group = "dev.emi", module = "emi-fabric") }
 
-    // modRuntimeOnly(libs.ae2wtlib.fabric)
+    modRuntimeOnly(libs.ae2wtlib.fabric)
+    modRuntimeOnly(libs.cloth.fabric)
 
     modRuntimeOnly(libs.jei.fabric)
     modRuntimeOnly(libs.jade.fabric)

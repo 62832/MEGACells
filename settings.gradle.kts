@@ -28,13 +28,14 @@ dependencyResolutionManagement {
             library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
 
             version("cloth-config", "11.1.106")
+            library("cloth-fabric", "me.shedaniel.cloth", "cloth-config-fabric").versionRef("cloth-config")
             library("cloth-forge", "me.shedaniel.cloth", "cloth-config-forge").versionRef("cloth-config")
 
             // AE2WTLib
-            val ae2wtVersion = "15.0.1-beta"
+            val ae2wtVersion = "15.2.1"
             version("ae2wtlib", ae2wtVersion)
             library("ae2wtlib-fabric", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("$ae2wtVersion-fabric")
-            library("ae2wtlib-forge", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("${ae2wtVersion}g-forge")
+            library("ae2wtlib-forge", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("$ae2wtVersion-forge")
 
             library("architectury-forge", "dev.architectury", "architectury-forge").version("9.1.10")
             library("curios", "top.theillusivec4.curios", "curios-forge").version("5.2.0+$minecraftVersion")

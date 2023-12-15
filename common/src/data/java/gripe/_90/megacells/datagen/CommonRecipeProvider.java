@@ -321,6 +321,15 @@ public class CommonRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAItems.MEGA_PATTERN_PROVIDER))
                 .save(writer, MEGACells.makeId("network/mega_pattern_provider_block"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.CELL_DOCK)
+                .pattern("ICI")
+                .pattern(" # ")
+                .define('I', ConventionTags.IRON_INGOT)
+                .define('C', ConventionTags.COPPER_INGOT)
+                .define('#', ConventionTags.GLASS_CABLE)
+                .unlockedBy("has_glass_cable", has(ConventionTags.GLASS_CABLE))
+                .save(writer, MEGACells.makeId("network/cell_dock"));
+
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             manaCells(writer, AppBotItems.MANA_CELL_1M, AppBotItems.PORTABLE_MANA_CELL_1M, MEGAItems.TIER_1M);
             manaCells(writer, AppBotItems.MANA_CELL_4M, AppBotItems.PORTABLE_MANA_CELL_4M, MEGAItems.TIER_4M);
