@@ -51,7 +51,7 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return new IInput[] {new Input(variant, 1)};
+        return new IInput[] {new Input(variant)};
     }
 
     @Override
@@ -71,7 +71,7 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private record Input(AEItemKey input, long multiplier) implements IInput {
+    private record Input(AEItemKey input) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
             return new GenericStack[] {new GenericStack(input, 1)};
@@ -79,7 +79,7 @@ public class DecompressionPattern implements IPatternDetails {
 
         @Override
         public long getMultiplier() {
-            return multiplier;
+            return 1;
         }
 
         @Override

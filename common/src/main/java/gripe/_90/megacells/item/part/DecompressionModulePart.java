@@ -1,8 +1,9 @@
 package gripe._90.megacells.item.part;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,7 +44,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     @PartModels
     public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
 
-    private final Map<AEKey, Long> outputs = new HashMap<>();
+    private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();
 
     private int priority = 0;
 
@@ -117,13 +118,13 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
         var storage = node.getGrid().getStorageService().getInventory();
 
-        for (var output : new HashMap<>(outputs).entrySet()) {
+        for (var output : new Object2LongOpenHashMap<>(outputs).object2LongEntrySet()) {
             var what = output.getKey();
-            var amount = output.getValue();
+            var amount = output.getLongValue();
             var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
             if (inserted >= amount) {
-                outputs.remove(what);
+                outputs.removeLong(what);
             } else if (inserted > 0) {
                 outputs.put(what, amount - inserted);
             }
