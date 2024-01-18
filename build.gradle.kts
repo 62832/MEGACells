@@ -2,6 +2,7 @@ import net.fabricmc.loom.api.LoomGradleExtensionAPI
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
+    `kotlin-dsl`
     java
     `maven-publish`
     alias(libs.plugins.loom) apply false
@@ -68,6 +69,9 @@ subprojects {
     }
 
     repositories {
+        mavenLocal()
+        mavenCentral()
+
         maven {
             name = "ModMaven (K4U-NL)"
             url = uri("https://modmaven.dev/")
@@ -180,10 +184,11 @@ for (platform in platforms) {
         val common: Configuration by configurations.creating
         val shadowCommon: Configuration by configurations.creating
 
+        @Suppress("UnstableApiUsage")
         configurations {
-            compileClasspath.get().extendsFrom(common)
-            runtimeClasspath.get().extendsFrom(common)
-            getByName("development${capitalise(platform)}").extendsFrom(common)
+            compileClasspath { extendsFrom(common) }
+            runtimeClasspath { extendsFrom(common) }
+            getByName("development${capitalise(platform)}") { extendsFrom(common) }
         }
 
         dependencies {
