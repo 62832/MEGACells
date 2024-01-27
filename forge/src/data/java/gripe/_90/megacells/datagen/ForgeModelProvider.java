@@ -11,6 +11,7 @@ import appeng.core.definitions.ItemDefinition;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.arseng.ArsEngItems;
 
 class ForgeModelProvider extends ItemModelProvider {
     private static final ResourceLocation STORAGE_CELL_LED = AppEng.makeId("item/storage_cell_led");
@@ -38,6 +39,15 @@ class ForgeModelProvider extends ItemModelProvider {
 
             driveCell("mega_chemical_cell");
             driveCell("radioactive_chemical_cell");
+        }
+
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.ARSENG)) {
+            basicItem(ArsEngItems.MEGA_SOURCE_CELL_HOUSING.asItem());
+
+            ArsEngItems.getCells().forEach(c -> cell(c, "standard", STORAGE_CELL_LED));
+            ArsEngItems.getPortables().forEach(c -> cell(c, "portable", PORTABLE_CELL_LED));
+
+            driveCell("mega_source_cell");
         }
     }
 

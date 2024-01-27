@@ -58,6 +58,19 @@ repositories {
             includeGroup("top.theillusivec4.curios")
         }
     }
+
+    maven {
+        name = "BlameJared"
+        url = uri("https://maven.blamejared.com")
+        content {
+            includeGroup("com.hollingsworth.ars_nouveau")
+        }
+    }
+
+    maven {
+        name = "GeckoLib"
+        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+    }
 }
 
 dependencies {
@@ -74,6 +87,11 @@ dependencies {
     modImplementation(libs.appbot.forge)
     modRuntimeOnly(libs.botania.forge)
     modRuntimeOnly(libs.patchouli.forge)
+
+    modImplementation(libs.arseng)
+    modRuntimeOnly(libs.arsnouveau)
+    modRuntimeOnly(libs.geckolib)
+    runtimeOnly(libs.mixinextras)
 
     modImplementation(libs.ae2wtlib.forge)
     modRuntimeOnly(libs.architectury.forge)

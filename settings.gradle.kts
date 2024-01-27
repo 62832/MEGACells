@@ -58,6 +58,14 @@ dependencyResolutionManagement {
             library("appmek", "maven.modrinth", "applied-mekanistics").versionRef("appmek")
             library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.4.0.14")
 
+            // Ars Énergistique
+            version("arseng", "1.1.5")
+            library("arseng", "maven.modrinth", "ars-energistique").versionRef("arseng")
+
+            library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-$minecraftVersion").version("4.8.3.135")
+            library("geckolib", "software.bernie.geckolib", "geckolib-forge-$minecraftVersion").version("4.2.1")
+            library("mixinextras", "io.github.llamalad7", "mixinextras-forge").version("0.2.1")
+
             // Runtime mods
             version("jei", "15.2.0.23")
             library("jei-fabric", "mezz.jei", "jei-$minecraftVersion-fabric").versionRef("jei")

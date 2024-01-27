@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -28,6 +27,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.arseng.ArsEngItems;
 
 public class ForgeRecipeProvider extends RecipeProvider {
     private static final TagKey<Item> OSMIUM = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
@@ -37,11 +37,10 @@ public class ForgeRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> writer) {
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
-            appmekRecipe(
-                    consumer,
-                    MEGACells.makeId("cells/mega_chemical_cell_housing"),
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
                     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                             .pattern("aba")
                             .pattern("b b")
@@ -49,23 +48,24 @@ public class ForgeRecipeProvider extends RecipeProvider {
                             .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                             .define('b', AEItems.SKY_DUST)
                             .define('d', OSMIUM)
-                            .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST)));
+                            .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST)),
+                    Addons.APPMEK,
+                    MEGACells.makeId("cells/mega_chemical_cell_housing"));
 
-            chemCell(consumer, AppMekItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
-            chemCell(consumer, AppMekItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
-            chemCell(consumer, AppMekItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
-            chemCell(consumer, AppMekItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
-            chemCell(consumer, AppMekItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
+            chemCell(writer, AppMekItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
+            chemCell(writer, AppMekItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
+            chemCell(writer, AppMekItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
+            chemCell(writer, AppMekItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
+            chemCell(writer, AppMekItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
 
-            chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
-            chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
-            chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
-            chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
-            chemPortable(consumer, AppMekItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
+            chemPortable(writer, AppMekItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
+            chemPortable(writer, AppMekItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
+            chemPortable(writer, AppMekItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
+            chemPortable(writer, AppMekItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
+            chemPortable(writer, AppMekItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
 
-            appmekRecipe(
-                    consumer,
-                    MEGACells.makeId("crafting/radioactive_cell_component"),
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
                     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CELL_COMPONENT)
                             .pattern("aba")
                             .pattern("cdc")
@@ -76,10 +76,11 @@ public class ForgeRecipeProvider extends RecipeProvider {
                             .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                             .define('e', AEItems.CELL_COMPONENT_256K)
                             .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
-                            .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL)));
-            appmekRecipe(
-                    consumer,
-                    MEGACells.makeId("cells/standard/radioactive_chemical_cell"),
+                            .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL)),
+                    Addons.APPMEK,
+                    MEGACells.makeId("crafting/radioactive_cell_component"));
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
                     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
                             .pattern("aba")
                             .pattern("bcb")
@@ -89,14 +90,29 @@ public class ForgeRecipeProvider extends RecipeProvider {
                             .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
                             .define('d', MekanismItems.HDPE_SHEET)
                             .define('e', MekanismItems.POLONIUM_PELLET)
-                            .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT)));
+                            .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT)),
+                    Addons.APPMEK,
+                    MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
+        }
+
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.ARSENG)) {
+            sourceCell(writer, ArsEngItems.SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
+            sourceCell(writer, ArsEngItems.SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
+            sourceCell(writer, ArsEngItems.SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
+            sourceCell(writer, ArsEngItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
+            sourceCell(writer, ArsEngItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
+
+            sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M);
+            sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M);
+            sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
+            sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
+            sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
         }
     }
 
-    private void chemCell(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
-        appmekRecipe(
-                consumer,
-                MEGACells.makeId("cells/standard/" + cell.id().getPath()),
+    private void chemCell(Consumer<FinishedRecipe> writer, ItemDefinition<?> cell, ItemDefinition<?> component) {
+        MEGACells.PLATFORM.addIntegrationRecipe(
+                writer,
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                         .pattern("aba")
                         .pattern("bcb")
@@ -105,21 +121,23 @@ public class ForgeRecipeProvider extends RecipeProvider {
                         .define('b', AEItems.SKY_DUST)
                         .define('c', component)
                         .define('d', OSMIUM)
-                        .unlockedBy("has_" + component.id().getPath(), has(component)));
-        appmekRecipe(
-                consumer,
-                MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"),
+                        .unlockedBy("has_" + component.id().getPath(), has(component)),
+                Addons.APPMEK,
+                MEGACells.makeId("cells/standard/" + cell.id().getPath()));
+        MEGACells.PLATFORM.addIntegrationRecipe(
+                writer,
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                         .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                         .requires(component)
                         .unlockedBy("has_" + component.id().getPath(), has(component))
-                        .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)));
+                        .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)),
+                Addons.APPMEK,
+                MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
     }
 
-    private void chemPortable(Consumer<FinishedRecipe> consumer, ItemDefinition<?> cell, ItemDefinition<?> component) {
-        appmekRecipe(
-                consumer,
-                MEGACells.makeId("cells/portable/" + cell.id().getPath()),
+    private void chemPortable(Consumer<FinishedRecipe> writer, ItemDefinition<?> cell, ItemDefinition<?> component) {
+        MEGACells.PLATFORM.addIntegrationRecipe(
+                writer,
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
                         .requires(AEBlocks.CHEST)
                         .requires(component)
@@ -127,10 +145,35 @@ public class ForgeRecipeProvider extends RecipeProvider {
                         .requires(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                         .unlockedBy("has_mega_chemical_cell_housing", has(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING))
                         .unlockedBy("has_" + component.id().getPath(), has(component))
-                        .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL)));
+                        .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL)),
+                Addons.APPMEK,
+                MEGACells.makeId("cells/portable/" + cell.id().getPath()));
     }
 
-    private void appmekRecipe(Consumer<FinishedRecipe> consumer, ResourceLocation id, RecipeBuilder builder) {
-        MEGACells.PLATFORM.addIntegrationRecipe(consumer, builder, Addons.APPMEK, id);
+    private void sourceCell(Consumer<FinishedRecipe> writer, ItemDefinition<?> cell, ItemDefinition<?> component) {
+        MEGACells.PLATFORM.addIntegrationRecipe(
+                writer,
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
+                        .requires(ArsEngItems.MEGA_SOURCE_CELL_HOUSING)
+                        .requires(component)
+                        .unlockedBy("has_" + component.id().getPath(), has(component))
+                        .unlockedBy("has_mega_source_cell_housing", has(ArsEngItems.MEGA_SOURCE_CELL_HOUSING)),
+                Addons.ARSENG,
+                MEGACells.makeId("cells/standard/" + cell.id().getPath()));
+    }
+
+    private void sourcePortable(Consumer<FinishedRecipe> writer, ItemDefinition<?> cell, ItemDefinition<?> component) {
+        MEGACells.PLATFORM.addIntegrationRecipe(
+                writer,
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
+                        .requires(AEBlocks.CHEST)
+                        .requires(component)
+                        .requires(AEBlocks.DENSE_ENERGY_CELL)
+                        .requires(ArsEngItems.MEGA_SOURCE_CELL_HOUSING)
+                        .unlockedBy("has_mega_source_cell_housing", has(ArsEngItems.MEGA_SOURCE_CELL_HOUSING))
+                        .unlockedBy("has_" + component.id().getPath(), has(component))
+                        .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL)),
+                Addons.ARSENG,
+                MEGACells.makeId("cells/portable/" + cell.id().getPath()));
     }
 }

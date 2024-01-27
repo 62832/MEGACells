@@ -76,6 +76,8 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.arseng.ArsEngIntegration;
+import gripe._90.megacells.integration.arseng.ArsEngItems;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.LavaTransformLogic;
 
@@ -111,6 +113,10 @@ public final class ForgePlatform implements Platform {
         if (isAddonLoaded(Addons.APPMEK)) {
             AppMekItems.init();
         }
+
+        if (isAddonLoaded(Addons.ARSENG)) {
+            ArsEngItems.init();
+        }
     }
 
     @Override
@@ -122,6 +128,10 @@ public final class ForgePlatform implements Platform {
             cells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
         }
 
+        if (isAddonLoaded(Addons.ARSENG)) {
+            cells.addAll(ArsEngItems.getCells());
+        }
+
         return cells;
     }
 
@@ -131,6 +141,10 @@ public final class ForgePlatform implements Platform {
 
         if (isAddonLoaded(Addons.APPMEK)) {
             portables.addAll(AppMekItems.getPortables());
+        }
+
+        if (isAddonLoaded(Addons.ARSENG)) {
+            portables.addAll(ArsEngItems.getPortables());
         }
 
         return portables;
@@ -171,6 +185,10 @@ public final class ForgePlatform implements Platform {
 
             if (isAddonLoaded(Addons.APPMEK)) {
                 event.enqueueWork(AppMekIntegration::initUpgrades);
+            }
+
+            if (isAddonLoaded(Addons.ARSENG)) {
+                event.enqueueWork(ArsEngIntegration::initUpgrades);
             }
         });
     }
