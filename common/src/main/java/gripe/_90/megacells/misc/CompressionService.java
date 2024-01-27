@@ -1,15 +1,14 @@
 package gripe._90.megacells.misc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
@@ -31,12 +30,12 @@ public class CompressionService {
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
     // This value is typically either 4 or 9 for any given item, or 1 for the smallest base variant.
-    private final Set<CompressionChain> compressionChains = new ObjectOpenHashSet<>();
+    private final Set<CompressionChain> compressionChains = new HashSet<>();
 
     // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
     // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
     // based on its usually irreversible recipe.
-    private final Set<Override> overrides = new ObjectOpenHashSet<>();
+    private final Set<Override> overrides = new HashSet<>();
 
     private CompressionService() {}
 
@@ -52,30 +51,32 @@ public class CompressionService {
         overrides.clear();
 
         // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
-        var allRecipes = recipeManager.getAllRecipesFor(RecipeType.CRAFTING);
-        var compressedCandidates = allRecipes.stream()
-                .filter(recipe -> isCompressionRecipe(recipe, access))
-                .toList();
-        var decompressedCandidates = allRecipes.stream()
-                .filter(recipe -> isDecompressionRecipe(recipe, access))
-                .toList();
+        var compressed = new ArrayList<CraftingRecipe>();
+        var decompressed = new ArrayList<CraftingRecipe>();
+
+        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
+            if (isCompressionRecipe(recipe, access)) {
+                compressed.add(recipe);
+            } else if (isDecompressionRecipe(recipe, access)) {
+                decompressed.add(recipe);
+            }
+        }
 
         // Filter gathered candidate recipes and retain only those that are reversible (i.e. those which can be carried
         // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
-        var compressed = compressedCandidates.stream()
-                .filter(recipe -> isReversibleRecipe(recipe, decompressedCandidates, access))
-                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
-                .toList();
-        var decompressed = decompressedCandidates.stream()
-                .filter(recipe -> isReversibleRecipe(recipe, compressedCandidates, access))
-                .sorted(Comparator.comparingInt(r -> r.getIngredients().get(0).getItems().length))
-                .toList();
+        compressed.removeIf(recipe -> isIrreversible(recipe, decompressed, access));
+        decompressed.removeIf(recipe -> isIrreversible(recipe, compressed, access));
+
+        var ingredientSize = Comparator.<CraftingRecipe>comparingInt(
+                r -> r.getIngredients().get(0).getItems().length);
+        compressed.sort(ingredientSize);
+        decompressed.sort(ingredientSize);
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
-        Stream.of(compressed, decompressed).flatMap(Collection::stream).forEach(recipe -> {
+        Stream.concat(compressed.stream(), decompressed.stream()).forEach(recipe -> {
             var baseVariant = recipe.getResultItem(access).getItem();
 
-            if (compressionChains.stream().noneMatch(chain -> chain.containsVariant(AEItemKey.of(baseVariant)))) {
+            if (getChain(AEItemKey.of(baseVariant)).isEmpty()) {
                 compressionChains.add(generateChain(baseVariant, compressed, decompressed, access));
             }
         });
@@ -181,9 +182,9 @@ public class CompressionService {
         return true;
     }
 
-    private boolean isReversibleRecipe(CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
+    private boolean isIrreversible(CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
         if (overrideRecipe(recipe, access)) {
-            return true;
+            return false;
         }
 
         var testInput = recipe.getIngredients().get(0).getItems();
@@ -197,11 +198,11 @@ public class CompressionService {
             var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output));
 
             if (compressible && decompressible) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     private boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
