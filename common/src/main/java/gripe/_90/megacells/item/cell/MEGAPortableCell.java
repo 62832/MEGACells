@@ -20,7 +20,7 @@ public class MEGAPortableCell extends PortableCellItem {
             Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu, int defaultColour) {
         super(
                 keyType,
-                18 + (keyType.equals(AEKeyType.items()) ? tier.index() * 9 : 0),
+                18 + (keyType.equals(AEKeyType.items()) ? (tier.index() - 5) * 9 : 0),
                 menu,
                 tier,
                 props.stacksTo(1),

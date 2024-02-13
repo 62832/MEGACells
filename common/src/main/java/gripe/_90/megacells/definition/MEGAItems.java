@@ -67,11 +67,11 @@ public final class MEGAItems {
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_64M = component(64);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_256M = component(256);
 
-    public static final StorageTier TIER_1M = tier(1, CELL_COMPONENT_1M);
-    public static final StorageTier TIER_4M = tier(2, CELL_COMPONENT_4M);
-    public static final StorageTier TIER_16M = tier(3, CELL_COMPONENT_16M);
-    public static final StorageTier TIER_64M = tier(4, CELL_COMPONENT_64M);
-    public static final StorageTier TIER_256M = tier(5, CELL_COMPONENT_256M);
+    public static final StorageTier TIER_1M = tier(6, CELL_COMPONENT_1M);
+    public static final StorageTier TIER_4M = tier(7, CELL_COMPONENT_4M);
+    public static final StorageTier TIER_16M = tier(8, CELL_COMPONENT_16M);
+    public static final StorageTier TIER_64M = tier(9, CELL_COMPONENT_64M);
+    public static final StorageTier TIER_256M = tier(10, CELL_COMPONENT_256M);
 
     public static final ItemDefinition<BasicStorageCell> ITEM_CELL_1M = itemCell(TIER_1M);
     public static final ItemDefinition<BasicStorageCell> ITEM_CELL_4M = itemCell(TIER_4M);
@@ -155,7 +155,7 @@ public final class MEGAItems {
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
         return new StorageTier(
-                index, multiplier + "m", 1048576 * multiplier, 2.5 + 0.5 * multiplier, component::asItem);
+                index, (multiplier / 1024) + "m", 1024 * multiplier, 0.5 * multiplier, component::asItem);
     }
 
     private static ItemDefinition<StorageComponentItem> component(int mb) {
