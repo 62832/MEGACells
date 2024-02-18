@@ -51,7 +51,7 @@ public final class AppBotItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " MEGA Mana Storage Cell",
                 "mana_storage_cell_" + tier.namePrefix(),
-                p -> new ManaCellItem(p, tier.componentSupplier().get(), tier.bytes() / 1024, tier.idleDrain()));
+                p -> new MEGAManaCellItem(p, tier));
     }
 
     private static ItemDefinition<PortableManaCellItem> portable(StorageTier tier) {
