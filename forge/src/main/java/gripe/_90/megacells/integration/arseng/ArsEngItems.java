@@ -2,6 +2,10 @@ package gripe._90.megacells.integration.arseng;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.resources.ResourceLocation;
+
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
@@ -57,6 +61,12 @@ public class ArsEngItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Source Cell",
                 "portable_source_cell_" + tier.namePrefix(),
-                p -> new PortableSourceCellItem(p, tier));
+                p -> new PortableSourceCellItem(p, tier) {
+                    @NotNull
+                    @Override
+                    public ResourceLocation getRecipeId() {
+                        return MEGACells.makeId("cells/portable/portable_source_cell_" + tier.namePrefix());
+                    }
+                });
     }
 }

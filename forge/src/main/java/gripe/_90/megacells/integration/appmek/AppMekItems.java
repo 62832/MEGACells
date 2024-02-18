@@ -2,6 +2,10 @@ package gripe._90.megacells.integration.appmek;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.resources.ResourceLocation;
+
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
@@ -70,6 +74,12 @@ public final class AppMekItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
                 "portable_chemical_cell_" + tier.namePrefix(),
-                p -> new ChemicalPortableCellItem(18, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, tier, p, 0x33528D));
+                p -> new ChemicalPortableCellItem(18, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, tier, p, 0x33528D) {
+                    @NotNull
+                    @Override
+                    public ResourceLocation getRecipeId() {
+                        return MEGACells.makeId("cells/portable/portable_chemical_cell_" + tier.namePrefix());
+                    }
+                });
     }
 }

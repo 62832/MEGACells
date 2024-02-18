@@ -2,6 +2,10 @@ package gripe._90.megacells.integration.appbot;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.resources.ResourceLocation;
+
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
@@ -58,6 +62,12 @@ public final class AppBotItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Mana Cell",
                 "portable_mana_cell_" + tier.namePrefix(),
-                p -> new PortableManaCellItem(p, tier.bytes() / 1024, tier.idleDrain()));
+                p -> new PortableManaCellItem(p, tier.bytes() / 1024, tier.idleDrain()) {
+                    @NotNull
+                    @Override
+                    public ResourceLocation getRecipeId() {
+                        return MEGACells.makeId("cells/portable/portable_mana_cell_" + tier.namePrefix());
+                    }
+                });
     }
 }
