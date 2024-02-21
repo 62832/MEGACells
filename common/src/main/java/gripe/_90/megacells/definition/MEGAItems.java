@@ -154,8 +154,7 @@ public final class MEGAItems {
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
-        return new StorageTier(
-                index, (multiplier / 1024) + "m", 1024 * multiplier, 0.5 * multiplier, component::asItem);
+        return new StorageTier(index, (multiplier / 1024) + "m", 1024 * multiplier, 0.5 * index, component::asItem);
     }
 
     private static ItemDefinition<StorageComponentItem> component(int mb) {
