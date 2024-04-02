@@ -10,11 +10,13 @@ public class MEGACellsFabric implements IAEAddonEntrypoint {
     @Override
     public void onAe2Initialized() {
         MEGACells.initCommon();
-        initPatternProviderTransfer();
+        initTransfers();
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private void initPatternProviderTransfer() {
+    private void initTransfers() {
+        GenericInternalInventory.SIDED.registerForBlockEntity(
+                (be, context) -> be.getInterfaceLogic().getStorage(), MEGABlockEntities.MEGA_INTERFACE);
         GenericInternalInventory.SIDED.registerForBlockEntity(
                 (be, context) -> be.getLogic().getReturnInv(), MEGABlockEntities.MEGA_PATTERN_PROVIDER);
     }
