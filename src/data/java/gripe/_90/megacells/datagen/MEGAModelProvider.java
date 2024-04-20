@@ -28,6 +28,8 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.appmek.AppMekItems;
 
 public class MEGAModelProvider extends AE2BlockStateProvider {
     private static final ExistingFileHelper.ResourceType MODEL =
@@ -192,6 +194,19 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                                         0);
                             }
                         }));
+
+        if (Addons.APPMEK.isLoaded()) {
+            basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
+
+            AppMekItems.getCells().forEach(this::cell);
+            AppMekItems.getPortables().forEach(this::portable);
+
+            basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
+            cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
+
+            driveCell("mega_chemical_cell");
+            driveCell("radioactive_chemical_cell");
+        }
     }
 
     private void basicItem(ItemDefinition<?> item) {
@@ -219,6 +234,13 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
                 .texture("layer2", housing)
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
+    }
+
+    private void portable(ItemDefinition<?> portable) {
+        var id = portable.id().getPath();
+        itemModels()
+                .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/cell/portable/" + id))
+                .texture("layer1", AppEng.makeId("item/portable_cell_led"));
     }
 
     private void driveCell(String texture) {

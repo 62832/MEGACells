@@ -3,6 +3,7 @@ package gripe._90.megacells.integration.appmek.item;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +40,7 @@ public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchIte
 
     @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(MekanismKeyType.TYPE.filter(), is, 1);
+        return CellConfig.create(Set.of(MekanismKeyType.TYPE), is, 1);
     }
 
     @Override

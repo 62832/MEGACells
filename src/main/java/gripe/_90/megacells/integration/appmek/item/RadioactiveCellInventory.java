@@ -19,7 +19,7 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
-import gripe._90.megacells.forge.MEGAConfig;
+import gripe._90.megacells.definition.MEGAConfig;
 
 public class RadioactiveCellInventory implements StorageCell {
 
@@ -97,8 +97,8 @@ public class RadioactiveCellInventory implements StorageCell {
 
     public boolean isBlackListed(AEKey what) {
         return !(what instanceof MekanismKey key)
-                || (key.getStack().getRaw().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical()
-                        ? !MEGAConfig.INSTANCE.isSpentWasteAllowed()
+                || (key.getStack().getType() == MekanismGases.SPENT_NUCLEAR_WASTE.get()
+                        ? !MEGAConfig.CONFIG.isSpentWasteAllowed()
                         : ChemicalAttributeValidator.DEFAULT.process(key.getStack()));
     }
 

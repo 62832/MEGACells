@@ -20,6 +20,7 @@ repositories {
         url = uri("https://modmaven.dev/")
         content {
             includeGroup("appeng")
+            includeGroup("mekanism")
         }
     }
 
@@ -38,6 +39,11 @@ dependencies {
 
     implementation(libs.ae2wtlib)
     runtimeOnly(libs.curios)
+
+    implementation(libs.appmek)
+    compileOnly(libs.mekanism)
+    compileOnly(variantOf(libs.mekanism) { classifier("generators") })
+    runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
 }
 
 sourceSets {

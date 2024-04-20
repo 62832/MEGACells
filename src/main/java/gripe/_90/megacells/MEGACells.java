@@ -21,7 +21,9 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -55,11 +57,15 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.AppMekItems;
+import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
@@ -80,7 +86,9 @@ public class MEGACells {
         initCompression();
         initLavaTransform();
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
+
+        if (FMLEnvironment.dist.isClient()) {
             Client.init(modEventBus);
         }
     }
@@ -90,6 +98,10 @@ public class MEGACells {
     }
 
     private static void registerAll(RegisterEvent event) {
+        if (Addons.APPMEK.isLoaded()) {
+            AppMekItems.init();
+        }
+
         MEGABlocks.getBlocks().forEach(block -> {
             event.register(Registries.BLOCK, block.id(), block::block);
             event.register(Registries.ITEM, block.id(), block::asItem);
@@ -166,8 +178,12 @@ public class MEGACells {
                 Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
             }
 
-            if (Addons.isLoaded(Addons.AE2WTLIB)) {
+            if (Addons.AE2WTLIB.isLoaded()) {
                 AE2WTIntegration.initUpgrades();
+            }
+
+            if (Addons.APPMEK.isLoaded()) {
+                AppMekIntegration.initUpgrades();
             }
         });
     }
@@ -181,6 +197,10 @@ public class MEGACells {
             MEGAItems.getFluidPortables()
                     .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
         });
+
+        if (Addons.APPMEK.isLoaded()) {
+            StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
+        }
     }
 
     private static void initVillagerTrades(FMLCommonSetupEvent event) {
@@ -284,6 +304,12 @@ public class MEGACells {
             portableCells.addAll(MEGAItems.getItemPortables());
             portableCells.addAll(MEGAItems.getFluidPortables());
 
+            if (Addons.APPMEK.isLoaded()) {
+                standardCells.addAll(AppMekItems.getCells());
+                standardCells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
+                portableCells.addAll(AppMekItems.getPortables());
+            }
+
             event.register(BasicStorageCell::getColor, standardCells.toArray(new ItemLike[0]));
             event.register(PortableCellItem::getColor, portableCells.toArray(new ItemLike[0]));
         }
@@ -299,6 +325,16 @@ public class MEGACells {
                 MEGAItems.getFluidPortables().forEach(cell -> StorageCellModels.registerModel(cell, fluidCell));
 
                 StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
+
+                if (Addons.APPMEK.isLoaded()) {
+                    var chemCell = makeId("block/drive/cells/mega_chemical_cell");
+                    AppMekItems.getCells().forEach(cell -> StorageCellModels.registerModel(cell, chemCell));
+                    AppMekItems.getPortables().forEach(cell -> StorageCellModels.registerModel(cell, chemCell));
+
+                    StorageCellModels.registerModel(
+                            AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
+                            MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
+                }
             });
         }
     }

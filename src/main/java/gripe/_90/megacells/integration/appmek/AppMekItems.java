@@ -21,8 +21,7 @@ import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 
 public final class AppMekItems {
     public static void init() {
-        // controls static load order
-        MEGACells.LOGGER.info("Initialised Applied Mekanistics integration.");
+        // noop
     }
 
     public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING =
