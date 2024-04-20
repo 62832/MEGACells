@@ -1,9 +1,0 @@
-{
-  "required": true,
-  "minVersion": "0.8.5",
-  "package": "gripe._90.megacells.mixin",
-  "mixins": ["ItemEntityMixin"],
-  "injectors": {
-    "defaultRequire": 1
-  }
-}

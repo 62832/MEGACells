@@ -19,6 +19,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
       - name: Generate data
-        run: ./gradlew downloadAssets runData
+        run: ./gradlew runData
       - name: Build
         run: ./gradlew build

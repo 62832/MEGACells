@@ -1,0 +1,26 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+
+logoFile = "logo.png"
+authors = "90"
+credits = "s/o to the AE2 dev team and the AE2 Discord server for making this all possible."
+license = "LGPLv3.0"
+
+issueTrackerURL = "https://github.com/62832/MEGACells/issues"
+displayURL = "https://github.com/62832/MEGACells"
+
+[[mods]]
+    modId = "megacells"
+    version = "$version"
+    displayName = "MEGA Cells"
+    description = "ME Greater Accumulation Cells - For when kilobytes just won't do."
+
+[[mixins]]
+    config = "megacells.mixins.json"
+
+[[dependencies.megacells]]
+    modId = "ae2"
+    type = "required"
+    versionRange = "[$ae2Version,$ae2VersionEnd)"
+    ordering = "AFTER"
+    side=  "BOTH"

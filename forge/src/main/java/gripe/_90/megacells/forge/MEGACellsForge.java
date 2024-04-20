@@ -21,9 +21,5 @@ public class MEGACellsForge {
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.ARSENG)) {
             ArsEngIntegration.init();
         }
-
-        if (FMLEnvironment.dist.isClient()) {
-            MEGACells.Client.initClient();
-        }
     }
 }

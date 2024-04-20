@@ -1,6 +1,0 @@
-{
-  "required": true,
-  "minVersion": "0.8.5",
-  "package": "gripe._90.megacells.mixin.data",
-  "mixins": ["TextureSlotAccessor"]
-}
