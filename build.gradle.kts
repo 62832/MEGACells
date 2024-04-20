@@ -50,7 +50,7 @@ sourceSets {
     main {
         resources.srcDir(file("src/generated/resources"))
     }
-    
+
     create("data") {
         val main = main.get()
         compileClasspath += main.compileClasspath + main.output
@@ -62,20 +62,21 @@ runs {
     configureEach {
         workingDirectory(file("run"))
         systemProperty("forge.logging.console.level", "info")
-        
+
         modSource(sourceSets.main.get())
     }
-    
+
     create("client")
     create("server")
-    
+
     create("data") {
         programArguments.addAll(
             "--mod", modId,
             "--all",
             "--output", file("src/generated/resources/").absolutePath,
-            "--existing", file("src/main/resources/").absolutePath)
-        
+            "--existing", file("src/main/resources/").absolutePath
+        )
+
         modSource(sourceSets.getByName("data"))
     }
 }
@@ -90,16 +91,16 @@ tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
-    
+
     processResources {
         exclude("**/.cache")
-        
+
         val props = mapOf(
             "version" to version,
             "ae2Version" to libs.versions.ae2.get(),
             "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1,
         )
-        
+
         inputs.properties(props)
         filesMatching("META-INF/mods.toml") {
             expand(props)

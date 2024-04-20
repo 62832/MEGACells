@@ -20,8 +20,9 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 
 public final class AppMekItems {
+    @SuppressWarnings("EmptyMethod")
     public static void init() {
-        // noop
+        // TODO: Replace with deferred registration when AE2 does so
     }
 
     public static final ItemDefinition<MaterialItem> MEGA_CHEMICAL_CELL_HOUSING =

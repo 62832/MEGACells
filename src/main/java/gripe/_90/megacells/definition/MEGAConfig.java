@@ -9,7 +9,10 @@ public class MEGAConfig {
     private final ModConfigSpec.BooleanValue spentNuclearWasteAllowed;
 
     public MEGAConfig(ModConfigSpec.Builder builder) {
-        spentNuclearWasteAllowed = builder.define("spentNuclearWasteAllowed", false);
+        spentNuclearWasteAllowed = builder.comment(
+                        "Whether to allow the Radioactive Chemical Cell to store Spent Nuclear Waste.",
+                        "AppMek integration feature.")
+                .define("spentNuclearWasteAllowed", false);
     }
 
     public boolean isSpentWasteAllowed() {

@@ -19,6 +19,7 @@ import gripe._90.megacells.misc.LavaTransformLogic;
 
 @Mixin(value = ItemEntity.class, priority = 500)
 public abstract class ItemEntityMixin extends Entity {
+    @SuppressWarnings("unused")
     public ItemEntityMixin(EntityType<?> type, Level level) {
         super(type, level);
     }

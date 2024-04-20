@@ -18,9 +18,9 @@ displayURL = "https://github.com/62832/MEGACells"
 [[mixins]]
     config = "megacells.mixins.json"
 
-[[dependencies.megacells]]
+[[dependencies]]
     modId = "ae2"
     type = "required"
     versionRange = "[$ae2Version,$ae2VersionEnd)"
     ordering = "AFTER"
-    side=  "BOTH"
+    side = "BOTH"
