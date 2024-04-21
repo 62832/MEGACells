@@ -121,6 +121,7 @@ spotless {
         removeUnusedImports()
         palantirJavaFormat()
         importOrderFile(file("mega.importorder"))
+        toggleOffOn()
 
         // courtesy of diffplug/spotless#240
         // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606

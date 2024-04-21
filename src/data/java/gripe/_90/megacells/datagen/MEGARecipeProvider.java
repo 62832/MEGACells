@@ -61,113 +61,29 @@ public class MEGARecipeProvider extends RecipeProvider {
         housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
 
-        cell(
-                output,
-                MEGAItems.ITEM_CELL_1M,
-                MEGAItems.CELL_COMPONENT_1M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING,
-                ConventionTags.IRON_INGOT);
-        cell(
-                output,
-                MEGAItems.ITEM_CELL_4M,
-                MEGAItems.CELL_COMPONENT_4M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING,
-                ConventionTags.IRON_INGOT);
-        cell(
-                output,
-                MEGAItems.ITEM_CELL_16M,
-                MEGAItems.CELL_COMPONENT_16M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING,
-                ConventionTags.IRON_INGOT);
-        cell(
-                output,
-                MEGAItems.ITEM_CELL_64M,
-                MEGAItems.CELL_COMPONENT_64M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING,
-                ConventionTags.IRON_INGOT);
-        cell(
-                output,
-                MEGAItems.ITEM_CELL_256M,
-                MEGAItems.CELL_COMPONENT_256M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING,
-                ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
 
-        cell(
-                output,
-                MEGAItems.FLUID_CELL_1M,
-                MEGAItems.CELL_COMPONENT_1M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING,
-                ConventionTags.COPPER_INGOT);
-        cell(
-                output,
-                MEGAItems.FLUID_CELL_4M,
-                MEGAItems.CELL_COMPONENT_4M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING,
-                ConventionTags.COPPER_INGOT);
-        cell(
-                output,
-                MEGAItems.FLUID_CELL_16M,
-                MEGAItems.CELL_COMPONENT_16M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING,
-                ConventionTags.COPPER_INGOT);
-        cell(
-                output,
-                MEGAItems.FLUID_CELL_64M,
-                MEGAItems.CELL_COMPONENT_64M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING,
-                ConventionTags.COPPER_INGOT);
-        cell(
-                output,
-                MEGAItems.FLUID_CELL_256M,
-                MEGAItems.CELL_COMPONENT_256M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING,
-                ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
 
-        portable(
-                output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(
-                output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_ITEM_CELL_16M,
-                MEGAItems.CELL_COMPONENT_16M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_ITEM_CELL_64M,
-                MEGAItems.CELL_COMPONENT_64M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_ITEM_CELL_256M,
-                MEGAItems.CELL_COMPONENT_256M,
-                MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
 
-        portable(
-                output,
-                MEGAItems.PORTABLE_FLUID_CELL_1M,
-                MEGAItems.CELL_COMPONENT_1M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_FLUID_CELL_4M,
-                MEGAItems.CELL_COMPONENT_4M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_FLUID_CELL_16M,
-                MEGAItems.CELL_COMPONENT_16M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_FLUID_CELL_64M,
-                MEGAItems.CELL_COMPONENT_64M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING);
-        portable(
-                output,
-                MEGAItems.PORTABLE_FLUID_CELL_256M,
-                MEGAItems.CELL_COMPONENT_256M,
-                MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        portable(output, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
