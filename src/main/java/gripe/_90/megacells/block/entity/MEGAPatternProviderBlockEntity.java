@@ -18,7 +18,6 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAMenus;
 
 public class MEGAPatternProviderBlockEntity extends PatternProviderBlockEntity {
-
     public MEGAPatternProviderBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
     }

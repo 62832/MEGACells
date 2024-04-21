@@ -272,4 +272,9 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("front", front)
                 .texture("back", back);
     }
+
+    @Override
+    public String getName() {
+        return "Block States / Models";
+    }
 }

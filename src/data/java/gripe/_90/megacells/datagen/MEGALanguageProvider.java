@@ -7,6 +7,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
+import org.jetbrains.annotations.NotNull;
 
 public class MEGALanguageProvider extends LanguageProvider {
     public MEGALanguageProvider(PackOutput output) {
@@ -26,5 +27,11 @@ public class MEGALanguageProvider extends LanguageProvider {
         for (var translation : MEGATranslations.values()) {
             add(translation.getTranslationKey(), translation.getEnglishText());
         }
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "Language";
     }
 }

@@ -33,7 +33,6 @@ import appeng.util.inv.filter.AEItemDefinitionFilter;
 
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 
-@SuppressWarnings("deprecation")
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
     private static final EnumProperty<PushDirection> PUSH_DIRECTION = PatternProviderBlock.PUSH_DIRECTION;
 
@@ -56,6 +55,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     }
 
     @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(
             BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {

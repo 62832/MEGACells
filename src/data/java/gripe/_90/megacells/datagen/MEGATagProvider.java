@@ -57,6 +57,12 @@ public class MEGATagProvider {
                     .add(Items.ICE, Items.PACKED_ICE)
                     .addOptionalTag(new ResourceLocation("functionalstorage", "ignore_crafting_check"));
         }
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "Tags (Item)";
+        }
     }
 
     public static class BlockTags extends IntrinsicHolderTagsProvider<Block> {
@@ -78,6 +84,12 @@ public class MEGATagProvider {
             }
 
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
+        }
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "Tags (Block)";
         }
     }
 }
