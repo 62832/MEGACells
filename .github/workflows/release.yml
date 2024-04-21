@@ -44,6 +44,6 @@ jobs:
           dependencies: |
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
             appmek(optional){curseforge:574300}{modrinth:IiATswDj}
+            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
 #           appbot(optional){curseforge:610632}{modrinth:545hUrw9}
 #           arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
-            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
