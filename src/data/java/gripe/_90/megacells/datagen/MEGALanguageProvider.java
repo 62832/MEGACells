@@ -1,5 +1,7 @@
 package gripe._90.megacells.datagen;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
@@ -7,7 +9,6 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
-import org.jetbrains.annotations.NotNull;
 
 public class MEGALanguageProvider extends LanguageProvider {
     public MEGALanguageProvider(PackOutput output) {
