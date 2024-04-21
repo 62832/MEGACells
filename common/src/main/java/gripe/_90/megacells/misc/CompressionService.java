@@ -158,8 +158,8 @@ public class CompressionService {
     private boolean sameIngredient(CraftingRecipe recipe) {
         var ingredients = recipe.getIngredients();
 
-        if (recipe instanceof ShapedRecipe) {
-            return ingredients.stream().distinct().count() <= 1;
+        if (recipe instanceof ShapedRecipe && ingredients.stream().distinct().count() <= 1) {
+            return true;
         }
 
         // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
