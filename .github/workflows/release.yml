@@ -27,9 +27,9 @@ jobs:
         id: build
         env:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
-        run: ./gradlew releaseInfo build
-      - name: Publish release files (Fabric)
-        uses: Kir-Antipov/mc-publish@4db8bd126f74d5e143822181a2b1201308e2c796
+        run: ./gradlew build
+      - name: Publish release files
+        uses: Kir-Antipov/mc-publish@c0f30ad683340ba9a5374ba42157179f30171107
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,38 +39,11 @@ jobs:
           modrinth-id: jjuIRIVr
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          name: ${{ steps.build.outputs.MOD_VERSION }} (Fabric ${{ steps.build.outputs.MINECRAFT_VERSION }})
-          version: fabric-${{ steps.build.outputs.MOD_VERSION }}
-          game-versions: ${{ steps.build.outputs.MINECRAFT_VERSION }}
-          dependencies: |
-            ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
-            appbot(optional){curseforge:610632}{modrinth:545hUrw9}
-            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
-
-          files: fabric/build/libs/*[0-9].jar
-      - name: Publish release files (Forge)
-        uses: Kir-Antipov/mc-publish@4db8bd126f74d5e143822181a2b1201308e2c796
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-          curseforge-id: 622112
-          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
-
-          modrinth-id: jjuIRIVr
-          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
-
-          name: ${{ steps.build.outputs.MOD_VERSION }} (Forge ${{ steps.build.outputs.MINECRAFT_VERSION }})
-          version: forge-${{ steps.build.outputs.MOD_VERSION }}
-          game-versions: ${{ steps.build.outputs.MINECRAFT_VERSION }}
           loaders: |
-            forge
             neoforge
           dependencies: |
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
             appmek(optional){curseforge:574300}{modrinth:IiATswDj}
-            appbot(optional){curseforge:610632}{modrinth:545hUrw9}
-            arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
+#           appbot(optional){curseforge:610632}{modrinth:545hUrw9}
+#           arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
             ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
-            cloth_config(required){curseforge:348521}{modrinth:9s6osm5g}
-
-          files: forge/build/libs/*[0-9].jar
