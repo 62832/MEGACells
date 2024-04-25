@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -27,6 +28,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
@@ -35,16 +38,20 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 
 import appeng.api.client.StorageCellModels;
 import appeng.api.features.HotkeyAction;
+import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.GridServices;
+import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.block.networking.EnergyCellBlockItem;
+import appeng.capabilities.AppEngCapabilities;
 import appeng.client.gui.implementations.InterfaceScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.crafting.CraftingCubeModel;
 import appeng.client.render.crafting.CraftingMonitorRenderer;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
+import appeng.core.definitions.ItemDefinition;
 import appeng.core.localization.GuiText;
 import appeng.hooks.BuiltInModelHooks;
 import appeng.hotkeys.HotkeyActions;
@@ -52,6 +59,7 @@ import appeng.init.InitVillager;
 import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
+import appeng.items.tools.powered.powersink.PoweredItemCapabilities;
 
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
@@ -82,6 +90,7 @@ public class MEGACells {
         modEventBus.addListener(MEGACells::initUpgrades);
         modEventBus.addListener(MEGACells::initStorageCells);
         modEventBus.addListener(MEGACells::initVillagerTrades);
+        modEventBus.addListener(MEGACells::initCapabilities);
 
         initCompression();
         initLavaTransform();
@@ -242,6 +251,42 @@ public class MEGACells {
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
             if (event.getPlayer() == null) LavaTransformLogic.clearCache();
         });
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static void initCapabilities(RegisterCapabilitiesEvent event) {
+        for (var type : MEGABlockEntities.getBEs().values()) {
+            event.registerBlockEntity(
+                    AppEngCapabilities.IN_WORLD_GRID_NODE_HOST, type, (be, context) -> (IInWorldGridNodeHost) be);
+        }
+
+        event.registerBlockEntity(
+                AppEngCapabilities.GENERIC_INTERNAL_INV,
+                MEGABlockEntities.MEGA_INTERFACE,
+                (be, context) -> be.getInterfaceLogic().getStorage());
+        event.registerBlockEntity(
+                AppEngCapabilities.ME_STORAGE, MEGABlockEntities.MEGA_INTERFACE, (be, context) -> be.getInterfaceLogic()
+                        .getInventory());
+
+        event.registerBlockEntity(
+                AppEngCapabilities.GENERIC_INTERNAL_INV,
+                MEGABlockEntities.MEGA_PATTERN_PROVIDER,
+                (be, context) -> be.getLogic().getReturnInv());
+
+        MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
+        MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
+
+        if (Addons.APPMEK.isLoaded()) {
+            AppMekItems.getPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
+        }
+    }
+
+    private static <T extends Item & IAEItemPowerStorage> void registerPoweredItemCapability(
+            RegisterCapabilitiesEvent event, ItemDefinition<T> item) {
+        event.registerItem(
+                Capabilities.EnergyStorage.ITEM,
+                (object, context) -> new PoweredItemCapabilities(object, item.asItem()),
+                item);
     }
 
     @OnlyIn(Dist.CLIENT)
