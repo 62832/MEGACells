@@ -1,6 +1,11 @@
 package gripe._90.megacells.datagen;
 
-import gripe._90.megacells.definition.MEGABlocks;
+import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -12,11 +17,8 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Set;
-import java.util.function.BiConsumer;
+import gripe._90.megacells.definition.MEGABlocks;
 
 public class MEGALootProvider extends LootTableProvider {
     public MEGALootProvider(PackOutput output) {
