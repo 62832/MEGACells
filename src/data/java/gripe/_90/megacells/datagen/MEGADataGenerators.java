@@ -24,5 +24,6 @@ public class MEGADataGenerators {
 
         generator.addProvider(event.includeClient(), new MEGALanguageProvider(output));
         generator.addProvider(event.includeServer(), new MEGARecipeProvider(output));
+        generator.addProvider(event.includeServer(), new MEGALootProvider(output));
     }
 }
