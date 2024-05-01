@@ -290,27 +290,27 @@ public class MEGARecipeProvider extends RecipeProvider {
 
             portable(
                     Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_1M,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_1M,
                     MEGAItems.CELL_COMPONENT_1M,
                     AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
             portable(
                     Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_4M,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_4M,
                     MEGAItems.CELL_COMPONENT_4M,
                     AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
             portable(
                     Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_16M,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_16M,
                     MEGAItems.CELL_COMPONENT_16M,
                     AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
             portable(
                     Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_64M,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_64M,
                     MEGAItems.CELL_COMPONENT_64M,
                     AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
             portable(
                     Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_256M,
+                    AppMekItems.PORTABLE_CHEMICAL_CELL_256M,
                     MEGAItems.CELL_COMPONENT_256M,
                     AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
 

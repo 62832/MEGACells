@@ -2,22 +2,23 @@ package gripe._90.megacells.integration.appmek;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.ItemStack;
 
-import net.minecraft.resources.ResourceLocation;
-
+import appeng.api.stacks.AEKey;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
 import appeng.items.storage.StorageTier;
 import appeng.items.tools.powered.AbstractPortableCell;
 
 import me.ramidzkh.mekae2.AMMenus;
-import me.ramidzkh.mekae2.item.ChemicalPortableCellItem;
+import me.ramidzkh.mekae2.ae2.MekanismKey;
+import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import me.ramidzkh.mekae2.item.ChemicalStorageCell;
+import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
+import gripe._90.megacells.item.cell.MEGAPortableCell;
 
 public final class AppMekItems {
     @SuppressWarnings("EmptyMethod")
@@ -34,16 +35,11 @@ public final class AppMekItems {
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_64M = cell(MEGAItems.TIER_64M);
     public static final ItemDefinition<ChemicalStorageCell> CHEMICAL_CELL_256M = cell(MEGAItems.TIER_256M);
 
-    public static final ItemDefinition<ChemicalPortableCellItem> PORTABLE_CHEMICAL_CELL_1M =
-            portable(MEGAItems.TIER_1M);
-    public static final ItemDefinition<ChemicalPortableCellItem> PORTABLE_CHEMICAL_CELL_4M =
-            portable(MEGAItems.TIER_4M);
-    public static final ItemDefinition<ChemicalPortableCellItem> PORTABLE_CHEMICAL_CELL_16M =
-            portable(MEGAItems.TIER_16M);
-    public static final ItemDefinition<ChemicalPortableCellItem> PORTABLE_CHEMICAL_CELL_64M =
-            portable(MEGAItems.TIER_64M);
-    public static final ItemDefinition<ChemicalPortableCellItem> PORTABLE_CHEMICAL_CELL_256M =
-            portable(MEGAItems.TIER_256M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_1M = portable(MEGAItems.TIER_1M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_4M = portable(MEGAItems.TIER_4M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_16M = portable(MEGAItems.TIER_16M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_64M = portable(MEGAItems.TIER_64M);
+    public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGAItems.TIER_256M);
 
     public static final ItemDefinition<MaterialItem> RADIOACTIVE_CELL_COMPONENT =
             MEGAItems.item("MEGA Radioactive Storage Component", "radioactive_cell_component", MaterialItem::new);
@@ -67,19 +63,24 @@ public final class AppMekItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " MEGA Chemical Storage Cell",
                 "chemical_storage_cell_" + tier.namePrefix(),
-                p -> new ChemicalStorageCell(p, tier, MEGA_CHEMICAL_CELL_HOUSING));
+                p -> new ChemicalStorageCell(p.stacksTo(1), tier, MEGA_CHEMICAL_CELL_HOUSING));
     }
 
-    private static ItemDefinition<ChemicalPortableCellItem> portable(StorageTier tier) {
+    private static ItemDefinition<MEGAPortableCell> portable(StorageTier tier) {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
                 "portable_chemical_cell_" + tier.namePrefix(),
-                p -> new ChemicalPortableCellItem(18, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, tier, p, 0x33528D) {
-                    @NotNull
-                    @Override
-                    public ResourceLocation getRecipeId() {
-                        return MEGACells.makeId("cells/portable/portable_chemical_cell_" + tier.namePrefix());
-                    }
-                });
+                p ->
+                        new MEGAPortableCell(
+                                p, tier, MekanismKeyType.TYPE, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, 0x33528D) {
+                            @Override
+                            public boolean isBlackListed(ItemStack cellItem, AEKey requestedAddition) {
+                                if (requestedAddition instanceof MekanismKey key) {
+                                    return !ChemicalAttributeValidator.DEFAULT.process(key.getStack());
+                                } else {
+                                    return true;
+                                }
+                            }
+                        });
     }
 }
