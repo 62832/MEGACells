@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.MaterialItem;
@@ -54,18 +55,28 @@ public class ArsEngItems {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " MEGA Source Storage Cell",
                 "source_storage_cell_" + tier.namePrefix(),
-                p -> new SourceCellItem(p, tier, MEGA_SOURCE_CELL_HOUSING));
+                p -> new SourceCellItem(p.stacksTo(1), tier, MEGA_SOURCE_CELL_HOUSING));
     }
 
     private static ItemDefinition<PortableSourceCellItem> portable(StorageTier tier) {
         return MEGAItems.item(
                 tier.namePrefix().toUpperCase() + " Portable Source Cell",
                 "portable_source_cell_" + tier.namePrefix(),
-                p -> new PortableSourceCellItem(p, tier) {
+                p -> new PortableSourceCellItem(p.stacksTo(1), tier) {
                     @NotNull
                     @Override
                     public ResourceLocation getRecipeId() {
                         return MEGACells.makeId("cells/portable/portable_source_cell_" + tier.namePrefix());
+                    }
+
+                    @Override
+                    public double getChargeRate(ItemStack stack) {
+                        return super.getChargeRate(stack) * 2;
+                    }
+
+                    @Override
+                    public double getAEMaxPower(ItemStack stack) {
+                        return super.getAEMaxPower(stack) * 8;
                     }
                 });
     }
