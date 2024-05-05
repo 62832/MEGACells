@@ -118,7 +118,8 @@ tasks.processResources {
         "appmekVersion" to libs.versions.appmek.get(),
         "loaderVersion" to libs.forge.get().version!!.substringAfter('-')
             .substringBefore('.'),
-        "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1
+        "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1,
+        "appliedeVersion" to libs.versions.appliede.get(),
     )
 
     inputs.properties(commonProps)

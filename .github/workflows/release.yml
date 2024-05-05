@@ -70,6 +70,7 @@ jobs:
             appmek(optional){curseforge:574300}{modrinth:IiATswDj}
             appbot(optional){curseforge:610632}{modrinth:545hUrw9}
             arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
+            appliede(optional){curseforge:1009940}{modrinth:SyKS54UY}
             ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
             cloth_config(required){curseforge:348521}{modrinth:9s6osm5g}
 

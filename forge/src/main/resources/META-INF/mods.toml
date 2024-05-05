@@ -36,9 +36,16 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
     side = "BOTH"
 
 [[dependencies.megacells]]
-    modId="appbot"
-    mandatory=false
+    modId = "appbot"
+    mandatory = false
     versionRange = "[$appbotVersion,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.megacells]]
+    modId = "appliede"
+    mandatory = false
+    versionRange = "[$appliedeVersion,)"
     ordering = "AFTER"
     side = "BOTH"
 
