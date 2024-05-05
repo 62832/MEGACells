@@ -46,12 +46,6 @@
     }
   },
   "widgets": {
-    "openPriority": {
-      "left": 154,
-      "top": 0,
-      "width": 16,
-      "height": 16
-    },
     "amtButton1": {
       "left": 8,
       "top": 35,
