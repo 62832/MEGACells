@@ -31,7 +31,7 @@ public class MEGAMenus {
             create("mega_pattern_provider", MEGAPatternProviderMenu::new, PatternProviderLogicHost.class);
     public static final MenuType<CellDockMenu> CELL_DOCK = create("cell_dock", CellDockMenu::new, CellDockPart.class);
 
-    private static <C extends AEBaseMenu, I> MenuType<C> create(
+    public static <C extends AEBaseMenu, I> MenuType<C> create(
             String id, MenuTypeBuilder.MenuFactory<C, I> factory, Class<I> host) {
         var menu = MenuTypeBuilder.create(factory, host).build(id);
         MENU_TYPES.put(AppEng.makeId(id), menu);

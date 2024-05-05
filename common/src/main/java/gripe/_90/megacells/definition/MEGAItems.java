@@ -208,7 +208,7 @@ public final class MEGAItems {
                 p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0xF1C5));
     }
 
-    private static <T extends IPart> ItemDefinition<PartItem<T>> part(
+    public static <T extends IPart> ItemDefinition<PartItem<T>> part(
             String englishName, String id, Class<T> partClass, Function<IPartItem<T>, T> factory) {
         PartModels.registerModels(PartModelsHelper.createModels(partClass));
         return item(englishName, id, p -> new PartItem<>(p, partClass, factory));

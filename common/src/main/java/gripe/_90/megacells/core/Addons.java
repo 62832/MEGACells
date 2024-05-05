@@ -4,6 +4,7 @@ public enum Addons {
     APPMEK("appmek"),
     APPBOT("appbot"),
     ARSENG("arseng"),
+    APPLIEDE("appliede"),
     AE2WTLIB("ae2wtlib");
 
     private final String modId;

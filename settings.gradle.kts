@@ -23,7 +23,7 @@ dependencyResolutionManagement {
             library("fabric-api", "net.fabricmc.fabric-api", "fabric-api").version("0.83.1+$minecraftVersion")
             library("forge", "net.minecraftforge", "forge").version("$minecraftVersion-47.1.47")
 
-            version("ae2", "15.0.15")
+            version("ae2", "15.1.0")
             library("ae2-fabric", "appeng", "appliedenergistics2-fabric").versionRef("ae2")
             library("ae2-forge", "appeng", "appliedenergistics2-forge").versionRef("ae2")
 
@@ -56,7 +56,7 @@ dependencyResolutionManagement {
             // Applied Mekanistics
             version("appmek", "1.4.2")
             library("appmek", "maven.modrinth", "applied-mekanistics").versionRef("appmek")
-            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.4.0.14")
+            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.4.6.20")
 
             // Ars Énergistique
             version("arseng", "1.1.5")
@@ -65,6 +65,11 @@ dependencyResolutionManagement {
             library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-$minecraftVersion").version("4.8.3.135")
             library("geckolib", "software.bernie.geckolib", "geckolib-forge-$minecraftVersion").version("4.2.1")
             library("mixinextras", "io.github.llamalad7", "mixinextras-forge").version("0.2.1")
+
+            // AppliedE
+            version("appliede", "0.6.1-beta")
+            library("appliede", "maven.modrinth", "appliede").versionRef("appliede")
+            library("projecte", "curse.maven", "projecte-226410").version("4901949-api-4901951")
 
             // Runtime mods
             version("jei", "15.2.0.23")

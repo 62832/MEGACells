@@ -23,11 +23,15 @@ import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
+import gripe._90.appliede.AppliedE;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.core.Addons;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.appliede.AppliedEIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.integration.arseng.ArsEngItems;
+
+import moze_intel.projecte.gameObjs.registries.PEItems;
 
 public class ForgeRecipeProvider extends RecipeProvider {
     private static final TagKey<Item> OSMIUM = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
@@ -107,6 +111,33 @@ public class ForgeRecipeProvider extends RecipeProvider {
             sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M);
             sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M);
             sourcePortable(writer, ArsEngItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M);
+        }
+
+        if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPLIEDE)) {
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
+                    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, AppliedEIntegration.EMC_INTERFACE)
+                            .requires(AppliedE.EMC_INTERFACE.get())
+                            .requires(MEGAItems.ACCUMULATION_PROCESSOR)
+                            .requires(PEItems.RED_MATTER.asItem())
+                            .unlockedBy("has_emc_interface", has(AppliedE.EMC_INTERFACE.get()))
+                            .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR)),
+                    Addons.APPLIEDE,
+                    MEGACells.makeId("network/mega_emc_interface"));
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
+                    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, AppliedEIntegration.CABLE_EMC_INTERFACE)
+                            .requires(AppliedEIntegration.EMC_INTERFACE)
+                            .unlockedBy("has_mega_emc_interface", has(AppliedEIntegration.EMC_INTERFACE)),
+                    Addons.APPLIEDE,
+                    MEGACells.makeId("network/mega_emc_interface_part"));
+            MEGACells.PLATFORM.addIntegrationRecipe(
+                    writer,
+                    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, AppliedEIntegration.EMC_INTERFACE)
+                            .requires(AppliedEIntegration.CABLE_EMC_INTERFACE)
+                            .unlockedBy("has_mega_emc_interface", has(AppliedEIntegration.EMC_INTERFACE)),
+                    Addons.APPLIEDE,
+                    MEGACells.makeId("network/mega_emc_interface_block"));
         }
     }
 

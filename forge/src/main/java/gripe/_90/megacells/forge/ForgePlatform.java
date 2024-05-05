@@ -60,9 +60,11 @@ import appeng.client.render.model.DriveBakedModel;
 import appeng.core.definitions.AEBlocks;
 import appeng.hooks.BuiltInModelHooks;
 import appeng.init.InitVillager;
+import appeng.init.client.InitScreens;
 
 import me.shedaniel.autoconfig.AutoConfig;
 
+import gripe._90.appliede.client.screen.EMCInterfaceScreen;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
@@ -74,6 +76,8 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.integration.appliede.AppliedEIntegration;
+import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceMenu;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.AppMekItems;
 import gripe._90.megacells.integration.arseng.ArsEngIntegration;
@@ -116,6 +120,10 @@ public final class ForgePlatform implements Platform {
 
         if (isAddonLoaded(Addons.ARSENG)) {
             ArsEngItems.init();
+        }
+
+        if (isAddonLoaded(Addons.APPLIEDE)) {
+            AppliedEIntegration.init();
         }
     }
 
@@ -249,7 +257,15 @@ public final class ForgePlatform implements Platform {
     public static class Client implements Platform.Client {
         @Override
         public void initScreens() {
-            modEventBus.addListener((FMLClientSetupEvent event) -> screens());
+            modEventBus.addListener((FMLClientSetupEvent event) -> {
+                event.enqueueWork(this::screens);
+                if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPLIEDE)) {
+                    event.enqueueWork(() -> InitScreens.register(
+                            AppliedEIntegration.EMC_INTERFACE_MENU,
+                            EMCInterfaceScreen<MEGAEMCInterfaceMenu>::new,
+                            "/screens/megacells/mega_emc_interface.json"));
+                }
+            });
 
             ModLoadingContext.get()
                     .registerExtensionPoint(

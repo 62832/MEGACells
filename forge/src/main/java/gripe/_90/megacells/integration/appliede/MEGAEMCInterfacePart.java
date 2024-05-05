@@ -1,4 +1,4 @@
-package gripe._90.megacells.item.part;
+package gripe._90.megacells.integration.appliede;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -7,20 +7,18 @@ import net.minecraft.world.item.ItemStack;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.IPartModel;
 import appeng.core.AppEng;
-import appeng.helpers.InterfaceLogic;
 import appeng.items.parts.PartModels;
 import appeng.menu.ISubMenu;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocator;
 import appeng.parts.PartModel;
-import appeng.parts.misc.InterfacePart;
 
+import gripe._90.appliede.me.misc.EMCInterfaceLogic;
+import gripe._90.appliede.part.EMCInterfacePart;
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.definition.MEGAMenus;
 
-public class MEGAInterfacePart extends InterfacePart {
-    private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_interface");
+public class MEGAEMCInterfacePart extends EMCInterfacePart {
+    private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_emc_interface");
 
     @PartModels
     public static final PartModel MODELS_OFF = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_off"));
@@ -32,23 +30,23 @@ public class MEGAInterfacePart extends InterfacePart {
     public static final PartModel MODELS_HAS_CHANNEL =
             new PartModel(MODEL_BASE, AppEng.makeId("part/interface_has_channel"));
 
-    public MEGAInterfacePart(IPartItem<?> partItem) {
+    public MEGAEMCInterfacePart(IPartItem<?> partItem) {
         super(partItem);
     }
 
     @Override
-    protected InterfaceLogic createLogic() {
-        return new InterfaceLogic(getMainNode(), this, getPartItem().asItem(), 18);
+    protected EMCInterfaceLogic createLogic() {
+        return new EMCInterfaceLogic(getMainNode(), this, 18);
     }
 
     @Override
     public void openMenu(Player player, MenuLocator locator) {
-        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, locator);
+        MenuOpener.open(AppliedEIntegration.EMC_INTERFACE_MENU, player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAMenus.MEGA_INTERFACE, player, subMenu.getLocator());
+        MenuOpener.returnTo(AppliedEIntegration.EMC_INTERFACE_MENU, player, subMenu.getLocator());
     }
 
     @Override
@@ -64,6 +62,6 @@ public class MEGAInterfacePart extends InterfacePart {
 
     @Override
     public ItemStack getMainMenuIcon() {
-        return MEGAItems.MEGA_INTERFACE.stack();
+        return AppliedEIntegration.CABLE_EMC_INTERFACE.stack();
     }
 }

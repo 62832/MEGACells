@@ -71,6 +71,14 @@ repositories {
         name = "GeckoLib"
         url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
     }
+
+    maven {
+        name = "Curse Maven"
+        url = uri("https://cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
 }
 
 dependencies {
@@ -92,6 +100,9 @@ dependencies {
     modRuntimeOnly(libs.arsnouveau)
     modRuntimeOnly(libs.geckolib)
     runtimeOnly(libs.mixinextras)
+
+    modImplementation(libs.appliede)
+    modImplementation(libs.projecte)
 
     modImplementation(libs.ae2wtlib.forge)
     modRuntimeOnly(libs.architectury.forge)

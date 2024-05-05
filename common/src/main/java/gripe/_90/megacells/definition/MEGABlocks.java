@@ -117,7 +117,7 @@ public final class MEGABlocks {
                 (block, props) -> new MEGACraftingBlockItem(block, props, disassemblyExtra));
     }
 
-    private static <T extends Block> BlockDefinition<T> block(
+    public static <T extends Block> BlockDefinition<T> block(
             String englishName,
             String id,
             Supplier<T> blockSupplier,

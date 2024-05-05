@@ -68,7 +68,7 @@ public final class MEGABlockEntities {
             MEGABlocks.MEGA_PATTERN_PROVIDER);
 
     @SafeVarargs
-    private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(
+    public static <T extends AEBaseBlockEntity> BlockEntityType<T> create(
             String id,
             Class<T> entityClass,
             BlockEntityFactory<T> factory,
@@ -96,7 +96,7 @@ public final class MEGABlockEntities {
         return type;
     }
 
-    private interface BlockEntityFactory<T extends AEBaseBlockEntity> {
+    public interface BlockEntityFactory<T extends AEBaseBlockEntity> {
         T create(BlockEntityType<T> type, BlockPos pos, BlockState state);
     }
 }

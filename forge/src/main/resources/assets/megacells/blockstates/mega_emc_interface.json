@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "megacells:block/mega_emc_interface"
+    }
+  }
+}
