@@ -67,7 +67,7 @@ dependencyResolutionManagement {
             library("mixinextras", "io.github.llamalad7", "mixinextras-forge").version("0.2.1")
 
             // AppliedE
-            version("appliede", "0.6.2-beta")
+            version("appliede", "0.7.0-beta")
             library("appliede", "maven.modrinth", "appliede").versionRef("appliede")
             library("projecte", "curse.maven", "projecte-226410").version("4901949-api-4901951")
 

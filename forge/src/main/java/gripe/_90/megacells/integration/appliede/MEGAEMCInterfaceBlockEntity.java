@@ -20,7 +20,7 @@ public class MEGAEMCInterfaceBlockEntity extends EMCInterfaceBlockEntity {
 
     @Override
     protected EMCInterfaceLogic createLogic() {
-        return new EMCInterfaceLogic(getMainNode(), this, 18);
+        return new EMCInterfaceLogic(getMainNode(), this, getItemFromBlockEntity(), 18);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class MEGAEMCInterfacePart extends EMCInterfacePart {
 
     @Override
     protected EMCInterfaceLogic createLogic() {
-        return new EMCInterfaceLogic(getMainNode(), this, 18);
+        return new EMCInterfaceLogic(getMainNode(), this, getPartItem().asItem(), 18);
     }
 
     @Override
