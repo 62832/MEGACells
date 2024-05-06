@@ -60,7 +60,7 @@ public class CommonTagProvider {
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             for (var block : MEGABlocks.getBlocks()) {
-                tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
+                tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE).addOptional(block.id());
             }
 
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
