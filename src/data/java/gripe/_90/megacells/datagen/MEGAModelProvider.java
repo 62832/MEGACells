@@ -29,6 +29,8 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 
+import static appeng.core.AppEng.makeId;
+
 public class MEGAModelProvider extends AE2BlockStateProvider {
     private static final ExistingFileHelper.ResourceType MODEL =
             new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");
@@ -66,13 +68,13 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         MEGAItems.getFluidCells().forEach(this::cell);
         cell(MEGAItems.BULK_ITEM_CELL);
 
-        var itemPortableHousing = AppEng.makeId("item/portable_cell_item_housing");
-        var fluidPortableHousing = AppEng.makeId("item/portable_cell_fluid_housing");
+        var itemPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_item_housing");
+        var fluidPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_fluid_housing");
         existing.trackGenerated(itemPortableHousing, ModelProvider.TEXTURE);
         existing.trackGenerated(fluidPortableHousing, ModelProvider.TEXTURE);
         existing.trackGenerated(AppEng.makeId("item/portable_cell_led"), ModelProvider.TEXTURE);
-        MEGAItems.getItemPortables().forEach(cell -> portable(cell, "item", itemPortableHousing));
-        MEGAItems.getFluidPortables().forEach(cell -> portable(cell, "fluid", fluidPortableHousing));
+        MEGAItems.getItemPortables().forEach(cell -> portable(cell, itemPortableHousing));
+        MEGAItems.getFluidPortables().forEach(cell -> portable(cell, fluidPortableHousing));
 
         existing.trackGenerated(AppEng.makeId("block/drive/drive_cell"), MODEL);
         driveCell("mega_item_cell");
@@ -199,7 +201,10 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
             basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
 
             AppMekItems.getCells().forEach(this::cell);
-            AppMekItems.getPortables().forEach(this::portable);
+
+            var chemicalPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_chemical_housing");
+            existing.trackGenerated(chemicalPortableHousing, ModelProvider.TEXTURE);
+            AppMekItems.getPortables().forEach(cell -> portable(cell, chemicalPortableHousing));
 
             basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
             cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
@@ -221,19 +226,18 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer1", AppEng.makeId("item/storage_cell_led"));
     }
 
-    private void portable(ItemDefinition<?> portable, String screenType, ResourceLocation housing) {
+    private void portable(ItemDefinition<?> portable, ResourceLocation housing) {
         var id = portable.id().getPath();
         var tierSuffix = id.substring(id.lastIndexOf('_'));
         existing.trackGenerated(housing, ModelProvider.TEXTURE);
 
         itemModels()
                 .singleTexture(
-                        id,
-                        mcLoc("item/generated"),
-                        "layer0",
-                        MEGACells.makeId("item/cell/portable/portable_cell_" + screenType + "_screen"))
+                id,
+                mcLoc("item/generated"),
+                "layer0", housing)
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
-                .texture("layer2", housing)
+                .texture("layer2", MEGACells.makeId("item/cell/portable/portable_cell_screen"))
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
     }
 
