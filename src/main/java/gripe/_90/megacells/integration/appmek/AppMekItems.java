@@ -72,7 +72,7 @@ public final class AppMekItems {
                 "portable_chemical_cell_" + tier.namePrefix(),
                 p ->
                         new MEGAPortableCell(
-                                p, tier, MekanismKeyType.TYPE, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, 0x33528D) {
+                                p, tier, MekanismKeyType.TYPE, AMMenus.PORTABLE_CHEMICAL_CELL_TYPE, 0x80caff) {
                             @Override
                             public boolean isBlackListed(ItemStack cellItem, AEKey requestedAddition) {
                                 if (requestedAddition instanceof MekanismKey key) {
