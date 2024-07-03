@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.GenericStack;
@@ -51,9 +51,9 @@ public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchIte
     @Override
     public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {}
 
+    @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(
-            @NotNull ItemStack is, Level level, @NotNull List<Component> lines, @NotNull TooltipFlag adv) {
+    public void appendHoverText(ItemStack is, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         var inv = HANDLER.getCellInventory(is, null);
 
         if (inv != null) {

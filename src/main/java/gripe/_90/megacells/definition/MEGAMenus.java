@@ -16,7 +16,7 @@ import appeng.menu.implementations.MenuTypeBuilder;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
-public class MEGAMenus {
+public final class MEGAMenus {
     private static final Map<ResourceLocation, MenuType<?>> MENU_TYPES = new HashMap<>();
 
     public static Map<ResourceLocation, MenuType<?>> getMenuTypes() {

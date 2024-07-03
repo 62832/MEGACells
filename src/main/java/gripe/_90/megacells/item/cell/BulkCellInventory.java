@@ -8,7 +8,6 @@ import java.util.Set;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -22,15 +21,12 @@ import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 
+import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.misc.CompressionChain;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.DecompressionPattern;
 
 public class BulkCellInventory implements StorageCell {
-    private static final String KEY = "key";
-    private static final String UNIT_COUNT = "smallestUnitCount";
-    private static final String UNIT_FACTOR = "unitFactor";
-
     private static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
     private final ISaveProvider container;
@@ -54,10 +50,8 @@ public class BulkCellInventory implements StorageCell {
         var cell = (BulkCellItem) stack.getItem();
         filterItem = (AEItemKey) cell.getConfigInventory(stack).getKey(0);
 
-        storedItem = getTag().contains(KEY) ? AEItemKey.fromTag(getTag().getCompound(KEY)) : null;
-        unitCount = !getTag().getString(UNIT_COUNT).isEmpty()
-                ? new BigInteger(getTag().getString(UNIT_COUNT))
-                : BigInteger.ZERO;
+        storedItem = (AEItemKey) stack.get(MEGAComponents.BULK_CELL_ITEM);
+        unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
 
         compressionEnabled = cell.getUpgrades(stack).isInstalled(COMPRESSION_CARD);
         compressionChain = CompressionService.INSTANCE
@@ -68,9 +62,7 @@ public class BulkCellInventory implements StorageCell {
 
         // Check newly-calculated factor against what's already recorded in order to adjust for a compression chain that
         // has changed from the left of the stored item
-        var recordedFactor = !getTag().getString(UNIT_FACTOR).isEmpty()
-                ? new BigInteger(getTag().getString(UNIT_FACTOR))
-                : unitFactor;
+        var recordedFactor = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
 
         if (!unitFactor.equals(recordedFactor)) {
             unitCount = unitCount.multiply(unitFactor).divide(recordedFactor);
@@ -80,10 +72,6 @@ public class BulkCellInventory implements StorageCell {
 
     private long clampedLong(BigInteger toClamp, long limit) {
         return toClamp.min(BigInteger.valueOf(limit)).longValue();
-    }
-
-    private CompoundTag getTag() {
-        return stack.getOrCreateTag();
     }
 
     @Override
@@ -131,7 +119,7 @@ public class BulkCellInventory implements StorageCell {
         var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
 
         for (var variant : decompressionChain) {
-            if (variant == decompressionChain.get(decompressionChain.size() - 1)) {
+            if (variant == decompressionChain.getLast()) {
                 continue;
             }
 
@@ -238,13 +226,13 @@ public class BulkCellInventory implements StorageCell {
         }
 
         if (storedItem == null || unitCount.signum() < 1) {
-            getTag().remove(KEY);
-            getTag().remove(UNIT_COUNT);
-            getTag().remove(UNIT_FACTOR);
+            stack.remove(MEGAComponents.BULK_CELL_ITEM);
+            stack.remove(MEGAComponents.BULK_CELL_UNIT_COUNT);
+            stack.remove(MEGAComponents.BULK_CELL_UNIT_FACTOR);
         } else {
-            getTag().put(KEY, storedItem.toTagGeneric());
-            getTag().putString(UNIT_COUNT, unitCount.toString());
-            getTag().putString(UNIT_FACTOR, unitFactor.toString());
+            stack.set(MEGAComponents.BULK_CELL_ITEM, storedItem);
+            stack.set(MEGAComponents.BULK_CELL_UNIT_COUNT, unitCount);
+            stack.set(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
         }
 
         isPersisted = true;
@@ -261,7 +249,7 @@ public class BulkCellInventory implements StorageCell {
                     var compressionFactor = BigInteger.valueOf(variant.factor());
                     var key = variant.item();
 
-                    if (count.divide(compressionFactor).signum() == 1 && variant != chain.get(chain.size() - 1)) {
+                    if (count.divide(compressionFactor).signum() == 1 && variant != chain.getLast()) {
                         out.add(key, count.remainder(compressionFactor).longValue());
                         count = count.divide(compressionFactor);
                     } else {

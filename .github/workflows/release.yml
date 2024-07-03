@@ -17,7 +17,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'temurin'
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
@@ -29,7 +29,7 @@ jobs:
           MEGA_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build
       - name: Publish release files
-        uses: Kir-Antipov/mc-publish@c0f30ad683340ba9a5374ba42157179f30171107
+        uses: Kir-Antipov/mc-publish@995edadc13559a8b28d0b7e6571229f067ec7659
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,7 +39,7 @@ jobs:
           modrinth-id: jjuIRIVr
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          game-versions: 1.20.4
+          game-versions: 1.21
           loaders: neoforge
           dependencies: |
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}

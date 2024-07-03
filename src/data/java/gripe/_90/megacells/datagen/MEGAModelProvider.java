@@ -28,8 +28,6 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
-import gripe._90.megacells.integration.Addons;
-import gripe._90.megacells.integration.appmek.AppMekItems;
 
 public class MEGAModelProvider extends AE2BlockStateProvider {
     private static final ExistingFileHelper.ResourceType MODEL =
@@ -160,7 +158,8 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         for (var i = 1; i < energyCellModels.size(); i++) {
             // The predicate matches "greater than", meaning for fill-level > 0 the first non-empty texture is used
             itemModels()
-                    .withExistingParent(energyCellPath, energyCellModels.get(0).getLocation())
+                    .withExistingParent(
+                            energyCellPath, energyCellModels.getFirst().getLocation())
                     .override()
                     .predicate(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID, i / (float) energyCellModels.size())
                     .model(energyCellModels.get(i));
@@ -195,6 +194,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                             }
                         }));
 
+        /*
         if (Addons.APPMEK.isLoaded()) {
             basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
 
@@ -207,6 +207,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
             driveCell("mega_chemical_cell");
             driveCell("radioactive_chemical_cell");
         }
+         */
     }
 
     private void basicItem(ItemDefinition<?> item) {
@@ -236,12 +237,14 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
     }
 
+    /*
     private void portable(ItemDefinition<?> portable) {
         var id = portable.id().getPath();
         itemModels()
                 .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/cell/portable/" + id))
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"));
     }
+     */
 
     private void driveCell(String texture) {
         var path = "block/drive/cells/" + texture;

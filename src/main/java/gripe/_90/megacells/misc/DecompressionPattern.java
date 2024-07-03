@@ -1,22 +1,26 @@
 package gripe._90.megacells.misc;
 
-import java.util.Objects;
+import java.util.List;
 
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appeng.api.crafting.IPatternDetails;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
+import appeng.core.definitions.AEItems;
 
+import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAItems;
 
 public class DecompressionPattern implements IPatternDetails {
-    static final String NBT_BASE = "base";
-    static final String NBT_VARIANT = "variant";
-    static final String NBT_FACTOR = "factor";
-
     private final AEItemKey definition;
     private final AEItemKey base;
     private final AEItemKey variant;
@@ -24,11 +28,17 @@ public class DecompressionPattern implements IPatternDetails {
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
+        var encodedPattern = definition.get(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN);
 
-        var tag = Objects.requireNonNull(definition.getTag());
-        base = AEItemKey.fromTag(tag.getCompound(NBT_BASE));
-        variant = AEItemKey.fromTag(tag.getCompound(NBT_VARIANT));
-        factor = tag.getByte(NBT_FACTOR);
+        if (encodedPattern == null) {
+            throw new IllegalArgumentException("Given item does not encode a stonecutting pattern: " + definition);
+        } else if (encodedPattern.containsMissingContent()) {
+            throw new IllegalArgumentException("Pattern references missing content");
+        }
+
+        base = AEItemKey.of(encodedPattern.base);
+        variant = AEItemKey.of(encodedPattern.variant);
+        factor = encodedPattern.factor;
     }
 
     public DecompressionPattern(AEItemKey base, CompressionService.Variant variant) {
@@ -36,12 +46,11 @@ public class DecompressionPattern implements IPatternDetails {
         this.variant = variant.item();
         this.factor = variant.factor();
 
-        var tag = new CompoundTag();
-        tag.put(NBT_BASE, this.base.toTag());
-        tag.put(NBT_VARIANT, this.variant.toTag());
-        tag.putByte(NBT_FACTOR, this.factor);
-
-        definition = AEItemKey.of(MEGAItems.DECOMPRESSION_PATTERN, tag);
+        var definition = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+        definition.set(
+                MEGAComponents.ENCODED_DECOMPRESSION_PATTERN,
+                new Encoded(base.toStack(), variant.item().toStack(), variant.factor()));
+        this.definition = AEItemKey.of(definition);
     }
 
     @Override
@@ -55,8 +64,8 @@ public class DecompressionPattern implements IPatternDetails {
     }
 
     @Override
-    public GenericStack[] getOutputs() {
-        return new GenericStack[] {new GenericStack(base, factor)};
+    public List<GenericStack> getOutputs() {
+        return List.of(new GenericStack(base, factor));
     }
 
     @Override
@@ -90,6 +99,27 @@ public class DecompressionPattern implements IPatternDetails {
         @Override
         public AEKey getRemainingKey(AEKey template) {
             return null;
+        }
+    }
+
+    public record Encoded(ItemStack base, ItemStack variant, byte factor) {
+        public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+                        ItemStack.CODEC.fieldOf("base").forGetter(Encoded::base),
+                        ItemStack.CODEC.fieldOf("variant").forGetter(Encoded::variant),
+                        Codec.BYTE.fieldOf("factor").forGetter(Encoded::factor))
+                .apply(builder, Encoded::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
+                ItemStack.STREAM_CODEC,
+                Encoded::base,
+                ItemStack.STREAM_CODEC,
+                Encoded::variant,
+                ByteBufCodecs.BYTE,
+                Encoded::factor,
+                Encoded::new);
+
+        private boolean containsMissingContent() {
+            return AEItems.MISSING_CONTENT.isSameAs(base) || AEItems.MISSING_CONTENT.isSameAs(variant);
         }
     }
 }

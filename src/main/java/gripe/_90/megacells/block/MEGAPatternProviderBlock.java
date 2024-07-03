@@ -2,12 +2,11 @@ package gripe._90.megacells.block;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -55,7 +54,6 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     }
 
     @ParametersAreNonnullByDefault
-    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(
             BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
@@ -67,20 +65,10 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     }
 
     @Override
-    public InteractionResult onActivated(
-            Level level,
-            BlockPos pos,
-            Player player,
-            InteractionHand hand,
-            @Nullable ItemStack heldItem,
-            BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(
+            BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
         if (InteractionUtil.isInAlternateUseMode(player)) {
             return InteractionResult.PASS;
-        }
-
-        if (heldItem != null && InteractionUtil.canWrenchRotate(heldItem)) {
-            setSide(level, pos, hit.getDirection());
-            return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
         var be = getBlockEntity(level, pos);
@@ -94,6 +82,23 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         }
 
         return InteractionResult.PASS;
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack heldItem,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hit) {
+        if (InteractionUtil.canWrenchRotate(heldItem)) {
+            setSide(level, pos, hit.getDirection());
+            return ItemInteractionResult.sidedSuccess(level.isClientSide());
+        }
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     private void setSide(Level level, BlockPos pos, Direction facing) {

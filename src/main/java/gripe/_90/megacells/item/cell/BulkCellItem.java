@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.AEKeyType;
@@ -53,7 +52,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack is, @Nullable Level level, List<Component> lines, TooltipFlag adv) {
+    public void appendHoverText(ItemStack is, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         var inv = HANDLER.getCellInventory(is, null);
 
         if (inv != null) {

@@ -2,7 +2,7 @@ package gripe._90.megacells.definition;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class MEGAConfig {
+public final class MEGAConfig {
     public static final MEGAConfig CONFIG;
     public static final ModConfigSpec SPEC;
 

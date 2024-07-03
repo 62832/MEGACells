@@ -43,7 +43,8 @@ public class MEGACraftingBlockItem extends CraftingBlockItem {
     }
 
     @Override
-    public void addCheckedInformation(ItemStack itemStack, Level level, List<Component> lines, TooltipFlag flag) {
+    public void addCheckedInformation(
+            ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         if (this.getBlock().equals(CRAFTING_ACCELERATOR.block())) {
             lines.add(Tooltips.of(AcceleratorThreads.text()));
         }

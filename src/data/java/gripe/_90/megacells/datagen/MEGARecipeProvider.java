@@ -1,7 +1,10 @@
 package gripe._90.megacells.datagen;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -31,22 +34,16 @@ import appeng.recipes.handlers.InscriberRecipeBuilder;
 import appeng.recipes.transform.TransformCircumstance;
 import appeng.recipes.transform.TransformRecipeBuilder;
 
-import mekanism.common.registries.MekanismBlocks;
-import mekanism.common.registries.MekanismItems;
-import mekanism.generators.common.registries.GeneratorsBlocks;
-
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
-import gripe._90.megacells.integration.Addons;
-import gripe._90.megacells.integration.appmek.AppMekItems;
 
 public class MEGARecipeProvider extends RecipeProvider {
-    private static final TagKey<Item> OSMIUM = ItemTags.create(new ResourceLocation("forge", "ingots/osmium"));
+    private static final TagKey<Item> OSMIUM = ItemTags.create(ResourceLocation.parse("forge:ingots/osmium"));
 
-    public MEGARecipeProvider(PackOutput output) {
-        super(output);
+    public MEGARecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries);
     }
 
     @Override
@@ -244,6 +241,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAItems.MEGA_PATTERN_PROVIDER))
                 .save(output, MEGACells.makeId("network/mega_pattern_provider_block"));
 
+        /*
         if (Addons.APPMEK.isLoaded()) {
             ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
                     .pattern("aba")
@@ -343,6 +341,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                             Addons.APPMEK.conditionalRecipe(output),
                             MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
         }
+         */
     }
 
     private static void component(

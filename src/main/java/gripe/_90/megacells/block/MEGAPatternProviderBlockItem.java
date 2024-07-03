@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 import appeng.block.AEBaseBlockItem;
@@ -21,7 +20,8 @@ public class MEGAPatternProviderBlockItem extends AEBaseBlockItem {
     }
 
     @Override
-    public void addCheckedInformation(ItemStack stack, Level level, List<Component> lines, TooltipFlag flag) {
+    public void addCheckedInformation(
+            ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag advTooltips) {
         lines.add(MEGATranslations.ProcessingOnly.text().withStyle(NOTICE));
     }
 }

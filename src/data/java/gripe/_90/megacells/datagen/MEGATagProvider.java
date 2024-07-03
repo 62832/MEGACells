@@ -55,7 +55,8 @@ public class MEGATagProvider {
                     .add(Items.CLAY_BALL)
                     .add(Items.MELON_SLICE)
                     .add(Items.ICE, Items.PACKED_ICE)
-                    .addOptionalTag(new ResourceLocation("functionalstorage", "ignore_crafting_check"));
+                    .addOptionalTag(
+                            ResourceLocation.fromNamespaceAndPath("functionalstorage", "ignore_crafting_check"));
         }
 
         @NotNull

@@ -10,17 +10,14 @@ issueTrackerURL = "https://github.com/62832/MEGACells/issues"
 displayURL = "https://github.com/62832/MEGACells"
 
 [[mods]]
-    modId = "megacells"
-    version = "$version"
-    displayName = "MEGA Cells"
-    description = "ME Greater Accumulation Cells - For when kilobytes just won't do."
+modId = "megacells"
+version = "$version"
+displayName = "MEGA Cells"
+description = "ME Greater Accumulation Cells - For when kilobytes just won't do."
 
 [[mixins]]
-    config = "megacells.mixins.json"
+config = "megacells.mixins.json"
 
 [[dependencies]]
-    modId = "ae2"
-    type = "required"
-    versionRange = "[$ae2Version,$ae2VersionEnd)"
-    ordering = "AFTER"
-    side = "BOTH"
+modId = "ae2"
+versionRange = "[$ae2Version,$ae2VersionEnd)"

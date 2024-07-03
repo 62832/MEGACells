@@ -17,12 +17,13 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -31,11 +32,13 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
+import appeng.api.AECapabilities;
 import appeng.api.client.StorageCellModels;
 import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
@@ -44,7 +47,6 @@ import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.block.networking.EnergyCellBlockItem;
-import appeng.capabilities.AppEngCapabilities;
 import appeng.client.gui.implementations.InterfaceScreen;
 import appeng.client.gui.implementations.PatternProviderScreen;
 import appeng.client.render.crafting.CraftingCubeModel;
@@ -65,15 +67,13 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
+import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appmek.AppMekItems;
-import gripe._90.megacells.integration.appmek.item.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
@@ -85,17 +85,19 @@ import gripe._90.megacells.misc.LavaTransformLogic;
 public class MEGACells {
     public static final String MODID = "megacells";
 
-    public MEGACells(IEventBus modEventBus) {
+    public MEGACells(ModContainer container, IEventBus modEventBus) {
         modEventBus.addListener(MEGACells::registerAll);
         modEventBus.addListener(MEGACells::initUpgrades);
         modEventBus.addListener(MEGACells::initStorageCells);
         modEventBus.addListener(MEGACells::initVillagerTrades);
         modEventBus.addListener(MEGACells::initCapabilities);
 
+        MEGAComponents.DEFERRED.register(modEventBus);
+
         initCompression();
         initLavaTransform();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
+        container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
 
         if (FMLEnvironment.dist.isClient()) {
             Client.init(modEventBus);
@@ -103,14 +105,10 @@ public class MEGACells {
     }
 
     public static ResourceLocation makeId(String path) {
-        return new ResourceLocation(MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
     private static void registerAll(RegisterEvent event) {
-        if (Addons.APPMEK.isLoaded()) {
-            AppMekItems.init();
-        }
-
         MEGABlocks.getBlocks().forEach(block -> {
             event.register(Registries.BLOCK, block.id(), block::block);
             event.register(Registries.ITEM, block.id(), block::asItem);
@@ -190,10 +188,6 @@ public class MEGACells {
             if (Addons.AE2WTLIB.isLoaded()) {
                 AE2WTIntegration.initUpgrades();
             }
-
-            if (Addons.APPMEK.isLoaded()) {
-                AppMekIntegration.initUpgrades();
-            }
         });
     }
 
@@ -206,10 +200,6 @@ public class MEGACells {
             MEGAItems.getFluidPortables()
                     .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
         });
-
-        if (Addons.APPMEK.isLoaded()) {
-            StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
-        }
     }
 
     private static void initVillagerTrades(FMLCommonSetupEvent event) {
@@ -225,7 +215,7 @@ public class MEGACells {
         masterEntries = ArrayUtils.add(
                 masterEntries,
                 (i, j) -> new MerchantOffer(
-                        new ItemStack(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
+                        new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
         offers.put(5, masterEntries);
     }
 
@@ -257,28 +247,24 @@ public class MEGACells {
     private static void initCapabilities(RegisterCapabilitiesEvent event) {
         for (var type : MEGABlockEntities.getBEs().values()) {
             event.registerBlockEntity(
-                    AppEngCapabilities.IN_WORLD_GRID_NODE_HOST, type, (be, context) -> (IInWorldGridNodeHost) be);
+                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type, (be, context) -> (IInWorldGridNodeHost) be);
         }
 
         event.registerBlockEntity(
-                AppEngCapabilities.GENERIC_INTERNAL_INV,
+                AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_INTERFACE,
                 (be, context) -> be.getInterfaceLogic().getStorage());
         event.registerBlockEntity(
-                AppEngCapabilities.ME_STORAGE, MEGABlockEntities.MEGA_INTERFACE, (be, context) -> be.getInterfaceLogic()
+                AECapabilities.ME_STORAGE, MEGABlockEntities.MEGA_INTERFACE, (be, context) -> be.getInterfaceLogic()
                         .getInventory());
 
         event.registerBlockEntity(
-                AppEngCapabilities.GENERIC_INTERNAL_INV,
+                AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_PATTERN_PROVIDER,
                 (be, context) -> be.getLogic().getReturnInv());
 
         MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
         MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
-
-        if (Addons.APPMEK.isLoaded()) {
-            AppMekItems.getPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
-        }
     }
 
     private static <T extends Item & IAEItemPowerStorage> void registerPoweredItemCapability(
@@ -299,17 +285,17 @@ public class MEGACells {
             modEventBus.addListener(Client::initStorageCellModels);
         }
 
-        private static void initScreens(FMLClientSetupEvent event) {
-            event.enqueueWork(() -> {
-                InitScreens.register(
-                        MEGAMenus.MEGA_INTERFACE,
-                        InterfaceScreen<MEGAInterfaceMenu>::new,
-                        "/screens/megacells/mega_interface.json");
-                InitScreens.register(
-                        MEGAMenus.MEGA_PATTERN_PROVIDER,
-                        PatternProviderScreen<MEGAPatternProviderMenu>::new,
-                        "/screens/megacells/mega_pattern_provider.json");
-            });
+        private static void initScreens(RegisterMenuScreensEvent event) {
+            InitScreens.register(
+                    event,
+                    MEGAMenus.MEGA_INTERFACE,
+                    InterfaceScreen<MEGAInterfaceMenu>::new,
+                    "/screens/megacells/mega_interface.json");
+            InitScreens.register(
+                    event,
+                    MEGAMenus.MEGA_PATTERN_PROVIDER,
+                    PatternProviderScreen<MEGAPatternProviderMenu>::new,
+                    "/screens/megacells/mega_pattern_provider.json");
         }
 
         @SuppressWarnings("deprecation")
@@ -349,12 +335,6 @@ public class MEGACells {
             portableCells.addAll(MEGAItems.getItemPortables());
             portableCells.addAll(MEGAItems.getFluidPortables());
 
-            if (Addons.APPMEK.isLoaded()) {
-                standardCells.addAll(AppMekItems.getCells());
-                standardCells.add(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
-                portableCells.addAll(AppMekItems.getPortables());
-            }
-
             event.register(BasicStorageCell::getColor, standardCells.toArray(new ItemLike[0]));
             event.register(PortableCellItem::getColor, portableCells.toArray(new ItemLike[0]));
         }
@@ -370,16 +350,6 @@ public class MEGACells {
                 MEGAItems.getFluidPortables().forEach(cell -> StorageCellModels.registerModel(cell, fluidCell));
 
                 StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
-
-                if (Addons.APPMEK.isLoaded()) {
-                    var chemCell = makeId("block/drive/cells/mega_chemical_cell");
-                    AppMekItems.getCells().forEach(cell -> StorageCellModels.registerModel(cell, chemCell));
-                    AppMekItems.getPortables().forEach(cell -> StorageCellModels.registerModel(cell, chemCell));
-
-                    StorageCellModels.registerModel(
-                            AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),
-                            MEGACells.makeId("block/drive/cells/radioactive_chemical_cell"));
-                }
             });
         }
     }

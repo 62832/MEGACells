@@ -10,9 +10,10 @@ import gripe._90.megacells.MEGACells;
 
 public final class MEGATags {
     public static final TagKey<Item> SKY_STEEL_INGOT =
-            TagKey.create(Registries.ITEM, new ResourceLocation("forge:ingots/sky_steel"));
+            TagKey.create(Registries.ITEM, ResourceLocation.parse("forge:ingots/sky_steel"));
 
-    private static final ResourceLocation SKY_STEEL_BLOCK_TAG = new ResourceLocation("forge:storage_blocks/sky_steel");
+    private static final ResourceLocation SKY_STEEL_BLOCK_TAG =
+            ResourceLocation.parse("forge:storage_blocks/sky_steel");
     public static final TagKey<Block> SKY_STEEL_BLOCK = TagKey.create(Registries.BLOCK, SKY_STEEL_BLOCK_TAG);
     public static final TagKey<Item> SKY_STEEL_BLOCK_ITEM = TagKey.create(Registries.ITEM, SKY_STEEL_BLOCK_TAG);
 

@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.neogradle)
-    alias(libs.plugins.spotless)
+    id("net.neoforged.moddev")
+    id("com.diffplug.spotless")
 }
 
 val modId = "megacells"
@@ -9,36 +9,11 @@ base.archivesName = modId
 version = System.getenv("MEGA_VERSION") ?: "0.0.0"
 group = "gripe.90"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-
-    maven {
-        name = "ModMaven (K4U-NL)"
-        url = uri("https://modmaven.dev/")
-        content {
-            includeGroup("appeng")
-            includeGroup("mekanism")
-        }
-    }
-
-    maven {
-        name = "Modrinth Maven"
-        url = uri("https://api.modrinth.com/maven")
-        content {
-            includeGroup("maven.modrinth")
-        }
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
-    implementation(libs.neoforge)
     implementation(libs.ae2)
-
     implementation(libs.ae2wtlib)
-    runtimeOnly(libs.curios)
 
     implementation(libs.appmek)
     compileOnly(libs.mekanism)
@@ -58,26 +33,45 @@ sourceSets {
     }
 }
 
-runs {
-    configureEach {
-        workingDirectory(file("run"))
-        systemProperty("forge.logging.console.level", "info")
+neoForge {
+    version = libs.versions.neoforge.get()
 
-        modSource(sourceSets.main.get())
+    parchment {
+        minecraftVersion = libs.versions.minecraft.get()
+        mappingsVersion = libs.versions.parchment.get()
+    }
+    
+    mods {
+        create(modId) {
+            sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets.getByName("data"))
+        }
     }
 
-    create("client")
-    create("server")
+    runs {
+        configureEach {
+            gameDirectory = file("run")
+        }
 
-    create("data") {
-        programArguments.addAll(
-            "--mod", modId,
-            "--all",
-            "--output", file("src/generated/resources/").absolutePath,
-            "--existing", file("src/main/resources/").absolutePath
-        )
+        create("client") {
+            client()
+        }
 
-        modSource(sourceSets.getByName("data"))
+        create("server") {
+            server()
+            gameDirectory = file("run/server")
+        }
+
+        create("data") {
+            data()
+            programArguments.addAll(
+                "--mod", modId,
+                "--all",
+                "--output", file("src/generated/resources/").absolutePath,
+                "--existing", file("src/main/resources/").absolutePath
+            )
+            sourceSet = sourceSets.getByName("data")
+        }
     }
 }
 
@@ -102,7 +96,7 @@ tasks {
         )
 
         inputs.properties(props)
-        filesMatching("META-INF/mods.toml") {
+        filesMatching("META-INF/neoforge.mods.toml") {
             expand(props)
         }
     }

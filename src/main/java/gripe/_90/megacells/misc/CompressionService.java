@@ -67,7 +67,7 @@ public class CompressionService {
         decompressed.removeIf(recipe -> isIrreversible(recipe, compressed, access));
 
         var ingredientSize = Comparator.<CraftingRecipe>comparingInt(
-                r -> r.getIngredients().get(0).getItems().length);
+                r -> r.getIngredients().getFirst().getItems().length);
         compressed.sort(ingredientSize);
         decompressed.sort(ingredientSize);
 
@@ -124,7 +124,7 @@ public class CompressionService {
         }
 
         for (var recipe : recipes) {
-            for (var input : recipe.getIngredients().get(0).getItems()) {
+            for (var input : recipe.getIngredients().getFirst().getItems()) {
                 if (input.getItem().equals(item)) {
                     return new Variant(recipe.getResultItem(access).getItem(), (byte)
                             (compressed
@@ -158,7 +158,7 @@ public class CompressionService {
         }
 
         // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
-        var first = ingredients.get(0).getItems();
+        var first = ingredients.getFirst().getItems();
 
         for (var ingredient : ingredients) {
             var stacks = ingredient.getItems();
@@ -168,7 +168,7 @@ public class CompressionService {
             }
 
             for (var i = 0; i < stacks.length; i++) {
-                if (!ItemStack.isSameItemSameTags(stacks[i], first[i])) {
+                if (!ItemStack.isSameItemSameComponents(stacks[i], first[i])) {
                     return false;
                 }
             }
@@ -182,11 +182,11 @@ public class CompressionService {
             return false;
         }
 
-        var testInput = recipe.getIngredients().get(0).getItems();
+        var testInput = recipe.getIngredients().getFirst().getItems();
         var testOutput = recipe.getResultItem(access).getItem();
 
         for (var candidate : candidates) {
-            var input = candidate.getIngredients().get(0).getItems();
+            var input = candidate.getIngredients().getFirst().getItems();
             var output = candidate.getResultItem(access).getItem();
 
             var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput));
@@ -201,7 +201,7 @@ public class CompressionService {
     }
 
     private boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        for (var input : recipe.getIngredients().get(0).getItems()) {
+        for (var input : recipe.getIngredients().getFirst().getItems()) {
             if (input.is(MEGATags.COMPRESSION_OVERRIDES)) {
                 // Less expensive to check for decompression rather than compression, and since this method is only
                 // being used on recipes that are candidates for either compression or decompression, this is fine.

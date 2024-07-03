@@ -1,29 +1,58 @@
 pluginManagement {
-    repositories {
-        maven { url = uri("https://maven.neoforged.net/") }
-        gradlePluginPortal()
+    plugins {
+        id("net.neoforged.moddev") version "0.1.112"
+        id("net.neoforged.moddev.repositories") version "0.1.112"
+        id("com.diffplug.spotless") version "6.25.0"
     }
 }
 
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            plugin("neogradle", "net.neoforged.gradle.userdev").version("7.0.97")
-            plugin("spotless", "com.diffplug.spotless").version("6.23.3")
+plugins {
+    id("net.neoforged.moddev.repositories")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
 
-            library("neoforge", "net.neoforged", "neoforge").version("20.4.209")
+run {
+    @Suppress("UnstableApiUsage")
+    dependencyResolutionManagement {
+        repositoriesMode = RepositoriesMode.PREFER_SETTINGS
+        rulesMode = RulesMode.PREFER_SETTINGS
+    
+        repositories {
+            mavenCentral()
 
-            version("ae2", "17.12.0-beta")
-            library("ae2", "appeng", "appliedenergistics2-neoforge").versionRef("ae2")
+            maven {
+                name = "ModMaven (K4U-NL)"
+                url = uri("https://modmaven.dev/")
+                content {
+                    includeGroup("appeng")
+                    includeGroup("mekanism")
+                }
+            }
 
-            library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("6VxDDjI8")
-            library("curios", "maven.modrinth", "curios").version("1aZiIHQO")
+            maven {
+                name = "Modrinth Maven"
+                url = uri("https://api.modrinth.com/maven")
+                content {
+                    includeGroup("maven.modrinth")
+                }
+            }
+        }
+    
+        versionCatalogs {
+            create("libs") {
+                version("minecraft", "1.21")
+                version("neoforge", "21.0.13-beta")
+                version("parchment", "2024.06.23")
+                
+                version("ae2", "19.0.8-alpha")
+                library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
-            val minecraftVersion = "1.20.4"
-            library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.5.10.32")
-            library("appmek", "maven.modrinth", "applied-mekanistics").version("BG93ZC9u")
+                library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("jqaoHVCd")
+
+                val minecraftVersion = "1.20.4"
+                library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.5.10.32")
+                library("appmek", "maven.modrinth", "applied-mekanistics").version("BG93ZC9u")
+            }
         }
     }
 }
-
-rootProject.name = "MEGACells"
