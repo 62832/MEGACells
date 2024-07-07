@@ -32,10 +32,15 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import gripe._90.megacells.definition.MEGATranslations;
 
 public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchItem {
-    public static final Handler HANDLER = new Handler();
+    private final StorageTier tier;
 
-    public RadioactiveCellItem(Properties properties) {
+    public RadioactiveCellItem(Properties properties, StorageTier tier) {
         super(properties.stacksTo(1));
+        this.tier = tier;
+    }
+
+    public StorageTier getTier() {
+        return tier;
     }
 
     @Override
@@ -60,7 +65,7 @@ public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchIte
             var containedType = inv.getAvailableStacks().getFirstKey();
             var filterItem = inv.getFilterChemical();
 
-            lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
+            lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), inv.maxMB / MekanismKeyType.TYPE.getAmountPerByte()));
             lines.add(Tooltips.of(
                     containedType != null
                             ? MEGATranslations.Contains.text(containedType.getDisplayName())
