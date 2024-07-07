@@ -42,9 +42,33 @@ public final class AppMekItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_CHEMICAL_CELL_256M = portable(MEGAItems.TIER_256M);
 
     public static final ItemDefinition<MaterialItem> RADIOACTIVE_CELL_COMPONENT =
-            MEGAItems.item("MEGA Radioactive Storage Component", "radioactive_cell_component", MaterialItem::new);
-    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL = MEGAItems.item(
-            "MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", RadioactiveCellItem::new);
+        MEGAItems.item("MEGA Radioactive Storage Component", "radioactive_cell_component", MaterialItem::new);
+
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_256B = radioactiveCell(MEGAItems.TIER_256B);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_1K = radioactiveCell(MEGAItems.TIER_1K);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_4K = radioactiveCell(MEGAItems.TIER_4K);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_16K = radioactiveCell(MEGAItems.TIER_16K);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_64K = radioactiveCell(MEGAItems.TIER_64K);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_256K = radioactiveCell(MEGAItems.TIER_256K);
+    public static final ItemDefinition<RadioactiveCellItem> RADIOACTIVE_CHEMICAL_CELL_1M = radioactiveCell(MEGAItems.TIER_1M);
+
+    private static ItemDefinition<RadioactiveCellItem> radioactiveCell(StorageTier tier) {
+        return MEGAItems.item(
+                tier.namePrefix().toUpperCase() + " MEGA Radioactive Chemical Storage Cell",
+                "radioactive_chemical_storage_cell_" + tier.namePrefix(),
+                p -> new RadioactiveCellItem(p.stacksTo(1), tier));
+    }
+
+    public static List<ItemDefinition<?>> getRadioactiveCells() {
+        return List.of(
+                RADIOACTIVE_CHEMICAL_CELL_256B,
+                RADIOACTIVE_CHEMICAL_CELL_1K,
+                RADIOACTIVE_CHEMICAL_CELL_4K,
+                RADIOACTIVE_CHEMICAL_CELL_16K,
+                RADIOACTIVE_CHEMICAL_CELL_64K,
+                RADIOACTIVE_CHEMICAL_CELL_256K,
+                RADIOACTIVE_CHEMICAL_CELL_1M);
+    }
 
     public static List<ItemDefinition<?>> getCells() {
         return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);
