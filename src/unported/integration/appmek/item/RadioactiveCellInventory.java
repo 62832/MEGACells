@@ -26,11 +26,9 @@ public class RadioactiveCellInventory implements StorageCell {
     private static final String KEY = "key";
     private static final String COUNT = "count";
 
-    static final int MAX_BYTES = 256;
-    private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
-
     private final ISaveProvider container;
     private final ItemStack stack;
+    private final long maxMB; // Add maxMB variable
 
     private AEKey storedChemical;
     private final MekanismKey filterChemical;
@@ -47,6 +45,9 @@ public class RadioactiveCellInventory implements StorageCell {
 
         storedChemical = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
         chemAmount = getTag().getLong(COUNT);
+
+        // Set maxMB based on the cell tier
+        maxMB = cell.getTier().getMaxMB();
     }
 
     private CompoundTag getTag() {
@@ -59,11 +60,11 @@ public class RadioactiveCellInventory implements StorageCell {
             return CellState.EMPTY;
         }
 
-        if (chemAmount == MAX_MB) {
+        if (chemAmount == maxMB) {
             return CellState.FULL;
         }
 
-        if (chemAmount > MAX_MB / 2) {
+        if (chemAmount > maxMB / 2) {
             return CellState.TYPES_FULL;
         }
 
@@ -116,11 +117,11 @@ public class RadioactiveCellInventory implements StorageCell {
             return 0;
         }
 
-        if (chemAmount == MAX_MB) {
+        if (chemAmount == maxMB) {
             return 0;
         }
 
-        long remainingAmount = Math.max(0, MAX_MB - chemAmount);
+        long remainingAmount = Math.max(0, maxMB - chemAmount);
         if (amount > remainingAmount) {
             amount = remainingAmount;
         }
