@@ -74,11 +74,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         MEGAItems.getItemPortables().forEach(cell -> portable(cell, itemPortableHousing));
         MEGAItems.getFluidPortables().forEach(cell -> portable(cell, fluidPortableHousing));
 
-        existing.trackGenerated(AppEng.makeId("block/drive/drive_cell"), MODEL);
-        driveCell("mega_item_cell");
-        driveCell("mega_fluid_cell");
-        driveCell("bulk_item_cell");
-
         var craftingPattern =
                 AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath());
         existing.trackGenerated(craftingPattern, ModelProvider.TEXTURE);
@@ -244,11 +239,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"));
     }
      */
-
-    private void driveCell(String texture) {
-        var path = "block/drive/cells/" + texture;
-        models().singleTexture(path, AppEng.makeId("block/drive/drive_cell"), "cell", MEGACells.makeId(path));
-    }
 
     private void interfaceOrProviderPart(ItemDefinition<?> part) {
         var id = part.id().getPath();
