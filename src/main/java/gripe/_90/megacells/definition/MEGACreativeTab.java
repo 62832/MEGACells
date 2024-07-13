@@ -2,8 +2,9 @@ package gripe._90.megacells.definition;
 
 import java.util.ArrayList;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseBlockItem;
@@ -14,13 +15,16 @@ import appeng.items.AEBaseItem;
 import gripe._90.megacells.MEGACells;
 
 public final class MEGACreativeTab {
-    public static final ResourceLocation ID = MEGACells.makeId("tab");
+    public static final DeferredRegister<CreativeModeTab> DR =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MEGACells.MODID);
 
-    public static final CreativeModeTab TAB = CreativeModeTab.builder()
-            .title(MEGATranslations.ModName.text())
-            .icon(MEGAItems.ITEM_CELL_256M::stack)
-            .displayItems(MEGACreativeTab::populateTab)
-            .build();
+    static {
+        DR.register("tab", () -> CreativeModeTab.builder()
+                .title(MEGATranslations.ModName.text())
+                .icon(MEGAItems.ITEM_CELL_256M::stack)
+                .displayItems(MEGACreativeTab::populateTab)
+                .build());
+    }
 
     private static void populateTab(CreativeModeTab.ItemDisplayParameters params, CreativeModeTab.Output output) {
         var itemDefs = new ArrayList<ItemDefinition<?>>();

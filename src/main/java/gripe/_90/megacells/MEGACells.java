@@ -11,8 +11,8 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,10 +36,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.registries.RegisterEvent;
 
 import appeng.api.AECapabilities;
-import appeng.api.client.StorageCellModels;
 import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.GridServices;
@@ -89,14 +87,14 @@ public class MEGACells {
         MEGABlocks.DR.register(modEventBus);
         MEGAItems.DR.register(modEventBus);
         MEGABlockEntities.DR.register(modEventBus);
+        MEGAMenus.DR.register(modEventBus);
+        MEGAComponents.DR.register(modEventBus);
+        MEGACreativeTab.DR.register(modEventBus);
 
-        modEventBus.addListener(MEGACells::registerAll);
         modEventBus.addListener(MEGACells::initUpgrades);
         modEventBus.addListener(MEGACells::initStorageCells);
         modEventBus.addListener(MEGACells::initVillagerTrades);
         modEventBus.addListener(MEGACells::initCapabilities);
-
-        MEGAComponents.DEFERRED.register(modEventBus);
 
         initCompression();
         initLavaTransform();
@@ -110,12 +108,6 @@ public class MEGACells {
 
     public static ResourceLocation makeId(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
-    }
-
-    private static void registerAll(RegisterEvent event) {
-        event.register(Registries.MENU, helper -> MEGAMenus.getMenuTypes().forEach(helper::register));
-
-        event.register(Registries.CREATIVE_MODE_TAB, MEGACreativeTab.ID, () -> MEGACreativeTab.TAB);
     }
 
     private static void initUpgrades(FMLCommonSetupEvent event) {
@@ -278,7 +270,6 @@ public class MEGACells {
             modEventBus.addListener(Client::initCraftingUnitModels);
             modEventBus.addListener(Client::initEnergyCellProps);
             modEventBus.addListener(Client::initItemColours);
-            modEventBus.addListener(Client::initStorageCellModels);
         }
 
         private static void initScreens(RegisterMenuScreensEvent event) {
@@ -332,22 +323,12 @@ public class MEGACells {
             portableCells.addAll(MEGAItems.getItemPortables());
             portableCells.addAll(MEGAItems.getFluidPortables());
 
-            event.register(BasicStorageCell::getColor, standardCells.toArray(new ItemLike[0]));
-            event.register(PortableCellItem::getColor, portableCells.toArray(new ItemLike[0]));
-        }
-
-        private static void initStorageCellModels(FMLClientSetupEvent event) {
-            event.enqueueWork(() -> {
-                var itemCell = makeId("block/drive/cells/mega_item_cell");
-                MEGAItems.getItemCells().forEach(cell -> StorageCellModels.registerModel(cell, itemCell));
-                MEGAItems.getItemPortables().forEach(cell -> StorageCellModels.registerModel(cell, itemCell));
-
-                var fluidCell = makeId("block/drive/cells/mega_item_cell");
-                MEGAItems.getFluidCells().forEach(cell -> StorageCellModels.registerModel(cell, fluidCell));
-                MEGAItems.getFluidPortables().forEach(cell -> StorageCellModels.registerModel(cell, fluidCell));
-
-                StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
-            });
+            event.register(
+                    (stack, tintIndex) -> FastColor.ARGB32.opaque(BasicStorageCell.getColor(stack, tintIndex)),
+                    standardCells.toArray(new ItemLike[0]));
+            event.register(
+                    (stack, tintIndex) -> FastColor.ARGB32.opaque(PortableCellItem.getColor(stack, tintIndex)),
+                    portableCells.toArray(new ItemLike[0]));
         }
     }
 }

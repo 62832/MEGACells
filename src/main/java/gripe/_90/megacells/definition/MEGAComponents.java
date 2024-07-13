@@ -21,7 +21,7 @@ import gripe._90.megacells.misc.DecompressionPattern;
 import io.netty.buffer.ByteBuf;
 
 public final class MEGAComponents {
-    public static final DeferredRegister<DataComponentType<?>> DEFERRED =
+    public static final DeferredRegister<DataComponentType<?>> DR =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MEGACells.MODID);
 
     public static final DataComponentType<AEKey> BULK_CELL_ITEM = register(
@@ -63,7 +63,7 @@ public final class MEGAComponents {
         var builder = DataComponentType.<T>builder();
         customizer.accept(builder);
         var componentType = builder.build();
-        DEFERRED.register(name, () -> componentType);
+        DR.register(name, () -> componentType);
         return componentType;
     }
 }
