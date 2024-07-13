@@ -7,12 +7,12 @@ import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 
-import appeng.core.AppEng;
 import appeng.helpers.InterfaceLogicHost;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.implementations.MenuTypeBuilder;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
@@ -30,8 +30,8 @@ public final class MEGAMenus {
 
     private static <C extends AEBaseMenu, I> MenuType<C> create(
             String id, MenuTypeBuilder.MenuFactory<C, I> factory, Class<I> host) {
-        var menu = MenuTypeBuilder.create(factory, host).build(id);
-        MENU_TYPES.put(AppEng.makeId(id), menu);
+        var menu = MenuTypeBuilder.create(factory, host).build(MEGACells.makeId(id));
+        MENU_TYPES.put(MEGACells.makeId(id), menu);
         return menu;
     }
 }

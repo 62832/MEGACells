@@ -1,15 +1,14 @@
 package gripe._90.megacells.definition;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
@@ -24,22 +23,19 @@ import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 
 @SuppressWarnings("unused")
 public final class MEGABlockEntities {
-    private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
+    public static final DeferredRegister<BlockEntityType<?>> DR =
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MEGACells.MODID);
 
-    public static Map<ResourceLocation, BlockEntityType<?>> getBEs() {
-        return Collections.unmodifiableMap(BLOCK_ENTITY_TYPES);
-    }
-
-    public static final BlockEntityType<EnergyCellBlockEntity> MEGA_ENERGY_CELL = create(
+    public static final Supplier<BlockEntityType<EnergyCellBlockEntity>> MEGA_ENERGY_CELL = create(
             "mega_energy_cell", EnergyCellBlockEntity.class, EnergyCellBlockEntity::new, MEGABlocks.MEGA_ENERGY_CELL);
 
-    public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_UNIT = create(
+    public static final Supplier<BlockEntityType<CraftingBlockEntity>> MEGA_CRAFTING_UNIT = create(
             "mega_crafting_unit",
             CraftingBlockEntity.class,
             CraftingBlockEntity::new,
             MEGABlocks.MEGA_CRAFTING_UNIT,
             MEGABlocks.CRAFTING_ACCELERATOR);
-    public static final BlockEntityType<CraftingBlockEntity> MEGA_CRAFTING_STORAGE = create(
+    public static final Supplier<BlockEntityType<CraftingBlockEntity>> MEGA_CRAFTING_STORAGE = create(
             "mega_crafting_storage",
             CraftingBlockEntity.class,
             CraftingBlockEntity::new,
@@ -48,15 +44,15 @@ public final class MEGABlockEntities {
             MEGABlocks.CRAFTING_STORAGE_16M,
             MEGABlocks.CRAFTING_STORAGE_64M,
             MEGABlocks.CRAFTING_STORAGE_256M);
-    public static final BlockEntityType<CraftingMonitorBlockEntity> MEGA_CRAFTING_MONITOR = create(
+    public static final Supplier<BlockEntityType<CraftingMonitorBlockEntity>> MEGA_CRAFTING_MONITOR = create(
             "mega_crafting_monitor",
             CraftingMonitorBlockEntity.class,
             CraftingMonitorBlockEntity::new,
             MEGABlocks.CRAFTING_MONITOR);
 
-    public static final BlockEntityType<MEGAInterfaceBlockEntity> MEGA_INTERFACE = create(
+    public static final Supplier<BlockEntityType<MEGAInterfaceBlockEntity>> MEGA_INTERFACE = create(
             "mega_interface", MEGAInterfaceBlockEntity.class, MEGAInterfaceBlockEntity::new, MEGABlocks.MEGA_INTERFACE);
-    public static final BlockEntityType<MEGAPatternProviderBlockEntity> MEGA_PATTERN_PROVIDER = create(
+    public static final Supplier<BlockEntityType<MEGAPatternProviderBlockEntity>> MEGA_PATTERN_PROVIDER = create(
             "mega_pattern_provider",
             MEGAPatternProviderBlockEntity.class,
             MEGAPatternProviderBlockEntity::new,
@@ -64,31 +60,31 @@ public final class MEGABlockEntities {
 
     @SuppressWarnings({"DataFlowIssue", "unchecked"})
     @SafeVarargs
-    private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(
+    private static <T extends AEBaseBlockEntity> Supplier<BlockEntityType<T>> create(
             String id,
             Class<T> entityClass,
             BlockEntityFactory<T> factory,
-            BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
-        if (blockDefinitions.length == 0) {
+            BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefs) {
+        if (blockDefs.length == 0) {
             throw new IllegalArgumentException();
         }
 
-        var blocks = Arrays.stream(blockDefinitions).map(BlockDefinition::block).toArray(AEBaseEntityBlock[]::new);
+        return DR.register(id, () -> {
+            var blocks = Arrays.stream(blockDefs).map(BlockDefinition::block).toArray(AEBaseEntityBlock[]::new);
 
-        var typeHolder = new AtomicReference<BlockEntityType<T>>();
-        var type = BlockEntityType.Builder.of((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks)
-                .build(null);
-        typeHolder.set(type);
-        BLOCK_ENTITY_TYPES.put(MEGACells.makeId(id), type);
+            var typeHolder = new AtomicReference<BlockEntityType<T>>();
+            var type = BlockEntityType.Builder.of((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks)
+                    .build(null);
+            typeHolder.set(type);
 
-        AEBaseBlockEntity.registerBlockEntityItem(type, blockDefinitions[0].asItem());
+            AEBaseBlockEntity.registerBlockEntityItem(type, blockDefs[0].asItem());
 
-        for (var block : blocks) {
-            var baseBlock = (AEBaseEntityBlock<T>) block;
-            baseBlock.setBlockEntity(entityClass, type, null, null);
-        }
+            for (var block : blocks) {
+                block.setBlockEntity(entityClass, type, null, null);
+            }
 
-        return type;
+            return type;
+        });
     }
 
     private interface BlockEntityFactory<T extends AEBaseBlockEntity> {

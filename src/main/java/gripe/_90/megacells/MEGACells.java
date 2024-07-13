@@ -86,6 +86,10 @@ public class MEGACells {
     public static final String MODID = "megacells";
 
     public MEGACells(ModContainer container, IEventBus modEventBus) {
+        MEGABlocks.DR.register(modEventBus);
+        MEGAItems.DR.register(modEventBus);
+        MEGABlockEntities.DR.register(modEventBus);
+
         modEventBus.addListener(MEGACells::registerAll);
         modEventBus.addListener(MEGACells::initUpgrades);
         modEventBus.addListener(MEGACells::initStorageCells);
@@ -109,15 +113,6 @@ public class MEGACells {
     }
 
     private static void registerAll(RegisterEvent event) {
-        MEGABlocks.getBlocks().forEach(block -> {
-            event.register(Registries.BLOCK, block.id(), block::block);
-            event.register(Registries.ITEM, block.id(), block::asItem);
-        });
-
-        MEGAItems.getItems().forEach(item -> event.register(Registries.ITEM, item.id(), item::asItem));
-
-        event.register(Registries.BLOCK_ENTITY_TYPE, helper -> MEGABlockEntities.getBEs()
-                .forEach(helper::register));
         event.register(Registries.MENU, helper -> MEGAMenus.getMenuTypes().forEach(helper::register));
 
         event.register(Registries.CREATIVE_MODE_TAB, MEGACreativeTab.ID, () -> MEGACreativeTab.TAB);
@@ -245,22 +240,23 @@ public class MEGACells {
 
     @SuppressWarnings("UnstableApiUsage")
     private static void initCapabilities(RegisterCapabilitiesEvent event) {
-        for (var type : MEGABlockEntities.getBEs().values()) {
+        for (var type : MEGABlockEntities.DR.getEntries()) {
             event.registerBlockEntity(
-                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type, (be, context) -> (IInWorldGridNodeHost) be);
+                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type.get(), (be, context) -> (IInWorldGridNodeHost) be);
         }
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                MEGABlockEntities.MEGA_INTERFACE,
+                MEGABlockEntities.MEGA_INTERFACE.get(),
                 (be, context) -> be.getInterfaceLogic().getStorage());
         event.registerBlockEntity(
-                AECapabilities.ME_STORAGE, MEGABlockEntities.MEGA_INTERFACE, (be, context) -> be.getInterfaceLogic()
-                        .getInventory());
+                AECapabilities.ME_STORAGE,
+                MEGABlockEntities.MEGA_INTERFACE.get(),
+                (be, context) -> be.getInterfaceLogic().getInventory());
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                MEGABlockEntities.MEGA_PATTERN_PROVIDER,
+                MEGABlockEntities.MEGA_PATTERN_PROVIDER.get(),
                 (be, context) -> be.getLogic().getReturnInv());
 
         MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
@@ -309,7 +305,8 @@ public class MEGACells {
                     ItemBlockRenderTypes.setRenderLayer(type.getDefinition().block(), RenderType.cutout());
                 }
 
-                BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);
+                BlockEntityRenderers.register(
+                        MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
             });
         }
 

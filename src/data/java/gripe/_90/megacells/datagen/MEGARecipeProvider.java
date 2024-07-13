@@ -421,7 +421,7 @@ public class MEGARecipeProvider extends RecipeProvider {
     private static void portable(
             RecipeOutput output, ItemDefinition<?> cell, ItemDefinition<?> component, ItemDefinition<?> housing) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
-                .requires(AEBlocks.CHEST)
+                .requires(AEBlocks.ME_CHEST)
                 .requires(component)
                 .requires(AEBlocks.DENSE_ENERGY_CELL)
                 .requires(housing)

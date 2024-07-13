@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.block.AEBaseBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
@@ -22,6 +23,7 @@ import appeng.block.networking.EnergyCellBlockItem;
 import appeng.core.definitions.AEItems;
 import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
+import appeng.core.definitions.ItemDefinition;
 import appeng.decorative.AEDecorativeBlock;
 
 import gripe._90.megacells.MEGACells;
@@ -32,6 +34,8 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
 
 public final class MEGABlocks {
+    public static final DeferredRegister.Blocks DR = DeferredRegister.createBlocks(MEGACells.MODID);
+
     private static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
 
     public static List<BlockDefinition<?>> getBlocks() {
@@ -117,10 +121,10 @@ public final class MEGABlocks {
             String id,
             Supplier<T> blockSupplier,
             BiFunction<Block, Item.Properties, BlockItem> itemFactory) {
-        var block = blockSupplier.get();
-        var item = itemFactory.apply(block, new Item.Properties());
+        var block = DR.register(id, blockSupplier);
+        var item = MEGAItems.DR.register(id, () -> itemFactory.apply(block.get(), new Item.Properties()));
 
-        var definition = new BlockDefinition<>(englishName, MEGACells.makeId(id), block, item);
+        var definition = new BlockDefinition<>(englishName, block, new ItemDefinition<>(englishName, item));
         BLOCKS.add(definition);
         return definition;
     }

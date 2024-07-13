@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import net.minecraft.Util;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.parts.IPart;
@@ -35,6 +36,8 @@ import gripe._90.megacells.item.part.MEGAPatternProviderPartItem;
 import gripe._90.megacells.misc.DecompressionPattern;
 
 public final class MEGAItems {
+    public static final DeferredRegister.Items DR = DeferredRegister.createItems(MEGACells.MODID);
+
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
 
     public static List<ItemDefinition<?>> getItems() {
@@ -210,7 +213,7 @@ public final class MEGAItems {
 
     public static <T extends Item> ItemDefinition<T> item(
             String englishName, String id, Function<Item.Properties, T> factory) {
-        var definition = new ItemDefinition<>(englishName, MEGACells.makeId(id), factory.apply(new Item.Properties()));
+        var definition = new ItemDefinition<>(englishName, DR.registerItem(id, factory));
         ITEMS.add(definition);
         return definition;
     }

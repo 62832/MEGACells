@@ -41,17 +41,13 @@ run {
         versionCatalogs {
             create("libs") {
                 version("minecraft", "1.21")
-                version("neoforge", "21.0.13-beta")
+                version("neoforge", "21.0.87-beta")
                 version("parchment", "2024.06.23")
                 
-                version("ae2", "19.0.8-alpha")
+                version("ae2", "19.0.12-alpha")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
-                library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("jqaoHVCd")
-
-                val minecraftVersion = "1.20.4"
-                library("mekanism", "mekanism", "Mekanism").version("$minecraftVersion-10.5.10.32")
-                library("appmek", "maven.modrinth", "applied-mekanistics").version("BG93ZC9u")
+                library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("WyPbb8sE")
             }
         }
     }

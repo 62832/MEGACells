@@ -119,7 +119,7 @@ public class DecompressionPattern implements IPatternDetails {
                 Encoded::new);
 
         private boolean containsMissingContent() {
-            return AEItems.MISSING_CONTENT.isSameAs(base) || AEItems.MISSING_CONTENT.isSameAs(variant);
+            return AEItems.MISSING_CONTENT.is(base) || AEItems.MISSING_CONTENT.is(variant);
         }
     }
 }

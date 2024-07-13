@@ -7,6 +7,7 @@ import net.minecraft.world.item.CreativeModeTab;
 
 import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseBlockItem;
+import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.AEBaseItem;
 
@@ -24,7 +25,8 @@ public final class MEGACreativeTab {
     private static void populateTab(CreativeModeTab.ItemDisplayParameters params, CreativeModeTab.Output output) {
         var itemDefs = new ArrayList<ItemDefinition<?>>();
         itemDefs.addAll(MEGAItems.getItems());
-        itemDefs.addAll(MEGABlocks.getBlocks());
+        itemDefs.addAll(
+                MEGABlocks.getBlocks().stream().map(BlockDefinition::item).toList());
 
         for (var itemDef : itemDefs) {
             var item = itemDef.asItem();

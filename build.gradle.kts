@@ -14,11 +14,6 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 dependencies {
     implementation(libs.ae2)
     implementation(libs.ae2wtlib)
-
-    implementation(libs.appmek)
-    compileOnly(libs.mekanism)
-    compileOnly(variantOf(libs.mekanism) { classifier("generators") })
-    runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
 }
 
 sourceSets {

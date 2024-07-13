@@ -7,19 +7,14 @@ import net.neoforged.fml.loading.moddiscovery.ModInfo;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 public enum Addons {
-    APPMEK("appmek"),
-    APPBOT("appbot"),
-    ARSENG("arseng"),
-    AE2WTLIB("ae2wtlib");
-
-    private final String modId;
-
-    Addons(String modId) {
-        this.modId = modId;
-    }
+    APPMEK,
+    APPBOT,
+    ARSENG,
+    APPLIEDE,
+    AE2WTLIB;
 
     public String getModId() {
-        return modId;
+        return name().toLowerCase();
     }
 
     public boolean isLoaded() {
