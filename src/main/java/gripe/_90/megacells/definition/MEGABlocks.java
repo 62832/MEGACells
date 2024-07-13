@@ -51,6 +51,15 @@ public final class MEGABlocks {
                     .mapColor(MapColor.METAL)
                     .sound(SoundType.METAL)),
             (b, p) -> new AEBaseBlockItem(b, p.fireResistant()));
+    public static final BlockDefinition<AEDecorativeBlock> SKY_BRONZE_BLOCK = block(
+            "Sky Bronze Block",
+            "sky_bronze_block",
+            () -> new AEDecorativeBlock(BlockBehaviour.Properties.of()
+                    .strength(3.0f, 12.0f)
+                    .requiresCorrectToolForDrops()
+                    .mapColor(MapColor.METAL)
+                    .sound(SoundType.METAL)),
+            (b, p) -> new AEBaseBlockItem(b, p.fireResistant()));
 
     public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block(
             "Superdense Energy Cell",

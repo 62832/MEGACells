@@ -1,4 +1,4 @@
-// 1.21	2024-07-13T20:04:03.084690949	Block States / Models
+// 1.21	2024-07-13T20:28:57.674621144	Block States / Models
 8d69a3c391bcb75b5aac370510d15fa9c367b200 assets/megacells/blockstates/16m_crafting_storage.json
 6b8ebbdecbd556e59c1c0d9abb4222d5de046e9a assets/megacells/blockstates/1m_crafting_storage.json
 c716f5bd44bda4274f6e5f2c2f2b09f6223a8de7 assets/megacells/blockstates/256m_crafting_storage.json
@@ -10,6 +10,7 @@ ffcec85500c3f3bd8dce340cd81836349acb9977 assets/megacells/blockstates/mega_craft
 28b545d74b4d84387000c0bce9f707febfab5e53 assets/megacells/blockstates/mega_energy_cell.json
 2a51df6e4749b03b2a70ac1607924b2b244b9f07 assets/megacells/blockstates/mega_interface.json
 a4b110cac74dc93ea009b31c56b3fc64d98bab56 assets/megacells/blockstates/mega_pattern_provider.json
+cc9ffc179cbf680c2e833a0b1d1dfb11c6e60cd0 assets/megacells/blockstates/sky_bronze_block.json
 fc6f383043383d52297758a5cab61a65ef94cf3a assets/megacells/blockstates/sky_steel_block.json
 1e813a6d19e9beb2ab1f8ae9e71ce5e287e9a71a assets/megacells/models/block/crafting/16m_storage.json
 bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f assets/megacells/models/block/crafting/16m_storage_formed.json
@@ -35,6 +36,7 @@ af7df74bf2e64274b07974fb48fa1d4300476634 assets/megacells/models/block/mega_ener
 cbcba8ba0487fbc3d29422589e6f32683c6329c8 assets/megacells/models/block/mega_interface.json
 a3715867175b3df82ed667657dc1b7a1d17098c2 assets/megacells/models/block/mega_pattern_provider.json
 b530550a2039aed047ad8aed48ad1ac082282458 assets/megacells/models/block/mega_pattern_provider_oriented.json
+39756f78f609fac3f952419c4694bdd2daf29b85 assets/megacells/models/block/sky_bronze_block.json
 17b74ff4589e3a2dfc390daa7667751f8cc191e3 assets/megacells/models/block/sky_steel_block.json
 cc3481b44d6dadbe5c08fd8f16249d6daac6152b assets/megacells/models/item/16m_crafting_storage.json
 c1c569ee3162be68838b475f03da688f251b7eff assets/megacells/models/item/1m_crafting_storage.json
@@ -84,6 +86,8 @@ a05e420a2c33c6766dadc6510ccd17d424cb711a assets/megacells/models/item/portable_i
 4ad6478c222fdfc833737fe2eac7d669ae74527b assets/megacells/models/item/portable_item_cell_4m.json
 16680ca3c70041ef4b2e8cc98c31847a756febce assets/megacells/models/item/portable_item_cell_64m.json
 8b14c7b99697775bf466df16fb333bb0f30c2477 assets/megacells/models/item/printed_accumulation_processor.json
+75342131d48da26641ba6bc411dc3693455dda9b assets/megacells/models/item/sky_bronze_block.json
+2080b6c476647a6a2051e426e1d0d47bfac10563 assets/megacells/models/item/sky_bronze_ingot.json
 a34d5ff80fdbb6800abfe3b530db2f7a49fd7c01 assets/megacells/models/item/sky_steel_block.json
 7b548bcd143b85ffdfd84e5eee68de434954ef85 assets/megacells/models/item/sky_steel_ingot.json
 4b0499ba14950b3dea8b594651306d9f4e909f1f assets/megacells/models/part/mega_interface.json

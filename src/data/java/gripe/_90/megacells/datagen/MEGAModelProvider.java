@@ -43,6 +43,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         basicItem(MEGAItems.SKY_STEEL_INGOT);
+        basicItem(MEGAItems.SKY_BRONZE_INGOT);
 
         basicItem(MEGAItems.ACCUMULATION_PROCESSOR);
         basicItem(MEGAItems.ACCUMULATION_PROCESSOR_PRINT);
@@ -85,6 +86,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                         craftingPattern);
 
         simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));
+        simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.MEGA_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_INTERFACE.block()));
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);

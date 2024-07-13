@@ -23,7 +23,11 @@ public class MEGADataGenerators {
         var registries = event.getLookupProvider();
         generator.addProvider(event.includeServer(), new MEGARecipeProvider(output, registries));
         generator.addProvider(event.includeServer(), new MEGALootProvider(output, registries));
-        generator.addProvider(event.includeServer(), new MEGATagProvider.BlockTags(output, registries, existing));
-        generator.addProvider(event.includeServer(), new MEGATagProvider.ItemTags(output, registries, existing));
+
+        var blockTags = new MEGATagProvider.BlockTags(output, registries, existing);
+        generator.addProvider(event.includeServer(), blockTags);
+        generator.addProvider(
+                event.includeServer(),
+                new MEGATagProvider.ItemTags(output, registries, blockTags.contentsGetter(), existing));
     }
 }

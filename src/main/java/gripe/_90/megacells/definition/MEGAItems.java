@@ -46,6 +46,8 @@ public final class MEGAItems {
 
     public static final ItemDefinition<MaterialItem> SKY_STEEL_INGOT =
             item("Sky Steel Ingot", "sky_steel_ingot", p -> new MaterialItem(p.fireResistant()));
+    public static final ItemDefinition<MaterialItem> SKY_BRONZE_INGOT =
+            item("Sky Bronze Ingot", "sky_bronze_ingot", p -> new MaterialItem(p.fireResistant()));
 
     public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRESS =
             item("Inscriber Accumulation Press", "accumulation_processor_press", MaterialItem::new);

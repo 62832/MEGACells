@@ -1,4 +1,4 @@
-// 1.21	2024-07-13T20:04:03.083433179	Loot Tables
+// 1.21	2024-07-13T20:28:57.673201084	Loot Tables
 707d0eccda1635750a24b8e2c508c9697b5bcee8 data/megacells/loot_table/blocks/16m_crafting_storage.json
 9383058b7682f02218b366dfa83b4932679957ed data/megacells/loot_table/blocks/1m_crafting_storage.json
 921f9b4082cf3a018df4d23e15d3e0ac293e2c07 data/megacells/loot_table/blocks/256m_crafting_storage.json
@@ -10,4 +10,5 @@ b960beab6b922cccf4e34d20a2654ae5e5f14ce4 data/megacells/loot_table/blocks/64m_cr
 3367c57fcd1c21ba43d54702f4dab4bb0bd560d9 data/megacells/loot_table/blocks/mega_energy_cell.json
 081145e945afcaf36cbd0f3a526f5f8700ad7c98 data/megacells/loot_table/blocks/mega_interface.json
 b6cf66f67b61f4fc8737f32b9a2e275da641502f data/megacells/loot_table/blocks/mega_pattern_provider.json
+0c6464bb5b798541059247715ecfa9d53cdfdeb1 data/megacells/loot_table/blocks/sky_bronze_block.json
 e0e08740ef7b4e7d30181ef36015058ec1535116 data/megacells/loot_table/blocks/sky_steel_block.json

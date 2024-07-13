@@ -10,6 +10,7 @@
   "block.megacells.mega_energy_cell": "Superdense Energy Cell",
   "block.megacells.mega_interface": "MEGA Interface",
   "block.megacells.mega_pattern_provider": "MEGA Pattern Provider",
+  "block.megacells.sky_bronze_block": "Sky Bronze Block",
   "block.megacells.sky_steel_block": "Sky Steel Block",
   "gui.megacells.ModName": "MEGA Cells",
   "gui.tooltips.megacells.ALot": "A lot.",
@@ -63,5 +64,6 @@
   "item.megacells.portable_item_cell_4m": "4M Portable Item Cell",
   "item.megacells.portable_item_cell_64m": "64M Portable Item Cell",
   "item.megacells.printed_accumulation_processor": "Printed Accumulation Circuit",
+  "item.megacells.sky_bronze_ingot": "Sky Bronze Ingot",
   "item.megacells.sky_steel_ingot": "Sky Steel Ingot"
 }

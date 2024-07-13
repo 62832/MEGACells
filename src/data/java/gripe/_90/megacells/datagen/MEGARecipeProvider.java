@@ -56,19 +56,19 @@ public class MEGARecipeProvider extends RecipeProvider {
         component(output, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem(), null);
 
         housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
 
-        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, ConventionTags.IRON_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
 
-        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, ConventionTags.COPPER_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
 
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -95,6 +95,18 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_sky_steel_ingot", has(MEGATags.SKY_STEEL_INGOT))
                 .save(output, MEGACells.makeId("crafting/sky_steel_ingot_from_sky_steel_block"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_BRONZE_BLOCK)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', MEGATags.SKY_BRONZE_INGOT)
+                .unlockedBy("has_sky_bronze_ingot", has(MEGATags.SKY_BRONZE_INGOT))
+                .save(output, MEGACells.makeId("crafting/sky_bronze_block"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.SKY_BRONZE_INGOT, 9)
+                .requires(MEGABlocks.SKY_BRONZE_BLOCK)
+                .unlockedBy("has_sky_bronze_ingot", has(MEGATags.SKY_BRONZE_INGOT))
+                .save(output, MEGACells.makeId("crafting/sky_bronze_ingot_from_sky_bronze_block"));
+
         TransformRecipeBuilder.transform(
                 output,
                 MEGACells.makeId("transform/sky_steel_ingot"),
@@ -103,6 +115,15 @@ public class MEGARecipeProvider extends RecipeProvider {
                 TransformCircumstance.fluid(FluidTags.LAVA),
                 Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
                 Ingredient.of(ConventionTags.IRON_INGOT),
+                Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
+        TransformRecipeBuilder.transform(
+                output,
+                MEGACells.makeId("transform/sky_bronze_ingot"),
+                MEGAItems.SKY_BRONZE_INGOT,
+                2,
+                TransformCircumstance.fluid(FluidTags.LAVA),
+                Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
+                Ingredient.of(ConventionTags.COPPER_INGOT),
                 Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
 
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)
