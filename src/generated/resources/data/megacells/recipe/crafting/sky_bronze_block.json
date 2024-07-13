@@ -3,7 +3,7 @@
   "category": "building",
   "key": {
     "#": {
-      "tag": "forge:ingots/sky_bronze"
+      "tag": "c:ingots/sky_bronze"
     }
   },
   "pattern": [

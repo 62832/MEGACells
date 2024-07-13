@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#forge:ingots/sky_steel"
+            "items": "#c:ingots/sky_steel"
           }
         ]
       },
