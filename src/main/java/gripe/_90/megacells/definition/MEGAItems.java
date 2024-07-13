@@ -202,7 +202,8 @@ public final class MEGAItems {
         return item(
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
-                p -> new MEGAPortableCell(p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x80caff));
+                p -> new MEGAPortableCell(
+                        p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x80caff));
     }
 
     private static <T extends IPart> ItemDefinition<PartItem<T>> part(

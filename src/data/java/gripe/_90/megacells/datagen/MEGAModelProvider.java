@@ -29,8 +29,6 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 
-import static appeng.core.AppEng.makeId;
-
 public class MEGAModelProvider extends AE2BlockStateProvider {
     private static final ExistingFileHelper.ResourceType MODEL =
             new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");
@@ -232,10 +230,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         existing.trackGenerated(housing, ModelProvider.TEXTURE);
 
         itemModels()
-                .singleTexture(
-                id,
-                mcLoc("item/generated"),
-                "layer0", housing)
+                .singleTexture(id, mcLoc("item/generated"), "layer0", housing)
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
                 .texture("layer2", MEGACells.makeId("item/cell/portable/portable_cell_screen"))
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
