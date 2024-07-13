@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sky_steel_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#forge:ingots/sky_steel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:crafting/sky_steel_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sky_steel_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:crafting/sky_steel_block"
+    ]
+  }
+}

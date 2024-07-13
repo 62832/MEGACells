@@ -1,0 +1,16 @@
+{
+  "values": [
+    "megacells:sky_steel_block",
+    "megacells:mega_energy_cell",
+    "megacells:mega_crafting_unit",
+    "megacells:mega_crafting_accelerator",
+    "megacells:1m_crafting_storage",
+    "megacells:4m_crafting_storage",
+    "megacells:16m_crafting_storage",
+    "megacells:64m_crafting_storage",
+    "megacells:256m_crafting_storage",
+    "megacells:mega_crafting_monitor",
+    "megacells:mega_interface",
+    "megacells:mega_pattern_provider"
+  ]
+}

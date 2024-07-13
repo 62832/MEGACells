@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "megacells:compression_card"
+    },
+    "A": {
+      "item": "megacells:accumulation_processor"
+    },
+    "C": {
+      "item": "ae2:calculation_processor"
+    },
+    "E": {
+      "item": "ae2:engineering_processor"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "L": {
+      "item": "ae2:logic_processor"
+    }
+  },
+  "pattern": [
+    "IAI",
+    "C#E",
+    "ILI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:decompression_module"
+  }
+}

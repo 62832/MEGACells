@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_accumulation_processor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:accumulation_processor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_cell_component_256k": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2:cell_component_256k"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/cell_component_1m"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_accumulation_processor",
+      "has_cell_component_256k"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/cell_component_1m"
+    ]
+  }
+}

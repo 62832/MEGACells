@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2:pattern_provider"
+    },
+    {
+      "item": "megacells:accumulation_processor"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:mega_pattern_provider"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:quartz_vibrant_glass"
+    },
+    "b": {
+      "item": "ae2:sky_dust"
+    },
+    "d": {
+      "tag": "forge:ingots/sky_steel"
+    }
+  },
+  "pattern": [
+    "aba",
+    "b b",
+    "ddd"
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:mega_item_cell_housing"
+  }
+}

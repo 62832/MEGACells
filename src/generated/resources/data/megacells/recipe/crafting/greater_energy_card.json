@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2:advanced_card"
+    },
+    {
+      "item": "megacells:mega_energy_cell"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:greater_energy_card"
+  }
+}

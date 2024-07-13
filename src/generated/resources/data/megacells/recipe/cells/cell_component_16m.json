@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:dusts/ender_pearl"
+    },
+    "b": {
+      "item": "megacells:accumulation_processor"
+    },
+    "c": {
+      "item": "megacells:cell_component_4m"
+    },
+    "d": {
+      "item": "ae2:quartz_vibrant_glass"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cdc",
+    "aca"
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:cell_component_16m"
+  }
+}

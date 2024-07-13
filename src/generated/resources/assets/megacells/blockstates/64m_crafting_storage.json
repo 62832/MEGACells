@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "formed=false": {
+      "model": "megacells:block/crafting/64m_storage"
+    },
+    "formed=true": {
+      "model": "megacells:block/crafting/64m_storage_formed"
+    }
+  }
+}

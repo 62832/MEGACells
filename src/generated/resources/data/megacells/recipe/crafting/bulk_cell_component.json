@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:sky_dust"
+    },
+    "b": {
+      "item": "ae2:spatial_cell_component_2"
+    },
+    "c": {
+      "item": "megacells:accumulation_processor"
+    },
+    "d": {
+      "item": "ae2:quartz_vibrant_glass"
+    },
+    "e": {
+      "item": "megacells:cell_component_1m"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cdc",
+    "aea"
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:bulk_cell_component"
+  }
+}

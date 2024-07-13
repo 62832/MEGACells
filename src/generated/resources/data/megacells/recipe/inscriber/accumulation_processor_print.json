@@ -1,0 +1,16 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "middle": {
+      "tag": "forge:ingots/sky_steel"
+    },
+    "top": {
+      "item": "megacells:accumulation_processor_press"
+    }
+  },
+  "mode": "inscribe",
+  "result": {
+    "count": 1,
+    "id": "megacells:printed_accumulation_processor"
+  }
+}

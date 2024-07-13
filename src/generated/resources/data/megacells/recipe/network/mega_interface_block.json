@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "megacells:cable_mega_interface"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:mega_interface"
+  }
+}

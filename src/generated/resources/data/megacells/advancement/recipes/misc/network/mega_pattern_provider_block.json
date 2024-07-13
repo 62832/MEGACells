@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cable_mega_pattern_provider": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:cable_mega_pattern_provider"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:network/mega_pattern_provider_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cable_mega_pattern_provider"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:network/mega_pattern_provider_block"
+    ]
+  }
+}

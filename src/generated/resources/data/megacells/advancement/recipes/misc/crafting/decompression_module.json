@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_accumulation_processor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:accumulation_processor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_compression_card": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:compression_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:crafting/decompression_module"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_accumulation_processor",
+      "has_compression_card"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:crafting/decompression_module"
+    ]
+  }
+}

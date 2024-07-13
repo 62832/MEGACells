@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2:advanced_card"
+    },
+    {
+      "item": "ae2:matter_ball"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:compression_card"
+  }
+}

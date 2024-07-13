@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:quartz",
+    "minecraft:glowstone_dust",
+    "minecraft:amethyst_shard",
+    "minecraft:magma_cream",
+    "minecraft:clay_ball",
+    "minecraft:melon_slice",
+    "minecraft:ice",
+    "minecraft:packed_ice",
+    {
+      "id": "#functionalstorage:ignore_crafting_check",
+      "required": false
+    }
+  ]
+}
