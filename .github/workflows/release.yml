@@ -21,8 +21,6 @@ jobs:
           distribution: 'temurin'
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Generate data
-        run: ./gradlew runData
       - name: Build release files
         id: build
         env:
