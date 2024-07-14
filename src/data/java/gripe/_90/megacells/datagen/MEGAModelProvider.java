@@ -7,7 +7,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -45,6 +44,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
     protected void registerStatesAndModels() {
         basicItem(MEGAItems.SKY_STEEL_INGOT);
         basicItem(MEGAItems.SKY_BRONZE_INGOT);
+        basicItem(MEGAItems.SKY_OSMIUM_INGOT);
 
         basicItem(MEGAItems.ACCUMULATION_PROCESSOR);
         basicItem(MEGAItems.ACCUMULATION_PROCESSOR_PRINT);
@@ -52,6 +52,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
 
         basicItem(MEGAItems.MEGA_ITEM_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_FLUID_CELL_HOUSING);
+        basicItem(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
 
         basicItem(MEGAItems.CELL_COMPONENT_1M);
         basicItem(MEGAItems.CELL_COMPONENT_4M);
@@ -59,6 +60,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.CELL_COMPONENT_64M);
         basicItem(MEGAItems.CELL_COMPONENT_256M);
         basicItem(MEGAItems.BULK_CELL_COMPONENT);
+        basicItem(MEGAItems.RADIOACTIVE_CELL_COMPONENT);
 
         basicItem(MEGAItems.GREATER_ENERGY_CARD);
         basicItem(MEGAItems.COMPRESSION_CARD);
@@ -66,18 +68,18 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         existing.trackGenerated(AppEng.makeId("item/storage_cell_led"), ModelProvider.TEXTURE);
         MEGAItems.getItemCells().forEach(this::cell);
         MEGAItems.getFluidCells().forEach(this::cell);
+        MEGAItems.getChemicalCells().forEach(this::cell);
         cell(MEGAItems.BULK_ITEM_CELL);
+        cell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
-        var itemPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_item_housing");
-        var fluidPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_fluid_housing");
-        existing.trackGenerated(itemPortableHousing, ModelProvider.TEXTURE);
-        existing.trackGenerated(fluidPortableHousing, ModelProvider.TEXTURE);
         existing.trackGenerated(AppEng.makeId("item/portable_cell_led"), ModelProvider.TEXTURE);
-        MEGAItems.getItemPortables().forEach(cell -> portable(cell, itemPortableHousing));
-        MEGAItems.getFluidPortables().forEach(cell -> portable(cell, fluidPortableHousing));
+        MEGAItems.getItemPortables().forEach(cell -> portable(cell, "item"));
+        MEGAItems.getFluidPortables().forEach(cell -> portable(cell, "fluid"));
+        MEGAItems.getChemicalPortables().forEach(cell -> portable(cell, "chemical"));
 
         MEGAItems.getAllCells().forEach(this::driveCell);
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
+        driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
 
         var craftingPattern =
                 AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath());
@@ -91,6 +93,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
 
         simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));
+        simpleBlockWithItem(MEGABlocks.SKY_OSMIUM_BLOCK.block(), cubeAll(MEGABlocks.SKY_OSMIUM_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.MEGA_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_INTERFACE.block()));
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);
@@ -194,24 +197,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                                         0);
                             }
                         }));
-
-        /*
-        if (Addons.APPMEK.isLoaded()) {
-            basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-
-            AppMekItems.getCells().forEach(this::cell);
-
-            var chemicalPortableHousing = MEGACells.makeId("item/cell/portable/portable_cell_chemical_housing");
-            existing.trackGenerated(chemicalPortableHousing, ModelProvider.TEXTURE);
-            AppMekItems.getPortables().forEach(cell -> portable(cell, chemicalPortableHousing));
-
-            basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT);
-            cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL);
-
-            driveCell("mega_chemical_cell");
-            driveCell("radioactive_chemical_cell");
-        }
-         */
     }
 
     private void basicItem(ItemDefinition<?> item) {
@@ -225,13 +210,16 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer1", AppEng.makeId("item/storage_cell_led"));
     }
 
-    private void portable(ItemDefinition<?> portable, ResourceLocation housing) {
+    private void portable(ItemDefinition<?> portable, String housingType) {
         var id = portable.id().getPath();
         var tierSuffix = id.substring(id.lastIndexOf('_'));
-        existing.trackGenerated(housing, ModelProvider.TEXTURE);
 
         itemModels()
-                .singleTexture(id, mcLoc("item/generated"), "layer0", housing)
+                .singleTexture(
+                        id,
+                        mcLoc("item/generated"),
+                        "layer0",
+                        MEGACells.makeId("item/cell/portable/portable_cell_" + housingType + "_housing"))
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
                 .texture("layer2", MEGACells.makeId("item/cell/portable/portable_cell_screen"))
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
@@ -269,15 +257,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                         builder.texture("#cell").cullface(Direction.NORTH).end())
                 .end();
     }
-
-    /*
-    private void portable(ItemDefinition<?> portable) {
-        var id = portable.id().getPath();
-        itemModels()
-                .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/cell/portable/" + id))
-                .texture("layer1", AppEng.makeId("item/portable_cell_led"));
-    }
-     */
 
     private void interfaceOrProviderPart(ItemDefinition<?> part) {
         var id = part.id().getPath();

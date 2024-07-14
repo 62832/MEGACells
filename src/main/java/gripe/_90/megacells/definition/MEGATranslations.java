@@ -15,6 +15,7 @@ public enum MEGATranslations implements LocalizationEnum {
     FilterChemicalUnsupported("Filter chemical unsupported!", Type.TOOLTIP),
     MismatchedFilter("Mismatched filter!", Type.TOOLTIP),
     ModName("MEGA Cells", Type.GUI),
+    NotInstalled("%s not installed.", Type.TOOLTIP),
     PartitionedFor("Partitioned for: %s", Type.TOOLTIP),
     ProcessingOnly("Supports processing patterns only.", Type.TOOLTIP),
     Quantity("Quantity: %s", Type.TOOLTIP),

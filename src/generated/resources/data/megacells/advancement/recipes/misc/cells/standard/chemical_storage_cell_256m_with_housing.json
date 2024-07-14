@@ -1,0 +1,49 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appmek"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_component_256m": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:cell_component_256m"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_mega_chemical_cell_housing": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:mega_chemical_cell_housing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/standard/chemical_storage_cell_256m_with_housing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cell_component_256m",
+      "has_mega_chemical_cell_housing"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/standard/chemical_storage_cell_256m_with_housing"
+    ]
+  }
+}

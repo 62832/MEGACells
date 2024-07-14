@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import net.minecraft.Util;
 import net.minecraft.world.item.Item;
@@ -27,6 +28,10 @@ import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.DummyIntegrationItem;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.DecompressionModulePart;
@@ -130,12 +135,45 @@ public final class MEGAItems {
             DecompressionModulePart.class,
             DecompressionModulePart::new);
 
+    public static final ItemDefinition<?> SKY_OSMIUM_INGOT = integrationItem(
+            "Sky Osmium Ingot",
+            "sky_osmium_ingot",
+            () -> MaterialItem::new,
+            Item.Properties::fireResistant,
+            Addons.APPMEK);
+    public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem(
+            "MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
+
+    public static final ItemDefinition<?> CHEMICAL_CELL_1M = chemCell(TIER_1M);
+    public static final ItemDefinition<?> CHEMICAL_CELL_4M = chemCell(TIER_4M);
+    public static final ItemDefinition<?> CHEMICAL_CELL_16M = chemCell(TIER_16M);
+    public static final ItemDefinition<?> CHEMICAL_CELL_64M = chemCell(TIER_64M);
+    public static final ItemDefinition<?> CHEMICAL_CELL_256M = chemCell(TIER_256M);
+
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_1M = chemPortable(TIER_1M);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_4M = chemPortable(TIER_4M);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_16M = chemPortable(TIER_16M);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_64M = chemPortable(TIER_64M);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M = chemPortable(TIER_256M);
+
+    public static final ItemDefinition<?> RADIOACTIVE_CELL_COMPONENT = integrationItem(
+            "MEGA Radioactive Storage Component", "radioactive_cell_component", () -> MaterialItem::new, Addons.APPMEK);
+    public static final ItemDefinition<?> RADIOACTIVE_CHEMICAL_CELL = integrationItem(
+            "MEGA Radioactive Chemical Storage Cell",
+            "radioactive_chemical_cell",
+            () -> RadioactiveCellItem::new,
+            Addons.APPMEK);
+
     public static List<ItemDefinition<BasicStorageCell>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
     }
 
     public static List<ItemDefinition<BasicStorageCell>> getFluidCells() {
         return List.of(FLUID_CELL_1M, FLUID_CELL_4M, FLUID_CELL_16M, FLUID_CELL_64M, FLUID_CELL_256M);
+    }
+
+    public static List<ItemDefinition<?>> getChemicalCells() {
+        return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);
     }
 
     public static List<ItemDefinition<? extends AbstractPortableCell>> getItemPortables() {
@@ -154,6 +192,15 @@ public final class MEGAItems {
                 PORTABLE_FLUID_CELL_16M,
                 PORTABLE_FLUID_CELL_64M,
                 PORTABLE_FLUID_CELL_256M);
+    }
+
+    public static List<ItemDefinition<?>> getChemicalPortables() {
+        return List.of(
+                PORTABLE_CHEMICAL_CELL_1M,
+                PORTABLE_CHEMICAL_CELL_4M,
+                PORTABLE_CHEMICAL_CELL_16M,
+                PORTABLE_CHEMICAL_CELL_64M,
+                PORTABLE_CHEMICAL_CELL_256M);
     }
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
@@ -202,6 +249,17 @@ public final class MEGAItems {
         return cell;
     }
 
+    private static ItemDefinition<?> chemCell(StorageTier tier) {
+        var cell = integrationItem(
+                tier.namePrefix().toUpperCase() + " MEGA Chemical Storage Cell",
+                "chemical_storage_cell_" + tier.namePrefix(),
+                () -> AppMekIntegration.createChemCell(tier),
+                p -> p.stacksTo(1),
+                Addons.APPMEK);
+        CELLS.add(new CellDefinition(cell, tier, "chemical"));
+        return cell;
+    }
+
     private static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
         var cell = item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
@@ -221,17 +279,47 @@ public final class MEGAItems {
         return cell;
     }
 
+    private static ItemDefinition<?> chemPortable(StorageTier tier) {
+        var cell = integrationItem(
+                tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
+                "portable_chemical_cell_" + tier.namePrefix(),
+                () -> AppMekIntegration.createChemPortable(tier),
+                p -> p.stacksTo(1),
+                Addons.APPMEK);
+        CELLS.add(new CellDefinition(cell, tier, "chemical"));
+        return cell;
+    }
+
     private static <T extends IPart> ItemDefinition<PartItem<T>> part(
             String englishName, String id, Class<T> partClass, Function<IPartItem<T>, T> factory) {
         PartModels.registerModels(PartModelsHelper.createModels(partClass));
         return item(englishName, id, p -> new PartItem<>(p, partClass, factory));
     }
 
-    public static <T extends Item> ItemDefinition<T> item(
+    private static <T extends Item> ItemDefinition<T> item(
             String englishName, String id, Function<Item.Properties, T> factory) {
         var definition = new ItemDefinition<>(englishName, DR.registerItem(id, factory));
         ITEMS.add(definition);
         return definition;
+    }
+
+    private static ItemDefinition<?> integrationItem(
+            String englishName,
+            String id,
+            Supplier<Function<Item.Properties, Item>> factory,
+            Function<Item.Properties, Item.Properties> propsCustomizer,
+            Addons addon) {
+        return item(
+                englishName,
+                id,
+                p -> addon.isLoaded()
+                        ? factory.get().apply(propsCustomizer.apply(p))
+                        : new DummyIntegrationItem(propsCustomizer.apply(p), addon));
+    }
+
+    private static ItemDefinition<?> integrationItem(
+            String englishName, String id, Supplier<Function<Item.Properties, Item>> factory, Addons addon) {
+        return integrationItem(englishName, id, factory, p -> p, addon);
     }
 
     public record CellDefinition(ItemDefinition<?> item, StorageTier tier, String keyType) {}

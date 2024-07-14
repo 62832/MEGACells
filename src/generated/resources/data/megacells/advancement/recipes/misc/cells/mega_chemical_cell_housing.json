@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appmek"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dusts/sky_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2:sky_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/mega_chemical_cell_housing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dusts/sky_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/mega_chemical_cell_housing"
+    ]
+  }
+}

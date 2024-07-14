@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "megacells:sky_osmium_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "megacells:sky_osmium_ingot"
+  }
+}

@@ -40,7 +40,8 @@ run {
     
         versionCatalogs {
             create("libs") {
-                version("minecraft", "1.21")
+                val mc = "1.21"
+                version("minecraft", mc)
                 version("neoforge", "21.0.87-beta")
                 version("parchment", "2024.06.23")
                 
@@ -48,6 +49,9 @@ run {
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("WyPbb8sE")
+
+                library("appmek", "maven.modrinth", "applied-mekanistics").version("yh6fz02r")
+                library("mekanism", "mekanism", "Mekanism").version("$mc-10.6.5.52")
             }
         }
     }

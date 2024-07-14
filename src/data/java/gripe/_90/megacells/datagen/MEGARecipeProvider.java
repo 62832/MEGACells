@@ -34,14 +34,17 @@ import appeng.recipes.handlers.InscriberRecipeBuilder;
 import appeng.recipes.transform.TransformCircumstance;
 import appeng.recipes.transform.TransformRecipeBuilder;
 
+import mekanism.common.registries.MekanismBlocks;
+import mekanism.common.registries.MekanismItems;
+import mekanism.generators.common.registries.GeneratorsBlocks;
+
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
+import gripe._90.megacells.integration.Addons;
 
 public class MEGARecipeProvider extends RecipeProvider {
-    private static final TagKey<Item> OSMIUM = ItemTags.create(ResourceLocation.parse("forge:ingots/osmium"));
-
     public MEGARecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -57,6 +60,7 @@ public class MEGARecipeProvider extends RecipeProvider {
 
         housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        housing(Addons.APPMEK.conditionalRecipe(output), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
 
         cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
@@ -70,6 +74,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
         cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
 
+        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -81,6 +91,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         portable(output, MEGAItems.PORTABLE_FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
+
+        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
@@ -107,6 +123,18 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_sky_bronze_ingot", has(MEGATags.SKY_BRONZE_INGOT))
                 .save(output, MEGACells.makeId("crafting/sky_bronze_ingot_from_sky_bronze_block"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_OSMIUM_BLOCK)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', MEGATags.SKY_OSMIUM_INGOT)
+                .unlockedBy("has_sky_osmium_ingot", has(MEGATags.SKY_OSMIUM_INGOT))
+                .save(output, MEGACells.makeId("crafting/sky_osmium_block"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MEGAItems.SKY_OSMIUM_INGOT, 9)
+                .requires(MEGABlocks.SKY_OSMIUM_BLOCK)
+                .unlockedBy("has_sky_osmium_ingot", has(MEGATags.SKY_OSMIUM_INGOT))
+                .save(output, MEGACells.makeId("crafting/sky_osmium_ingot_from_sky_osmium_block"));
+
         TransformRecipeBuilder.transform(
                 output,
                 MEGACells.makeId("transform/sky_steel_ingot"),
@@ -124,6 +152,15 @@ public class MEGARecipeProvider extends RecipeProvider {
                 TransformCircumstance.fluid(FluidTags.LAVA),
                 Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
                 Ingredient.of(ConventionTags.COPPER_INGOT),
+                Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
+        TransformRecipeBuilder.transform(
+                output,
+                MEGACells.makeId("transform/sky_osmium_ingot"),
+                MEGAItems.SKY_OSMIUM_INGOT,
+                2,
+                TransformCircumstance.fluid(FluidTags.LAVA),
+                Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED),
+                Ingredient.of(ItemTags.create(ResourceLocation.parse("c:ingots/osmium"))),
                 Ingredient.of(AEBlocks.SKY_STONE_BLOCK));
 
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 1)
@@ -262,107 +299,32 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAItems.MEGA_PATTERN_PROVIDER))
                 .save(output, MEGACells.makeId("network/mega_pattern_provider_block"));
 
-        /*
-        if (Addons.APPMEK.isLoaded()) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.MEGA_CHEMICAL_CELL_HOUSING)
-                    .pattern("aba")
-                    .pattern("b b")
-                    .pattern("ddd")
-                    .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                    .define('b', AEItems.SKY_DUST)
-                    .define('d', OSMIUM)
-                    .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
-                    .save(
-                            Addons.APPMEK.conditionalRecipe(output),
-                            MEGACells.makeId("cells/mega_chemical_cell_housing"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CELL_COMPONENT)
+                .pattern("aba")
+                .pattern("cdc")
+                .pattern("aea")
+                .define('a', AEItems.SKY_DUST)
+                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                .define('c', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
+                .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .define('e', AEItems.CELL_COMPONENT_256K)
+                .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
+                .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
+                .save(Addons.APPMEK.conditionalRecipe(output), MEGACells.makeId("crafting/radioactive_cell_component"));
 
-            cell(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_1M,
-                    MEGAItems.CELL_COMPONENT_1M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
-                    OSMIUM);
-            cell(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_4M,
-                    MEGAItems.CELL_COMPONENT_4M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
-                    OSMIUM);
-            cell(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_16M,
-                    MEGAItems.CELL_COMPONENT_16M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
-                    OSMIUM);
-            cell(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_64M,
-                    MEGAItems.CELL_COMPONENT_64M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
-                    OSMIUM);
-            cell(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.CHEMICAL_CELL_256M,
-                    MEGAItems.CELL_COMPONENT_256M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING,
-                    OSMIUM);
-
-            portable(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.PORTABLE_CHEMICAL_CELL_1M,
-                    MEGAItems.CELL_COMPONENT_1M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.PORTABLE_CHEMICAL_CELL_4M,
-                    MEGAItems.CELL_COMPONENT_4M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.PORTABLE_CHEMICAL_CELL_16M,
-                    MEGAItems.CELL_COMPONENT_16M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.PORTABLE_CHEMICAL_CELL_64M,
-                    MEGAItems.CELL_COMPONENT_64M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-            portable(
-                    Addons.APPMEK.conditionalRecipe(output),
-                    AppMekItems.PORTABLE_CHEMICAL_CELL_256M,
-                    MEGAItems.CELL_COMPONENT_256M,
-                    AppMekItems.MEGA_CHEMICAL_CELL_HOUSING);
-
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CELL_COMPONENT)
-                    .pattern("aba")
-                    .pattern("cdc")
-                    .pattern("aea")
-                    .define('a', AEItems.SKY_DUST)
-                    .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
-                    .define('c', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
-                    .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                    .define('e', AEItems.CELL_COMPONENT_256K)
-                    .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
-                    .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
-                    .save(
-                            Addons.APPMEK.conditionalRecipe(output),
-                            MEGACells.makeId("crafting/radioactive_cell_component"));
-
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, AppMekItems.RADIOACTIVE_CHEMICAL_CELL)
-                    .pattern("aba")
-                    .pattern("bcb")
-                    .pattern("ded")
-                    .define('a', GeneratorsBlocks.REACTOR_GLASS)
-                    .define('b', AEItems.SKY_DUST)
-                    .define('c', AppMekItems.RADIOACTIVE_CELL_COMPONENT)
-                    .define('d', MekanismItems.HDPE_SHEET)
-                    .define('e', MekanismItems.POLONIUM_PELLET)
-                    .unlockedBy("has_radioactive_cell_component", has(AppMekItems.RADIOACTIVE_CELL_COMPONENT))
-                    .save(
-                            Addons.APPMEK.conditionalRecipe(output),
-                            MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
-        }
-         */
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CHEMICAL_CELL)
+                .pattern("aba")
+                .pattern("bcb")
+                .pattern("ded")
+                .define('a', GeneratorsBlocks.REACTOR_GLASS)
+                .define('b', AEItems.SKY_DUST)
+                .define('c', MEGAItems.RADIOACTIVE_CELL_COMPONENT)
+                .define('d', MekanismItems.HDPE_SHEET)
+                .define('e', MekanismItems.POLONIUM_PELLET)
+                .unlockedBy("has_radioactive_cell_component", has(MEGAItems.RADIOACTIVE_CELL_COMPONENT))
+                .save(
+                        Addons.APPMEK.conditionalRecipe(output),
+                        MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
     }
 
     private static void component(

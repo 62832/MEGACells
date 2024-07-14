@@ -1,4 +1,4 @@
-package gripe._90.megacells.integration.appmek.item;
+package gripe._90.megacells.integration.appmek;
 
 import java.util.ArrayList;
 import java.util.List;

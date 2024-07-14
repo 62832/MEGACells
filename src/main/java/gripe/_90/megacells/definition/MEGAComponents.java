@@ -12,7 +12,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 
 import gripe._90.megacells.MEGACells;
@@ -24,8 +23,8 @@ public final class MEGAComponents {
     public static final DeferredRegister<DataComponentType<?>> DR =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, MEGACells.MODID);
 
-    public static final DataComponentType<AEKey> BULK_CELL_ITEM = register(
-            "bulk_item", builder -> builder.persistent(AEKey.CODEC).networkSynchronized(AEItemKey.STREAM_CODEC));
+    public static final DataComponentType<AEKey> BULK_CELL_ITEM =
+            register("bulk_item", builder -> builder.persistent(AEKey.CODEC).networkSynchronized(AEKey.STREAM_CODEC));
 
     private static final Codec<BigInteger> BIG_INTEGER_CODEC = Codec.STRING.comapFlatMap(
             str -> {
@@ -58,6 +57,13 @@ public final class MEGAComponents {
     public static final DataComponentType<DecompressionPattern.Encoded> ENCODED_DECOMPRESSION_PATTERN =
             register("encoded_decompression_pattern", builder -> builder.persistent(DecompressionPattern.Encoded.CODEC)
                     .networkSynchronized(DecompressionPattern.Encoded.STREAM_CODEC));
+
+    public static final DataComponentType<AEKey> RADIOACTIVE_CELL_CHEMICAL = register(
+            "radioactive_chemical", builder -> builder.persistent(AEKey.CODEC).networkSynchronized(AEKey.STREAM_CODEC));
+
+    public static final DataComponentType<Long> RADIOACTIVE_CELL_AMOUNT =
+            register("radioactive_amount", builder -> builder.persistent(Codec.LONG)
+                    .networkSynchronized(ByteBufCodecs.VAR_LONG));
 
     private static <T> DataComponentType<T> register(String name, Consumer<DataComponentType.Builder<T>> customizer) {
         var builder = DataComponentType.<T>builder();

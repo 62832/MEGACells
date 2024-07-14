@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import net.minecraft.world.item.BlockItem;
@@ -32,6 +33,8 @@ import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAInterfaceBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
+import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.DummyIntegrationBlock;
 
 public final class MEGABlocks {
     public static final DeferredRegister.Blocks DR = DeferredRegister.createBlocks(MEGACells.MODID);
@@ -60,6 +63,17 @@ public final class MEGABlocks {
                     .mapColor(MapColor.METAL)
                     .sound(SoundType.METAL)),
             (b, p) -> new AEBaseBlockItem(b, p.fireResistant()));
+    public static final BlockDefinition<?> SKY_OSMIUM_BLOCK = integrationBlock(
+            "Sky Osmium Block",
+            "sky_osmium_block",
+            () -> AEDecorativeBlock::new,
+            BlockBehaviour.Properties.of()
+                    .strength(7.5f, 24.0f)
+                    .requiresCorrectToolForDrops()
+                    .mapColor(MapColor.METAL)
+                    .sound(SoundType.METAL),
+            (b, p) -> new AEBaseBlockItem(b, p.fireResistant()),
+            Addons.APPMEK);
 
     public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block(
             "Superdense Energy Cell",
@@ -136,5 +150,23 @@ public final class MEGABlocks {
         var definition = new BlockDefinition<>(englishName, block, new ItemDefinition<>(englishName, item));
         BLOCKS.add(definition);
         return definition;
+    }
+
+    private static BlockDefinition<?> integrationBlock(
+            String englishName,
+            String id,
+            Supplier<Function<BlockBehaviour.Properties, Block>> blockFactory,
+            BlockBehaviour.Properties blockProps,
+            BiFunction<Block, Item.Properties, BlockItem> itemFactory,
+            Addons addon) {
+        if (!addon.isLoaded()) {
+            return block(
+                    englishName,
+                    id,
+                    () -> new DummyIntegrationBlock(blockProps),
+                    (b, p) -> new DummyIntegrationBlock.Item(b, p, addon));
+        }
+
+        return block(englishName, id, () -> blockFactory.get().apply(blockProps), itemFactory);
     }
 }

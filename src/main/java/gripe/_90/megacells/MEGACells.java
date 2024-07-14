@@ -52,13 +52,13 @@ import appeng.client.render.crafting.CraftingCubeModel;
 import appeng.client.render.crafting.CraftingMonitorRenderer;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
-import appeng.core.definitions.ItemDefinition;
 import appeng.core.localization.GuiText;
 import appeng.hooks.BuiltInModelHooks;
 import appeng.hotkeys.HotkeyActions;
 import appeng.init.InitVillager;
 import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
+import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.items.tools.powered.PortableCellItem;
 import appeng.items.tools.powered.powersink.PoweredItemCapabilities;
 
@@ -73,6 +73,8 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
@@ -174,17 +176,25 @@ public class MEGACells {
             if (Addons.AE2WTLIB.isLoaded()) {
                 AE2WTIntegration.initUpgrades();
             }
+
+            if (Addons.APPMEK.isLoaded()) {
+                AppMekIntegration.initUpgrades();
+            }
         });
     }
 
     private static void initStorageCells(FMLCommonSetupEvent event) {
-        StorageCells.addCellHandler(BulkCellItem.HANDLER);
-
         event.enqueueWork(() -> {
+            StorageCells.addCellHandler(BulkCellItem.HANDLER);
+
             MEGAItems.getItemPortables()
                     .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
             MEGAItems.getFluidPortables()
                     .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
+
+            if (Addons.APPMEK.isLoaded()) {
+                StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
+            }
         });
     }
 
@@ -243,16 +253,22 @@ public class MEGACells {
                 MEGABlockEntities.MEGA_PATTERN_PROVIDER.get(),
                 (be, context) -> be.getLogic().getReturnInv());
 
-        MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
-        MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable));
+        MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
+        MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
+
+        if (Addons.APPMEK.isLoaded()) {
+            for (var portable : MEGAItems.getChemicalPortables()) {
+                if (portable.get() instanceof AbstractPortableCell cell) {
+                    registerPoweredItemCapability(event, cell);
+                }
+            }
+        }
     }
 
     private static <T extends Item & IAEItemPowerStorage> void registerPoweredItemCapability(
-            RegisterCapabilitiesEvent event, ItemDefinition<T> item) {
+            RegisterCapabilitiesEvent event, T item) {
         event.registerItem(
-                Capabilities.EnergyStorage.ITEM,
-                (object, context) -> new PoweredItemCapabilities(object, item.asItem()),
-                item);
+                Capabilities.EnergyStorage.ITEM, (object, context) -> new PoweredItemCapabilities(object, item), item);
     }
 
     @OnlyIn(Dist.CLIENT)

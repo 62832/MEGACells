@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sky_osmium_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/sky_osmium"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:crafting/sky_osmium_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sky_osmium_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:crafting/sky_osmium_block"
+    ]
+  }
+}

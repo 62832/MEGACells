@@ -1,8 +1,7 @@
-package gripe._90.megacells.integration.appmek.item;
+package gripe._90.megacells.integration.appmek;
 
 import java.util.Objects;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -19,13 +18,10 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 import mekanism.api.chemical.attribute.ChemicalAttributeValidator;
 import mekanism.common.registries.MekanismGases;
 
+import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAConfig;
 
 public class RadioactiveCellInventory implements StorageCell {
-
-    private static final String KEY = "key";
-    private static final String COUNT = "count";
-
     static final int MAX_BYTES = 256;
     private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
 
@@ -45,12 +41,8 @@ public class RadioactiveCellInventory implements StorageCell {
         var filter = cell.getConfigInventory(this.stack).getKey(0);
         filterChemical = filter instanceof MekanismKey chemical ? chemical : null;
 
-        storedChemical = getTag().contains(KEY) ? AEKey.fromTagGeneric(getTag().getCompound(KEY)) : null;
-        chemAmount = getTag().getLong(COUNT);
-    }
-
-    private CompoundTag getTag() {
-        return stack.getOrCreateTag();
+        storedChemical = stack.get(MEGAComponents.RADIOACTIVE_CELL_CHEMICAL);
+        chemAmount = stack.getOrDefault(MEGAComponents.RADIOACTIVE_CELL_AMOUNT, 0L);
     }
 
     @Override
@@ -97,7 +89,7 @@ public class RadioactiveCellInventory implements StorageCell {
 
     public boolean isBlackListed(AEKey what) {
         return !(what instanceof MekanismKey key)
-                || (key.getStack().getType() == MekanismGases.SPENT_NUCLEAR_WASTE.get()
+                || (key.getStack().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.get()
                         ? !MEGAConfig.CONFIG.isSpentWasteAllowed()
                         : ChemicalAttributeValidator.DEFAULT.process(key.getStack()));
     }
@@ -181,11 +173,11 @@ public class RadioactiveCellInventory implements StorageCell {
         }
 
         if (storedChemical == null || chemAmount < 0) {
-            getTag().remove(KEY);
-            getTag().remove(COUNT);
+            stack.remove(MEGAComponents.RADIOACTIVE_CELL_CHEMICAL);
+            stack.remove(MEGAComponents.RADIOACTIVE_CELL_AMOUNT);
         } else {
-            getTag().put(KEY, storedChemical.toTagGeneric());
-            getTag().putLong(COUNT, chemAmount);
+            stack.set(MEGAComponents.RADIOACTIVE_CELL_CHEMICAL, storedChemical);
+            stack.set(MEGAComponents.RADIOACTIVE_CELL_AMOUNT, chemAmount);
         }
 
         isPersisted = true;

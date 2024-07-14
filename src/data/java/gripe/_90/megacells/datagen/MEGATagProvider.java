@@ -45,6 +45,7 @@ public class MEGATagProvider {
 
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
             tag(MEGATags.SKY_BRONZE_BLOCK).add(MEGABlocks.SKY_BRONZE_BLOCK.block());
+            tag(MEGATags.SKY_OSMIUM_BLOCK).add(MEGABlocks.SKY_OSMIUM_BLOCK.block());
         }
 
         @NotNull
@@ -67,9 +68,11 @@ public class MEGATagProvider {
         protected void addTags(@NotNull HolderLookup.Provider provider) {
             copy(MEGATags.SKY_STEEL_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_STEEL_BLOCK.location()));
             copy(MEGATags.SKY_BRONZE_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_BRONZE_BLOCK.location()));
+            copy(MEGATags.SKY_OSMIUM_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_OSMIUM_BLOCK.location()));
 
             tag(MEGATags.SKY_STEEL_INGOT).add(MEGAItems.SKY_STEEL_INGOT.asItem());
             tag(MEGATags.SKY_BRONZE_INGOT).add(MEGAItems.SKY_BRONZE_INGOT.asItem());
+            tag(MEGATags.SKY_OSMIUM_INGOT).add(MEGAItems.SKY_OSMIUM_INGOT.asItem());
 
             tag(P2PTunnelAttunement.getAttunementTag(P2PTunnelAttunement.ENERGY_TUNNEL))
                     .add(MEGABlocks.MEGA_ENERGY_CELL.asItem());
