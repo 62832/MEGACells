@@ -8,11 +8,21 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 import appeng.recipes.transform.TransformRecipe;
 
 public final class LavaTransformLogic {
     private static final Set<Item> lavaCache = new HashSet<>();
+
+    static {
+        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> lavaCache.clear());
+        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            if (event.getPlayer() == null) lavaCache.clear();
+        });
+    }
 
     public static boolean canTransformInLava(ItemEntity entity) {
         return getLavaTransformableItems(entity.level())
@@ -67,9 +77,5 @@ public final class LavaTransformLogic {
         }
 
         return lavaCache;
-    }
-
-    public static void clearCache() {
-        lavaCache.clear();
     }
 }

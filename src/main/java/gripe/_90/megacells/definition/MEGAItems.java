@@ -39,9 +39,14 @@ public final class MEGAItems {
     public static final DeferredRegister.Items DR = DeferredRegister.createItems(MEGACells.MODID);
 
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
+    private static final List<CellDefinition> CELLS = new ArrayList<>();
 
     public static List<ItemDefinition<?>> getItems() {
         return Collections.unmodifiableList(ITEMS);
+    }
+
+    public static List<CellDefinition> getAllCells() {
+        return Collections.unmodifiableList(CELLS);
     }
 
     public static final ItemDefinition<MaterialItem> SKY_STEEL_INGOT =
@@ -125,11 +130,11 @@ public final class MEGAItems {
             DecompressionModulePart.class,
             DecompressionModulePart::new);
 
-    public static List<ItemDefinition<?>> getItemCells() {
+    public static List<ItemDefinition<BasicStorageCell>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
     }
 
-    public static List<ItemDefinition<?>> getFluidCells() {
+    public static List<ItemDefinition<BasicStorageCell>> getFluidCells() {
         return List.of(FLUID_CELL_1M, FLUID_CELL_4M, FLUID_CELL_16M, FLUID_CELL_64M, FLUID_CELL_256M);
     }
 
@@ -164,7 +169,7 @@ public final class MEGAItems {
     }
 
     private static ItemDefinition<BasicStorageCell> itemCell(StorageTier tier) {
-        return item(
+        var cell = item(
                 tier.namePrefix().toUpperCase() + " MEGA Item Storage Cell",
                 "item_storage_cell_" + tier.namePrefix(),
                 p -> new BasicStorageCell(
@@ -176,10 +181,12 @@ public final class MEGAItems {
                         tier.bytes() / 128,
                         63,
                         AEKeyType.items()));
+        CELLS.add(new CellDefinition(cell, tier, "item"));
+        return cell;
     }
 
     private static ItemDefinition<BasicStorageCell> fluidCell(StorageTier tier) {
-        return item(
+        var cell = item(
                 tier.namePrefix().toUpperCase() + " MEGA Fluid Storage Cell",
                 "fluid_storage_cell_" + tier.namePrefix(),
                 p -> new BasicStorageCell(
@@ -191,21 +198,27 @@ public final class MEGAItems {
                         tier.bytes() / 128,
                         18,
                         AEKeyType.fluids()));
+        CELLS.add(new CellDefinition(cell, tier, "fluid"));
+        return cell;
     }
 
     private static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
-        return item(
+        var cell = item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
                 "portable_item_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x80caff));
+        CELLS.add(new CellDefinition(cell, tier, "item"));
+        return cell;
     }
 
     private static ItemDefinition<MEGAPortableCell> fluidPortable(StorageTier tier) {
-        return item(
+        var cell = item(
                 tier.namePrefix().toUpperCase() + " Portable Fluid Cell",
                 "portable_fluid_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(
                         p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x80caff));
+        CELLS.add(new CellDefinition(cell, tier, "fluid"));
+        return cell;
     }
 
     private static <T extends IPart> ItemDefinition<PartItem<T>> part(
@@ -220,4 +233,6 @@ public final class MEGAItems {
         ITEMS.add(definition);
         return definition;
     }
+
+    public record CellDefinition(ItemDefinition<?> item, StorageTier tier, String keyType) {}
 }

@@ -38,6 +38,7 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 import appeng.api.AECapabilities;
+import appeng.api.client.StorageCellModels;
 import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.GridServices;
@@ -77,7 +78,6 @@ import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.DecompressionService;
-import gripe._90.megacells.misc.LavaTransformLogic;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
@@ -93,11 +93,10 @@ public class MEGACells {
 
         modEventBus.addListener(MEGACells::initUpgrades);
         modEventBus.addListener(MEGACells::initStorageCells);
-        modEventBus.addListener(MEGACells::initVillagerTrades);
         modEventBus.addListener(MEGACells::initCapabilities);
+        modEventBus.addListener(MEGACells::initVillagerTrades);
 
         initCompression();
-        initLavaTransform();
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
 
@@ -223,13 +222,6 @@ public class MEGACells {
         GridServices.register(DecompressionService.class, DecompressionService.class);
     }
 
-    private static void initLavaTransform() {
-        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> LavaTransformLogic.clearCache());
-        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
-            if (event.getPlayer() == null) LavaTransformLogic.clearCache();
-        });
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     private static void initCapabilities(RegisterCapabilitiesEvent event) {
         for (var type : MEGABlockEntities.DR.getEntries()) {
@@ -269,6 +261,7 @@ public class MEGACells {
             modEventBus.addListener(Client::initScreens);
             modEventBus.addListener(Client::initCraftingUnitModels);
             modEventBus.addListener(Client::initEnergyCellProps);
+            modEventBus.addListener(Client::initStorageCellModels);
             modEventBus.addListener(Client::initItemColours);
         }
 
@@ -311,6 +304,22 @@ public class MEGACells {
 
                         return (float) (curPower / maxPower);
                     }));
+        }
+
+        private static void initStorageCellModels(FMLClientSetupEvent event) {
+            event.enqueueWork(() -> {
+                var modelPrefix = "block/drive/cells/";
+
+                for (var cell : MEGAItems.getAllCells()) {
+                    StorageCellModels.registerModel(
+                            cell.item(),
+                            makeId(modelPrefix + cell.tier().namePrefix() + "_" + cell.keyType() + "_cell"));
+                }
+
+                StorageCellModels.registerModel(
+                        MEGAItems.BULK_ITEM_CELL,
+                        makeId(modelPrefix + MEGAItems.BULK_ITEM_CELL.id().getPath()));
+            });
         }
 
         private static void initItemColours(RegisterColorHandlersEvent.Item event) {
