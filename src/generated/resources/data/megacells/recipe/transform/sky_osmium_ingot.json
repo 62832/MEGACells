@@ -1,0 +1,22 @@
+{
+  "type": "ae2:transform",
+  "circumstance": {
+    "type": "fluid",
+    "tag": "minecraft:lava"
+  },
+  "ingredients": [
+    {
+      "item": "ae2:charged_certus_quartz_crystal"
+    },
+    {
+      "tag": "c:ingots/osmium"
+    },
+    {
+      "item": "ae2:sky_stone_block"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "megacells:sky_osmium_ingot"
+  }
+}
