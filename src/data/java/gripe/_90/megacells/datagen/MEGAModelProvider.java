@@ -2,6 +2,7 @@ package gripe._90.megacells.datagen;
 
 import java.util.ArrayList;
 
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
@@ -74,6 +75,9 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         existing.trackGenerated(AppEng.makeId("item/portable_cell_led"), ModelProvider.TEXTURE);
         MEGAItems.getItemPortables().forEach(cell -> portable(cell, itemPortableHousing));
         MEGAItems.getFluidPortables().forEach(cell -> portable(cell, fluidPortableHousing));
+
+        MEGAItems.getAllCells().forEach(this::driveCell);
+        driveCell(MEGAItems.BULK_ITEM_CELL, 0);
 
         var craftingPattern =
                 AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath());
@@ -231,6 +235,39 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
                 .texture("layer2", MEGACells.makeId("item/cell/portable/portable_cell_screen"))
                 .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
+    }
+
+    private void driveCell(MEGAItems.CellDefinition cell) {
+        driveCell(
+                cell.tier().namePrefix() + "_" + cell.keyType() + "_cell",
+                "mega_" + cell.keyType() + "_cell",
+                (cell.tier().index() - 6) * 2);
+    }
+
+    private void driveCell(ItemDefinition<?> cell, int offset) {
+        driveCell(cell.id().getPath(), "misc_cell", offset);
+    }
+
+    private void driveCell(String cell, String texture, int offset) {
+        var texturePrefix = "block/drive/cells/";
+        models().getBuilder(texturePrefix + cell)
+                .ao(false)
+                .texture("cell", texturePrefix + texture)
+                .texture("particle", texturePrefix + texture)
+                .element()
+                .to(6, 2, 2)
+                .face(Direction.NORTH)
+                .uvs(0, offset, 6, offset + 2)
+                .end()
+                .face(Direction.UP)
+                .uvs(6, offset, 0, offset + 2)
+                .end()
+                .face(Direction.DOWN)
+                .uvs(6, offset, 0, offset + 2)
+                .end()
+                .faces((dir, builder) ->
+                        builder.texture("#cell").cullface(Direction.NORTH).end())
+                .end();
     }
 
     /*
