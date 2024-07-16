@@ -7,11 +7,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appeng.api.orientation.BlockOrientation;
@@ -30,14 +28,8 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 
 public class MEGAModelProvider extends AE2BlockStateProvider {
-    private static final ExistingFileHelper.ResourceType MODEL =
-            new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");
-
-    private final ExistingFileHelper existing;
-
     public MEGAModelProvider(PackOutput output, ExistingFileHelper existing) {
         super(output, MEGACells.MODID, existing);
-        this.existing = existing;
     }
 
     @Override
@@ -65,14 +57,12 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.GREATER_ENERGY_CARD);
         basicItem(MEGAItems.COMPRESSION_CARD);
 
-        existing.trackGenerated(AppEng.makeId("item/storage_cell_led"), ModelProvider.TEXTURE);
         MEGAItems.getItemCells().forEach(this::cell);
         MEGAItems.getFluidCells().forEach(this::cell);
         MEGAItems.getChemicalCells().forEach(this::cell);
         cell(MEGAItems.BULK_ITEM_CELL);
         cell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
-        existing.trackGenerated(AppEng.makeId("item/portable_cell_led"), ModelProvider.TEXTURE);
         MEGAItems.getItemPortables().forEach(cell -> portable(cell, "item"));
         MEGAItems.getFluidPortables().forEach(cell -> portable(cell, "fluid"));
         MEGAItems.getChemicalPortables().forEach(cell -> portable(cell, "chemical"));
@@ -81,15 +71,12 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
         driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
 
-        var craftingPattern =
-                AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath());
-        existing.trackGenerated(craftingPattern, ModelProvider.TEXTURE);
         itemModels()
                 .singleTexture(
                         MEGAItems.DECOMPRESSION_PATTERN.id().getPath(),
                         mcLoc("item/generated"),
                         "layer0",
-                        craftingPattern);
+                        AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath()));
 
         simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));
@@ -264,9 +251,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         var front = MEGACells.makeId("part/" + partName);
         var back = MEGACells.makeId("part/" + partName + "_back");
         var sides = MEGACells.makeId("part/" + partName + "_sides");
-
-        existing.trackGenerated(AppEng.makeId("part/interface_base"), MODEL);
-        existing.trackGenerated(AppEng.makeId("item/cable_interface"), MODEL);
 
         models().singleTexture(
                         "part/" + partName,

@@ -68,7 +68,8 @@ neoForge {
                 "--mod", modId,
                 "--all",
                 "--output", file("src/generated/resources/").absolutePath,
-                "--existing", file("src/main/resources/").absolutePath
+                "--existing", file("src/main/resources/").absolutePath,
+                "--existing-mod", "ae2"
             )
             sourceSet = sourceSets.getByName("data")
         }
@@ -106,6 +107,8 @@ spotless {
     kotlinGradle {
         target("*.kts")
         diktat()
+        indentWithSpaces(4)
+        endWithNewline()
     }
 
     java {

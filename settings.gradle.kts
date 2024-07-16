@@ -16,7 +16,7 @@ run {
     dependencyResolutionManagement {
         repositoriesMode = RepositoriesMode.PREFER_SETTINGS
         rulesMode = RulesMode.PREFER_SETTINGS
-    
+
         repositories {
             mavenCentral()
 
@@ -37,14 +37,16 @@ run {
                 }
             }
         }
-    
+
         versionCatalogs {
             create("libs") {
                 val mc = "1.21"
                 version("minecraft", mc)
-                version("neoforge", "21.0.87-beta")
+
+                val nf = mc.substringAfter('.')
+                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.87-beta")
                 version("parchment", "2024.06.23")
-                
+
                 version("ae2", "19.0.12-alpha")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
