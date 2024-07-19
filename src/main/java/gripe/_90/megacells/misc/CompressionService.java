@@ -208,8 +208,8 @@ public class CompressionService {
                 var compressed = !isDecompressionRecipe(recipe, access);
                 var output = recipe.getResultItem(access);
 
-                var smaller = compressed ? input.getItem() : output.getItem();
-                var larger = compressed ? output.getItem() : input.getItem();
+                var smaller = (compressed ? input : output).getItem();
+                var larger = (compressed ? output : input).getItem();
                 var factor = (byte) (compressed ? recipe.getIngredients().size() : output.getCount());
 
                 overrides.add(new Override(smaller, larger, factor));

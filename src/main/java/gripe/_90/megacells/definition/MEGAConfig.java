@@ -6,6 +6,12 @@ public final class MEGAConfig {
     public static final MEGAConfig CONFIG;
     public static final ModConfigSpec SPEC;
 
+    static {
+        var configured = new ModConfigSpec.Builder().configure(MEGAConfig::new);
+        CONFIG = configured.getKey();
+        SPEC = configured.getValue();
+    }
+
     private final ModConfigSpec.BooleanValue spentNuclearWasteAllowed;
 
     public MEGAConfig(ModConfigSpec.Builder builder) {
@@ -17,11 +23,5 @@ public final class MEGAConfig {
 
     public boolean isSpentWasteAllowed() {
         return spentNuclearWasteAllowed.get();
-    }
-
-    static {
-        var configured = new ModConfigSpec.Builder().configure(MEGAConfig::new);
-        CONFIG = configured.getKey();
-        SPEC = configured.getValue();
     }
 }

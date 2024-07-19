@@ -21,8 +21,8 @@ public final class MEGAMenus {
     public static final MenuType<MEGAPatternProviderMenu> MEGA_PATTERN_PROVIDER =
             create("mega_pattern_provider", MEGAPatternProviderMenu::new, PatternProviderLogicHost.class);
 
-    private static <C extends AEBaseMenu, I> MenuType<C> create(
-            String id, MenuTypeBuilder.MenuFactory<C, I> factory, Class<I> host) {
+    private static <M extends AEBaseMenu, H> MenuType<M> create(
+            String id, MenuTypeBuilder.MenuFactory<M, H> factory, Class<H> host) {
         var menu = MenuTypeBuilder.create(factory, host).build(MEGACells.makeId(id));
         DR.register(id, () -> menu);
         return menu;

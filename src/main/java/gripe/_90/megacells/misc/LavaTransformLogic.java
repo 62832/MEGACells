@@ -71,7 +71,7 @@ public final class LavaTransformLogic {
                         lavaCache.add(stack.getItem());
                     }
 
-                    // Don't break here unlike AE2's TransformLogic, otherwise non-processed items will burn up
+                    // Don't break here unlike AE2's TransformLogic, otherwise unprocessed items will burn up
                 }
             }
         }
