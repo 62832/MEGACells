@@ -142,7 +142,7 @@ public class MEGACells {
                 Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
             }
 
-            if (Addons.AE2WTLIB.isLoaded()) {
+            if (Addons.AE2WTLIB_API.isLoaded()) {
                 AE2WTIntegration.initUpgrades();
             }
 

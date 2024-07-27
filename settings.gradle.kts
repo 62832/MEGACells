@@ -26,6 +26,7 @@ run {
                 content {
                     includeGroup("appeng")
                     includeGroup("mekanism")
+                    includeGroup("de.mari_023")
                 }
             }
 
@@ -50,7 +51,9 @@ run {
                 version("ae2", "19.0.12-alpha")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
-                library("ae2wtlib", "maven.modrinth", "applied-energistics-2-wireless-terminals").version("WyPbb8sE")
+                version("ae2wtlib", "19.1.0-alpha.1")
+                library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
+                library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
 
                 library("appmek", "maven.modrinth", "applied-mekanistics").version("yh6fz02r")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.6.5.52")
