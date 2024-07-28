@@ -11,7 +11,7 @@ public enum Addons {
     APPBOT("Applied Botanics"),
     ARSENG("Ars Énergistique"),
     APPLIEDE("AppliedE"),
-    AE2WTLIB("AE2WTLib");
+    AE2WTLIB_API("AE2WTLib API");
 
     private final String modName;
 
