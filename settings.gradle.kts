@@ -1,7 +1,7 @@
 pluginManagement {
     plugins {
-        id("net.neoforged.moddev") version "0.1.112"
-        id("net.neoforged.moddev.repositories") version "0.1.112"
+        id("net.neoforged.moddev") version "1.0.11"
+        id("net.neoforged.moddev.repositories") version "1.0.11"
         id("com.diffplug.spotless") version "6.25.0"
     }
 }
@@ -41,22 +41,22 @@ run {
 
         versionCatalogs {
             create("libs") {
-                val mc = "1.21"
+                val mc = "1.21.1"
                 version("minecraft", mc)
 
                 val nf = mc.substringAfter('.')
-                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.87-beta")
-                version("parchment", "2024.06.23")
+                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.26")
+                version("parchment", "2024.07.28")
 
-                version("ae2", "19.0.12-alpha")
+                version("ae2", "19.0.21-beta")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
-                version("ae2wtlib", "19.1.0-alpha.1")
+                version("ae2wtlib", "19.1.3-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
 
-                library("appmek", "maven.modrinth", "applied-mekanistics").version("yh6fz02r")
-                library("mekanism", "mekanism", "Mekanism").version("$mc-10.6.5.52")
+                library("appmek", "maven.modrinth", "applied-mekanistics").version("GCScYwwI")
+                library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
             }
         }
     }
