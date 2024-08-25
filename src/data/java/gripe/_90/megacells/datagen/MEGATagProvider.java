@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appeng.api.features.P2PTunnelAttunement;
@@ -46,6 +47,11 @@ public class MEGATagProvider {
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
             tag(MEGATags.SKY_BRONZE_BLOCK).add(MEGABlocks.SKY_BRONZE_BLOCK.block());
             tag(MEGATags.SKY_OSMIUM_BLOCK).add(MEGABlocks.SKY_OSMIUM_BLOCK.block());
+
+            tag(Tags.Blocks.STORAGE_BLOCKS)
+                    .addTag(MEGATags.SKY_STEEL_BLOCK)
+                    .addTag(MEGATags.SKY_BRONZE_BLOCK)
+                    .addTag(MEGATags.SKY_OSMIUM_BLOCK);
         }
 
         @NotNull
@@ -91,6 +97,12 @@ public class MEGATagProvider {
                     .add(Items.ICE, Items.PACKED_ICE)
                     .addOptionalTag(
                             ResourceLocation.fromNamespaceAndPath("functionalstorage", "ignore_crafting_check"));
+
+            tag(Tags.Items.INGOTS)
+                    .addTag(MEGATags.SKY_STEEL_INGOT)
+                    .addTag(MEGATags.SKY_BRONZE_INGOT)
+                    .addTag(MEGATags.SKY_OSMIUM_INGOT);
+            copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
         }
 
         @NotNull
