@@ -31,7 +31,7 @@ public class DecompressionPattern implements IPatternDetails {
         var encodedPattern = definition.get(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN);
 
         if (encodedPattern == null) {
-            throw new IllegalArgumentException("Given item does not encode a stonecutting pattern: " + definition);
+            throw new IllegalArgumentException("Given item does not encode a decompression pattern: " + definition);
         } else if (encodedPattern.containsMissingContent()) {
             throw new IllegalArgumentException("Pattern references missing content");
         }
