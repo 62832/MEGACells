@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 import appeng.api.stacks.AEItemKey;
 
+import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
@@ -92,9 +93,18 @@ public class CompressionService {
         variants.addFirst(baseVariant);
 
         for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
-            variants.addFirst(lower.item().getItem());
-            multipliers.addFirst(lower.factor());
-            lower = getNextVariant(lower.item().getItem(), decompressed, false, access);
+            var item = lower.item.getItem();
+
+            if (variants.contains(item)) {
+                MEGACells.LOGGER.warn(
+                        "Duplicate lower compression variant detected: %s. Check any recipe involving this item for problems.",
+                        lower);
+                break;
+            }
+
+            variants.addFirst(item);
+            multipliers.addFirst(lower.factor);
+            lower = getNextVariant(item, decompressed, false, access);
         }
 
         multipliers.addFirst((byte) 1);
@@ -105,6 +115,13 @@ public class CompressionService {
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
+            if (chain.contains(higher)) {
+                MEGACells.LOGGER.warn(
+                        "Duplicate higher compression variant detected: %s. Check any recipe involving this item for problems.",
+                        higher);
+                break;
+            }
+
             chain.add(higher);
             higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }

@@ -45,10 +45,10 @@ run {
                 version("minecraft", mc)
 
                 val nf = mc.substringAfter('.')
-                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.26")
+                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.66")
                 version("parchment", "2024.07.28")
 
-                version("ae2", "19.0.21-beta")
+                version("ae2", "19.0.23-beta")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")
