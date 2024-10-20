@@ -97,7 +97,7 @@ public class CompressionService {
 
             if (variants.contains(item)) {
                 MEGACells.LOGGER.warn(
-                        "Duplicate lower compression variant detected: %s. Check any recipe involving this item for problems.",
+                        "Duplicate lower compression variant detected: {}. Check any recipe involving this item for problems.",
                         lower);
                 break;
             }
@@ -117,7 +117,7 @@ public class CompressionService {
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
             if (chain.contains(higher)) {
                 MEGACells.LOGGER.warn(
-                        "Duplicate higher compression variant detected: %s. Check any recipe involving this item for problems.",
+                        "Duplicate higher compression variant detected: {}. Check any recipe involving this item for problems.",
                         higher);
                 break;
             }

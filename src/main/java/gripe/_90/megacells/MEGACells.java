@@ -3,8 +3,8 @@ package gripe._90.megacells;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -60,7 +60,7 @@ import gripe._90.megacells.misc.DecompressionService;
 @Mod(MEGACells.MODID)
 public class MEGACells {
     public static final String MODID = "megacells";
-    public static final Logger LOGGER = LogManager.getFormatterLogger(MEGATranslations.ModName.getEnglishText());
+    public static final Logger LOGGER = LoggerFactory.getLogger(MEGATranslations.ModName.getEnglishText());
 
     public MEGACells(ModContainer container, IEventBus eventBus) {
         MEGABlocks.DR.register(eventBus);
