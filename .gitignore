@@ -21,4 +21,3 @@ build
 eclipse
 run
 .directory
-src/generated/resources/.cache

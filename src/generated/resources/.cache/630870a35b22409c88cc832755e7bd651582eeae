@@ -1,0 +1,13 @@
+// 1.21.1	2024-08-25T13:50:12.498501175	Tags (Item)
+e42fb28c86b642b8733975efead834402f7fe45b data/ae2/tags/item/p2p_attunements/fe_p2p_tunnel.json
+bf572a87643cf277b91bffb416e388a94cd36747 data/c/tags/item/ingots.json
+61e4876c9c48d312a89177d6a5c81319297777ac data/c/tags/item/ingots/sky_bronze.json
+3dc07818130be5c3305175569a972dd347a6ba71 data/c/tags/item/ingots/sky_osmium.json
+39b471400d5e4d6b128765929d0fb819eb462fb5 data/c/tags/item/ingots/sky_steel.json
+5f29c122184fe688516e8992538a01924c1ed7e2 data/c/tags/item/storage_blocks.json
+d16fe455331319a8d365af59139ac5d88a119144 data/c/tags/item/storage_blocks/sky_bronze.json
+7a65c757f9501fd29bc86bebcbae0d91f197ff43 data/c/tags/item/storage_blocks/sky_osmium.json
+1bfe8421078982de39dc3cb1d5917d6385175b44 data/c/tags/item/storage_blocks/sky_steel.json
+99c21c9a0d2d3ed906e8580c0e1752315f114ba6 data/megacells/tags/item/compression_overrides.json
+6945345eddaa46dddeb49da1543ec0850f03278a data/megacells/tags/item/mega_interface.json
+75a9b0d69567961cd99e9e16fc2f9d57a8101f82 data/megacells/tags/item/mega_pattern_provider.json
