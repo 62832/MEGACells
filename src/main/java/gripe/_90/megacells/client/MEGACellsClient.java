@@ -101,6 +101,11 @@ public class MEGACellsClient {
             StorageCellModels.registerModel(
                     MEGAItems.BULK_ITEM_CELL,
                     MEGACells.makeId(modelPrefix + MEGAItems.BULK_ITEM_CELL.id().getPath()));
+
+            StorageCellModels.registerModel(
+                    MEGAItems.RADIOACTIVE_CHEMICAL_CELL,
+                    MEGACells.makeId(modelPrefix
+                            + MEGAItems.RADIOACTIVE_CHEMICAL_CELL.id().getPath()));
         });
     }
 
