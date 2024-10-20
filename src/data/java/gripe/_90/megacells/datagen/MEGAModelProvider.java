@@ -45,6 +45,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.MEGA_ITEM_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_FLUID_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        basicItem(MEGAItems.MEGA_SOURCE_CELL_HOUSING);
 
         basicItem(MEGAItems.CELL_COMPONENT_1M);
         basicItem(MEGAItems.CELL_COMPONENT_4M);
@@ -60,12 +61,14 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         MEGAItems.getItemCells().forEach(this::cell);
         MEGAItems.getFluidCells().forEach(this::cell);
         MEGAItems.getChemicalCells().forEach(this::cell);
+        MEGAItems.getSourceCells().forEach(this::cell);
         cell(MEGAItems.BULK_ITEM_CELL);
         cell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
         MEGAItems.getItemPortables().forEach(cell -> portable(cell, "item"));
         MEGAItems.getFluidPortables().forEach(cell -> portable(cell, "fluid"));
         MEGAItems.getChemicalPortables().forEach(cell -> portable(cell, "chemical"));
+        MEGAItems.getSourcePortables().forEach(cell -> portable(cell, "source"));
 
         MEGAItems.getAllCells().forEach(this::driveCell);
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);

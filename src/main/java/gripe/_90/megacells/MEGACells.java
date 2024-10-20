@@ -53,6 +53,7 @@ import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
+import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.DecompressionService;
@@ -153,6 +154,8 @@ public class MEGACells {
             if (Addons.APPMEK.isLoaded()) {
                 AppMekIntegration.initUpgrades();
             }
+
+            if (Addons.ARSENG.isLoaded()) ArsEngIntegration.initUpgrades();
         });
     }
 
@@ -229,11 +232,15 @@ public class MEGACells {
         MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
         MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
 
-        if (Addons.APPMEK.isLoaded()) {
-            for (var portable : MEGAItems.getChemicalPortables()) {
-                if (portable.get() instanceof AbstractPortableCell cell) {
-                    registerPoweredItemCapability(event, cell);
-                }
+        for (var portable : MEGAItems.getChemicalPortables()) {
+            if (portable.get() instanceof AbstractPortableCell cell) {
+                registerPoweredItemCapability(event, cell);
+            }
+        }
+
+        for (var portable : MEGAItems.getSourcePortables()) {
+            if (portable.get() instanceof AbstractPortableCell cell) {
+                registerPoweredItemCapability(event, cell);
             }
         }
     }

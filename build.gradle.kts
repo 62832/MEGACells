@@ -20,6 +20,9 @@ dependencies {
     compileOnly(libs.mekanism)
     compileOnly(variantOf(libs.mekanism) { classifier("generators") })
     runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
+
+    implementation(libs.arseng)
+    implementation(libs.arsnouveau)
 }
 
 sourceSets {

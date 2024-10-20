@@ -1,0 +1,49 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "arseng"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_component_64m": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:cell_component_64m"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_mega_source_cell_housing": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:mega_source_cell_housing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/standard/source_storage_cell_64m_with_housing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cell_component_64m",
+      "has_mega_source_cell_housing"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/standard/source_storage_cell_64m_with_housing"
+    ]
+  }
+}

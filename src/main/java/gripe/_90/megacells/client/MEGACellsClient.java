@@ -109,6 +109,7 @@ public class MEGACellsClient {
         standardCells.addAll(MEGAItems.getItemCells());
         standardCells.addAll(MEGAItems.getFluidCells());
         standardCells.addAll(MEGAItems.getChemicalCells());
+        standardCells.addAll(MEGAItems.getSourceCells());
         standardCells.add(MEGAItems.BULK_ITEM_CELL);
         standardCells.add(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
@@ -116,6 +117,7 @@ public class MEGACellsClient {
         portableCells.addAll(MEGAItems.getItemPortables());
         portableCells.addAll(MEGAItems.getFluidPortables());
         portableCells.addAll(MEGAItems.getChemicalPortables());
+        portableCells.addAll(MEGAItems.getSourcePortables());
 
         event.register(
                 (stack, tintIndex) -> FastColor.ARGB32.opaque(BasicStorageCell.getColor(stack, tintIndex)),

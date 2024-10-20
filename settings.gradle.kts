@@ -27,6 +27,56 @@ run {
                     includeGroup("appeng")
                     includeGroup("mekanism")
                     includeGroup("de.mari_023")
+                    includeGroup("mezz.jei")
+                }
+            }
+
+            maven {
+                name = "BlameJared"
+                url = uri("https://maven.blamejared.com")
+                content {
+                    includeGroup("com.hollingsworth.ars_nouveau")
+                    includeGroup("vazkii.patchouli")
+                }
+            }
+
+            maven {
+                name = "GeckoLib"
+                url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+                content {
+                    includeGroup("software.bernie.geckolib")
+                }
+            }
+
+            maven {
+                name = "Illusive Soulworks"
+                url = uri("https://maven.theillusivec4.top/")
+                content {
+                    includeGroup("com.illusivesoulworks.caelus")
+                }
+            }
+
+            maven {
+                name = "Minecraft Forge"
+                url = uri("https://maven.minecraftforge.net/")
+                content {
+                    includeGroup("com.github.glitchfiend")
+                }
+            }
+
+            maven {
+                name = "OctoStudios"
+                url = uri("https://maven.octo-studios.com/releases")
+                content {
+                    includeGroup("top.theillusivec4.curios")
+                }
+            }
+
+            maven {
+                name = "CurseMaven"
+                url = uri("https://cursemaven.com")
+                content {
+                    includeGroup("curse.maven")
                 }
             }
 
@@ -57,6 +107,9 @@ run {
 
                 library("appmek", "maven.modrinth", "applied-mekanistics").version("GCScYwwI")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
+
+                library("arseng", "maven.modrinth", "ars-energistique").version("smOxCSOc")
+                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.0").version("5.1.0.736")
             }
         }
     }

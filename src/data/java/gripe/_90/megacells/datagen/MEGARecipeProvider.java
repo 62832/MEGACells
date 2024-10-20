@@ -80,6 +80,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
         cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
 
+        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -97,6 +103,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
         portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
         portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+
+        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)

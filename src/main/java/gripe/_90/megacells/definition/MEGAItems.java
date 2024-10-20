@@ -32,6 +32,7 @@ import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.DummyIntegrationItem;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
+import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.DecompressionModulePart;
@@ -164,6 +165,21 @@ public final class MEGAItems {
             () -> RadioactiveCellItem::new,
             Addons.APPMEK);
 
+    public static final ItemDefinition<?> MEGA_SOURCE_CELL_HOUSING = integrationItem(
+            "MEGA Source Cell Housing", "mega_source_cell_housing", () -> MaterialItem::new, Addons.ARSENG);
+
+    public static final ItemDefinition<?> SOURCE_CELL_1M = sourceCell(TIER_1M);
+    public static final ItemDefinition<?> SOURCE_CELL_4M = sourceCell(TIER_4M);
+    public static final ItemDefinition<?> SOURCE_CELL_16M = sourceCell(TIER_16M);
+    public static final ItemDefinition<?> SOURCE_CELL_64M = sourceCell(TIER_64M);
+    public static final ItemDefinition<?> SOURCE_CELL_256M = sourceCell(TIER_256M);
+
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_1M = sourcePortable(TIER_1M);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_4M = sourcePortable(TIER_4M);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_16M = sourcePortable(TIER_16M);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_64M = sourcePortable(TIER_64M);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M = sourcePortable(TIER_256M);
+
     public static List<ItemDefinition<BasicStorageCell>> getItemCells() {
         return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
     }
@@ -174,6 +190,10 @@ public final class MEGAItems {
 
     public static List<ItemDefinition<?>> getChemicalCells() {
         return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);
+    }
+
+    public static List<ItemDefinition<?>> getSourceCells() {
+        return List.of(SOURCE_CELL_1M, SOURCE_CELL_4M, SOURCE_CELL_16M, SOURCE_CELL_64M, SOURCE_CELL_256M);
     }
 
     public static List<ItemDefinition<? extends AbstractPortableCell>> getItemPortables() {
@@ -201,6 +221,15 @@ public final class MEGAItems {
                 PORTABLE_CHEMICAL_CELL_16M,
                 PORTABLE_CHEMICAL_CELL_64M,
                 PORTABLE_CHEMICAL_CELL_256M);
+    }
+
+    public static List<ItemDefinition<?>> getSourcePortables() {
+        return List.of(
+                PORTABLE_SOURCE_CELL_1M,
+                PORTABLE_SOURCE_CELL_4M,
+                PORTABLE_SOURCE_CELL_16M,
+                PORTABLE_SOURCE_CELL_64M,
+                PORTABLE_SOURCE_CELL_256M);
     }
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
@@ -260,6 +289,17 @@ public final class MEGAItems {
         return cell;
     }
 
+    private static ItemDefinition<?> sourceCell(StorageTier tier) {
+        var cell = integrationItem(
+                tier.namePrefix().toUpperCase() + " MEGA Source Storage Cell",
+                "source_storage_cell_" + tier.namePrefix(),
+                () -> ArsEngIntegration.createSourceCell(tier),
+                p -> p.stacksTo(1),
+                Addons.ARSENG);
+        CELLS.add(new CellDefinition(cell, tier, "source"));
+        return cell;
+    }
+
     private static ItemDefinition<MEGAPortableCell> itemPortable(StorageTier tier) {
         var cell = item(
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
@@ -287,6 +327,17 @@ public final class MEGAItems {
                 p -> p.stacksTo(1),
                 Addons.APPMEK);
         CELLS.add(new CellDefinition(cell, tier, "chemical"));
+        return cell;
+    }
+
+    private static ItemDefinition<?> sourcePortable(StorageTier tier) {
+        var cell = integrationItem(
+                tier.namePrefix().toUpperCase() + " Portable Source Cell",
+                "portable_source_cell_" + tier.namePrefix(),
+                () -> ArsEngIntegration.createSourcePortable(tier),
+                p -> p.stacksTo(1),
+                Addons.ARSENG);
+        CELLS.add(new CellDefinition(cell, tier, "source"));
         return cell;
     }
 
