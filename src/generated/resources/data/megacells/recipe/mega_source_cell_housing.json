@@ -7,9 +7,6 @@
   ],
   "type": "ars_nouveau:enchanting_apparatus",
   "keepNbtOfReagent": false,
-  "output": {
-    "item": "megacells:mega_source_cell_housing"
-  },
   "pedestalItems": [
     {
       "item": "ars_nouveau:manipulation_essence"
@@ -36,10 +33,12 @@
       "item": "megacells:sky_steel_ingot"
     }
   ],
-  "reagent": [
-    {
-      "item": "arseng:source_cell_housing"
-    }
-  ],
+  "reagent": {
+    "item": "arseng:source_cell_housing"
+  },
+  "result": {
+    "count": 1,
+    "id": "megacells:mega_source_cell_housing"
+  },
   "sourceCost": 2000
 }

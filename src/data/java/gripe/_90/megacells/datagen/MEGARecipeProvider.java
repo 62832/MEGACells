@@ -1,6 +1,11 @@
 package gripe._90.megacells.datagen;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
+import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
+import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +43,7 @@ import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
+import gripe._90.arseng.definition.ArsEngItems;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -337,6 +343,26 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .save(
                         Addons.APPMEK.conditionalRecipe(output),
                         MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
+
+        Addons.ARSENG
+                .conditionalRecipe(output)
+                .accept(
+                        MEGAItems.MEGA_SOURCE_CELL_HOUSING.id(),
+                        new EnchantingApparatusRecipe(
+                                Ingredient.of(ArsEngItems.SOURCE_CELL_HOUSING),
+                                MEGAItems.MEGA_SOURCE_CELL_HOUSING.stack(),
+                                List.of(
+                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
+                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
+                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
+                                        Ingredient.of(BlockRegistry.SOURCE_GEM_BLOCK),
+                                        Ingredient.of(BlockRegistry.SOURCE_GEM_BLOCK),
+                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT),
+                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT),
+                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT)),
+                                2000,
+                                false),
+                        null);
     }
 
     private static void component(
