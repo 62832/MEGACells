@@ -24,7 +24,7 @@ public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
     private final AEItemKey base;
     private final AEItemKey variant;
-    private final byte factor;
+    private final int factor;
 
     public DecompressionPattern(AEItemKey definition) {
         this.definition = definition;
@@ -102,11 +102,11 @@ public class DecompressionPattern implements IPatternDetails {
         }
     }
 
-    public record Encoded(ItemStack base, ItemStack variant, byte factor) {
+    public record Encoded(ItemStack base, ItemStack variant, int factor) {
         public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(builder -> builder.group(
                         ItemStack.CODEC.fieldOf("base").forGetter(Encoded::base),
                         ItemStack.CODEC.fieldOf("variant").forGetter(Encoded::variant),
-                        Codec.BYTE.fieldOf("factor").forGetter(Encoded::factor))
+                        Codec.INT.fieldOf("factor").forGetter(Encoded::factor))
                 .apply(builder, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
@@ -114,7 +114,7 @@ public class DecompressionPattern implements IPatternDetails {
                 Encoded::base,
                 ItemStack.STREAM_CODEC,
                 Encoded::variant,
-                ByteBufCodecs.BYTE,
+                ByteBufCodecs.VAR_INT,
                 Encoded::factor,
                 Encoded::new);
 

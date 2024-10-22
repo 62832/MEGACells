@@ -194,14 +194,14 @@ public class MEGACells {
     private static void initCompression() {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
             var server = event.getServer();
-            CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
+            CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
         });
 
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
             // Only rebuild cache in the event of a data pack /reload and not when a new player joins
             if (event.getPlayer() == null) {
                 var server = event.getPlayerList().getServer();
-                CompressionService.INSTANCE.loadRecipes(server.getRecipeManager(), server.registryAccess());
+                CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
             }
         });
 

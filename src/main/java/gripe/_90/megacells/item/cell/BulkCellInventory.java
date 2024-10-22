@@ -54,8 +54,7 @@ public class BulkCellInventory implements StorageCell {
         unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
 
         compressionEnabled = cell.getUpgrades(stack).isInstalled(COMPRESSION_CARD);
-        compressionChain = CompressionService.INSTANCE
-                .getChain(storedItem != null ? storedItem : filterItem)
+        compressionChain = CompressionService.getChain(storedItem != null ? storedItem : filterItem)
                 .orElseGet(CompressionChain::new);
         decompressionPatterns = generateDecompressionPatterns();
         unitFactor = compressionChain.unitFactor(storedItem != null ? storedItem : filterItem);

@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import appeng.api.stacks.AEItemKey;
 
 public class CompressionChain extends ObjectArrayList<CompressionService.Variant> {
-    public void add(AEItemKey item, byte factor) {
+    void add(AEItemKey item, int factor) {
         add(new CompressionService.Variant(item, factor));
     }
 
