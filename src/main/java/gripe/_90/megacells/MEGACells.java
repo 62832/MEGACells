@@ -23,14 +23,10 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.OnDatapackSyncEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 import appeng.api.AECapabilities;
 import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
-import appeng.api.networking.GridServices;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
@@ -56,7 +52,6 @@ import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.misc.CompressionService;
-import gripe._90.megacells.misc.DecompressionService;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
@@ -76,7 +71,7 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initCapabilities);
         eventBus.addListener(MEGACells::initVillagerTrades);
 
-        initCompression();
+        CompressionService.init();
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
     }
@@ -189,23 +184,6 @@ public class MEGACells {
                 (i, j) -> new MerchantOffer(
                         new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
         offers.put(5, masterEntries);
-    }
-
-    private static void initCompression() {
-        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
-            var server = event.getServer();
-            CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
-        });
-
-        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
-            // Only rebuild cache in the event of a data pack /reload and not when a new player joins
-            if (event.getPlayer() == null) {
-                var server = event.getPlayerList().getServer();
-                CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
-            }
-        });
-
-        GridServices.register(DecompressionService.class, DecompressionService.class);
     }
 
     @SuppressWarnings("UnstableApiUsage")

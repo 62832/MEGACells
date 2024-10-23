@@ -7,11 +7,13 @@ import java.util.stream.IntStream;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
+import net.minecraft.world.item.Item;
+
 import appeng.api.stacks.AEItemKey;
 
-public class CompressionChain extends ObjectArrayList<CompressionService.Variant> {
+public class CompressionChain extends ObjectArrayList<CompressionChain.Variant> {
     void add(AEItemKey item, int factor) {
-        add(new CompressionService.Variant(item, factor));
+        add(new Variant(item, factor));
     }
 
     public boolean containsVariant(AEItemKey item) {
@@ -30,10 +32,10 @@ public class CompressionChain extends ObjectArrayList<CompressionService.Variant
     }
 
     public CompressionChain lastMultiplierSwapped() {
-        var multipliers = stream().map(CompressionService.Variant::factor).collect(Collectors.toList());
+        var multipliers = stream().map(Variant::factor).collect(Collectors.toList());
         Collections.rotate(multipliers, -1);
 
-        var items = stream().map(CompressionService.Variant::item).toList();
+        var items = stream().map(Variant::item).toList();
         var chain = new CompressionChain();
 
         for (var i = 0; i < items.size(); i++) {
@@ -41,5 +43,11 @@ public class CompressionChain extends ObjectArrayList<CompressionService.Variant
         }
 
         return chain;
+    }
+
+    public record Variant(AEItemKey item, int factor) {
+        Variant(Item item, int factor) {
+            this(AEItemKey.of(item), factor);
+        }
     }
 }

@@ -41,7 +41,7 @@ public class DecompressionPattern implements IPatternDetails {
         factor = encodedPattern.factor;
     }
 
-    public DecompressionPattern(AEItemKey base, CompressionService.Variant variant) {
+    public DecompressionPattern(AEItemKey base, CompressionChain.Variant variant) {
         this.base = base;
         this.variant = variant.item();
         this.factor = variant.factor();

@@ -18,7 +18,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
+import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.MEGACells;
@@ -41,7 +45,24 @@ public class CompressionService {
                 .findFirst();
     }
 
-    public static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
+    public static void init() {
+        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
+            var server = event.getServer();
+            CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
+        });
+
+        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            // Only rebuild cache in the event of a data pack /reload and not when a new player joins
+            if (event.getPlayer() == null) {
+                var server = event.getPlayerList().getServer();
+                CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
+            }
+        });
+
+        GridServices.register(DecompressionService.class, DecompressionService.class);
+    }
+
+    private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old chain cache in case of the server restarting or recipes being reloaded
         compressionChains.clear();
         overrides.clear();
@@ -89,7 +110,7 @@ public class CompressionService {
         variants.addFirst(baseVariant);
 
         for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
-            var item = lower.item.getItem();
+            var item = lower.item().getItem();
 
             if (variants.contains(item)) {
                 MEGACells.LOGGER.warn(
@@ -99,7 +120,7 @@ public class CompressionService {
             }
 
             variants.addFirst(item);
-            multipliers.addFirst(lower.factor);
+            multipliers.addFirst(lower.factor());
             lower = getNextVariant(item, decompressed, false, access);
         }
 
@@ -119,28 +140,28 @@ public class CompressionService {
             }
 
             chain.add(higher);
-            higher = getNextVariant(higher.item.getItem(), compressed, true, access);
+            higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }
 
         return chain;
     }
 
-    private static Variant getNextVariant(
+    private static CompressionChain.Variant getNextVariant(
             Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
             if (compressed && override.smaller.equals(item)) {
-                return new Variant(override.larger, override.factor);
+                return new CompressionChain.Variant(override.larger, override.factor);
             }
 
             if (!compressed && override.larger.equals(item)) {
-                return new Variant(override.smaller, override.factor);
+                return new CompressionChain.Variant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
                 if (input.getItem().equals(item)) {
-                    return new Variant(
+                    return new CompressionChain.Variant(
                             recipe.getResultItem(access).getItem(),
                             compressed
                                     ? recipe.getIngredients().size()
@@ -234,12 +255,6 @@ public class CompressionService {
         }
 
         return false;
-    }
-
-    public record Variant(AEItemKey item, int factor) {
-        private Variant(Item item, int factor) {
-            this(AEItemKey.of(item), factor);
-        }
     }
 
     private record Override(Item smaller, Item larger, int factor) {}
