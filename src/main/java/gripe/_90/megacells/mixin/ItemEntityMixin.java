@@ -47,9 +47,9 @@ public abstract class ItemEntityMixin extends Entity {
             var state = level().getFluidState(new BlockPos(x, y, z));
 
             if (state.is(FluidTags.LAVA)) {
-                mega$lavaImmune = mega$lavaTicks++ <= 200 || LavaTransformLogic.allIngredientsPresent(self);
+                mega$lavaImmune = mega$lavaTicks <= 200;
 
-                if (mega$lavaTicks > 200 && LavaTransformLogic.allIngredientsPresent(self)) {
+                if (mega$lavaTicks++ > 200 && LavaTransformLogic.allIngredientsPresent(self)) {
                     mega$lavaTicks = 0;
                 }
             }

@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
-import appeng.recipes.transform.TransformRecipe;
+import appeng.recipes.AERecipeTypes;
 
 public final class LavaTransformLogic {
     private static final Set<Item> lavaCache = new HashSet<>();
@@ -20,7 +20,9 @@ public final class LavaTransformLogic {
     static {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> lavaCache.clear());
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
-            if (event.getPlayer() == null) lavaCache.clear();
+            if (event.getPlayer() == null) {
+                lavaCache.clear();
+            }
         });
     }
 
@@ -41,7 +43,7 @@ public final class LavaTransformLogic {
                 .map(e -> ((ItemEntity) e).getItem().getItem())
                 .toList();
 
-        for (var recipe : level.getRecipeManager().getAllRecipesFor(TransformRecipe.TYPE)) {
+        for (var recipe : level.getRecipeManager().getAllRecipesFor(AERecipeTypes.TRANSFORM)) {
             if (recipe.value().circumstance.isFluidTag(FluidTags.LAVA)) {
                 return recipe.value().getIngredients().stream().noneMatch(ingredient -> {
                     for (var stack : ingredient.getItems()) {
@@ -61,7 +63,7 @@ public final class LavaTransformLogic {
     @SuppressWarnings("SameReturnValue")
     private static Set<Item> getLavaTransformableItems(Level level) {
         if (lavaCache.isEmpty()) {
-            for (var recipe : level.getRecipeManager().getAllRecipesFor(TransformRecipe.TYPE)) {
+            for (var recipe : level.getRecipeManager().getAllRecipesFor(AERecipeTypes.TRANSFORM)) {
                 if (!recipe.value().circumstance.isFluidTag(FluidTags.LAVA)) {
                     continue;
                 }
