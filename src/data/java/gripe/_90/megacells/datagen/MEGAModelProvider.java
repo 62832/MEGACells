@@ -58,19 +58,18 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.GREATER_ENERGY_CARD);
         basicItem(MEGAItems.COMPRESSION_CARD);
 
-        MEGAItems.getItemCells().forEach(this::cell);
-        MEGAItems.getFluidCells().forEach(this::cell);
-        MEGAItems.getChemicalCells().forEach(this::cell);
-        MEGAItems.getSourceCells().forEach(this::cell);
+        for (var cell : MEGAItems.getTieredCells()) {
+            if (cell.portable()) {
+                portable(cell.item(), cell.keyType());
+            } else {
+                cell(cell.item());
+            }
+        }
+
         cell(MEGAItems.BULK_ITEM_CELL);
         cell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
-        MEGAItems.getItemPortables().forEach(cell -> portable(cell, "item"));
-        MEGAItems.getFluidPortables().forEach(cell -> portable(cell, "fluid"));
-        MEGAItems.getChemicalPortables().forEach(cell -> portable(cell, "chemical"));
-        MEGAItems.getSourcePortables().forEach(cell -> portable(cell, "source"));
-
-        MEGAItems.getAllCells().forEach(this::driveCell);
+        MEGAItems.getTieredCells().forEach(this::driveCell);
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
         driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
 
@@ -216,10 +215,12 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
     }
 
     private void driveCell(MEGAItems.CellDefinition cell) {
-        driveCell(
-                cell.tier().namePrefix() + "_" + cell.keyType() + "_cell",
-                "mega_" + cell.keyType() + "_cell",
-                (cell.tier().index() - 6) * 2);
+        if (!cell.portable()) {
+            driveCell(
+                    cell.tier().namePrefix() + "_" + cell.keyType() + "_cell",
+                    "mega_" + cell.keyType() + "_cell",
+                    (cell.tier().index() - 6) * 2);
+        }
     }
 
     private void driveCell(ItemDefinition<?> cell, int offset) {

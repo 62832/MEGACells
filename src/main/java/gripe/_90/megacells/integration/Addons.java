@@ -1,22 +1,34 @@
 package gripe._90.megacells.integration;
 
+import java.util.function.Supplier;
+
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.LoadingModList;
 import net.neoforged.fml.loading.moddiscovery.ModInfo;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.common.util.Lazy;
 
+import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
+import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.arseng.ArsEngIntegration;
+
+@SuppressWarnings("Convert2MethodRef")
 public enum Addons {
-    APPMEK("Applied Mekanistics"),
-    APPBOT("Applied Botanics"),
-    ARSENG("Ars Énergistique"),
-    APPLIEDE("AppliedE"),
-    AE2WTLIB_API("AE2WTLib API");
+    APPMEK("Applied Mekanistics", () -> new AppMekIntegration()),
+    ARSENG("Ars Énergistique", () -> new ArsEngIntegration()),
+    AE2WTLIB_API("AE2WTLib", () -> new AE2WTIntegration())
+// APPBOT("Applied Botanics"),
+// APPLIEDE("AppliedE"),
+// APPELEM("Applied Elemental"),
+;
 
     private final String modName;
+    private final Supplier<IntegrationHelper> helper;
 
-    Addons(String modName) {
+    Addons(String modName, Supplier<IntegrationHelper> helper) {
         this.modName = modName;
+        this.helper = Lazy.of(helper);
     }
 
     public String getModId() {
@@ -25,6 +37,10 @@ public enum Addons {
 
     public String getModName() {
         return modName;
+    }
+
+    public IntegrationHelper getHelper() {
+        return helper.get();
     }
 
     public boolean isLoaded() {

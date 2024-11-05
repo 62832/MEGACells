@@ -2,8 +2,6 @@ package gripe._90.megacells.client;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.util.FastColor;
@@ -37,7 +35,6 @@ import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
-@SuppressWarnings("unused")
 @Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
 public class MEGACellsClient {
     public MEGACellsClient(IEventBus eventBus) {
@@ -61,15 +58,12 @@ public class MEGACellsClient {
                 "/screens/megacells/mega_pattern_provider.json");
     }
 
-    @SuppressWarnings("deprecation")
     private static void initCraftingUnitModels(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             for (var type : MEGACraftingUnitType.values()) {
                 BuiltInModelHooks.addBuiltInModel(
                         MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
                         new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
-
-                ItemBlockRenderTypes.setRenderLayer(type.getDefinition().block(), RenderType.cutout());
             }
 
             BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
@@ -92,7 +86,7 @@ public class MEGACellsClient {
         event.enqueueWork(() -> {
             var modelPrefix = "block/drive/cells/";
 
-            for (var cell : MEGAItems.getAllCells()) {
+            for (var cell : MEGAItems.getTieredCells()) {
                 StorageCellModels.registerModel(
                         cell.item(),
                         MEGACells.makeId(modelPrefix + cell.tier().namePrefix() + "_" + cell.keyType() + "_cell"));
@@ -111,18 +105,18 @@ public class MEGACellsClient {
 
     private static void initItemColours(RegisterColorHandlersEvent.Item event) {
         var standardCells = new ArrayList<ItemLike>();
-        standardCells.addAll(MEGAItems.getItemCells());
-        standardCells.addAll(MEGAItems.getFluidCells());
-        standardCells.addAll(MEGAItems.getChemicalCells());
-        standardCells.addAll(MEGAItems.getSourceCells());
+        var portableCells = new ArrayList<ItemLike>();
+
+        for (var cell : MEGAItems.getTieredCells()) {
+            if (cell.portable()) {
+                portableCells.add(cell.item());
+            } else {
+                standardCells.add(cell.item());
+            }
+        }
+
         standardCells.add(MEGAItems.BULK_ITEM_CELL);
         standardCells.add(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
-
-        var portableCells = new ArrayList<ItemLike>();
-        portableCells.addAll(MEGAItems.getItemPortables());
-        portableCells.addAll(MEGAItems.getFluidPortables());
-        portableCells.addAll(MEGAItems.getChemicalPortables());
-        portableCells.addAll(MEGAItems.getSourcePortables());
 
         event.register(
                 (stack, tintIndex) -> FastColor.ARGB32.opaque(BasicStorageCell.getColor(stack, tintIndex)),

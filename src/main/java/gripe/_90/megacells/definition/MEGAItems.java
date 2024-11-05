@@ -24,15 +24,12 @@ import appeng.items.parts.PartItem;
 import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
-import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.menu.me.common.MEStorageMenu;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.DummyIntegrationItem;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
-import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.part.DecompressionModulePart;
@@ -51,7 +48,7 @@ public final class MEGAItems {
         return Collections.unmodifiableList(ITEMS);
     }
 
-    public static List<CellDefinition> getAllCells() {
+    public static List<CellDefinition> getTieredCells() {
         return Collections.unmodifiableList(CELLS);
     }
 
@@ -145,17 +142,22 @@ public final class MEGAItems {
     public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem(
             "MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
 
-    public static final ItemDefinition<?> CHEMICAL_CELL_1M = chemCell(TIER_1M);
-    public static final ItemDefinition<?> CHEMICAL_CELL_4M = chemCell(TIER_4M);
-    public static final ItemDefinition<?> CHEMICAL_CELL_16M = chemCell(TIER_16M);
-    public static final ItemDefinition<?> CHEMICAL_CELL_64M = chemCell(TIER_64M);
-    public static final ItemDefinition<?> CHEMICAL_CELL_256M = chemCell(TIER_256M);
+    public static final ItemDefinition<?> CHEMICAL_CELL_1M = integrationCell(TIER_1M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> CHEMICAL_CELL_4M = integrationCell(TIER_4M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> CHEMICAL_CELL_16M = integrationCell(TIER_16M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> CHEMICAL_CELL_64M = integrationCell(TIER_64M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> CHEMICAL_CELL_256M = integrationCell(TIER_256M, "Chemical", Addons.APPMEK);
 
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_1M = chemPortable(TIER_1M);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_4M = chemPortable(TIER_4M);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_16M = chemPortable(TIER_16M);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_64M = chemPortable(TIER_64M);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M = chemPortable(TIER_256M);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_1M =
+            integrationPortable(TIER_1M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_4M =
+            integrationPortable(TIER_4M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_16M =
+            integrationPortable(TIER_16M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_64M =
+            integrationPortable(TIER_64M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M =
+            integrationPortable(TIER_256M, "Chemical", Addons.APPMEK);
 
     public static final ItemDefinition<?> RADIOACTIVE_CELL_COMPONENT = integrationItem(
             "MEGA Radioactive Storage Component", "radioactive_cell_component", () -> MaterialItem::new, Addons.APPMEK);
@@ -168,69 +170,22 @@ public final class MEGAItems {
     public static final ItemDefinition<?> MEGA_SOURCE_CELL_HOUSING = integrationItem(
             "MEGA Source Cell Housing", "mega_source_cell_housing", () -> MaterialItem::new, Addons.ARSENG);
 
-    public static final ItemDefinition<?> SOURCE_CELL_1M = sourceCell(TIER_1M);
-    public static final ItemDefinition<?> SOURCE_CELL_4M = sourceCell(TIER_4M);
-    public static final ItemDefinition<?> SOURCE_CELL_16M = sourceCell(TIER_16M);
-    public static final ItemDefinition<?> SOURCE_CELL_64M = sourceCell(TIER_64M);
-    public static final ItemDefinition<?> SOURCE_CELL_256M = sourceCell(TIER_256M);
+    public static final ItemDefinition<?> SOURCE_CELL_1M = integrationCell(TIER_1M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> SOURCE_CELL_4M = integrationCell(TIER_4M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> SOURCE_CELL_16M = integrationCell(TIER_16M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> SOURCE_CELL_64M = integrationCell(TIER_64M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> SOURCE_CELL_256M = integrationCell(TIER_256M, "Source", Addons.ARSENG);
 
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_1M = sourcePortable(TIER_1M);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_4M = sourcePortable(TIER_4M);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_16M = sourcePortable(TIER_16M);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_64M = sourcePortable(TIER_64M);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M = sourcePortable(TIER_256M);
-
-    public static List<ItemDefinition<BasicStorageCell>> getItemCells() {
-        return List.of(ITEM_CELL_1M, ITEM_CELL_4M, ITEM_CELL_16M, ITEM_CELL_64M, ITEM_CELL_256M);
-    }
-
-    public static List<ItemDefinition<BasicStorageCell>> getFluidCells() {
-        return List.of(FLUID_CELL_1M, FLUID_CELL_4M, FLUID_CELL_16M, FLUID_CELL_64M, FLUID_CELL_256M);
-    }
-
-    public static List<ItemDefinition<?>> getChemicalCells() {
-        return List.of(CHEMICAL_CELL_1M, CHEMICAL_CELL_4M, CHEMICAL_CELL_16M, CHEMICAL_CELL_64M, CHEMICAL_CELL_256M);
-    }
-
-    public static List<ItemDefinition<?>> getSourceCells() {
-        return List.of(SOURCE_CELL_1M, SOURCE_CELL_4M, SOURCE_CELL_16M, SOURCE_CELL_64M, SOURCE_CELL_256M);
-    }
-
-    public static List<ItemDefinition<? extends AbstractPortableCell>> getItemPortables() {
-        return List.of(
-                PORTABLE_ITEM_CELL_1M,
-                PORTABLE_ITEM_CELL_4M,
-                PORTABLE_ITEM_CELL_16M,
-                PORTABLE_ITEM_CELL_64M,
-                PORTABLE_ITEM_CELL_256M);
-    }
-
-    public static List<ItemDefinition<? extends AbstractPortableCell>> getFluidPortables() {
-        return List.of(
-                PORTABLE_FLUID_CELL_1M,
-                PORTABLE_FLUID_CELL_4M,
-                PORTABLE_FLUID_CELL_16M,
-                PORTABLE_FLUID_CELL_64M,
-                PORTABLE_FLUID_CELL_256M);
-    }
-
-    public static List<ItemDefinition<?>> getChemicalPortables() {
-        return List.of(
-                PORTABLE_CHEMICAL_CELL_1M,
-                PORTABLE_CHEMICAL_CELL_4M,
-                PORTABLE_CHEMICAL_CELL_16M,
-                PORTABLE_CHEMICAL_CELL_64M,
-                PORTABLE_CHEMICAL_CELL_256M);
-    }
-
-    public static List<ItemDefinition<?>> getSourcePortables() {
-        return List.of(
-                PORTABLE_SOURCE_CELL_1M,
-                PORTABLE_SOURCE_CELL_4M,
-                PORTABLE_SOURCE_CELL_16M,
-                PORTABLE_SOURCE_CELL_64M,
-                PORTABLE_SOURCE_CELL_256M);
-    }
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_1M =
+            integrationPortable(TIER_1M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_4M =
+            integrationPortable(TIER_4M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_16M =
+            integrationPortable(TIER_16M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_64M =
+            integrationPortable(TIER_64M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M =
+            integrationPortable(TIER_256M, "Source", Addons.ARSENG);
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
@@ -257,7 +212,7 @@ public final class MEGAItems {
                         tier.bytes() / 128,
                         63,
                         AEKeyType.items()));
-        CELLS.add(new CellDefinition(cell, tier, "item"));
+        CELLS.add(new CellDefinition(cell, tier, "item", false));
         return cell;
     }
 
@@ -274,29 +229,18 @@ public final class MEGAItems {
                         tier.bytes() / 128,
                         18,
                         AEKeyType.fluids()));
-        CELLS.add(new CellDefinition(cell, tier, "fluid"));
+        CELLS.add(new CellDefinition(cell, tier, "fluid", false));
         return cell;
     }
 
-    private static ItemDefinition<?> chemCell(StorageTier tier) {
+    private static ItemDefinition<?> integrationCell(StorageTier tier, String type, Addons addon) {
         var cell = integrationItem(
-                tier.namePrefix().toUpperCase() + " MEGA Chemical Storage Cell",
-                "chemical_storage_cell_" + tier.namePrefix(),
-                () -> AppMekIntegration.createChemCell(tier),
-                p -> p.stacksTo(1),
-                Addons.APPMEK);
-        CELLS.add(new CellDefinition(cell, tier, "chemical"));
-        return cell;
-    }
-
-    private static ItemDefinition<?> sourceCell(StorageTier tier) {
-        var cell = integrationItem(
-                tier.namePrefix().toUpperCase() + " MEGA Source Storage Cell",
-                "source_storage_cell_" + tier.namePrefix(),
-                () -> ArsEngIntegration.createSourceCell(tier),
-                p -> p.stacksTo(1),
-                Addons.ARSENG);
-        CELLS.add(new CellDefinition(cell, tier, "source"));
+                tier.namePrefix().toUpperCase() + " MEGA " + type + " Storage Cell",
+                type.toLowerCase() + "_storage_cell_" + tier.namePrefix(),
+                () -> addon.getHelper().createCell(tier),
+                props -> props.stacksTo(1),
+                addon);
+        CELLS.add(new CellDefinition(cell, tier, type.toLowerCase(), false));
         return cell;
     }
 
@@ -305,7 +249,7 @@ public final class MEGAItems {
                 tier.namePrefix().toUpperCase() + " Portable Item Cell",
                 "portable_item_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(p, tier, AEKeyType.items(), MEStorageMenu.PORTABLE_ITEM_CELL_TYPE, 0x80caff));
-        CELLS.add(new CellDefinition(cell, tier, "item"));
+        CELLS.add(new CellDefinition(cell, tier, "item", true));
         return cell;
     }
 
@@ -315,29 +259,18 @@ public final class MEGAItems {
                 "portable_fluid_cell_" + tier.namePrefix(),
                 p -> new MEGAPortableCell(
                         p, tier, AEKeyType.fluids(), MEStorageMenu.PORTABLE_FLUID_CELL_TYPE, 0x80caff));
-        CELLS.add(new CellDefinition(cell, tier, "fluid"));
+        CELLS.add(new CellDefinition(cell, tier, "fluid", true));
         return cell;
     }
 
-    private static ItemDefinition<?> chemPortable(StorageTier tier) {
+    private static ItemDefinition<?> integrationPortable(StorageTier tier, String type, Addons addon) {
         var cell = integrationItem(
-                tier.namePrefix().toUpperCase() + " Portable Chemical Cell",
-                "portable_chemical_cell_" + tier.namePrefix(),
-                () -> AppMekIntegration.createChemPortable(tier),
-                p -> p.stacksTo(1),
-                Addons.APPMEK);
-        CELLS.add(new CellDefinition(cell, tier, "chemical"));
-        return cell;
-    }
-
-    private static ItemDefinition<?> sourcePortable(StorageTier tier) {
-        var cell = integrationItem(
-                tier.namePrefix().toUpperCase() + " Portable Source Cell",
-                "portable_source_cell_" + tier.namePrefix(),
-                () -> ArsEngIntegration.createSourcePortable(tier),
-                p -> p.stacksTo(1),
-                Addons.ARSENG);
-        CELLS.add(new CellDefinition(cell, tier, "source"));
+                tier.namePrefix().toUpperCase() + " Portable " + type + " Cell",
+                "portable_" + type.toLowerCase() + "_cell_" + tier.namePrefix(),
+                () -> addon.getHelper().createPortable(tier),
+                props -> props.stacksTo(1),
+                addon);
+        CELLS.add(new CellDefinition(cell, tier, type.toLowerCase(), true));
         return cell;
     }
 
@@ -373,5 +306,5 @@ public final class MEGAItems {
         return integrationItem(englishName, id, factory, p -> p, addon);
     }
 
-    public record CellDefinition(ItemDefinition<?> item, StorageTier tier, String keyType) {}
+    public record CellDefinition(ItemDefinition<?> item, StorageTier tier, String keyType, boolean portable) {}
 }

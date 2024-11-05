@@ -16,13 +16,16 @@ import gripe._90.arseng.item.PortableSourceCellItem;
 import gripe._90.arseng.item.SourceCellItem;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
+import gripe._90.megacells.integration.IntegrationHelper;
 
-public class ArsEngIntegration {
-    public static Function<Item.Properties, Item> createSourceCell(StorageTier tier) {
+public class ArsEngIntegration implements IntegrationHelper {
+    @Override
+    public Function<Item.Properties, Item> createCell(StorageTier tier) {
         return p -> new SourceCellItem(p, tier, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
     }
 
-    public static Function<Item.Properties, Item> createSourcePortable(StorageTier tier) {
+    @Override
+    public Function<Item.Properties, Item> createPortable(StorageTier tier) {
         return p -> new PortableSourceCellItem(p, tier) {
             @Override
             public ResourceLocation getRecipeId() {
@@ -32,17 +35,21 @@ public class ArsEngIntegration {
         };
     }
 
-    @SuppressWarnings("CodeBlock2Expr")
-    public static void initUpgrades() {
-        MEGAItems.getSourceCells().forEach(cell -> {
-            Upgrades.add(AEItems.VOID_CARD, cell, 1, GuiText.StorageCells.getTranslationKey());
-        });
-        MEGAItems.getSourcePortables().forEach(cell -> {
+    @Override
+    public void initUpgrades() {
+        for (var cell : MEGAItems.getTieredCells()) {
+            if (cell.keyType().equals("source")) {
+                Upgrades.add(AEItems.VOID_CARD, cell.item(), 1, GuiText.StorageCells.getTranslationKey());
+
+                if (cell.portable()) {
+                    Upgrades.add(
+                            MEGAItems.GREATER_ENERGY_CARD, cell.item(), 2, GuiText.PortableCells.getTranslationKey());
+                }
+            }
+        }
+
+        for (var cell : ArsEngItems.getPortables()) {
             Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, cell, 2, GuiText.PortableCells.getTranslationKey());
-            Upgrades.add(AEItems.VOID_CARD, cell, 1, GuiText.PortableCells.getTranslationKey());
-        });
-        ArsEngItems.getPortables().forEach(cell -> {
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, cell, 2, GuiText.PortableCells.getTranslationKey());
-        });
+        }
     }
 }

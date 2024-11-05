@@ -12,7 +12,7 @@ import appeng.hooks.BuiltInModelHooks;
 
 @Mixin(BuiltInModelHooks.class)
 public interface BuiltInModelHooksAccessor {
-    @Accessor(value = "builtInModels", remap = false)
+    @Accessor
     static Map<ResourceLocation, UnbakedModel> getBuiltInModels() {
         throw new AssertionError();
     }

@@ -46,10 +46,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.integration.Addons;
-import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
-import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.misc.CompressionService;
 
@@ -87,32 +84,22 @@ public class MEGACells {
             var interfaceGroup = GuiText.Interface.getTranslationKey();
             var wirelessTerminalGroup = GuiText.WirelessTerminals.getTranslationKey();
 
-            for (var itemCell : MEGAItems.getItemCells()) {
-                Upgrades.add(AEItems.FUZZY_CARD, itemCell, 1, storageCellGroup);
-                Upgrades.add(AEItems.INVERTER_CARD, itemCell, 1, storageCellGroup);
-                Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemCell, 1, storageCellGroup);
-                Upgrades.add(AEItems.VOID_CARD, itemCell, 1, storageCellGroup);
-            }
+            for (var cell : MEGAItems.getTieredCells()) {
+                if (!(cell.keyType().equals("item") || cell.keyType().equals("fluid"))) {
+                    continue;
+                }
 
-            for (var fluidCell : MEGAItems.getFluidCells()) {
-                Upgrades.add(AEItems.INVERTER_CARD, fluidCell, 1, storageCellGroup);
-                Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidCell, 1, storageCellGroup);
-                Upgrades.add(AEItems.VOID_CARD, fluidCell, 1, storageCellGroup);
-            }
+                Upgrades.add(AEItems.INVERTER_CARD, cell.item(), 1, storageCellGroup);
+                Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, cell.item(), 1, storageCellGroup);
+                Upgrades.add(AEItems.VOID_CARD, cell.item(), 1, storageCellGroup);
 
-            for (var itemPortable : MEGAItems.getItemPortables()) {
-                Upgrades.add(AEItems.FUZZY_CARD, itemPortable, 1, portableCellGroup);
-                Upgrades.add(AEItems.INVERTER_CARD, itemPortable, 1, portableCellGroup);
-                Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, itemPortable, 2, portableCellGroup);
-                Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, itemPortable, 1, storageCellGroup);
-                Upgrades.add(AEItems.VOID_CARD, itemPortable, 1, storageCellGroup);
-            }
+                if (cell.keyType().equals("item")) {
+                    Upgrades.add(AEItems.FUZZY_CARD, cell.item(), 1, storageCellGroup);
+                }
 
-            for (var fluidPortable : MEGAItems.getFluidPortables()) {
-                Upgrades.add(AEItems.INVERTER_CARD, fluidPortable, 1, portableCellGroup);
-                Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, fluidPortable, 2, portableCellGroup);
-                Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, fluidPortable, 1, storageCellGroup);
-                Upgrades.add(AEItems.VOID_CARD, fluidPortable, 1, storageCellGroup);
+                if (cell.portable()) {
+                    Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, cell.item(), 2, portableCellGroup);
+                }
             }
 
             Upgrades.add(AEItems.CRAFTING_CARD, MEGABlocks.MEGA_INTERFACE, 1, interfaceGroup);
@@ -142,15 +129,11 @@ public class MEGACells {
                 Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portableCell, 2, portableCellGroup);
             }
 
-            if (Addons.AE2WTLIB_API.isLoaded()) {
-                AE2WTIntegration.initUpgrades();
+            for (var addon : Addons.values()) {
+                if (addon.isLoaded()) {
+                    addon.getHelper().initUpgrades();
+                }
             }
-
-            if (Addons.APPMEK.isLoaded()) {
-                AppMekIntegration.initUpgrades();
-            }
-
-            if (Addons.ARSENG.isLoaded()) ArsEngIntegration.initUpgrades();
         });
     }
 
@@ -158,10 +141,16 @@ public class MEGACells {
         event.enqueueWork(() -> {
             StorageCells.addCellHandler(BulkCellItem.HANDLER);
 
-            MEGAItems.getItemPortables()
-                    .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_ITEM_CELL));
-            MEGAItems.getFluidPortables()
-                    .forEach(cell -> HotkeyActions.registerPortableCell(cell, HotkeyAction.PORTABLE_FLUID_CELL));
+            for (var cell : MEGAItems.getTieredCells()) {
+                if (cell.item().asItem() instanceof AbstractPortableCell portable) {
+                    HotkeyActions.register(
+                            portable,
+                            portable::openFromInventory,
+                            cell.keyType().equals("item")
+                                    ? HotkeyAction.PORTABLE_ITEM_CELL
+                                    : HotkeyAction.PORTABLE_FLUID_CELL);
+                }
+            }
 
             if (Addons.APPMEK.isLoaded()) {
                 StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
@@ -207,25 +196,17 @@ public class MEGACells {
                 MEGABlockEntities.MEGA_PATTERN_PROVIDER.get(),
                 (be, context) -> be.getLogic().getReturnInv());
 
-        MEGAItems.getItemPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
-        MEGAItems.getFluidPortables().forEach(portable -> registerPoweredItemCapability(event, portable.get()));
-
-        for (var portable : MEGAItems.getChemicalPortables()) {
-            if (portable.get() instanceof AbstractPortableCell cell) {
-                registerPoweredItemCapability(event, cell);
-            }
-        }
-
-        for (var portable : MEGAItems.getSourcePortables()) {
-            if (portable.get() instanceof AbstractPortableCell cell) {
-                registerPoweredItemCapability(event, cell);
+        for (var cell : MEGAItems.getTieredCells()) {
+            if (cell.portable()) {
+                registerPoweredItemCapability(event, cell.item().asItem());
             }
         }
     }
 
-    private static <T extends Item & IAEItemPowerStorage> void registerPoweredItemCapability(
-            RegisterCapabilitiesEvent event, T item) {
-        event.registerItem(
-                Capabilities.EnergyStorage.ITEM, (object, context) -> new PoweredItemCapabilities(object, item), item);
+    private static <T extends Item> void registerPoweredItemCapability(RegisterCapabilitiesEvent event, T item) {
+        if (item instanceof IAEItemPowerStorage powered) {
+            event.registerItem(
+                    Capabilities.EnergyStorage.ITEM, (stack, ctx) -> new PoweredItemCapabilities(stack, powered), item);
+        }
     }
 }

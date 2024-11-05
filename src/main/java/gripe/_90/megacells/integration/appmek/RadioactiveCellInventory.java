@@ -23,7 +23,7 @@ import gripe._90.megacells.definition.MEGAConfig;
 
 public class RadioactiveCellInventory implements StorageCell {
     static final int MAX_BYTES = 256;
-    private static final long MAX_MB = (long) MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
+    private static final int MAX_MB = MAX_BYTES * MekanismKeyType.TYPE.getAmountPerByte();
 
     private final ISaveProvider container;
     private final ItemStack stack;
