@@ -97,7 +97,16 @@ public class CompressionService {
         variants.addFirst(baseVariant);
 
         for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
-            variants.addFirst(lower.item().getItem());
+            var item = lower.item.getItem();
+
+            if (variants.contains(item)) {
+                MEGACells.LOGGER.warn(
+                        "Duplicate lower compression variant detected: {}. Check any recipe involving this item for problems.",
+                        lower);
+                break;
+            }
+
+            variants.addFirst(item);
             multipliers.addFirst(lower.factor());
             lower = getNextVariant(lower.item().getItem(), decompressed, false, access);
         }
@@ -110,6 +119,13 @@ public class CompressionService {
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
+            if (chain.contains(higher)) {
+                MEGACells.LOGGER.warn(
+                        "Duplicate higher compression variant detected: {}}. Check any recipe involving this item for problems.",
+                        higher);
+                break;
+            }
+
             chain.add(higher);
             higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }
