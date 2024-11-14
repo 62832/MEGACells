@@ -23,13 +23,13 @@ public class MEGAInterfacePart extends InterfacePart {
     private static final ResourceLocation MODEL_BASE = MEGACells.makeId("part/mega_interface");
 
     @PartModels
-    public static final PartModel MODELS_OFF = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_off"));
+    private static final PartModel MODELS_OFF = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_off"));
 
     @PartModels
-    public static final PartModel MODELS_ON = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_on"));
+    private static final PartModel MODELS_ON = new PartModel(MODEL_BASE, AppEng.makeId("part/interface_on"));
 
     @PartModels
-    public static final PartModel MODELS_HAS_CHANNEL =
+    private static final PartModel MODELS_HAS_CHANNEL =
             new PartModel(MODEL_BASE, AppEng.makeId("part/interface_has_channel"));
 
     public MEGAInterfacePart(IPartItem<?> partItem) {

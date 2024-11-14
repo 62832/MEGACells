@@ -42,7 +42,7 @@ import gripe._90.megacells.misc.DecompressionService;
 
 public class DecompressionModulePart extends AEBasePart implements ICraftingProvider, IPriorityHost, IGridTickable {
     @PartModels
-    public static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
+    private static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
 
     private final Object2LongMap<AEKey> outputs = new Object2LongOpenHashMap<>();
 
