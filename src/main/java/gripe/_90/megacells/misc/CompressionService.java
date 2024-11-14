@@ -240,14 +240,12 @@ public class CompressionService {
     private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
         for (var input : recipe.getIngredients().getFirst().getItems()) {
             if (input.is(MEGATags.COMPRESSION_OVERRIDES)) {
-                // Less expensive to check for decompression rather than compression, and since this method is only
-                // being used on recipes that are candidates for either compression or decompression, this is fine.
-                var compressed = !isDecompressionRecipe(recipe, access);
+                var decompressed = isDecompressionRecipe(recipe, access);
                 var output = recipe.getResultItem(access);
 
-                var smaller = (compressed ? input : output).getItem();
-                var larger = (compressed ? output : input).getItem();
-                var factor = compressed ? recipe.getIngredients().size() : output.getCount();
+                var smaller = (decompressed ? output : input).getItem();
+                var larger = (decompressed ? input : output).getItem();
+                var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
 
                 overrides.add(new Override(smaller, larger, factor));
                 return true;
