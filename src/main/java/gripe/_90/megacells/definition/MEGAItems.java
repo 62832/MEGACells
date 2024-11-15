@@ -10,7 +10,6 @@ import net.minecraft.Util;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.PartModels;
@@ -37,7 +36,6 @@ import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPartItem;
-import gripe._90.megacells.misc.DecompressionPattern;
 
 public final class MEGAItems {
     public static final DeferredRegister.Items DR = DeferredRegister.createItems(MEGACells.MODID);
@@ -94,11 +92,6 @@ public final class MEGAItems {
     public static final ItemDefinition<BasicStorageCell> FLUID_CELL_64M = fluidCell(TIER_64M);
     public static final ItemDefinition<BasicStorageCell> FLUID_CELL_256M = fluidCell(TIER_256M);
 
-    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT =
-            item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL =
-            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
-
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_1M = itemPortable(TIER_1M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_4M = itemPortable(TIER_4M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_ITEM_CELL_16M = itemPortable(TIER_16M);
@@ -113,13 +106,18 @@ public final class MEGAItems {
 
     public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD =
             item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
+
+    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT =
+            item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
+    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL =
+            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD =
             item("Compression Card", "compression_card", UpgradeCardItem::new);
-
-    public static final ItemDefinition<Item> DECOMPRESSION_PATTERN =
-            item("Decompression Pattern", "decompression_pattern", p -> PatternDetailsHelper.encodedPatternItemBuilder(
-                            k -> new DecompressionPattern(k))
-                    .build());
+    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
+            "MEGA Decompression Module",
+            "decompression_module",
+            DecompressionModulePart.class,
+            DecompressionModulePart::new);
 
     public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE =
             part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
@@ -127,12 +125,6 @@ public final class MEGAItems {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
     });
-
-    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
-            "MEGA Decompression Module",
-            "decompression_module",
-            DecompressionModulePart.class,
-            DecompressionModulePart::new);
     public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
             part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
 

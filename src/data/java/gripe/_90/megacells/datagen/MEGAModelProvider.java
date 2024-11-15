@@ -19,7 +19,6 @@ import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.core.AppEng;
-import appeng.core.definitions.AEItems;
 import appeng.core.definitions.ItemDefinition;
 import appeng.datagen.providers.models.AE2BlockStateProvider;
 import appeng.init.client.InitItemModelsProperties;
@@ -74,13 +73,6 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         MEGAItems.getTieredCells().forEach(this::driveCell);
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
         driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
-
-        itemModels()
-                .singleTexture(
-                        MEGAItems.DECOMPRESSION_PATTERN.id().getPath(),
-                        mcLoc("item/generated"),
-                        "layer0",
-                        AppEng.makeId("item/" + AEItems.CRAFTING_PATTERN.id().getPath()));
 
         simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));

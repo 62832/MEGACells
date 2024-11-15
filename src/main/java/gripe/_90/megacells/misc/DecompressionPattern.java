@@ -15,7 +15,6 @@ import appeng.api.crafting.IPatternDetails;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
-import appeng.core.definitions.AEItems;
 
 import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAItems;
@@ -26,27 +25,12 @@ public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey variant;
     private final int factor;
 
-    public DecompressionPattern(AEItemKey definition) {
-        this.definition = definition;
-        var encodedPattern = definition.get(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN);
-
-        if (encodedPattern == null) {
-            throw new IllegalArgumentException("Given item does not encode a decompression pattern: " + definition);
-        } else if (encodedPattern.containsMissingContent()) {
-            throw new IllegalArgumentException("Pattern references missing content");
-        }
-
-        base = AEItemKey.of(encodedPattern.base);
-        variant = AEItemKey.of(encodedPattern.variant);
-        factor = encodedPattern.factor;
-    }
-
     public DecompressionPattern(AEItemKey base, CompressionChain.Variant variant) {
         this.base = base;
         this.variant = variant.item();
         this.factor = variant.factor();
 
-        var definition = new ItemStack(MEGAItems.DECOMPRESSION_PATTERN);
+        var definition = new ItemStack(MEGAItems.SKY_STEEL_INGOT);
         definition.set(
                 MEGAComponents.ENCODED_DECOMPRESSION_PATTERN,
                 new Encoded(base.toStack(), variant.item().toStack(), variant.factor()));
@@ -117,9 +101,5 @@ public class DecompressionPattern implements IPatternDetails {
                 ByteBufCodecs.VAR_INT,
                 Encoded::factor,
                 Encoded::new);
-
-        private boolean containsMissingContent() {
-            return AEItems.MISSING_CONTENT.is(base) || AEItems.MISSING_CONTENT.is(variant);
-        }
     }
 }
