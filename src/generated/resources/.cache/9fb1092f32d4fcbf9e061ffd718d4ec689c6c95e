@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-21T15:46:55.532690722	Recipes
+// 1.21.1	2024-11-14T20:29:08.043673855	Recipes
 94f8f9445346bc6aa07cda2a3ca730d685c7abfe data/megacells/advancement/recipes/building_blocks/crafting/sky_bronze_block.json
 bafe5e1847658b51c654ec6f0888ca6d10be429b data/megacells/advancement/recipes/building_blocks/crafting/sky_osmium_block.json
 c7454f25cf0053a6a4b616c628ff7ad67714d1dd data/megacells/advancement/recipes/building_blocks/crafting/sky_steel_block.json
@@ -85,6 +85,7 @@ a6a7e98d91e809c43906095544965f693af352ff data/megacells/advancement/recipes/misc
 ef75df41d86a094882ba795720bd3b3e2c6d5981 data/megacells/advancement/recipes/misc/crafting/sky_bronze_ingot_from_sky_bronze_block.json
 4ae2aa45e5252627c03c87caecdd8122b02e45ee data/megacells/advancement/recipes/misc/crafting/sky_osmium_ingot_from_sky_osmium_block.json
 95e9dcfadbd6565242e0c89d85f9272aa69fcd6a data/megacells/advancement/recipes/misc/crafting/sky_steel_ingot_from_sky_steel_block.json
+e3f9dd0238d4f4558b8bd86c6d517e574f2dfbc3 data/megacells/advancement/recipes/misc/network/cell_dock.json
 fea4db086508a3875e8b11d8e384e35c95b11b48 data/megacells/advancement/recipes/misc/network/mega_interface.json
 a967fa390f5f28e988c6be0c55ce00b0e9ec419b data/megacells/advancement/recipes/misc/network/mega_interface_block.json
 088fa991b78870508c9120f28278a7a30529c53f data/megacells/advancement/recipes/misc/network/mega_interface_part.json
@@ -182,6 +183,7 @@ b70b7850d64dbccd29188b191d9fbc85934864f4 data/megacells/recipe/inscriber/accumul
 837b89fb9ba383bc6ed8728784e0783a37c6f7b8 data/megacells/recipe/inscriber/accumulation_processor_press_extra.json
 d746c6725b36f5b794e03f2c74aff47d5be449b9 data/megacells/recipe/inscriber/accumulation_processor_print.json
 e6d1135f705100c4c5d4e72d1a0936c99ff14c8a data/megacells/recipe/mega_source_cell_housing.json
+461f043a0df7237502e593b3c7cf88baed736ade data/megacells/recipe/network/cell_dock.json
 fc3a06b25c7a5e423bd432fc555c659f3f4fb648 data/megacells/recipe/network/mega_interface.json
 92a45f534fb651563f10ca2174c97e09a022ddb4 data/megacells/recipe/network/mega_interface_block.json
 fb9f204cb093ed7add90f88538c224647cd40b34 data/megacells/recipe/network/mega_interface_part.json

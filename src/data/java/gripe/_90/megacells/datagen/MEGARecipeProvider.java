@@ -317,6 +317,15 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cable_mega_pattern_provider", has(MEGAItems.MEGA_PATTERN_PROVIDER))
                 .save(output, MEGACells.makeId("network/mega_pattern_provider_block"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.CELL_DOCK)
+                .pattern("ICI")
+                .pattern(" # ")
+                .define('I', ConventionTags.IRON_INGOT)
+                .define('C', ConventionTags.COPPER_INGOT)
+                .define('#', ConventionTags.GLASS_CABLE)
+                .unlockedBy("has_glass_cable", has(ConventionTags.GLASS_CABLE))
+                .save(output, MEGACells.makeId("network/cell_dock"));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CELL_COMPONENT)
                 .pattern("aba")
                 .pattern("cdc")
