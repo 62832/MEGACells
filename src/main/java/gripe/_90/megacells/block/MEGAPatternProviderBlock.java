@@ -2,6 +2,8 @@ package gripe._90.megacells.block;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -64,6 +66,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         }
     }
 
+    @NotNull
     @Override
     protected InteractionResult useWithoutItem(
             BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
@@ -84,6 +87,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
         return InteractionResult.PASS;
     }
 
+    @NotNull
     @Override
     protected ItemInteractionResult useItemOn(
             ItemStack heldItem,

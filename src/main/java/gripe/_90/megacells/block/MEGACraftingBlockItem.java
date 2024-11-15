@@ -7,6 +7,8 @@ import static gripe._90.megacells.definition.MEGATranslations.AcceleratorThreads
 import java.util.List;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -27,6 +29,7 @@ public class MEGACraftingBlockItem extends CraftingBlockItem {
         super(id, props, disassemblyExtra);
     }
 
+    @NotNull
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (AEConfig.instance().isDisassemblyCraftingEnabled() && InteractionUtil.isInAlternateUseMode(player)) {

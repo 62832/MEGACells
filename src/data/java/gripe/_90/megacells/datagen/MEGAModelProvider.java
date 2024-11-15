@@ -2,6 +2,8 @@ package gripe._90.megacells.datagen;
 
 import java.util.ArrayList;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
@@ -254,7 +256,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         var partName = id.substring(id.indexOf('_') + 1);
         var front = MEGACells.makeId("part/" + partName);
         var back = MEGACells.makeId("part/" + partName + "_back");
-        var sides = MEGACells.makeId("part/" + partName + "_sides");
+        var sides = MEGACells.makeId("part/mega_monitor_sides");
 
         models().singleTexture(
                         "part/" + partName,
@@ -271,6 +273,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 .texture("back", back);
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "Block States / Models";

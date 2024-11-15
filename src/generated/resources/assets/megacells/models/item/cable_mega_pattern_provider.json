@@ -3,6 +3,6 @@
   "textures": {
     "back": "megacells:part/mega_pattern_provider_back",
     "front": "megacells:part/mega_pattern_provider",
-    "sides": "megacells:part/mega_pattern_provider_sides"
+    "sides": "megacells:part/mega_monitor_sides"
   }
 }
