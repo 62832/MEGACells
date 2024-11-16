@@ -10,10 +10,12 @@ import appeng.menu.AEBaseMenu;
 import appeng.menu.implementations.MenuTypeBuilder;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.item.cell.PortableCellWorkbenchMenuHost;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.menu.CellDockMenu;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
+import gripe._90.megacells.menu.PortableCellWorkbenchMenu;
 
 public final class MEGAMenus {
     public static final DeferredRegister<MenuType<?>> DR = DeferredRegister.create(Registries.MENU, MEGACells.MODID);
@@ -24,6 +26,8 @@ public final class MEGAMenus {
             create("mega_pattern_provider", MEGAPatternProviderMenu::new, PatternProviderLogicHost.class);
 
     public static final MenuType<CellDockMenu> CELL_DOCK = create("cell_dock", CellDockMenu::new, CellDockPart.class);
+    public static final MenuType<PortableCellWorkbenchMenu> PORTABLE_CELL_WORKBENCH =
+            create("portable_cell_workbench", PortableCellWorkbenchMenu::new, PortableCellWorkbenchMenuHost.class);
 
     private static <M extends AEBaseMenu, H> MenuType<M> create(
             String id, MenuTypeBuilder.MenuFactory<M, H> factory, Class<H> host) {

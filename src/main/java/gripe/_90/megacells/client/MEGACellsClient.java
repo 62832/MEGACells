@@ -29,6 +29,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.client.screen.CellDockScreen;
+import gripe._90.megacells.client.screen.PortableCellWorkbenchScreen;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
@@ -58,6 +59,11 @@ public class MEGACellsClient {
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
         InitScreens.register(event, MEGAMenus.CELL_DOCK, CellDockScreen::new, "/screens/megacells/cell_dock.json");
+        InitScreens.register(
+                event,
+                MEGAMenus.PORTABLE_CELL_WORKBENCH,
+                PortableCellWorkbenchScreen::new,
+                "/screens/megacells/portable_cell_workbench.json");
     }
 
     private static void initCraftingUnitModels(FMLClientSetupEvent event) {
