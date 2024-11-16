@@ -18,7 +18,7 @@ public abstract class ItemMenuHostMixin {
     @Inject(method = "getUpgrades", at = @At("HEAD"), cancellable = true)
     private void getPortableCellWorkbenchUpgrades(CallbackInfoReturnable<IUpgradeInventory> cir) {
         if (((ItemMenuHost<?>) (Object) this) instanceof PortableCellWorkbenchMenuHost workbench) {
-            cir.setReturnValue(workbench.getCachedUpgrades());
+            cir.setReturnValue(workbench.getCellUpgrades());
         }
     }
 }

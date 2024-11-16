@@ -2,10 +2,14 @@ package gripe._90.megacells.item.cell;
 
 import java.util.Collections;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.ItemLike;
 
 import appeng.api.config.CopyMode;
 import appeng.api.config.Settings;
@@ -28,20 +32,12 @@ import appeng.util.inv.InternalInventoryHost;
 
 /**
  * See {@link appeng.blockentity.misc.CellWorkbenchBlockEntity}
- * <p>
- * FIXME: Currently suffers from a dupe/void bug due to the config and upgrades on the cell within not saving properly.
- * This was more or less expected attempting to copy-paste the logic for a block entity to what is instead an item.
  */
 public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWorkbenchItem>
         implements InternalInventoryHost, ISegmentedInventory, IConfigurableObject, IConfigInvHost {
-    // FIXME: Ideally this should use a supplier-based inventory as with other ItemMenuHost impls
     private final AppEngInternalInventory cellInv = new AppEngInternalInventory(this, 1);
     private final GenericStackInv config =
             new GenericStackInv(this::configChanged, GenericStackInv.Mode.CONFIG_TYPES, 63);
-
-    private IUpgradeInventory cachedUpgrades;
-    private ConfigInventory cachedConfig;
-    private boolean locked;
 
     public PortableCellWorkbenchMenuHost(PortableCellWorkbenchItem item, Player player, ItemMenuHostLocator locator) {
         super(item, player, locator);
@@ -66,29 +62,17 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
 
     @Override
     public void onChangeInventory(AppEngInternalInventory inv, int slot) {
-        if (inv == cellInv && !locked) {
-            locked = true;
+        var configInventory = getCellConfigInventory();
 
-            try {
-                cachedUpgrades = null;
-                cachedConfig = null;
-
-                var configInventory = getCellConfigInventory();
-
-                if (configInventory != null) {
-                    if (!configInventory.isEmpty()) {
-                        CellWorkbenchBlockEntity.copy(configInventory, config);
-                    } else {
-                        CellWorkbenchBlockEntity.copy(config, configInventory);
-                        CellWorkbenchBlockEntity.copy(configInventory, config);
-                    }
-                } else if (getConfigManager().getSetting(Settings.COPY_MODE) == CopyMode.CLEAR_ON_REMOVE) {
-                    config.clear();
-                    saveChanges();
-                }
-            } finally {
-                locked = false;
+        if (configInventory != null) {
+            if (!configInventory.isEmpty()) {
+                CellWorkbenchBlockEntity.copy(configInventory, config);
+            } else {
+                CellWorkbenchBlockEntity.copy(config, configInventory);
+                CellWorkbenchBlockEntity.copy(configInventory, config);
             }
+        } else if (getConfigManager().getSetting(Settings.COPY_MODE) == CopyMode.CLEAR_ON_REMOVE) {
+            config.clear();
         }
     }
 
@@ -103,48 +87,30 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
     }
 
     private void configChanged() {
-        if (locked) {
-            return;
+        var c = getCellConfigInventory();
+
+        if (c != null) {
+            CellWorkbenchBlockEntity.copy(config, c);
+            CellWorkbenchBlockEntity.copy(c, config);
         }
 
-        locked = true;
-
-        try {
-            var c = getCellConfigInventory();
-
-            if (c != null) {
-                CellWorkbenchBlockEntity.copy(config, c);
-                CellWorkbenchBlockEntity.copy(c, config);
-            }
-        } finally {
-            locked = false;
-        }
+        saveChanges();
     }
 
     private ConfigInventory getCellConfigInventory() {
-        if (cachedConfig == null) {
-            var cell = getCell();
+        var cell = getCell();
 
-            if (cell == null) {
-                return null;
-            }
-
-            var is = cellInv.getStackInSlot(0);
-
-            if (is.isEmpty()) {
-                return null;
-            }
-
-            var inv = cell.getConfigInventory(is);
-
-            if (inv == null) {
-                return null;
-            }
-
-            cachedConfig = inv;
+        if (cell == null) {
+            return null;
         }
 
-        return cachedConfig;
+        var is = cellInv.getStackInSlot(0);
+
+        if (is.isEmpty()) {
+            return null;
+        }
+
+        return cell.getConfigInventory(is);
     }
 
     @Override
@@ -159,29 +125,91 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
         return config;
     }
 
-    public IUpgradeInventory getCachedUpgrades() {
-        if (cachedUpgrades == null) {
-            var cell = getCell();
+    public IUpgradeInventory getCellUpgrades() {
+        var cell = getCell();
 
-            if (cell == null) {
-                return UpgradeInventories.empty();
-            }
-
-            var is = cellInv.getStackInSlot(0);
-
-            if (is.isEmpty()) {
-                return UpgradeInventories.empty();
-            }
-
-            var inv = cell.getUpgrades(is);
-
-            if (inv == null) {
-                return UpgradeInventories.empty();
-            }
-
-            cachedUpgrades = inv;
+        if (cell == null) {
+            return UpgradeInventories.empty();
         }
 
-        return cachedUpgrades;
+        var is = cellInv.getStackInSlot(0);
+
+        if (is.isEmpty()) {
+            return UpgradeInventories.empty();
+        }
+
+        var inv = cell.getUpgrades(is);
+        return inv == null ? UpgradeInventories.empty() : new ProxiedUpgradeInventory(inv, this);
+    }
+
+    private static class ProxiedUpgradeInventory extends AppEngInternalInventory implements IUpgradeInventory {
+        private final IUpgradeInventory delegate;
+
+        public ProxiedUpgradeInventory(IUpgradeInventory inventory, InternalInventoryHost host) {
+            super(host, inventory.size(), 1);
+            delegate = inventory;
+        }
+
+        @Override
+        public ItemLike getUpgradableItem() {
+            return delegate.getUpgradableItem();
+        }
+
+        @Override
+        public int getInstalledUpgrades(ItemLike u) {
+            return delegate.getInstalledUpgrades(u);
+        }
+
+        @Override
+        public int getMaxInstalled(ItemLike u) {
+            return delegate.getMaxInstalled(u);
+        }
+
+        @Override
+        public void readFromNBT(CompoundTag data, String subtag, HolderLookup.Provider registries) {
+            delegate.readFromNBT(data, subtag, registries);
+        }
+
+        @Override
+        public void writeToNBT(CompoundTag data, String subtag, HolderLookup.Provider registries) {
+            delegate.writeToNBT(data, subtag, registries);
+        }
+
+        @Override
+        public int size() {
+            return delegate.size();
+        }
+
+        @Override
+        public ItemStack getStackInSlot(int slotIndex) {
+            return delegate.getStackInSlot(slotIndex);
+        }
+
+        @Override
+        public void setItemDirect(int slotIndex, ItemStack stack) {
+            delegate.setItemDirect(slotIndex, stack);
+            onContentsChanged(slotIndex);
+        }
+
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            var extracted = delegate.extractItem(slot, amount, simulate);
+
+            if (!simulate && !extracted.isEmpty()) {
+                onContentsChanged(slot);
+            }
+
+            return extracted;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return delegate.isItemValid(slot, stack);
+        }
+
+        @Override
+        protected boolean eventsEnabled() {
+            return true;
+        }
     }
 }
