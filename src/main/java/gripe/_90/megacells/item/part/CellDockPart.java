@@ -64,13 +64,6 @@ public class CellDockPart extends AEBasePart
     @PartModels
     private static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/cell_dock"));
 
-    private static final IAEItemFilter FILTER = new IAEItemFilter() {
-        @Override
-        public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
-            return StorageCells.isCellHandled(stack);
-        }
-    };
-
     private final AppEngCellInventory cellInventory = new AppEngCellInventory(this, 1);
     private DriveWatcher cellWatcher;
     private boolean isCached = false;
@@ -88,7 +81,7 @@ public class CellDockPart extends AEBasePart
                 .setIdlePowerUsage(0.5)
                 .setFlags(GridFlags.REQUIRE_CHANNEL)
                 .addService(IStorageProvider.class, this);
-        cellInventory.setFilter(FILTER);
+        cellInventory.setFilter(new Filter());
     }
 
     @Override
@@ -376,5 +369,12 @@ public class CellDockPart extends AEBasePart
         CellLedRenderer.renderLed(this, 0, buffers.getBuffer(CellLedRenderer.RENDER_LAYER), poseStack, partialTicks);
 
         poseStack.popPose();
+    }
+
+    private static class Filter implements IAEItemFilter {
+        @Override
+        public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
+            return StorageCells.isCellHandled(stack);
+        }
     }
 }
