@@ -31,6 +31,7 @@ import gripe._90.megacells.integration.DummyIntegrationItem;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
+import gripe._90.megacells.item.cell.PortableCellWorkbenchItem;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
@@ -125,8 +126,11 @@ public final class MEGAItems {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
     });
+
     public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
             part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
+    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH =
+            item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
 
     public static final ItemDefinition<?> SKY_OSMIUM_INGOT = integrationItem(
             "Sky Osmium Ingot",

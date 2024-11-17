@@ -10,6 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
@@ -28,11 +29,14 @@ import appeng.items.tools.powered.PortableCellItem;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
+import gripe._90.megacells.client.render.PortableCellWorkbenchClientTooltipComponent;
 import gripe._90.megacells.client.screen.CellDockScreen;
+import gripe._90.megacells.client.screen.PortableCellWorkbenchScreen;
 import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
 import gripe._90.megacells.menu.MEGAInterfaceMenu;
 import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
@@ -44,6 +48,7 @@ public class MEGACellsClient {
         eventBus.addListener(MEGACellsClient::initEnergyCellProps);
         eventBus.addListener(MEGACellsClient::initStorageCellModels);
         eventBus.addListener(MEGACellsClient::initItemColours);
+        eventBus.addListener(MEGACellsClient::initTooltipComponents);
     }
 
     private static void initScreens(RegisterMenuScreensEvent event) {
@@ -58,6 +63,11 @@ public class MEGACellsClient {
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
         InitScreens.register(event, MEGAMenus.CELL_DOCK, CellDockScreen::new, "/screens/megacells/cell_dock.json");
+        InitScreens.register(
+                event,
+                MEGAMenus.PORTABLE_CELL_WORKBENCH,
+                PortableCellWorkbenchScreen::new,
+                "/screens/megacells/portable_cell_workbench.json");
     }
 
     private static void initCraftingUnitModels(FMLClientSetupEvent event) {
@@ -126,5 +136,9 @@ public class MEGACellsClient {
         event.register(
                 (stack, tintIndex) -> FastColor.ARGB32.opaque(PortableCellItem.getColor(stack, tintIndex)),
                 portableCells.toArray(new ItemLike[0]));
+    }
+
+    private static void initTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(PortableCellWorkbenchTooltipComponent.class, PortableCellWorkbenchClientTooltipComponent::new);
     }
 }

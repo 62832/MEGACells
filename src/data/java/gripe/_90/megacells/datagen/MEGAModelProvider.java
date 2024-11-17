@@ -9,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.blockstates.PropertyDispatch;
 import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -58,6 +59,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
 
         basicItem(MEGAItems.GREATER_ENERGY_CARD);
         basicItem(MEGAItems.COMPRESSION_CARD);
+        basicItem(MEGAItems.PORTABLE_CELL_WORKBENCH);
 
         for (var cell : MEGAItems.getTieredCells()) {
             if (cell.portable()) {
@@ -182,7 +184,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                         }));
     }
 
-    private void basicItem(ItemDefinition<?> item) {
+    private void basicItem(ItemLike item) {
         itemModels().basicItem(item.asItem());
     }
 

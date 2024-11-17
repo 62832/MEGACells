@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-15T19:31:29.758210643	Block States / Models
+// 1.21.1	2024-11-15T20:14:53.378945918	Block States / Models
 8d69a3c391bcb75b5aac370510d15fa9c367b200 assets/megacells/blockstates/16m_crafting_storage.json
 6b8ebbdecbd556e59c1c0d9abb4222d5de046e9a assets/megacells/blockstates/1m_crafting_storage.json
 c716f5bd44bda4274f6e5f2c2f2b09f6223a8de7 assets/megacells/blockstates/256m_crafting_storage.json
@@ -105,6 +105,7 @@ a31fadf8962f679c8fc76b36b705c49d64a494e4 assets/megacells/models/item/mega_inter
 43bb96e2391a03b8d1782ce0765563c8cc722cad assets/megacells/models/item/mega_item_cell_housing.json
 a4708e37ca1954b67e57a24d60c5955a437b0ef5 assets/megacells/models/item/mega_pattern_provider.json
 6762bae761c01dfae6e5a358e1da5ec25b4b3c93 assets/megacells/models/item/mega_source_cell_housing.json
+f9f81f7f70a276807ae69104dca94146e9f709b6 assets/megacells/models/item/portable_cell_workbench.json
 05c359b2007ed45af3da1911571f48b6f2b84182 assets/megacells/models/item/portable_chemical_cell_16m.json
 a5430292a6845f49fb8fc6e60611815b617323f8 assets/megacells/models/item/portable_chemical_cell_1m.json
 3c2fd4a6757406e90eb49b972618a50255fa1e67 assets/megacells/models/item/portable_chemical_cell_256m.json
