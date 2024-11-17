@@ -21,6 +21,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
 import appeng.api.implementations.blockentities.IChestOrDrive;
@@ -319,6 +321,7 @@ public class CellDockPart extends AEBasePart
     }
 
     @SuppressWarnings("DataFlowIssue")
+    @OnlyIn(Dist.CLIENT) // FIXME (AE2): should not a permanent solution, @OnlyIn is already heavily-discouraged
     @Override
     public void renderDynamic(
             float partialTicks,
