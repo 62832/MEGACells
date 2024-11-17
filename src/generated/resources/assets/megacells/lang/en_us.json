@@ -28,6 +28,8 @@
   "gui.tooltips.megacells.PartitionedFor": "Partitioned for: %s",
   "gui.tooltips.megacells.ProcessingOnly": "Supports processing patterns only.",
   "gui.tooltips.megacells.Quantity": "Quantity: %s",
+  "gui.tooltips.megacells.WorkbenchCell": "Cell:",
+  "gui.tooltips.megacells.WorkbenchConfig": "Config:",
   "item.megacells.accumulation_processor": "Accumulation Processor",
   "item.megacells.accumulation_processor_press": "Inscriber Accumulation Press",
   "item.megacells.bulk_cell_component": "MEGA Bulk Storage Component",

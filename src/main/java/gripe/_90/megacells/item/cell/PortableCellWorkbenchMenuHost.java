@@ -47,12 +47,16 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
         config.readFromList(getItemStack().getOrDefault(AEComponents.EXPORTED_CONFIG_INV, Collections.emptyList()));
     }
 
+    public ItemStack getContainedStack() {
+        return cellInv.getStackInSlot(0);
+    }
+
     public ICellWorkbenchItem getCell() {
-        if (cellInv.getStackInSlot(0).isEmpty()) {
+        if (getContainedStack().isEmpty()) {
             return null;
         }
 
-        return cellInv.getStackInSlot(0).getItem() instanceof ICellWorkbenchItem cell ? cell : null;
+        return getContainedStack().getItem() instanceof ICellWorkbenchItem cell ? cell : null;
     }
 
     @Override
@@ -132,13 +136,11 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
             return UpgradeInventories.empty();
         }
 
-        var is = cellInv.getStackInSlot(0);
-
-        if (is.isEmpty()) {
+        if (getContainedStack().isEmpty()) {
             return UpgradeInventories.empty();
         }
 
-        var inv = cell.getUpgrades(is);
+        var inv = cell.getUpgrades(getContainedStack());
         return inv == null ? UpgradeInventories.empty() : new ProxiedUpgradeInventory(inv, this);
     }
 

@@ -19,7 +19,9 @@ public enum MEGATranslations implements LocalizationEnum {
     PartitionedFor("Partitioned for: %s", Type.TOOLTIP),
     ProcessingOnly("Supports processing patterns only.", Type.TOOLTIP),
     Quantity("Quantity: %s", Type.TOOLTIP),
-    NotPartitioned("Not Partitioned", Type.TOOLTIP);
+    NotPartitioned("Not Partitioned", Type.TOOLTIP),
+    WorkbenchCell("Cell:", Type.TOOLTIP),
+    WorkbenchConfig("Config:", Type.TOOLTIP);
 
     private final String englishText;
     private final Type type;
