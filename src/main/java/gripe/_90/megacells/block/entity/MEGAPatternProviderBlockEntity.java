@@ -29,12 +29,12 @@ public class MEGAPatternProviderBlockEntity extends PatternProviderBlockEntity {
 
     @Override
     public void openMenu(Player player, MenuHostLocator locator) {
-        MenuOpener.open(MEGAMenus.MEGA_PATTERN_PROVIDER, player, locator);
+        MenuOpener.open(MEGAMenus.MEGA_PATTERN_PROVIDER.get(), player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAMenus.MEGA_PATTERN_PROVIDER, player, subMenu.getLocator());
+        MenuOpener.returnTo(MEGAMenus.MEGA_PATTERN_PROVIDER.get(), player, subMenu.getLocator());
     }
 
     @Override

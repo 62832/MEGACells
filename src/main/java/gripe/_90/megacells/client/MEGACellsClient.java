@@ -54,18 +54,19 @@ public class MEGACellsClient {
     private static void initScreens(RegisterMenuScreensEvent event) {
         InitScreens.register(
                 event,
-                MEGAMenus.MEGA_INTERFACE,
+                MEGAMenus.MEGA_INTERFACE.get(),
                 InterfaceScreen<MEGAInterfaceMenu>::new,
                 "/screens/megacells/mega_interface.json");
         InitScreens.register(
                 event,
-                MEGAMenus.MEGA_PATTERN_PROVIDER,
+                MEGAMenus.MEGA_PATTERN_PROVIDER.get(),
                 PatternProviderScreen<MEGAPatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
-        InitScreens.register(event, MEGAMenus.CELL_DOCK, CellDockScreen::new, "/screens/megacells/cell_dock.json");
+        InitScreens.register(
+                event, MEGAMenus.CELL_DOCK.get(), CellDockScreen::new, "/screens/megacells/cell_dock.json");
         InitScreens.register(
                 event,
-                MEGAMenus.PORTABLE_CELL_WORKBENCH,
+                MEGAMenus.PORTABLE_CELL_WORKBENCH.get(),
                 PortableCellWorkbenchScreen::new,
                 "/screens/megacells/portable_cell_workbench.json");
     }

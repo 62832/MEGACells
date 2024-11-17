@@ -171,7 +171,7 @@ public class CellDockPart extends AEBasePart
     @Override
     public boolean onUseWithoutItem(Player player, Vec3 pos) {
         if (!player.getCommandSenderWorld().isClientSide()) {
-            MenuOpener.open(MEGAMenus.CELL_DOCK, player, MenuLocators.forPart(this));
+            MenuOpener.open(MEGAMenus.CELL_DOCK.get(), player, MenuLocators.forPart(this));
         }
 
         return true;
@@ -179,7 +179,7 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.returnTo(MEGAMenus.CELL_DOCK, player, MenuLocators.forPart(this));
+        MenuOpener.returnTo(MEGAMenus.CELL_DOCK.get(), player, MenuLocators.forPart(this));
     }
 
     @Override

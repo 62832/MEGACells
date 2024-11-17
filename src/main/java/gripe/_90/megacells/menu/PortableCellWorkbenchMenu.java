@@ -41,7 +41,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
     public CopyMode copyMode = CopyMode.CLEAR_ON_REMOVE;
 
     public PortableCellWorkbenchMenu(int id, Inventory ip, PortableCellWorkbenchMenuHost host) {
-        super(MEGAMenus.PORTABLE_CELL_WORKBENCH, id, ip, host);
+        super(MEGAMenus.PORTABLE_CELL_WORKBENCH.get(), id, ip, host);
         registerClientAction(CellWorkbenchMenu.ACTION_NEXT_COPYMODE, this::nextWorkBenchCopyMode);
         registerClientAction(CellWorkbenchMenu.ACTION_PARTITION, this::partition);
         registerClientAction(CellWorkbenchMenu.ACTION_CLEAR, this::clear);

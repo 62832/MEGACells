@@ -9,6 +9,6 @@ import gripe._90.megacells.definition.MEGAMenus;
 
 public class MEGAInterfaceMenu extends InterfaceMenu {
     public MEGAInterfaceMenu(int id, Inventory ip, InterfaceLogicHost host) {
-        super(MEGAMenus.MEGA_INTERFACE, id, ip, host);
+        super(MEGAMenus.MEGA_INTERFACE.get(), id, ip, host);
     }
 }

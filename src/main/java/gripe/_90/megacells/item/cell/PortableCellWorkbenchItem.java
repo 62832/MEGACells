@@ -42,7 +42,7 @@ public class PortableCellWorkbenchItem extends AEBaseItem implements IMenuItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
-            MenuOpener.open(MEGAMenus.PORTABLE_CELL_WORKBENCH, player, MenuLocators.forHand(player, hand));
+            MenuOpener.open(MEGAMenus.PORTABLE_CELL_WORKBENCH.get(), player, MenuLocators.forHand(player, hand));
         }
 
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());

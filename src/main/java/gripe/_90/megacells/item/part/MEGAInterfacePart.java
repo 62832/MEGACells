@@ -43,12 +43,12 @@ public class MEGAInterfacePart extends InterfacePart {
 
     @Override
     public void openMenu(Player player, MenuHostLocator locator) {
-        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, locator);
+        MenuOpener.open(MEGAMenus.MEGA_INTERFACE.get(), player, locator);
     }
 
     @Override
     public void returnToMainMenu(Player player, ISubMenu subMenu) {
-        MenuOpener.open(MEGAMenus.MEGA_INTERFACE, player, subMenu.getLocator());
+        MenuOpener.open(MEGAMenus.MEGA_INTERFACE.get(), player, subMenu.getLocator());
     }
 
     @Override

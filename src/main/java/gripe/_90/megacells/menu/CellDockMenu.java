@@ -14,7 +14,7 @@ import gripe._90.megacells.item.part.CellDockPart;
  */
 public class CellDockMenu extends AEBaseMenu {
     public CellDockMenu(int id, Inventory playerInventory, CellDockPart dock) {
-        super(MEGAMenus.CELL_DOCK, id, playerInventory, dock);
+        super(MEGAMenus.CELL_DOCK.get(), id, playerInventory, dock);
         addSlot(
                 new RestrictedInputSlot(RestrictedInputSlot.PlacableItemType.STORAGE_CELLS, dock.getCellInventory(), 0),
                 SlotSemantics.STORAGE_CELL);
