@@ -2,7 +2,11 @@
   "required": true,
   "minVersion": "0.8.5",
   "package": "gripe._90.megacells.mixin",
-  "mixins": ["ItemEntityMixin", "ItemMenuHostMixin"],
+  "mixins": [
+    "ItemEntityMixin",
+    "ItemMenuHostMixin",
+    "PatternProviderMenuAccessor"
+  ],
   "client": ["client.BuiltInModelHooksAccessor", "client.ModelBakeryMixin"],
   "injectors": {
     "defaultRequire": 1

@@ -25,6 +25,8 @@ import appeng.hooks.BuiltInModelHooks;
 import appeng.init.client.InitScreens;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.tools.powered.PortableCellItem;
+import appeng.menu.implementations.InterfaceMenu;
+import appeng.menu.implementations.PatternProviderMenu;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -37,8 +39,6 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
-import gripe._90.megacells.menu.MEGAInterfaceMenu;
-import gripe._90.megacells.menu.MEGAPatternProviderMenu;
 
 @Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
 public class MEGACellsClient {
@@ -55,12 +55,12 @@ public class MEGACellsClient {
         InitScreens.register(
                 event,
                 MEGAMenus.MEGA_INTERFACE.get(),
-                InterfaceScreen<MEGAInterfaceMenu>::new,
+                InterfaceScreen<InterfaceMenu>::new,
                 "/screens/megacells/mega_interface.json");
         InitScreens.register(
                 event,
                 MEGAMenus.MEGA_PATTERN_PROVIDER.get(),
-                PatternProviderScreen<MEGAPatternProviderMenu>::new,
+                PatternProviderScreen<PatternProviderMenu>::new,
                 "/screens/megacells/mega_pattern_provider.json");
         InitScreens.register(
                 event, MEGAMenus.CELL_DOCK.get(), CellDockScreen::new, "/screens/megacells/cell_dock.json");

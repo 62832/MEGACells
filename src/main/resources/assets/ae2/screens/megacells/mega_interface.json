@@ -2,7 +2,7 @@
   "includes": ["../common/common.json", "../common/player_inventory.json"],
   "background": {
     "texture": "guis/megacells/mega_interface.png",
-    "srcRect": [0, 0, 176, 238]
+    "srcRect": [0, 0, 176, 240]
   },
   "slots": {
     "CONFIG": {
@@ -47,8 +47,8 @@
   },
   "widgets": {
     "openPriority": {
-      "left": 154,
-      "top": 0,
+      "left": 152,
+      "top": -5,
       "width": 16,
       "height": 16
     },
