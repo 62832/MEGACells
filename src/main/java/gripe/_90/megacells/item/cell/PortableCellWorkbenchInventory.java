@@ -24,6 +24,9 @@ import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.InternalInventoryHost;
 import appeng.util.inv.filter.IAEItemFilter;
 
+/**
+ * See {@link appeng.blockentity.misc.CellWorkbenchBlockEntity}
+ */
 public class PortableCellWorkbenchInventory extends AppEngInternalInventory implements InternalInventoryHost {
     private final ItemStack stack;
 
@@ -107,17 +110,9 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
 
     IUpgradeInventory getCellUpgrades() {
         var cell = getCell();
-
-        if (cell == null) {
-            return UpgradeInventories.empty();
-        }
-
-        if (getStackInSlot(0).isEmpty()) {
-            return UpgradeInventories.empty();
-        }
-
-        var inv = cell.getUpgrades(getStackInSlot(0));
-        return inv == null ? UpgradeInventories.empty() : new ProxiedUpgradeInventory(inv, this);
+        return cell != null
+                ? new ProxiedUpgradeInventory(cell.getUpgrades(getStackInSlot(0)), this)
+                : UpgradeInventories.empty();
     }
 
     private static class ProxiedUpgradeInventory extends AppEngInternalInventory implements IUpgradeInventory {
