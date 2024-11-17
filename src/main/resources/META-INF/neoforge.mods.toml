@@ -8,6 +8,7 @@ license = "LGPLv3.0"
 
 issueTrackerURL = "https://github.com/62832/MEGACells/issues"
 displayURL = "https://github.com/62832/MEGACells"
+updateJSONURL = "https://api.modrinth.com/updates/mega/forge_updates.json?neoforge=only"
 
 [[mods]]
 modId = "megacells"
