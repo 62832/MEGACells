@@ -59,6 +59,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
 
             if (cell != null) {
                 cell.setFuzzyMode(getWorkbenchItem(), fuzzyMode);
+                getHost().saveChanges();
             }
         }
     }
@@ -71,6 +72,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
         }
     }
 
+    @Override
     public void mega$nextCompressionLimit() {
         if (isClientSide()) {
             sendClientAction(CompressionCutoffHost.ACTION_SET_COMPRESSION_LIMIT);
