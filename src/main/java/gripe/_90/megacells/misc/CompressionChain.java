@@ -45,6 +45,12 @@ public class CompressionChain extends ObjectArrayList<CompressionChain.Variant> 
         return chain;
     }
 
+    public CompressionChain limited(int limit) {
+        var chain = new CompressionChain();
+        chain.addAll(subList(0, limit));
+        return chain;
+    }
+
     public record Variant(AEItemKey item, int factor) {
         Variant(Item item, int factor) {
             this(AEItemKey.of(item), factor);

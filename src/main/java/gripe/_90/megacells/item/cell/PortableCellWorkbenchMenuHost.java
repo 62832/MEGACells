@@ -18,11 +18,13 @@ import appeng.helpers.externalstorage.GenericStackInv;
 import appeng.items.contents.StackDependentSupplier;
 import appeng.menu.locator.ItemMenuHostLocator;
 
+import gripe._90.megacells.misc.CellWorkbenchHost;
+
 /**
  * See {@link appeng.blockentity.misc.CellWorkbenchBlockEntity}
  */
 public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWorkbenchItem>
-        implements ISegmentedInventory, IConfigurableObject, IConfigInvHost {
+        implements ISegmentedInventory, IConfigurableObject, IConfigInvHost, CellWorkbenchHost {
     private final Supplier<PortableCellWorkbenchInventory> cellInv =
             new StackDependentSupplier<>(this::getItemStack, PortableCellWorkbenchInventory::new);
 
@@ -30,11 +32,13 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
         super(item, player, locator);
     }
 
+    @Override
     public ICellWorkbenchItem getCell() {
         return cellInv.get().getCell();
     }
 
-    ItemStack getContainedStack() {
+    @Override
+    public ItemStack mega$getContainedStack() {
         return cellInv.get().getStackInSlot(0);
     }
 
@@ -50,6 +54,11 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
 
     public IUpgradeInventory getCellUpgrades() {
         return cellInv.get().getCellUpgrades();
+    }
+
+    @Override
+    public void saveChanges() {
+        cellInv.get().saveChanges();
     }
 
     @Override

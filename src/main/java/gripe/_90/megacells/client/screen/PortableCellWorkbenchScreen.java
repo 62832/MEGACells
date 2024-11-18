@@ -25,6 +25,8 @@ import appeng.client.gui.widgets.ToggleButton;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 
+import gripe._90.megacells.item.cell.BulkCellInventory;
+import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.menu.PortableCellWorkbenchMenu;
 
 /**
@@ -33,6 +35,7 @@ import gripe._90.megacells.menu.PortableCellWorkbenchMenu;
 public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellWorkbenchMenu> {
     private final ToggleButton copyMode;
     private final SettingToggleButton<FuzzyMode> fuzzyMode;
+    private final CompressionCutoffButton compressionCutoff;
 
     public PortableCellWorkbenchScreen(
             PortableCellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
@@ -49,6 +52,7 @@ public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellW
                 GuiText.CopyMode.text(),
                 GuiText.CopyModeDesc.text(),
                 act -> menu.nextWorkBenchCopyMode()));
+        compressionCutoff = addToLeftToolbar(new CompressionCutoffButton(button -> menu.mega$nextCompressionLimit()));
     }
 
     @Override
@@ -57,6 +61,15 @@ public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellW
         copyMode.setState(menu.getCopyMode() == CopyMode.CLEAR_ON_REMOVE);
         fuzzyMode.set(menu.getFuzzyMode());
         fuzzyMode.setVisibility(menu.getUpgrades().isInstalled(AEItems.FUZZY_CARD));
+
+        if (BulkCellItem.HANDLER.getCellInventory(menu.getHost().mega$getContainedStack(), null)
+                instanceof BulkCellInventory bulkCell) {
+            compressionCutoff.setVisibility(bulkCell.isCompressionEnabled()
+                    && !bulkCell.getCompressionChain().isEmpty());
+            compressionCutoff.setItem(bulkCell.getCompressionChain().get(bulkCell.getCompressionCutoff() - 1));
+        } else {
+            compressionCutoff.setVisibility(false);
+        }
     }
 
     @NotNull

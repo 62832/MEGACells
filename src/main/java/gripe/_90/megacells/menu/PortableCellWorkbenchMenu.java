@@ -30,13 +30,15 @@ import appeng.util.EnumCycler;
 import appeng.util.inv.SupplierInternalInventory;
 
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.item.cell.BulkCellInventory;
+import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchMenuHost;
 
 /**
  * See {@link appeng.menu.implementations.CellWorkbenchMenu}
  */
 public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkbenchMenuHost>
-        implements IPartitionSlotHost {
+        implements IPartitionSlotHost, CompressionCutoffHost {
     @GuiSync(2)
     public CopyMode copyMode = CopyMode.CLEAR_ON_REMOVE;
 
@@ -46,18 +48,18 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
         registerClientAction(CellWorkbenchMenu.ACTION_PARTITION, this::partition);
         registerClientAction(CellWorkbenchMenu.ACTION_CLEAR, this::clear);
         registerClientAction(CellWorkbenchMenu.ACTION_SET_FUZZY_MODE, FuzzyMode.class, this::setCellFuzzyMode);
+        registerClientAction(CompressionCutoffHost.ACTION_SET_COMPRESSION_LIMIT, this::mega$nextCompressionLimit);
     }
 
     public void setCellFuzzyMode(FuzzyMode fuzzyMode) {
         if (isClientSide()) {
             sendClientAction(CellWorkbenchMenu.ACTION_SET_FUZZY_MODE, fuzzyMode);
-            return;
-        }
+        } else {
+            var cell = getHost().getCell();
 
-        var cell = getHost().getCell();
-
-        if (cell != null) {
-            cell.setFuzzyMode(getWorkbenchItem(), fuzzyMode);
+            if (cell != null) {
+                cell.setFuzzyMode(getWorkbenchItem(), fuzzyMode);
+            }
         }
     }
 
@@ -66,6 +68,20 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
             sendClientAction(CellWorkbenchMenu.ACTION_NEXT_COPYMODE);
         } else {
             getHost().getConfigManager().putSetting(Settings.COPY_MODE, EnumCycler.next(getWorkBenchCopyMode()));
+        }
+    }
+
+    public void mega$nextCompressionLimit() {
+        if (isClientSide()) {
+            sendClientAction(CompressionCutoffHost.ACTION_SET_COMPRESSION_LIMIT);
+        } else {
+            if (BulkCellItem.HANDLER.getCellInventory(getHost().mega$getContainedStack(), null)
+                    instanceof BulkCellInventory bulkCell) {
+                var currentLimit = bulkCell.getCompressionCutoff();
+                bulkCell.setCompressionCutoff(
+                        currentLimit == 1 ? bulkCell.getCompressionChain().size() : currentLimit - 1);
+                getHost().saveChanges();
+            }
         }
     }
 
@@ -148,27 +164,26 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
     public void partition() {
         if (isClientSide()) {
             sendClientAction(CellWorkbenchMenu.ACTION_PARTITION);
-            return;
-        }
+        } else {
+            var inv = getConfigInventory();
+            var is = getWorkbenchItem();
 
-        var inv = getConfigInventory();
-        var is = getWorkbenchItem();
+            var cellInv = StorageCells.getCellInventory(is, null);
 
-        var cellInv = StorageCells.getCellInventory(is, null);
+            if (cellInv != null) {
+                var it = Iterators.transform(cellInv.getAvailableStacks().iterator(), Map.Entry::getKey);
 
-        if (cellInv != null) {
-            var it = Iterators.transform(cellInv.getAvailableStacks().iterator(), Map.Entry::getKey);
-
-            for (var x = 0; x < inv.size(); x++) {
-                if (it.hasNext()) {
-                    inv.setStack(x, new GenericStack(it.next(), 0));
-                } else {
-                    inv.setStack(x, null);
+                for (var x = 0; x < inv.size(); x++) {
+                    if (it.hasNext()) {
+                        inv.setStack(x, new GenericStack(it.next(), 0));
+                    } else {
+                        inv.setStack(x, null);
+                    }
                 }
             }
-        }
 
-        broadcastChanges();
+            broadcastChanges();
+        }
     }
 
     private GenericStackInv getConfigInventory() {

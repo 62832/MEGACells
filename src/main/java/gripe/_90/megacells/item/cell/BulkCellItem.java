@@ -87,6 +87,14 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                     inv.isCompressionEnabled()
                             ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                             : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
+
+            if (inv.isCompressionEnabled()
+                    && inv.getCompressionCutoff() < inv.getCompressionChain().size()) {
+                lines.add(Tooltips.of(MEGATranslations.Cutoff.text(inv.getCompressionChain()
+                        .get(inv.getCompressionCutoff() - 1)
+                        .item()
+                        .getDisplayName())));
+            }
         }
     }
 

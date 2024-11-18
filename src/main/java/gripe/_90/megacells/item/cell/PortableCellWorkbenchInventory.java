@@ -32,6 +32,9 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
 
     private final GenericStackInv config =
             new GenericStackInv(this::onConfigChanged, GenericStackInv.Mode.CONFIG_TYPES, 63);
+    private final IConfigManager manager = IConfigManager.builder(this::saveChanges)
+            .registerSetting(Settings.COPY_MODE, CopyMode.CLEAR_ON_REMOVE)
+            .build();
 
     public PortableCellWorkbenchInventory(ItemStack stack) {
         super(null, 1, 1, new Filter());
@@ -56,9 +59,7 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
     }
 
     IConfigManager getConfigManager() {
-        return IConfigManager.builder(stack)
-                .registerSetting(Settings.COPY_MODE, CopyMode.CLEAR_ON_REMOVE)
-                .build();
+        return manager;
     }
 
     private ConfigInventory getCellConfigInventory() {
@@ -98,9 +99,10 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
         saveChanges();
     }
 
-    private void saveChanges() {
+    void saveChanges() {
         stack.set(DataComponents.CONTAINER, toItemContainerContents());
         stack.set(AEComponents.EXPORTED_CONFIG_INV, config.toList());
+        stack.set(AEComponents.EXPORTED_SETTINGS, manager.exportSettings());
     }
 
     @Override

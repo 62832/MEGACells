@@ -68,6 +68,7 @@ public class PortableCellWorkbenchItem extends AEBaseItem implements IMenuItem {
             }
         }
 
-        return Optional.of(new PortableCellWorkbenchTooltipComponent(shownConfig, host.getContainedStack(), hasMore));
+        return Optional.of(
+                new PortableCellWorkbenchTooltipComponent(shownConfig, host.mega$getContainedStack(), hasMore));
     }
 }

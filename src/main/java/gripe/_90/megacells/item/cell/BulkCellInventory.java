@@ -1,7 +1,5 @@
 package gripe._90.megacells.item.cell;
 
-import static gripe._90.megacells.definition.MEGAItems.COMPRESSION_CARD;
-
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Set;
@@ -22,6 +20,7 @@ import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 
 import gripe._90.megacells.definition.MEGAComponents;
+import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.misc.CompressionChain;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.DecompressionPattern;
@@ -37,9 +36,10 @@ public class BulkCellInventory implements StorageCell {
 
     private final boolean compressionEnabled;
     private final CompressionChain compressionChain;
-    private final Set<IPatternDetails> decompressionPatterns;
     private BigInteger unitCount;
     private final BigInteger unitFactor;
+    private final int compressionCutoff;
+    private Set<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
 
@@ -53,10 +53,9 @@ public class BulkCellInventory implements StorageCell {
         storedItem = (AEItemKey) stack.get(MEGAComponents.BULK_CELL_ITEM);
         unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
 
-        compressionEnabled = cell.getUpgrades(stack).isInstalled(COMPRESSION_CARD);
+        compressionEnabled = cell.getUpgrades(stack).isInstalled(MEGAItems.COMPRESSION_CARD);
         compressionChain = CompressionService.getChain(storedItem != null ? storedItem : filterItem)
                 .orElseGet(CompressionChain::new);
-        decompressionPatterns = generateDecompressionPatterns();
         unitFactor = compressionChain.unitFactor(storedItem != null ? storedItem : filterItem);
 
         // Check newly-calculated factor against what's already recorded in order to adjust for a compression chain that
@@ -66,6 +65,15 @@ public class BulkCellInventory implements StorageCell {
         if (!unitFactor.equals(recordedFactor)) {
             unitCount = unitCount.multiply(unitFactor).divide(recordedFactor);
             saveChanges();
+        }
+
+        int recordedCutoff = stack.getOrDefault(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionChain.size());
+
+        if (recordedCutoff > compressionChain.size()) {
+            stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
+            compressionCutoff = compressionChain.size();
+        } else {
+            compressionCutoff = recordedCutoff;
         }
     }
 
@@ -102,31 +110,43 @@ public class BulkCellInventory implements StorageCell {
         return compressionEnabled;
     }
 
-    public Set<IPatternDetails> getDecompressionPatterns() {
-        return decompressionPatterns;
+    public CompressionChain getCompressionChain() {
+        return compressionChain;
     }
 
-    private Set<IPatternDetails> generateDecompressionPatterns() {
+    public Set<IPatternDetails> getDecompressionPatterns() {
         if (!compressionEnabled || compressionChain.isEmpty()) {
             return Set.of();
         }
 
-        var decompressionChain = new CompressionChain();
-        decompressionChain.addAll(compressionChain);
-        Collections.reverse(decompressionChain);
+        if (decompressionPatterns == null) {
+            var decompressionChain = compressionChain.limited(compressionCutoff);
+            Collections.reverse(decompressionChain);
 
-        var patterns = new ObjectLinkedOpenHashSet<IPatternDetails>();
+            decompressionPatterns = new ObjectLinkedOpenHashSet<>();
 
-        for (var variant : decompressionChain) {
-            if (variant == decompressionChain.getLast()) {
-                continue;
+            for (var variant : decompressionChain) {
+                if (variant == decompressionChain.getLast()) {
+                    continue;
+                }
+
+                var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
+                decompressionPatterns.add(new DecompressionPattern(decompressed.item(), variant, false));
             }
 
-            var decompressed = decompressionChain.get(decompressionChain.indexOf(variant) + 1);
-            patterns.add(new DecompressionPattern(decompressed.item(), variant));
+            var remainingChain = compressionChain.subList(decompressionChain.size() - 1, compressionChain.size());
+
+            for (var variant : remainingChain) {
+                if (variant == remainingChain.getFirst()) {
+                    continue;
+                }
+
+                var decompressed = remainingChain.get(remainingChain.indexOf(variant) - 1);
+                decompressionPatterns.add(new DecompressionPattern(decompressed.item(), variant, true));
+            }
         }
 
-        return Collections.unmodifiableSet(patterns);
+        return Collections.unmodifiableSet(decompressionPatterns);
     }
 
     @Override
@@ -213,7 +233,6 @@ public class BulkCellInventory implements StorageCell {
         if (container != null) {
             container.saveChanges();
         } else {
-            // if there is no ISaveProvider, store to NBT immediately
             persist();
         }
     }
@@ -237,12 +256,24 @@ public class BulkCellInventory implements StorageCell {
         isPersisted = true;
     }
 
+    public void setCompressionCutoff(int cutoff) {
+        if (cutoff == compressionChain.size()) {
+            stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
+        } else {
+            stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, cutoff);
+        }
+    }
+
+    public int getCompressionCutoff() {
+        return compressionCutoff;
+    }
+
     @Override
     public void getAvailableStacks(KeyCounter out) {
         if (storedItem != null) {
             if (compressionEnabled && storedItem.equals(filterItem) && !compressionChain.isEmpty()) {
                 var count = unitCount;
-                var chain = compressionChain.lastMultiplierSwapped();
+                var chain = compressionChain.limited(compressionCutoff).lastMultiplierSwapped();
 
                 for (var variant : chain) {
                     var compressionFactor = BigInteger.valueOf(variant.factor());

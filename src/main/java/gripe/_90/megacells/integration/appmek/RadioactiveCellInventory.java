@@ -161,7 +161,6 @@ public class RadioactiveCellInventory implements StorageCell {
         if (container != null) {
             container.saveChanges();
         } else {
-            // if there is no ISaveProvider, store to NBT immediately
             persist();
         }
     }

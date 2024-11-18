@@ -24,16 +24,18 @@ public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey base;
     private final AEItemKey variant;
     private final int factor;
+    private final boolean toCompress;
 
-    public DecompressionPattern(AEItemKey base, CompressionChain.Variant variant) {
+    public DecompressionPattern(AEItemKey base, CompressionChain.Variant variant, boolean toCompress) {
         this.base = base;
         this.variant = variant.item();
         this.factor = variant.factor();
+        this.toCompress = toCompress;
 
         var definition = new ItemStack(MEGAItems.SKY_STEEL_INGOT);
         definition.set(
                 MEGAComponents.ENCODED_DECOMPRESSION_PATTERN,
-                new Encoded(base.toStack(), variant.item().toStack(), variant.factor()));
+                new Encoded(base.toStack(), variant.item().toStack(), variant.factor(), toCompress));
         this.definition = AEItemKey.of(definition);
     }
 
@@ -44,12 +46,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return new IInput[] {new Input(variant)};
+        return new IInput[] {toCompress ? new Input(base, factor) : new Input(variant, 1)};
     }
 
     @Override
     public List<GenericStack> getOutputs() {
-        return List.of(new GenericStack(base, factor));
+        return List.of(toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor));
     }
 
     @Override
@@ -64,7 +66,7 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private record Input(AEItemKey input) implements IInput {
+    private record Input(AEItemKey input, int factor) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
             return new GenericStack[] {new GenericStack(input, 1)};
@@ -72,7 +74,7 @@ public class DecompressionPattern implements IPatternDetails {
 
         @Override
         public long getMultiplier() {
-            return 1;
+            return factor;
         }
 
         @Override
@@ -86,11 +88,12 @@ public class DecompressionPattern implements IPatternDetails {
         }
     }
 
-    public record Encoded(ItemStack base, ItemStack variant, int factor) {
+    public record Encoded(ItemStack base, ItemStack variant, int factor, boolean toCompress) {
         public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(builder -> builder.group(
                         ItemStack.CODEC.fieldOf("base").forGetter(Encoded::base),
                         ItemStack.CODEC.fieldOf("variant").forGetter(Encoded::variant),
-                        Codec.INT.fieldOf("factor").forGetter(Encoded::factor))
+                        Codec.INT.fieldOf("factor").forGetter(Encoded::factor),
+                        Codec.BOOL.fieldOf("toCompress").forGetter(Encoded::toCompress))
                 .apply(builder, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
@@ -100,6 +103,8 @@ public class DecompressionPattern implements IPatternDetails {
                 Encoded::variant,
                 ByteBufCodecs.VAR_INT,
                 Encoded::factor,
+                ByteBufCodecs.BOOL,
+                Encoded::toCompress,
                 Encoded::new);
     }
 }

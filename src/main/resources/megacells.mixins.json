@@ -4,10 +4,16 @@
   "package": "gripe._90.megacells.mixin",
   "mixins": [
     "ItemEntityMixin",
-    "ItemMenuHostMixin",
-    "PatternProviderMenuAccessor"
+    "PatternProviderMenuAccessor",
+    "CellWorkbenchBlockEntityMixin",
+    "CellWorkbenchMenuMixin",
+    "ItemMenuHostMixin"
   ],
-  "client": ["client.BuiltInModelHooksAccessor", "client.ModelBakeryMixin"],
+  "client": [
+    "client.BuiltInModelHooksAccessor",
+    "client.CellWorkbenchScreenMixin",
+    "client.ModelBakeryMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

@@ -25,6 +25,8 @@ public final class MEGAComponents {
 
     public static final DataComponentType<AEKey> BULK_CELL_ITEM =
             register("bulk_item", AEKey.CODEC, AEKey.STREAM_CODEC);
+    public static final DataComponentType<Integer> BULK_CELL_COMPRESSION_CUTOFF =
+            register("compression_cutoff", Codec.INT, ByteBufCodecs.VAR_INT);
 
     private static final Codec<BigInteger> BIG_INTEGER_CODEC = Codec.STRING.comapFlatMap(
             str -> {
