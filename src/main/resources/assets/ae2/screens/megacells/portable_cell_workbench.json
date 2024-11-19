@@ -1,5 +1,6 @@
 {
   "includes": ["../cell_workbench.json"],
+  "helpTopic": "items-blocks-machines/cell_workbench.md",
   "text": {
     "dialog_title": {
       "text": {
