@@ -40,9 +40,9 @@ public abstract class CellWorkbenchScreenMixin extends AEBaseScreen<CellWorkbenc
     @Inject(method = "updateBeforeRender", at = @At("RETURN"))
     private void updateCutoffButton(CallbackInfo ci) {
         if (BulkCellItem.HANDLER.getCellInventory(((CellWorkbenchHost) menu.getHost()).mega$getContainedStack(), null)
-                instanceof BulkCellInventory bulkCell) {
-            mega$compressionCutoff.setVisibility(bulkCell.isCompressionEnabled()
-                    && !bulkCell.getCompressionChain().isEmpty());
+                        instanceof BulkCellInventory bulkCell
+                && !bulkCell.getCompressionChain().isEmpty()) {
+            mega$compressionCutoff.setVisibility(bulkCell.isCompressionEnabled());
             mega$compressionCutoff.setItem(bulkCell.getCompressionChain().get(bulkCell.getCompressionCutoff() - 1));
         } else {
             mega$compressionCutoff.setVisibility(false);

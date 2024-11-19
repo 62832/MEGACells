@@ -63,9 +63,9 @@ public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellW
         fuzzyMode.setVisibility(menu.getUpgrades().isInstalled(AEItems.FUZZY_CARD));
 
         if (BulkCellItem.HANDLER.getCellInventory(menu.getHost().mega$getContainedStack(), null)
-                instanceof BulkCellInventory bulkCell) {
-            compressionCutoff.setVisibility(bulkCell.isCompressionEnabled()
-                    && !bulkCell.getCompressionChain().isEmpty());
+                        instanceof BulkCellInventory bulkCell
+                && !bulkCell.getCompressionChain().isEmpty()) {
+            compressionCutoff.setVisibility(bulkCell.isCompressionEnabled());
             compressionCutoff.setItem(bulkCell.getCompressionChain().get(bulkCell.getCompressionCutoff() - 1));
         } else {
             compressionCutoff.setVisibility(false);
