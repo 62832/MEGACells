@@ -2,7 +2,6 @@ package gripe._90.megacells.client;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.level.ItemLike;
@@ -10,6 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -43,12 +43,22 @@ import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
 @Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
 public class MEGACellsClient {
     public MEGACellsClient(IEventBus eventBus) {
+        initCraftingUnitModels();
+
         eventBus.addListener(MEGACellsClient::initScreens);
-        eventBus.addListener(MEGACellsClient::initCraftingUnitModels);
+        eventBus.addListener(MEGACellsClient::initBlockEntityRenderers);
         eventBus.addListener(MEGACellsClient::initEnergyCellProps);
         eventBus.addListener(MEGACellsClient::initStorageCellModels);
         eventBus.addListener(MEGACellsClient::initItemColours);
         eventBus.addListener(MEGACellsClient::initTooltipComponents);
+    }
+
+    private static void initCraftingUnitModels() {
+        for (var type : MEGACraftingUnitType.values()) {
+            BuiltInModelHooks.addBuiltInModel(
+                    MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
+                    new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
+        }
     }
 
     private static void initScreens(RegisterMenuScreensEvent event) {
@@ -71,16 +81,8 @@ public class MEGACellsClient {
                 "/screens/megacells/portable_cell_workbench.json");
     }
 
-    private static void initCraftingUnitModels(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (var type : MEGACraftingUnitType.values()) {
-                BuiltInModelHooks.addBuiltInModel(
-                        MEGACells.makeId("block/crafting/" + type.getAffix() + "_formed"),
-                        new CraftingCubeModel(new MEGACraftingUnitModelProvider(type)));
-            }
-
-            BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
-        });
+    private static void initBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
     }
 
     private static void initEnergyCellProps(FMLClientSetupEvent event) {
