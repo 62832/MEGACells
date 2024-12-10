@@ -1,0 +1,14 @@
+{
+  "type": "ae2:storage_cell_disassembly",
+  "cell": "megacells:fluid_storage_cell_4m",
+  "cell_disassembly_items": [
+    {
+      "count": 1,
+      "id": "megacells:cell_component_4m"
+    },
+    {
+      "count": 1,
+      "id": "megacells:mega_fluid_cell_housing"
+    }
+  ]
+}

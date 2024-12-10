@@ -204,8 +204,6 @@ public final class MEGAItems {
                 "item_storage_cell_" + tier.namePrefix(),
                 p -> new BasicStorageCell(
                         p.stacksTo(1),
-                        tier.componentSupplier().get(),
-                        MEGA_ITEM_CELL_HOUSING,
                         tier.idleDrain(),
                         tier.bytes() / 1024,
                         tier.bytes() / 128,
@@ -221,8 +219,6 @@ public final class MEGAItems {
                 "fluid_storage_cell_" + tier.namePrefix(),
                 p -> new BasicStorageCell(
                         p.stacksTo(1),
-                        tier.componentSupplier().get(),
-                        MEGA_FLUID_CELL_HOUSING,
                         tier.idleDrain(),
                         tier.bytes() / 1024,
                         tier.bytes() / 128,

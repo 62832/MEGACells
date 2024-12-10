@@ -1,0 +1,5 @@
+{
+  "type": "ae2:crafting_unit_transform",
+  "upgrade_item": "megacells:cell_component_256m",
+  "upgraded_block": "megacells:256m_crafting_storage"
+}

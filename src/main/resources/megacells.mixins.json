@@ -3,11 +3,11 @@
   "minVersion": "0.8.5",
   "package": "gripe._90.megacells.mixin",
   "mixins": [
-    "ItemEntityMixin",
-    "PatternProviderMenuAccessor",
     "CellWorkbenchBlockEntityMixin",
     "CellWorkbenchMenuMixin",
-    "ItemMenuHostMixin"
+    "ItemEntityMixin",
+    "ItemMenuHostMixin",
+    "PatternProviderMenuAccessor"
   ],
   "client": [
     "client.BuiltInModelHooksAccessor",

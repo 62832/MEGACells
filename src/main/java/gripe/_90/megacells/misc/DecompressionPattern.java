@@ -1,5 +1,6 @@
 package gripe._90.megacells.misc;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.mojang.serialization.Codec;
@@ -51,14 +52,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public List<GenericStack> getOutputs() {
-        return List.of(toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor));
+        return Collections.singletonList(toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor));
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null
-                && obj.getClass() == getClass()
-                && ((DecompressionPattern) obj).definition.equals(definition);
+        return obj instanceof DecompressionPattern pattern && pattern.definition.equals(definition);
     }
 
     @Override

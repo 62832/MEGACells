@@ -34,6 +34,8 @@ import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 import appeng.datagen.providers.tags.ConventionTags;
 import appeng.items.storage.StorageTier;
+import appeng.recipes.game.CraftingUnitTransformRecipe;
+import appeng.recipes.game.StorageCellDisassemblyRecipe;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
 import appeng.recipes.transform.TransformCircumstance;
@@ -436,6 +438,10 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_" + housing.id().getPath(), has(housing))
                 .save(output, MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_with_housing"));
+        output.accept(
+                MEGACells.makeId("cells/standard/" + cell.id().getPath() + "_disassembly"),
+                new StorageCellDisassemblyRecipe(cell.asItem(), List.of(component.stack(), housing.stack())),
+                null);
     }
 
     private static void cell(
@@ -468,6 +474,16 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_" + component.id().getPath(), has(component))
                 .unlockedBy("has_dense_energy_cell", has(AEBlocks.DENSE_ENERGY_CELL))
                 .save(output, MEGACells.makeId("cells/portable/" + cell.id().getPath()));
+        output.accept(
+                MEGACells.makeId("cells/portable/" + cell.id().getPath() + "_disassembly"),
+                new StorageCellDisassemblyRecipe(
+                        cell.asItem(),
+                        List.of(
+                                component.stack(),
+                                housing.stack(),
+                                AEBlocks.ME_CHEST.stack(),
+                                AEBlocks.DENSE_ENERGY_CELL.stack())),
+                null);
     }
 
     private static void craftingBlock(RecipeOutput output, BlockDefinition<?> unit, ItemLike part) {
@@ -476,5 +492,9 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .requires(part)
                 .unlockedBy("has_mega_crafting_unit", has(MEGABlocks.MEGA_CRAFTING_UNIT))
                 .save(output, MEGACells.makeId("crafting/" + unit.id().getPath()));
+        output.accept(
+                MEGACells.makeId("crafting/" + unit.id().getPath() + "_disassembly"),
+                new CraftingUnitTransformRecipe(unit.block(), part.asItem()),
+                null);
     }
 }

@@ -21,7 +21,7 @@ import gripe._90.megacells.integration.IntegrationHelper;
 public class ArsEngIntegration implements IntegrationHelper {
     @Override
     public Function<Item.Properties, Item> createCell(StorageTier tier) {
-        return p -> new SourceCellItem(p, tier, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        return p -> new SourceCellItem(p, tier);
     }
 
     @Override

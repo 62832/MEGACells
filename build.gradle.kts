@@ -13,10 +13,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
     implementation(libs.ae2)
-    implementation(libs.ae2wtlibapi)
+    compileOnly(libs.ae2wtlibapi)
     runtimeOnly(libs.ae2wtlib)
 
-    implementation(libs.appmek)
+    compileOnly(libs.appmek)
     compileOnly(libs.mekanism)
     compileOnly(variantOf(libs.mekanism) { classifier("generators") })
     runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
@@ -98,7 +98,9 @@ tasks {
         val props = mapOf(
             "version" to version,
             "ae2Version" to libs.versions.ae2.get(),
-            "ae2VersionEnd" to libs.versions.ae2.get().substringBefore('.').toInt() + 1,
+            "ae2wtlibVersion" to libs.versions.ae2wtlib.get(),
+            "appmekVersion" to libs.versions.appmek.get(),
+            "arsengVersion" to libs.versions.arseng.get()
         )
 
         inputs.properties(props)

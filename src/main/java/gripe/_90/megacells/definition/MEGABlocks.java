@@ -7,9 +7,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -17,18 +19,16 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.block.AEBaseBlockItem;
+import appeng.block.crafting.CraftingBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.block.crafting.CraftingUnitBlock;
 import appeng.block.networking.EnergyCellBlock;
 import appeng.block.networking.EnergyCellBlockItem;
-import appeng.core.definitions.AEItems;
-import appeng.core.definitions.AEParts;
 import appeng.core.definitions.BlockDefinition;
 import appeng.core.definitions.ItemDefinition;
 import appeng.decorative.AEDecorativeBlock;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.block.MEGACraftingBlockItem;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 import gripe._90.megacells.block.MEGAInterfaceBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlock;
@@ -86,41 +86,47 @@ public final class MEGABlocks {
             "mega_crafting_unit",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.UNIT),
             AEBaseBlockItem::new);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = craftingBlock(
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_ACCELERATOR = block(
             "MEGA Crafting Co-Processing Unit",
             "mega_crafting_accelerator",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.ACCELERATOR),
-            () -> AEItems.ENGINEERING_PROCESSOR);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = craftingBlock(
+            (block, props) -> new CraftingBlockItem(block, props) {
+                @Override
+                public void addCheckedInformation(
+                        ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag adv) {
+                    lines.add(MEGATranslations.AcceleratorThreads.text());
+                }
+            });
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = block(
             "1M MEGA Crafting Storage",
             "1m_crafting_storage",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_1M),
-            () -> MEGAItems.CELL_COMPONENT_1M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = craftingBlock(
+            CraftingBlockItem::new);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_4M = block(
             "4M MEGA Crafting Storage",
             "4m_crafting_storage",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_4M),
-            () -> MEGAItems.CELL_COMPONENT_4M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_16M = craftingBlock(
+            CraftingBlockItem::new);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_16M = block(
             "16M MEGA Crafting Storage",
             "16m_crafting_storage",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_16M),
-            () -> MEGAItems.CELL_COMPONENT_16M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = craftingBlock(
+            CraftingBlockItem::new);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_64M = block(
             "64M MEGA Crafting Storage",
             "64m_crafting_storage",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_64M),
-            () -> MEGAItems.CELL_COMPONENT_64M);
-    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = craftingBlock(
+            CraftingBlockItem::new);
+    public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_256M = block(
             "256M MEGA Crafting Storage",
             "256m_crafting_storage",
             () -> new CraftingUnitBlock(MEGACraftingUnitType.STORAGE_256M),
-            () -> MEGAItems.CELL_COMPONENT_256M);
-    public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = craftingBlock(
+            CraftingBlockItem::new);
+    public static final BlockDefinition<CraftingMonitorBlock> CRAFTING_MONITOR = block(
             "MEGA Crafting Monitor",
             "mega_crafting_monitor",
             () -> new CraftingMonitorBlock(MEGACraftingUnitType.MONITOR),
-            () -> AEParts.STORAGE_MONITOR);
+            CraftingBlockItem::new);
 
     public static final BlockDefinition<MEGAInterfaceBlock> MEGA_INTERFACE =
             block("MEGA Interface", "mega_interface", MEGAInterfaceBlock::new, AEBaseBlockItem::new);
@@ -129,15 +135,6 @@ public final class MEGABlocks {
             "mega_pattern_provider",
             MEGAPatternProviderBlock::new,
             MEGAPatternProviderBlockItem::new);
-
-    private static <T extends Block> BlockDefinition<T> craftingBlock(
-            String englishName, String id, Supplier<T> blockSupplier, Supplier<ItemLike> disassemblyExtra) {
-        return block(
-                englishName,
-                id,
-                blockSupplier,
-                (block, props) -> new MEGACraftingBlockItem(block, props, disassemblyExtra));
-    }
 
     private static <T extends Block> BlockDefinition<T> block(
             String englishName,

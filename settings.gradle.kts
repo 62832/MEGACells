@@ -79,14 +79,6 @@ run {
                     includeGroup("curse.maven")
                 }
             }
-
-            maven {
-                name = "Modrinth Maven"
-                url = uri("https://api.modrinth.com/maven")
-                content {
-                    includeGroup("maven.modrinth")
-                }
-            }
         }
 
         versionCatalogs {
@@ -98,18 +90,20 @@ run {
                 version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.66")
                 version("parchment", "2024.07.28")
 
-                version("ae2", "19.0.23-beta")
+                version("ae2", "19.0.25")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
 
-                library("appmek", "maven.modrinth", "applied-mekanistics").version("GCScYwwI")
+                version("appmek", "1.6.2")
+                library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
 
-                library("arseng", "maven.modrinth", "ars-energistique").version("smOxCSOc")
-                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.0").version("5.1.0.736")
+                version("arseng", "2.0.4-beta")
+                library("arseng", "curse.maven", "ars-energistique-905641").version("5978726")
+                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.3.5.844")
             }
         }
     }
