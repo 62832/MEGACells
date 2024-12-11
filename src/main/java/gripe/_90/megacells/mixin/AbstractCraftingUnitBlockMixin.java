@@ -3,19 +3,17 @@ package gripe._90.megacells.mixin;
 import java.util.Objects;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +22,6 @@ import appeng.block.AEBaseBlock;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.ICraftingUnitType;
 import appeng.core.definitions.AEBlocks;
-import appeng.recipes.AERecipeTypes;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -80,26 +77,16 @@ public abstract class AbstractCraftingUnitBlockMixin extends AEBaseBlock {
                     value = "INVOKE",
                     target = "Lappeng/recipes/game/CraftingUnitTransformRecipe;getUpgradedBlock(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/level/block/Block;"))
     // spotless:on
-    private Block isMegaRecipe(
-            Block original, @Local(argsOnly = true) ItemStack heldItem, @Local(argsOnly = true) Level level) {
+    private Block isMegaUpgrade(Block original) {
         if (original == null) {
             return null;
         }
 
-        return Objects.requireNonNull(getRegistryName()).getNamespace().equals(MEGACells.MODID)
-                        && !mega$isFromMegaRecipe(level, heldItem)
+        return BuiltInRegistries.BLOCK.getKey(original).getNamespace().equals(MEGACells.MODID)
+                        && !Objects.requireNonNull(getRegistryName())
+                                .getNamespace()
+                                .equals(MEGACells.MODID)
                 ? null
                 : original;
-    }
-
-    @Unique
-    private static boolean mega$isFromMegaRecipe(Level level, ItemStack heldItem) {
-        for (var holder : level.getRecipeManager().getAllRecipesFor(AERecipeTypes.CRAFTING_UNIT_TRANSFORM)) {
-            if (heldItem.is(holder.value().getUpgradeItem())) {
-                return holder.id().getNamespace().equals(MEGACells.MODID);
-            }
-        }
-
-        return false;
     }
 }
