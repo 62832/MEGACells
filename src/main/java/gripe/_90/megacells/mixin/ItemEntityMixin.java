@@ -1,11 +1,12 @@
 package gripe._90.megacells.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
@@ -30,9 +31,9 @@ public abstract class ItemEntityMixin extends Entity {
     @Unique
     private int mega$lavaTicks;
 
-    @Inject(method = "fireImmune", at = @At("RETURN"), cancellable = true)
-    private void handleLavaTransform(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(cir.getReturnValue() || mega$lavaImmune);
+    @ModifyReturnValue(method = "fireImmune", at = @At("RETURN"))
+    private boolean lavaImmune(boolean original) {
+        return original || mega$lavaImmune;
     }
 
     @SuppressWarnings({"resource", "UnreachableCode"})
