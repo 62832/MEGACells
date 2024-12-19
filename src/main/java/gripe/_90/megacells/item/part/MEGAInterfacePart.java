@@ -53,13 +53,7 @@ public class MEGAInterfacePart extends InterfacePart {
 
     @Override
     public IPartModel getStaticModels() {
-        if (isActive() && isPowered()) {
-            return MODELS_HAS_CHANNEL;
-        } else if (isPowered()) {
-            return MODELS_ON;
-        } else {
-            return MODELS_OFF;
-        }
+        return isPowered() ? isActive() ? MODELS_HAS_CHANNEL : MODELS_ON : MODELS_OFF;
     }
 
     @Override

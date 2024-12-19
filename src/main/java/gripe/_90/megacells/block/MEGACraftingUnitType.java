@@ -36,7 +36,7 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
     }
 
     public String getAffix() {
-        return this.affix;
+        return affix;
     }
 
     public BlockDefinition<?> getDefinition() {

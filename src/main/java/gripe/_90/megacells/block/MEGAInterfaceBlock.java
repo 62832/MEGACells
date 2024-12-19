@@ -29,7 +29,7 @@ public class MEGAInterfaceBlock extends AEBaseEntityBlock<MEGAInterfaceBlockEnti
             return InteractionResult.PASS;
         }
 
-        var be = this.getBlockEntity(level, pos);
+        var be = getBlockEntity(level, pos);
 
         if (be != null) {
             if (!level.isClientSide()) {

@@ -48,7 +48,7 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     }
 
     public TextureAtlasSprite getLightMaterial(Function<Material, TextureAtlasSprite> textureGetter) {
-        return switch (this.type) {
+        return switch (type) {
             case ACCELERATOR -> textureGetter.apply(ACCELERATOR_LIGHT);
             case STORAGE_1M -> textureGetter.apply(STORAGE_1M_LIGHT);
             case STORAGE_4M -> textureGetter.apply(STORAGE_4M_LIGHT);
@@ -56,7 +56,7 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
             case STORAGE_64M -> textureGetter.apply(STORAGE_64M_LIGHT);
             case STORAGE_256M -> textureGetter.apply(STORAGE_256M_LIGHT);
             default -> throw new IllegalArgumentException(
-                    "Crafting unit type " + this.type + " does not use a light texture.");
+                    "Crafting unit type " + type + " does not use a light texture.");
         };
     }
 
@@ -66,14 +66,14 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
         TextureAtlasSprite ringSideHor = spriteGetter.apply(RING_SIDE_HOR);
         TextureAtlasSprite ringSideVer = spriteGetter.apply(RING_SIDE_VER);
 
-        return switch (this.type) {
+        return switch (type) {
             case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, spriteGetter.apply(UNIT_BASE));
             case ACCELERATOR, STORAGE_1M, STORAGE_4M, STORAGE_16M, STORAGE_64M, STORAGE_256M -> new LightBakedModel(
                     ringCorner,
                     ringSideHor,
                     ringSideVer,
                     spriteGetter.apply(LIGHT_BASE),
-                    this.getLightMaterial(spriteGetter));
+                    getLightMaterial(spriteGetter));
             case MONITOR -> new MonitorBakedModel(
                     ringCorner,
                     ringSideHor,

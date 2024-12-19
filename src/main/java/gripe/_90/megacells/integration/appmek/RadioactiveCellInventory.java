@@ -132,8 +132,8 @@ public class RadioactiveCellInventory implements StorageCell {
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
         var extractAmount = Math.min(Integer.MAX_VALUE, amount);
+        var currentCount = chemAmount;
 
-        var currentCount = this.chemAmount;
         if (chemAmount > 0 && Objects.equals(storedChemical, what)) {
             if (extractAmount >= currentCount) {
                 if (mode == Actionable.MODULATE) {

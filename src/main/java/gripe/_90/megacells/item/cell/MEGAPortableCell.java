@@ -35,7 +35,7 @@ public class MEGAPortableCell extends PortableCellItem {
 
     @Override
     public StorageTier getTier() {
-        return this.tier;
+        return tier;
     }
 
     @Override

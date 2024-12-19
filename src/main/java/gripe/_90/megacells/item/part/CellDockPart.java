@@ -125,17 +125,17 @@ public class CellDockPart extends AEBasePart
         super.readVisualStateFromNBT(data);
 
         try {
-            this.clientCell = BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getString("cellId")));
+            clientCell = BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getString("cellId")));
         } catch (Exception e) {
             MEGACells.LOGGER.warn("Couldn't read cell item for {} from {}", this, data);
-            this.clientCell = Items.AIR;
+            clientCell = Items.AIR;
         }
 
         try {
-            this.clientCellState = CellState.valueOf(data.getString("cellStatus"));
+            clientCellState = CellState.valueOf(data.getString("cellStatus"));
         } catch (Exception e) {
             MEGACells.LOGGER.warn("Couldn't read cell status for {} from {}", this, data);
-            this.clientCellState = CellState.ABSENT;
+            clientCellState = CellState.ABSENT;
         }
     }
 

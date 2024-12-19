@@ -24,7 +24,7 @@ public class MEGAPatternProviderBlockEntity extends PatternProviderBlockEntity {
 
     @Override
     public PatternProviderLogic createLogic() {
-        return MEGAPatternProviderBlock.createLogic(this.getMainNode(), this);
+        return MEGAPatternProviderBlock.createLogic(getMainNode(), this);
     }
 
     @Override

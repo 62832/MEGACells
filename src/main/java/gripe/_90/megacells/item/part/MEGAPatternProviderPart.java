@@ -39,7 +39,7 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public PatternProviderLogic createLogic() {
-        return MEGAPatternProviderBlock.createLogic(this.getMainNode(), this);
+        return MEGAPatternProviderBlock.createLogic(getMainNode(), this);
     }
 
     @Override
@@ -54,13 +54,7 @@ public class MEGAPatternProviderPart extends PatternProviderPart {
 
     @Override
     public IPartModel getStaticModels() {
-        if (isActive() && isPowered()) {
-            return MODELS_HAS_CHANNEL;
-        } else if (isPowered()) {
-            return MODELS_ON;
-        } else {
-            return MODELS_OFF;
-        }
+        return isPowered() ? isActive() ? MODELS_HAS_CHANNEL : MODELS_ON : MODELS_OFF;
     }
 
     @Override
