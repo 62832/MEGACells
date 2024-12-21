@@ -120,9 +120,7 @@ public class BulkCellInventory implements StorageCell {
         }
 
         if (decompressionPatterns == null) {
-            var decompressionChain = compressionChain.limited(compressionCutoff);
-            Collections.reverse(decompressionChain);
-
+            var decompressionChain = compressionChain.limited(compressionCutoff).reversed();
             decompressionPatterns = new ObjectLinkedOpenHashSet<>();
 
             for (var variant : decompressionChain) {

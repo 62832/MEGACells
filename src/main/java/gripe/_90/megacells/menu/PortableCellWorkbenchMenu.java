@@ -48,7 +48,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
         registerClientAction(CellWorkbenchMenu.ACTION_PARTITION, this::partition);
         registerClientAction(CellWorkbenchMenu.ACTION_CLEAR, this::clear);
         registerClientAction(CellWorkbenchMenu.ACTION_SET_FUZZY_MODE, FuzzyMode.class, this::setCellFuzzyMode);
-        registerClientAction(CompressionCutoffHost.ACTION_SET_COMPRESSION_LIMIT, this::mega$nextCompressionLimit);
+        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, this::mega$nextCompressionLimit);
     }
 
     public void setCellFuzzyMode(FuzzyMode fuzzyMode) {
@@ -75,7 +75,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
     @Override
     public void mega$nextCompressionLimit() {
         if (isClientSide()) {
-            sendClientAction(CompressionCutoffHost.ACTION_SET_COMPRESSION_LIMIT);
+            sendClientAction(ACTION_SET_COMPRESSION_LIMIT);
         } else {
             if (BulkCellItem.HANDLER.getCellInventory(getHost().mega$getContainedStack(), null)
                     instanceof BulkCellInventory bulkCell) {

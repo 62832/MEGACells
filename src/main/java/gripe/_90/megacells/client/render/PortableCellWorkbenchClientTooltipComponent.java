@@ -17,15 +17,10 @@ import appeng.items.storage.StorageCellTooltipComponent;
 import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
 
-public class PortableCellWorkbenchClientTooltipComponent implements ClientTooltipComponent {
+public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchTooltipComponent tooltipComponent)
+        implements ClientTooltipComponent {
     private static final Component CELL_LABEL = MEGATranslations.WorkbenchCell.text();
     private static final Component CONFIG_LABEL = MEGATranslations.WorkbenchConfig.text();
-
-    private final PortableCellWorkbenchTooltipComponent tooltipComponent;
-
-    public PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchTooltipComponent tooltipComponent) {
-        this.tooltipComponent = tooltipComponent;
-    }
 
     @Override
     public int getHeight() {

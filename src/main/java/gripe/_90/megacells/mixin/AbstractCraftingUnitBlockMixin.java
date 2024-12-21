@@ -3,6 +3,7 @@ package gripe._90.megacells.mixin;
 import java.util.Objects;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import org.spongepowered.asm.mixin.Final;
@@ -14,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,6 +24,7 @@ import appeng.block.AEBaseBlock;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.ICraftingUnitType;
 import appeng.core.definitions.AEBlocks;
+import appeng.core.definitions.BlockDefinition;
 import appeng.recipes.AERecipeTypes;
 
 import gripe._90.megacells.MEGACells;
@@ -47,26 +48,19 @@ public abstract class AbstractCraftingUnitBlockMixin extends AEBaseBlock {
     }
 
     @Shadow
-    public abstract InteractionResult removeUpgrade(Level level, Player player, BlockPos pos, BlockState newState);
-
-    @Shadow
     protected abstract boolean transform(Level level, BlockPos pos, BlockState state);
 
     // spotless:off
-    @Redirect(
+    @ModifyReceiver(
             method = "useWithoutItem",
             at = @At(
                     value = "INVOKE",
-                    target = "Lappeng/block/crafting/AbstractCraftingUnitBlock;removeUpgrade(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/InteractionResult;"))
+                    target = "Lappeng/core/definitions/BlockDefinition;block()Lnet/minecraft/world/level/block/Block;"))
     // spotless:on
-    private InteractionResult removeMegaUpgrade(
-            AbstractCraftingUnitBlock<?> instance, Level level, Player player, BlockPos pos, BlockState newState) {
-        var unitBlock = Objects.requireNonNull(instance.getRegistryName())
-                        .getNamespace()
-                        .equals(MEGACells.MODID)
+    private BlockDefinition<?> removeMegaUpgrade(BlockDefinition<?> instance) {
+        return Objects.requireNonNull(getRegistryName()).getNamespace().equals(MEGACells.MODID)
                 ? MEGABlocks.MEGA_CRAFTING_UNIT
                 : AEBlocks.CRAFTING_UNIT;
-        return removeUpgrade(level, player, pos, unitBlock.block().defaultBlockState());
     }
 
     @ModifyExpressionValue(
@@ -88,8 +82,7 @@ public abstract class AbstractCraftingUnitBlockMixin extends AEBaseBlock {
             if (heldItem.is(holder.value().getUpgradeItem())) {
                 var upgraded = holder.value().getUpgradedBlock();
 
-                if (BuiltInRegistries.BLOCK
-                        .getKey((AbstractCraftingUnitBlock<?>) (Object) this)
+                if (Objects.requireNonNull(getRegistryName())
                         .getNamespace()
                         .equals(BuiltInRegistries.BLOCK.getKey(upgraded).getNamespace())) {
                     return upgraded;

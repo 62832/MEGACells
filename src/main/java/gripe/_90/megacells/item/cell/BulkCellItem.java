@@ -110,10 +110,8 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
         var upgrades = new ArrayList<ItemStack>();
         var content = new ArrayList<GenericStack>();
 
-        if (AEConfig.instance().isTooltipShowCellUpgrades()) {
-            if (inv.isCompressionEnabled()) {
-                upgrades.add(MEGAItems.COMPRESSION_CARD.stack());
-            }
+        if (AEConfig.instance().isTooltipShowCellUpgrades() && inv.isCompressionEnabled()) {
+            upgrades.add(MEGAItems.COMPRESSION_CARD.stack());
         }
 
         if (AEConfig.instance().isTooltipShowCellContent()) {
