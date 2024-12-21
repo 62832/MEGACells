@@ -65,7 +65,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
             if (cell.portable()) {
                 portable(cell.item(), cell.keyType());
             } else {
-                cell(cell.item());
+                cell(cell.item(), cell.keyType());
             }
         }
 
@@ -188,10 +188,24 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         itemModels().basicItem(item.asItem());
     }
 
+    private void cell(ItemDefinition<?> cell, String housingType) {
+        var id = cell.id().getPath();
+        var tierSuffix = id.substring(id.lastIndexOf('_'));
+
+        itemModels()
+                .singleTexture(
+                        id,
+                        mcLoc("item/generated"),
+                        "layer0",
+                        MEGACells.makeId("item/mega_" + housingType + "_cell_housing"))
+                .texture("layer1", AppEng.makeId("item/storage_cell_led"))
+                .texture("layer2", MEGACells.makeId("item/storage_cell_side" + tierSuffix));
+    }
+
     private void cell(ItemDefinition<?> cell) {
         var id = cell.id().getPath();
         itemModels()
-                .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/cell/standard/" + id))
+                .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + id))
                 .texture("layer1", AppEng.makeId("item/storage_cell_led"));
     }
 
@@ -204,10 +218,10 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                         id,
                         mcLoc("item/generated"),
                         "layer0",
-                        MEGACells.makeId("item/cell/portable/portable_cell_" + housingType + "_housing"))
+                        MEGACells.makeId("item/portable_cell_" + housingType + "_housing"))
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
-                .texture("layer2", MEGACells.makeId("item/cell/portable/portable_cell_screen"))
-                .texture("layer3", MEGACells.makeId("item/cell/portable/portable_cell_side" + tierSuffix));
+                .texture("layer2", MEGACells.makeId("item/portable_cell_screen"))
+                .texture("layer3", MEGACells.makeId("item/portable_cell_side" + tierSuffix));
     }
 
     private void driveCell(MEGAItems.CellDefinition cell) {

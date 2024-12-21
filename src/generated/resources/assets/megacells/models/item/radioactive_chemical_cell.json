@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "megacells:item/cell/standard/radioactive_chemical_cell",
+    "layer0": "megacells:item/radioactive_chemical_cell",
     "layer1": "ae2:item/storage_cell_led"
   }
 }

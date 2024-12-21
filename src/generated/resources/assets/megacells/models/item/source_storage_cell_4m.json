@@ -1,7 +1,8 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "megacells:item/cell/standard/source_storage_cell_4m",
-    "layer1": "ae2:item/storage_cell_led"
+    "layer0": "megacells:item/mega_source_cell_housing",
+    "layer1": "ae2:item/storage_cell_led",
+    "layer2": "megacells:item/storage_cell_side_4m"
   }
 }
