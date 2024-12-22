@@ -7,9 +7,13 @@ import net.minecraft.world.item.Item;
 import appeng.items.storage.StorageTier;
 
 public interface IntegrationHelper {
-    Function<Item.Properties, Item> createCell(StorageTier tier);
+    default Function<Item.Properties, Item> createCell(StorageTier tier) {
+        throw new UnsupportedOperationException();
+    }
 
-    Function<Item.Properties, Item> createPortable(StorageTier tier);
+    default Function<Item.Properties, Item> createPortable(StorageTier tier) {
+        throw new UnsupportedOperationException();
+    }
 
-    void initUpgrades();
+    default void initUpgrades() {}
 }

@@ -13,6 +13,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
     implementation(libs.ae2)
+
     compileOnly(libs.ae2wtlibapi)
     runtimeOnly(libs.ae2wtlib)
 
@@ -23,6 +24,9 @@ dependencies {
 
     implementation(libs.arseng)
     implementation(libs.arsnouveau)
+
+    implementation(libs.appflux)
+    implementation(libs.glodium)
 }
 
 sourceSets {
@@ -99,7 +103,6 @@ tasks {
         val props = mapOf(
             "version" to version,
             "ae2Version" to libs.versions.ae2.get(),
-            "ae2wtlibVersion" to libs.versions.ae2wtlib.get(),
             "appmekVersion" to libs.versions.appmek.get(),
             "arsengVersion" to libs.versions.arseng.get()
         )

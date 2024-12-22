@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
+import gripe._90.megacells.integration.appflux.AppFluxIntegration;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 
@@ -17,7 +18,8 @@ import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 public enum Addons {
     APPMEK("Applied Mekanistics", () -> new AppMekIntegration()),
     ARSENG("Ars Énergistique", () -> new ArsEngIntegration()),
-    AE2WTLIB_API("AE2WTLib", () -> new AE2WTIntegration())
+    AE2WTLIB_API("AE2WTLib", () -> new AE2WTIntegration()),
+    APPFLUX("Applied Flux", () -> new AppFluxIntegration())
 // APPBOT("Applied Botanics"),
 // APPLIEDE("AppliedE"),
 // APPELEM("Applied Elemental"),

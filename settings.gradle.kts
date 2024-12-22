@@ -104,6 +104,9 @@ run {
                 version("arseng", "2.0.4-beta")
                 library("arseng", "curse.maven", "ars-energistique-905641").version("5978726")
                 library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.3.5.844")
+
+                library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
+                library("glodium", "curse.maven", "glodium-957920").version("5821676")
             }
         }
     }

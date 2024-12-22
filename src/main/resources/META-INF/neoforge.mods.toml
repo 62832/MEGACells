@@ -26,7 +26,6 @@ versionRange = "[$ae2Version,)"
 [[dependencies]]
 modId = "ae2wtlib"
 type = "optional"
-versionRange = "[$ae2wtlibVersion,)"
 
 [[dependencies]]
 modId = "appmek"
@@ -37,3 +36,7 @@ versionRange = "[$appmekVersion,)"
 modId = "arseng"
 type = "optional"
 versionRange = "[$arsengVersion,)"
+
+[[dependencies]]
+modId = "appflux"
+type = "optional"
