@@ -3,16 +3,21 @@ package gripe._90.megacells.client;
 import java.util.ArrayList;
 
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 import appeng.api.client.StorageCellModels;
 import appeng.block.networking.EnergyCellBlockItem;
@@ -38,6 +43,7 @@ import gripe._90.megacells.definition.MEGABlockEntities;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
 
 @Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
@@ -51,6 +57,7 @@ public class MEGACellsClient {
         eventBus.addListener(MEGACellsClient::initStorageCellModels);
         eventBus.addListener(MEGACellsClient::initItemColours);
         eventBus.addListener(MEGACellsClient::initTooltipComponents);
+        eventBus.addListener(MEGACellsClient::initResourcePackFinder);
     }
 
     private static void initCraftingUnitModels() {
@@ -97,7 +104,9 @@ public class MEGACellsClient {
                 }));
     }
 
-    private static void initStorageCellModels(FMLClientSetupEvent event) {
+    private static void initStorageCellModels(FMLCommonSetupEvent event) {
+        // Has to be done in common setup, otherwise textures are broken when first entering a world until one forces a
+        // resource pack reload.
         event.enqueueWork(() -> {
             var modelPrefix = "block/drive/cells/";
 
@@ -123,11 +132,7 @@ public class MEGACellsClient {
         var portableCells = new ArrayList<ItemLike>();
 
         for (var cell : MEGAItems.getTieredCells()) {
-            if (cell.portable()) {
-                portableCells.add(cell.item());
-            } else {
-                standardCells.add(cell.item());
-            }
+            (cell.portable() ? portableCells : standardCells).add(cell.item());
         }
 
         standardCells.add(MEGAItems.BULK_ITEM_CELL);
@@ -143,5 +148,17 @@ public class MEGACellsClient {
 
     private static void initTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(PortableCellWorkbenchTooltipComponent.class, PortableCellWorkbenchClientTooltipComponent::new);
+    }
+
+    private static void initResourcePackFinder(AddPackFindersEvent event) {
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            event.addPackFinders(
+                    MEGACells.makeId("optional_cell_colours"),
+                    PackType.CLIENT_RESOURCES,
+                    MEGATranslations.ClassicCellColours.text(),
+                    PackSource.BUILT_IN,
+                    false,
+                    Pack.Position.TOP);
+        }
     }
 }

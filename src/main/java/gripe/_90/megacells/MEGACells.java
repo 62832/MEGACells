@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
@@ -192,16 +191,12 @@ public class MEGACells {
                 (be, context) -> be.getLogic().getReturnInv());
 
         for (var cell : MEGAItems.getTieredCells()) {
-            if (cell.portable()) {
-                registerPoweredItemCapability(event, cell.item().asItem());
+            if (cell.portable() && cell.item().asItem() instanceof IAEItemPowerStorage powered) {
+                event.registerItem(
+                        Capabilities.EnergyStorage.ITEM,
+                        (stack, context) -> new PoweredItemCapabilities(stack, powered),
+                        cell.item());
             }
-        }
-    }
-
-    private static <T extends Item> void registerPoweredItemCapability(RegisterCapabilitiesEvent event, T item) {
-        if (item instanceof IAEItemPowerStorage powered) {
-            event.registerItem(
-                    Capabilities.EnergyStorage.ITEM, (stack, ctx) -> new PoweredItemCapabilities(stack, powered), item);
         }
     }
 }
