@@ -220,7 +220,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                         "layer0",
                         MEGACells.makeId("item/portable_cell_" + housingType + "_housing"))
                 .texture("layer1", AppEng.makeId("item/portable_cell_led"))
-                .texture("layer2", MEGACells.makeId("item/portable_cell_screen"))
+                .texture("layer2", AppEng.makeId("item/portable_cell_screen"))
                 .texture("layer3", MEGACells.makeId("item/portable_cell_side" + tierSuffix));
     }
 

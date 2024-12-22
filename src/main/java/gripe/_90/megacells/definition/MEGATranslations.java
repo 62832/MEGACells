@@ -5,32 +5,38 @@ import appeng.core.localization.LocalizationEnum;
 import gripe._90.megacells.MEGACells;
 
 public enum MEGATranslations implements LocalizationEnum {
-    AcceleratorThreads("Provides 4 co-processing threads per block.", Type.TOOLTIP),
-    ALot("A lot.", Type.TOOLTIP),
-    Compression("Compression: %s", Type.TOOLTIP),
-    CompressionCutoff("Bulk Compression Cutoff", Type.TOOLTIP),
-    Contains("Contains: %s", Type.TOOLTIP),
-    Disabled("Disabled", Type.TOOLTIP),
-    Empty("Empty", Type.TOOLTIP),
-    Enabled("Enabled", Type.TOOLTIP),
-    FilterChemicalUnsupported("Filter chemical unsupported!", Type.TOOLTIP),
-    Cutoff("Cutoff: %s", Type.TOOLTIP),
-    MismatchedFilter("Mismatched filter!", Type.TOOLTIP),
-    ModName("MEGA Cells", Type.GUI),
-    NotInstalled("%s not installed.", Type.TOOLTIP),
-    PartitionedFor("Partitioned for: %s", Type.TOOLTIP),
-    ProcessingOnly("Supports processing patterns only.", Type.TOOLTIP),
-    Quantity("Quantity: %s", Type.TOOLTIP),
-    NotPartitioned("Not Partitioned", Type.TOOLTIP),
-    WorkbenchCell("Cell:", Type.TOOLTIP),
-    WorkbenchConfig("Config:", Type.TOOLTIP);
+    AcceleratorThreads("Provides 4 co-processing threads per block."),
+    ALot("A lot."),
+    ClassicCellColours("MEGA: Classic Cell Colours", "pack"),
+    ClassicCellColoursDesc("Old red-purple colours for both AE2 and MEGA cell tiers.", "pack"),
+    Compression("Compression: %s"),
+    CompressionCutoff("Bulk Compression Cutoff"),
+    Contains("Contains: %s"),
+    Disabled("Disabled"),
+    Empty("Empty"),
+    Enabled("Enabled"),
+    FilterChemicalUnsupported("Filter chemical unsupported!"),
+    Cutoff("Cutoff: %s"),
+    MismatchedFilter("Mismatched filter!"),
+    ModName("MEGA Cells", "gui"),
+    NotInstalled("%s not installed."),
+    PartitionedFor("Partitioned for: %s"),
+    ProcessingOnly("Supports processing patterns only."),
+    Quantity("Quantity: %s"),
+    NotPartitioned("Not Partitioned"),
+    WorkbenchCell("Cell:"),
+    WorkbenchConfig("Config:");
 
     private final String englishText;
-    private final Type type;
+    private final String root;
 
-    MEGATranslations(String englishText, Type type) {
+    MEGATranslations(String englishText, String root) {
         this.englishText = englishText;
-        this.type = type;
+        this.root = root;
+    }
+
+    MEGATranslations(String englishText) {
+        this(englishText, "gui.tooltips");
     }
 
     @Override
@@ -40,17 +46,6 @@ public enum MEGATranslations implements LocalizationEnum {
 
     @Override
     public String getTranslationKey() {
-        return String.format("%s.%s.%s", type.root, MEGACells.MODID, name());
-    }
-
-    private enum Type {
-        GUI("gui"),
-        TOOLTIP("gui.tooltips");
-
-        private final String root;
-
-        Type(String root) {
-            this.root = root;
-        }
+        return String.format("%s.%s.%s", root, MEGACells.MODID, name());
     }
 }

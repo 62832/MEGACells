@@ -29,5 +29,9 @@ public class MEGADataGenerators {
         generator.addProvider(
                 event.includeServer(),
                 new MEGATagProvider.ItemTags(output, registries, blockTags.contentsGetter(), existing));
+
+        generator.addProvider(
+                event.includeClient(),
+                new OverrideModelProvider(generator.getPackOutput("optional_cell_colours"), existing));
     }
 }

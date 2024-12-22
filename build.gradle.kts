@@ -16,7 +16,7 @@ dependencies {
     compileOnly(libs.ae2wtlibapi)
     runtimeOnly(libs.ae2wtlib)
 
-    compileOnly(libs.appmek)
+    implementation(libs.appmek)
     compileOnly(libs.mekanism)
     compileOnly(variantOf(libs.mekanism) { classifier("generators") })
     runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
@@ -74,6 +74,7 @@ neoForge {
                 "--all",
                 "--output", file("src/generated/resources/").absolutePath,
                 "--existing", file("src/main/resources/").absolutePath,
+                "--existing", file("src/main/resources/optional_cell_colours").absolutePath,
                 "--existing-mod", "ae2"
             )
             sourceSet = sourceSets.getByName("data")
