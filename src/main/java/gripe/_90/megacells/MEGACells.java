@@ -2,11 +2,8 @@ package gripe._90.megacells;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -23,6 +20,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 import appeng.api.AECapabilities;
 import appeng.api.features.HotkeyAction;
@@ -66,9 +65,9 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
-        eventBus.addListener(MEGACells::initVillagerTrades);
 
         CompressionService.init();
+        NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
     }
@@ -158,21 +157,17 @@ public class MEGACells {
         });
     }
 
-    private static void initVillagerTrades(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            addVillagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20);
-            addVillagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50);
-        });
+    private static void initVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == InitVillager.PROFESSION) {
+            var trades = event.getTrades().get(5);
+            trades.add(villagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20));
+            trades.add(villagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50));
+        }
     }
 
-    private static void addVillagerTrade(ItemLike item, int cost, int quantity, int xp) {
-        var offers = VillagerTrades.TRADES.computeIfAbsent(InitVillager.PROFESSION, k -> new Int2ObjectOpenHashMap<>());
-        var masterEntries = offers.computeIfAbsent(5, k -> new VillagerTrades.ItemListing[0]);
-        masterEntries = ArrayUtils.add(
-                masterEntries,
-                (i, j) -> new MerchantOffer(
-                        new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F));
-        offers.put(5, masterEntries);
+    private static VillagerTrades.ItemListing villagerTrade(ItemLike item, int cost, int quantity, int xp) {
+        return (entity, random) ->
+                new MerchantOffer(new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F);
     }
 
     @SuppressWarnings("UnstableApiUsage")
