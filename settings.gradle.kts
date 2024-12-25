@@ -101,8 +101,8 @@ run {
                 library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
 
-                version("arseng", "2.0.4-beta")
-                library("arseng", "curse.maven", "ars-energistique-905641").version("5978726")
+                version("arseng", "2.0.5-beta")
+                library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
                 library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.3.5.844")
 
                 library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
