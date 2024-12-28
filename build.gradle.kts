@@ -59,6 +59,7 @@ neoForge {
 
     runs {
         configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
             gameDirectory = file("run")
         }
 

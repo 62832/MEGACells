@@ -1,0 +1,13 @@
+{
+  "remove": [
+    "mysticalagriculture:inferium_essence"
+  ],
+  "values": [
+    "#c:seeds",
+    "#c:tools/wrench",
+    {
+      "id": "#mysticalagriculture:essences",
+      "required": false
+    }
+  ]
+}

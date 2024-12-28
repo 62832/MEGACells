@@ -2,9 +2,6 @@ package gripe._90.megacells;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +39,6 @@ import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGACreativeTab;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
-import gripe._90.megacells.definition.MEGATranslations;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
@@ -51,7 +47,6 @@ import gripe._90.megacells.misc.CompressionService;
 @Mod(MEGACells.MODID)
 public class MEGACells {
     public static final String MODID = "megacells";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MEGATranslations.ModName.getEnglishText());
 
     public MEGACells(ModContainer container, IEventBus eventBus) {
         MEGABlocks.DR.register(eventBus);

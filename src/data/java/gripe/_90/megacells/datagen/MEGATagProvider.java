@@ -12,13 +12,14 @@ import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appeng.api.features.P2PTunnelAttunement;
+import appeng.datagen.providers.tags.ConventionTags;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -26,8 +27,8 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
 
 public class MEGATagProvider {
-    public static class BlockTags extends IntrinsicHolderTagsProvider<Block> {
-        public BlockTags(
+    public static class Block extends IntrinsicHolderTagsProvider<net.minecraft.world.level.block.Block> {
+        public Block(
                 PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existing) {
             super(
                     output,
@@ -41,7 +42,7 @@ public class MEGATagProvider {
         @Override
         protected void addTags(@NotNull HolderLookup.Provider provider) {
             for (var block : MEGABlocks.getBlocks()) {
-                tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
+                tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.block());
             }
 
             tag(MEGATags.SKY_STEEL_BLOCK).add(MEGABlocks.SKY_STEEL_BLOCK.block());
@@ -61,20 +62,20 @@ public class MEGATagProvider {
         }
     }
 
-    public static class ItemTags extends ItemTagsProvider {
-        public ItemTags(
+    public static class Item extends ItemTagsProvider {
+        public Item(
                 PackOutput output,
                 CompletableFuture<HolderLookup.Provider> registries,
-                CompletableFuture<TagsProvider.TagLookup<Block>> blockTags,
+                CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> blockTags,
                 ExistingFileHelper existing) {
             super(output, registries, blockTags, MEGACells.MODID, existing);
         }
 
         @Override
         protected void addTags(@NotNull HolderLookup.Provider provider) {
-            copy(MEGATags.SKY_STEEL_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_STEEL_BLOCK.location()));
-            copy(MEGATags.SKY_BRONZE_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_BRONZE_BLOCK.location()));
-            copy(MEGATags.SKY_OSMIUM_BLOCK, TagKey.create(Registries.ITEM, MEGATags.SKY_OSMIUM_BLOCK.location()));
+            copy(MEGATags.SKY_STEEL_BLOCK);
+            copy(MEGATags.SKY_BRONZE_BLOCK);
+            copy(MEGATags.SKY_OSMIUM_BLOCK);
 
             tag(MEGATags.SKY_STEEL_INGOT).add(MEGAItems.SKY_STEEL_INGOT.asItem());
             tag(MEGATags.SKY_BRONZE_INGOT).add(MEGAItems.SKY_BRONZE_INGOT.asItem());
@@ -95,14 +96,28 @@ public class MEGATagProvider {
                     .add(Items.CLAY_BALL)
                     .add(Items.MELON_SLICE)
                     .add(Items.ICE, Items.PACKED_ICE)
+                    .add(Items.STRING)
+                    .add(Items.SNOWBALL)
+                    .add(Items.HONEYCOMB)
+                    .add(Items.POINTED_DRIPSTONE)
                     .addOptionalTag(
                             ResourceLocation.fromNamespaceAndPath("functionalstorage", "ignore_crafting_check"));
+
+            tag(MEGATags.COMPRESSION_BLACKLIST)
+                    .addTag(Tags.Items.SEEDS)
+                    .addTag(ConventionTags.WRENCH)
+                    .addOptionalTag(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "essences"))
+                    .remove(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "inferium_essence"));
 
             tag(Tags.Items.INGOTS)
                     .addTag(MEGATags.SKY_STEEL_INGOT)
                     .addTag(MEGATags.SKY_BRONZE_INGOT)
                     .addTag(MEGATags.SKY_OSMIUM_INGOT);
             copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
+        }
+
+        private void copy(TagKey<net.minecraft.world.level.block.Block> blockTag) {
+            copy(blockTag, TagKey.create(Registries.ITEM, blockTag.location()));
         }
 
         @NotNull

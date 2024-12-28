@@ -7,7 +7,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import gripe._90.megacells.MEGACells;
 
-@SuppressWarnings("unused")
 @EventBusSubscriber(modid = MEGACells.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MEGADataGenerators {
     @SubscribeEvent
@@ -24,11 +23,11 @@ public class MEGADataGenerators {
         generator.addProvider(event.includeServer(), new MEGARecipeProvider(output, registries));
         generator.addProvider(event.includeServer(), new MEGALootProvider(output, registries));
 
-        var blockTags = new MEGATagProvider.BlockTags(output, registries, existing);
+        var blockTags = new MEGATagProvider.Block(output, registries, existing);
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(
                 event.includeServer(),
-                new MEGATagProvider.ItemTags(output, registries, blockTags.contentsGetter(), existing));
+                new MEGATagProvider.Item(output, registries, blockTags.contentsGetter(), existing));
 
         generator.addProvider(
                 event.includeClient(),

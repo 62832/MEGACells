@@ -10,14 +10,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -25,14 +26,15 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompressionService.class);
+
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
-    // This value is typically either 4 or 9 for any given item, or 1 for the smallest base variant.
-    private static final Set<CompressionChain> compressionChains = new HashSet<>();
+    // This value will be between 1 and 9 (inclusive) for any given item, or just 1 for the smallest base variant.
+    private static final Set<CompressionChain> chains = new HashSet<>();
 
     // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
     // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
@@ -40,9 +42,7 @@ public class CompressionService {
     private static final Set<Override> overrides = new HashSet<>();
 
     public static Optional<CompressionChain> getChain(AEItemKey item) {
-        return compressionChains.stream()
-                .filter(chain -> chain.containsVariant(item))
-                .findFirst();
+        return chains.stream().filter(chain -> chain.containsVariant(item)).findFirst();
     }
 
     public static void init() {
@@ -64,7 +64,7 @@ public class CompressionService {
 
     private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old chain cache in case of the server restarting or recipes being reloaded
-        compressionChains.clear();
+        chains.clear();
         overrides.clear();
 
         // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
@@ -74,7 +74,7 @@ public class CompressionService {
         for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
             if (isCompressionRecipe(recipe.value(), access)) {
                 compressed.add(recipe.value());
-            } else if (isDecompressionRecipe(recipe.value(), access)) {
+            } else if (isDecompressionRecipe(recipe.value())) {
                 decompressed.add(recipe.value());
             }
         }
@@ -94,9 +94,11 @@ public class CompressionService {
             var baseVariant = recipe.getResultItem(access).getItem();
 
             if (getChain(AEItemKey.of(baseVariant)).isEmpty()) {
-                compressionChains.add(generateChain(baseVariant, compressed, decompressed, access));
+                chains.add(generateChain(baseVariant, compressed, decompressed, access));
             }
         });
+
+        LOGGER.info("Initialised bulk compression. {} compression chains gathered.", chains.size());
     }
 
     private static CompressionChain generateChain(
@@ -113,9 +115,12 @@ public class CompressionService {
             var item = lower.item().getItem();
 
             if (variants.contains(item)) {
-                MEGACells.LOGGER.warn(
-                        "Duplicate lower compression variant detected: {}. Check any recipe involving this item for problems.",
-                        lower);
+                if (lower.factor() != 1) {
+                    LOGGER.warn(
+                            "Duplicate lower compression variant detected: {}. Check any recipe involving this item for problems.",
+                            lower);
+                }
+
                 break;
             }
 
@@ -133,9 +138,12 @@ public class CompressionService {
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
             if (chain.contains(higher)) {
-                MEGACells.LOGGER.warn(
-                        "Duplicate higher compression variant detected: {}. Check any recipe involving this item for problems.",
-                        higher);
+                if (higher.factor() != 1) {
+                    LOGGER.warn(
+                            "Duplicate higher compression variant detected: {}. Check any recipe involving this item for problems.",
+                            higher);
+                }
+
                 break;
             }
 
@@ -143,6 +151,7 @@ public class CompressionService {
             higher = getNextVariant(higher.item().getItem(), compressed, true, access);
         }
 
+        LOGGER.debug("Gathered bulk compression chain: {}", chain);
         return chain;
     }
 
@@ -173,27 +182,29 @@ public class CompressionService {
         return null;
     }
 
-    private static boolean isDecompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        return recipe.getIngredients().stream().filter(i -> !i.isEmpty()).count() == 1
-                && Set.of(4, 9).contains(recipe.getResultItem(access).getCount());
+    private static boolean isDecompressionRecipe(CraftingRecipe recipe) {
+        return recipe.getIngredients().stream().filter(i -> !i.isEmpty()).count() == 1;
     }
 
     private static boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        var ingredients = recipe.getIngredients();
-        return recipe.getResultItem(access).getCount() == 1
-                && ingredients.stream().noneMatch(Ingredient::isEmpty)
-                && Set.of(4, 9).contains(ingredients.size())
-                && sameIngredient(recipe);
-    }
-
-    private static boolean sameIngredient(CraftingRecipe recipe) {
-        var ingredients = recipe.getIngredients();
-
-        if (recipe instanceof ShapedRecipe) {
-            return ingredients.stream().distinct().count() <= 1;
+        if (recipe.getResultItem(access).getCount() != 1) {
+            return false;
         }
 
-        // Check further for any odd cases (e.g. melon blocks having a shapeless recipe instead of a shaped one)
+        var ingredients = recipe.getIngredients().stream()
+                .filter(i -> !i.isEmpty())
+                .distinct()
+                .toList();
+
+        if (ingredients.isEmpty()) {
+            return false;
+        }
+
+        if (ingredients.size() == 1) {
+            return true;
+        }
+
+        // Check further for any odd cases such as certain mods' metal ingot/block recipes post-unification
         var first = ingredients.getFirst().getItems();
 
         for (var ingredient : ingredients) {
@@ -226,10 +237,15 @@ public class CompressionService {
             var input = candidate.getIngredients().getFirst().getItems();
             var output = candidate.getResultItem(access).getItem();
 
-            var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput));
-            var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output));
+            // spotless:off
+            var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput) && !i.is(MEGATags.COMPRESSION_BLACKLIST));
+            var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output) && !i.is(MEGATags.COMPRESSION_BLACKLIST));
 
-            if (compressible && decompressible) {
+            var sameQuantity = candidate.getResultItem(access).getCount() == recipe.getIngredients().size()
+                            && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
+            // spotless:on
+
+            if (compressible && decompressible && sameQuantity) {
                 return false;
             }
         }
@@ -239,15 +255,26 @@ public class CompressionService {
 
     private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
         for (var input : recipe.getIngredients().getFirst().getItems()) {
+            if (input.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                return false;
+            }
+
             if (input.is(MEGATags.COMPRESSION_OVERRIDES)) {
-                var decompressed = isDecompressionRecipe(recipe, access);
                 var output = recipe.getResultItem(access);
 
+                if (output.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                    return false;
+                }
+
+                var decompressed = isDecompressionRecipe(recipe);
                 var smaller = (decompressed ? output : input).getItem();
                 var larger = (decompressed ? input : output).getItem();
                 var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
 
-                overrides.add(new Override(smaller, larger, factor));
+                var override = new Override(smaller, larger, factor);
+                LOGGER.debug("Found bulk compression override: {}", override);
+                overrides.add(override);
+
                 return true;
             }
         }
@@ -255,5 +282,10 @@ public class CompressionService {
         return false;
     }
 
-    private record Override(Item smaller, Item larger, int factor) {}
+    private record Override(Item smaller, Item larger, int factor) {
+        @java.lang.Override
+        public String toString() {
+            return larger + " → " + factor + "x " + smaller;
+        }
+    }
 }

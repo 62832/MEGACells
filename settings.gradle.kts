@@ -87,7 +87,7 @@ run {
                 version("minecraft", mc)
 
                 val nf = mc.substringAfter('.')
-                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.66")
+                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.91")
                 version("parchment", "2024.07.28")
 
                 version("ae2", "19.1.1-beta")

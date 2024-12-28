@@ -55,5 +55,10 @@ public class CompressionChain extends ObjectArrayList<CompressionChain.Variant> 
         Variant(Item item, int factor) {
             this(AEItemKey.of(item), factor);
         }
+
+        @Override
+        public String toString() {
+            return factor + "x → " + item;
+        }
     }
 }

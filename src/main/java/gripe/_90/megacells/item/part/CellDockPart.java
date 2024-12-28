@@ -5,6 +5,8 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -63,6 +65,8 @@ import gripe._90.megacells.definition.MEGAMenus;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IStorageProvider, IPriorityHost {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CellDockPart.class);
+
     @PartModels
     private static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/cell_dock"));
 
@@ -127,14 +131,14 @@ public class CellDockPart extends AEBasePart
         try {
             clientCell = BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getString("cellId")));
         } catch (Exception e) {
-            MEGACells.LOGGER.warn("Couldn't read cell item for {} from {}", this, data);
+            LOGGER.warn("Couldn't read cell item for {} from {}", this, data);
             clientCell = Items.AIR;
         }
 
         try {
             clientCellState = CellState.valueOf(data.getString("cellStatus"));
         } catch (Exception e) {
-            MEGACells.LOGGER.warn("Couldn't read cell status for {} from {}", this, data);
+            LOGGER.warn("Couldn't read cell status for {} from {}", this, data);
             clientCellState = CellState.ABSENT;
         }
     }
