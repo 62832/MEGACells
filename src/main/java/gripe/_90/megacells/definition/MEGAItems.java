@@ -186,6 +186,26 @@ public final class MEGAItems {
     public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M =
             integrationPortable(TIER_256M, "Source", Addons.ARSENG);
 
+    public static final ItemDefinition<?> MEGA_EXPERIENCE_CELL_HOUSING = integrationItem(
+            "MEGA Experience Cell Housing", "mega_experience_cell_housing", () -> MaterialItem::new, Addons.APPEX);
+
+    public static final ItemDefinition<?> EXPERIENCE_CELL_1M = integrationCell(TIER_1M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> EXPERIENCE_CELL_4M = integrationCell(TIER_4M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> EXPERIENCE_CELL_16M = integrationCell(TIER_16M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> EXPERIENCE_CELL_64M = integrationCell(TIER_64M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> EXPERIENCE_CELL_256M = integrationCell(TIER_256M, "Experience", Addons.APPEX);
+
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_1M =
+            integrationPortable(TIER_1M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_4M =
+            integrationPortable(TIER_4M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_16M =
+            integrationPortable(TIER_16M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_64M =
+            integrationPortable(TIER_64M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_256M =
+            integrationPortable(TIER_256M, "Experience", Addons.APPEX);
+
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);
         return new StorageTier(index, (multiplier / 1024) + "m", 1024 * multiplier, 0.5 * index, component::asItem);

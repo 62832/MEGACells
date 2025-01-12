@@ -26,7 +26,10 @@ dependencies {
     implementation(libs.arsnouveau)
 
     implementation(libs.appflux)
-    implementation(libs.glodium)
+    runtimeOnly(libs.glodium)
+
+    implementation(libs.appex)
+    runtimeOnly(libs.explib)
 }
 
 sourceSets {
