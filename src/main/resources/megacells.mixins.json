@@ -9,7 +9,8 @@
     "CraftingBlockItemMixin",
     "ItemEntityMixin",
     "ItemMenuHostMixin",
-    "PatternProviderMenuAccessor"
+    "PatternProviderMenuAccessor",
+    "SpinMappingAccessor"
   ],
   "client": [
     "client.BuiltInModelHooksAccessor",
