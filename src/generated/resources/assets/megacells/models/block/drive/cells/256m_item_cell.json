@@ -8,6 +8,50 @@
           "texture": "#cell",
           "uv": [
             6.0,
+            0.0,
+            0.0,
+            2.0
+          ]
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#cell",
+          "uv": [
+            0.0,
+            0.0,
+            6.0,
+            2.0
+          ]
+        },
+        "up": {
+          "cullface": "north",
+          "texture": "#cell",
+          "uv": [
+            6.0,
+            0.0,
+            0.0,
+            2.0
+          ]
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        6,
+        2,
+        2
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "north",
+          "texture": "#tier",
+          "uv": [
+            6.0,
             8.0,
             0.0,
             10.0
@@ -15,7 +59,7 @@
         },
         "north": {
           "cullface": "north",
-          "texture": "#cell",
+          "texture": "#tier",
           "uv": [
             0.0,
             8.0,
@@ -25,7 +69,7 @@
         },
         "up": {
           "cullface": "north",
-          "texture": "#cell",
+          "texture": "#tier",
           "uv": [
             6.0,
             8.0,
@@ -47,7 +91,8 @@
     }
   ],
   "textures": {
-    "cell": "megacells:block/drive/cells/mega_item_cell",
-    "particle": "megacells:block/drive/cells/mega_item_cell"
+    "cell": "megacells:block/drive/cells/standard_cell",
+    "particle": "megacells:block/drive/cells/standard_cell",
+    "tier": "megacells:block/drive/cells/standard_cell_tiers"
   }
 }

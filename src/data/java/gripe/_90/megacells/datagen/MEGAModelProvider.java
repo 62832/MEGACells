@@ -11,6 +11,7 @@ import net.minecraft.data.models.blockstates.Variant;
 import net.minecraft.data.models.blockstates.VariantProperties;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -226,21 +227,46 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
     }
 
     private void driveCell(MEGAItems.CellDefinition cell) {
-        if (!cell.portable()) {
-            driveCell(
-                    cell.tier().namePrefix() + "_" + cell.keyType() + "_cell",
-                    "mega_" + cell.keyType() + "_cell",
-                    (cell.tier().index() - 6) * 2);
+        if (cell.portable()) {
+            return;
         }
+
+        var typeOffset =
+                switch (cell.keyType()) {
+                    case "item" -> 0;
+                    case "fluid" -> 2;
+                    case "chemical" -> 4;
+                    case "mana" -> 6;
+                    case "source" -> 8;
+                    case "experience" -> 10;
+                    default -> throw new IllegalArgumentException();
+                };
+        var tierOffset = (cell.tier().index() - 6) * 2;
+        driveCell(cell.tier().namePrefix() + "_" + cell.keyType() + "_cell", "standard_cell", typeOffset)
+                .texture("tier", "block/drive/cells/standard_cell_tiers")
+                .element()
+                .to(6, 2, 2)
+                .face(Direction.NORTH)
+                .uvs(0, tierOffset, 6, tierOffset + 2)
+                .end()
+                .face(Direction.UP)
+                .uvs(6, tierOffset, 0, tierOffset + 2)
+                .end()
+                .face(Direction.DOWN)
+                .uvs(6, tierOffset, 0, tierOffset + 2)
+                .end()
+                .faces((dir, builder) ->
+                        builder.texture("#tier").cullface(Direction.NORTH).end())
+                .end();
     }
 
     private void driveCell(ItemDefinition<?> cell, int offset) {
         driveCell(cell.id().getPath(), "misc_cell", offset);
     }
 
-    private void driveCell(String cell, String texture, int offset) {
+    private BlockModelBuilder driveCell(String cell, String texture, int offset) {
         var texturePrefix = "block/drive/cells/";
-        models().getBuilder(texturePrefix + cell)
+        return models().getBuilder(texturePrefix + cell)
                 .ao(false)
                 .texture("cell", texturePrefix + texture)
                 .texture("particle", texturePrefix + texture)
