@@ -17,7 +17,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +45,7 @@ import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.StorageCell;
 import appeng.blockentity.inventory.AppEngCellInventory;
 import appeng.client.render.BakedModelUnwrapper;
+import appeng.client.render.model.AEModelData;
 import appeng.client.render.model.DriveBakedModel;
 import appeng.client.render.tesr.CellLedRenderer;
 import appeng.core.definitions.AEBlocks;
@@ -54,6 +57,7 @@ import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
+import appeng.util.InteractionUtil;
 import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.InternalInventoryHost;
 import appeng.util.inv.filter.IAEItemFilter;
@@ -62,6 +66,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.client.render.FaceRotatingModel;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.mixin.SpinMappingAccessor;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IStorageProvider, IPriorityHost {
@@ -80,6 +85,7 @@ public class CellDockPart extends AEBasePart
     // when a dock comes into view
     private Item clientCell = Items.AIR;
     private CellState clientCellState = CellState.ABSENT;
+    private byte spin;
 
     public CellDockPart(IPartItem<?> partItem) {
         super(partItem);
@@ -95,6 +101,7 @@ public class CellDockPart extends AEBasePart
         super.readFromNBT(data, registries);
         cellInventory.setItemDirect(0, ItemStack.parseOptional(registries, data.getCompound("cell")));
         priority = data.getInt("priority");
+        spin = data.getByte("spin");
     }
 
     @Override
@@ -102,6 +109,7 @@ public class CellDockPart extends AEBasePart
         super.writeToNBT(data, registries);
         data.put("cell", getCell().saveOptional(registries));
         data.putInt("priority", priority);
+        data.putByte("spin", spin);
     }
 
     @Override
@@ -110,11 +118,13 @@ public class CellDockPart extends AEBasePart
 
         var oldCell = clientCell;
         var oldCellState = clientCellState;
+        var oldSpin = spin;
 
         clientCell = BuiltInRegistries.ITEM.get(data.readResourceLocation());
         clientCellState = data.readEnum(CellState.class);
+        spin = data.readByte();
 
-        return changed || oldCell != clientCell || oldCellState != clientCellState;
+        return changed || oldCell != clientCell || oldCellState != clientCellState || oldSpin != spin;
     }
 
     @Override
@@ -122,6 +132,7 @@ public class CellDockPart extends AEBasePart
         super.writeToStream(data);
         data.writeResourceLocation(BuiltInRegistries.ITEM.getKey(getCell().getItem()));
         data.writeEnum(clientCellState = getCellStatus(0));
+        data.writeByte(spin);
     }
 
     @Override
@@ -174,11 +185,36 @@ public class CellDockPart extends AEBasePart
 
     @Override
     public boolean onUseWithoutItem(Player player, Vec3 pos) {
-        if (!player.getCommandSenderWorld().isClientSide()) {
+        if (!isClientSide()) {
             MenuOpener.open(MEGAMenus.CELL_DOCK.get(), player, MenuLocators.forPart(this));
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onUseItemOn(ItemStack heldItem, Player player, InteractionHand hand, Vec3 pos) {
+        if (InteractionUtil.canWrenchRotate(heldItem)) {
+            if (!isClientSide()) {
+                spin = (byte) ((spin + 1) % 4);
+                getHost().markForSave();
+                getHost().markForUpdate();
+            }
+
+            return true;
+        } else {
+            return super.onUseItemOn(heldItem, player, hand, pos);
+        }
+    }
+
+    @Override
+    public void onPlacement(Player player) {
+        super.onPlacement(player);
+        var rotation = (byte) (Mth.floor(player.getYRot() * 4F / 360F + 2.5D) & 3);
+
+        if (getSide() == Direction.UP || getSide() == Direction.DOWN) {
+            spin = rotation;
+        }
     }
 
     @Override
@@ -351,9 +387,7 @@ public class CellDockPart extends AEBasePart
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
 
-        var front = getSide() == Direction.UP || getSide() == Direction.DOWN ? Direction.NORTH : Direction.UP;
-        var orientation = BlockOrientation.get(front, getSide());
-
+        var orientation = BlockOrientation.get(getUpFromSpin(getSide(), spin), getSide());
         poseStack.mulPose(orientation.getQuaternion());
         poseStack.translate(-3F / 16, 5F / 16, -4F / 16);
 
@@ -374,8 +408,24 @@ public class CellDockPart extends AEBasePart
                         ModelData.EMPTY,
                         null);
         CellLedRenderer.renderLed(this, 0, buffers.getBuffer(CellLedRenderer.RENDER_LAYER), poseStack, partialTicks);
-
         poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
+        poseStack.mulPose(BlockOrientation.get(getSide(), spin).getQuaternion());
+        poseStack.translate(-8F / 16, -3F / 16, -8F / 16);
+        CellLedRenderer.renderLed(this, 0, buffers.getBuffer(CellLedRenderer.RENDER_LAYER), poseStack, partialTicks);
+        poseStack.popPose();
+    }
+
+    // FIXME (AE2): This is what SpinMapping::getUpFromSpin is meant to be rather than a duplicate of getSpinFromUp
+    private Direction getUpFromSpin(Direction facing, int spin) {
+        return SpinMappingAccessor.getSpinDirections()[facing.ordinal()][spin];
+    }
+
+    @Override
+    public ModelData getModelData() {
+        return ModelData.builder().with(AEModelData.SPIN, spin).build();
     }
 
     private static class Filter implements IAEItemFilter {
