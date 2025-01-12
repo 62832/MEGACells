@@ -90,7 +90,7 @@ run {
                 version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.91")
                 version("parchment", "2024.07.28")
 
-                version("ae2", "19.1.1-beta")
+                version("ae2", "19.1.2-beta")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")
@@ -107,6 +107,9 @@ run {
 
                 library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
                 library("glodium", "curse.maven", "glodium-957920").version("5821676")
+
+                library("appex", "curse.maven", "applied-experienced-1157608").version("6080443")
+                library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
             }
         }
     }

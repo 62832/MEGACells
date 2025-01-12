@@ -46,4 +46,6 @@ jobs:
             appmek(optional){curseforge:574300}{modrinth:IiATswDj}
             ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
             arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
+            appflux(optional){curseforge:965012}
+            appex(optional){curseforge:1157608}{modrinth:yKwUnZCV}
 #           appbot(optional){curseforge:610632}{modrinth:545hUrw9}

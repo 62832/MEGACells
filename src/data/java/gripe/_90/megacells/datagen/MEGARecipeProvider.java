@@ -66,9 +66,10 @@ public class MEGARecipeProvider extends RecipeProvider {
         component(output, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem(), null);
         component(output, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem(), null);
 
-        housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
-        housing(Addons.APPMEK.conditionalRecipe(output), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        housing(Addons.APPMEK.conditionalRecipe(output), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        housing(Addons.APPEX.conditionalRecipe(output), MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
 
         cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
         cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
@@ -94,6 +95,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
 
+        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -117,6 +124,12 @@ public class MEGARecipeProvider extends RecipeProvider {
         portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+
+        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
@@ -418,15 +431,22 @@ public class MEGARecipeProvider extends RecipeProvider {
                                         .getPath()));
     }
 
-    private static void housing(RecipeOutput output, ItemDefinition<?> housing, TagKey<Item> housingMaterial) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, housing)
+    private static void housing(
+            RecipeOutput output, ItemDefinition<?> housing, ItemLike materialItem, TagKey<Item> materialTag) {
+        var builder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, housing)
                 .pattern("aba")
                 .pattern("b b")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .define('b', AEItems.SKY_DUST)
-                .define('d', housingMaterial)
-                .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
+                .define('b', AEItems.SKY_DUST);
+
+        if (materialItem != null) {
+            builder.define('d', materialItem);
+        } else if (materialTag != null) {
+            builder.define('d', materialTag);
+        }
+
+        builder.unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
                 .save(output, MEGACells.makeId("cells/" + housing.id().getPath()));
     }
 

@@ -17,6 +17,8 @@ import me.ramidzkh.mekae2.AMItems;
 import gripe._90.arseng.definition.ArsEngItems;
 import gripe._90.megacells.MEGACells;
 
+import es.degrassi.appexp.definition.AExpItems;
+
 public class OverrideModelProvider extends ItemModelProvider {
     public OverrideModelProvider(PackOutput output, ExistingFileHelper existing) {
         super(output, MEGACells.MODID, existing);
@@ -49,6 +51,13 @@ public class OverrideModelProvider extends ItemModelProvider {
         cell(ArsEngItems.SOURCE_CELL_16K, ArsEngItems.SOURCE_CELL_HOUSING);
         cell(ArsEngItems.SOURCE_CELL_64K, ArsEngItems.SOURCE_CELL_HOUSING);
         cell(ArsEngItems.SOURCE_CELL_256K, ArsEngItems.SOURCE_CELL_HOUSING);
+
+        existingFileHelper.trackGenerated(textureLocation(AExpItems.EXPERIENCE_CELL_HOUSING), TEXTURE);
+        cell(AExpItems.EXPERIENCE_CELL_1K, AExpItems.EXPERIENCE_CELL_HOUSING);
+        cell(AExpItems.EXPERIENCE_CELL_4K, AExpItems.EXPERIENCE_CELL_HOUSING);
+        cell(AExpItems.EXPERIENCE_CELL_16K, AExpItems.EXPERIENCE_CELL_HOUSING);
+        cell(AExpItems.EXPERIENCE_CELL_64K, AExpItems.EXPERIENCE_CELL_HOUSING);
+        cell(AExpItems.EXPERIENCE_CELL_256K, AExpItems.EXPERIENCE_CELL_HOUSING);
     }
 
     private void cell(ItemLike cell, ItemLike housing) {

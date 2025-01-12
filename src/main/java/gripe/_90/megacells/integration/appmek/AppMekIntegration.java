@@ -23,7 +23,7 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.IntegrationHelper;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 
-public final class AppMekIntegration implements IntegrationHelper {
+public class AppMekIntegration implements IntegrationHelper {
     @Override
     public Function<Item.Properties, Item> createCell(StorageTier tier) {
         return p -> new ChemicalStorageCell(p, tier);

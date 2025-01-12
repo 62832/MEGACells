@@ -1,4 +1,4 @@
-// 1.21.1	2024-12-21T19:18:50.660574979	Item Models (Classic Cell Colours)
+// 1.21.1	2025-01-11T21:05:01.517587038	Item Models (Classic Cell Colours)
 94835dda1d5fc0b64f3b8d17cf55a9f25539e675 optional_cell_colours/assets/ae2/models/item/fluid_storage_cell_16k.json
 389a98c7e00c1a767aba11552e656847d35d16b9 optional_cell_colours/assets/ae2/models/item/fluid_storage_cell_1k.json
 0e499abd7e13c11b38c1751736d9f3be783b491c optional_cell_colours/assets/ae2/models/item/fluid_storage_cell_256k.json
@@ -9,6 +9,11 @@
 ce295ff4b8abf3116a5a1c22e39bf609eaf060de optional_cell_colours/assets/ae2/models/item/item_storage_cell_256k.json
 b148926c6e21755af6af04f9ffc8c5b2e4fe6ce2 optional_cell_colours/assets/ae2/models/item/item_storage_cell_4k.json
 9b182321313fa45e900137bedffa989bc2ec665c optional_cell_colours/assets/ae2/models/item/item_storage_cell_64k.json
+6d7facaca99fcf4da9f58c5d23a238439bb5cbdc optional_cell_colours/assets/appex/models/item/experience_storage_cell_16k.json
+257969f5828ad4aa4ded70e92453639c98e8b152 optional_cell_colours/assets/appex/models/item/experience_storage_cell_1k.json
+027b9c505122f288a248687d23e9edb405fec132 optional_cell_colours/assets/appex/models/item/experience_storage_cell_256k.json
+30f32f76193f315b2a74063eb08efe0016141986 optional_cell_colours/assets/appex/models/item/experience_storage_cell_4k.json
+06148cf188d30a73af093c40a1e028ec3e36dac8 optional_cell_colours/assets/appex/models/item/experience_storage_cell_64k.json
 3e6fef3a262cffc1d8f9bcbcfd425a263abfd56e optional_cell_colours/assets/appmek/models/item/chemical_storage_cell_16k.json
 c8072caf9dec0990e7bda333dd374f353213f46c optional_cell_colours/assets/appmek/models/item/chemical_storage_cell_1k.json
 049cedbc0dad900bb050c8d0b5c06525d9b940a3 optional_cell_colours/assets/appmek/models/item/chemical_storage_cell_256k.json

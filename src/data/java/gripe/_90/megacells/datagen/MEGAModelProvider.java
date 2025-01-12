@@ -48,6 +48,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.MEGA_FLUID_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        basicItem(MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
 
         basicItem(MEGAItems.CELL_COMPONENT_1M);
         basicItem(MEGAItems.CELL_COMPONENT_4M);
