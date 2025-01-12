@@ -52,22 +52,16 @@ public final class MEGAItems {
         return Collections.unmodifiableList(CELLS);
     }
 
-    public static final ItemDefinition<MaterialItem> SKY_STEEL_INGOT =
-            item("Sky Steel Ingot", "sky_steel_ingot", p -> new MaterialItem(p.fireResistant()));
-    public static final ItemDefinition<MaterialItem> SKY_BRONZE_INGOT =
-            item("Sky Bronze Ingot", "sky_bronze_ingot", p -> new MaterialItem(p.fireResistant()));
+    // spotless:off
+    public static final ItemDefinition<MaterialItem> SKY_STEEL_INGOT = item("Sky Steel Ingot", "sky_steel_ingot", p -> new MaterialItem(p.fireResistant()));
+    public static final ItemDefinition<MaterialItem> SKY_BRONZE_INGOT = item("Sky Bronze Ingot", "sky_bronze_ingot", p -> new MaterialItem(p.fireResistant()));
 
-    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRESS =
-            item("Inscriber Accumulation Press", "accumulation_processor_press", MaterialItem::new);
-    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRINT =
-            item("Printed Accumulation Circuit", "printed_accumulation_processor", MaterialItem::new);
-    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR =
-            item("Accumulation Processor", "accumulation_processor", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRESS = item("Inscriber Accumulation Press", "accumulation_processor_press", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR_PRINT = item("Printed Accumulation Circuit", "printed_accumulation_processor", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> ACCUMULATION_PROCESSOR = item("Accumulation Processor", "accumulation_processor", MaterialItem::new);
 
-    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING =
-            item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
-    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING =
-            item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_ITEM_CELL_HOUSING = item("MEGA Item Cell Housing", "mega_item_cell_housing", MaterialItem::new);
+    public static final ItemDefinition<MaterialItem> MEGA_FLUID_CELL_HOUSING = item("MEGA Fluid Cell Housing", "mega_fluid_cell_housing", MaterialItem::new);
 
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_1M = component(1);
     public static final ItemDefinition<StorageComponentItem> CELL_COMPONENT_4M = component(4);
@@ -105,32 +99,26 @@ public final class MEGAItems {
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_64M = fluidPortable(TIER_64M);
     public static final ItemDefinition<MEGAPortableCell> PORTABLE_FLUID_CELL_256M = fluidPortable(TIER_256M);
 
-    public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD =
-            item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
+    public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD = item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
 
-    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT =
-            item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL =
-            item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
-    public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD =
-            item("Compression Card", "compression_card", UpgradeCardItem::new);
+    public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
+    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
+    public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
+
     public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
             "MEGA Decompression Module",
             "decompression_module",
             DecompressionModulePart.class,
             DecompressionModulePart::new);
 
-    public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE =
-            part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
+    public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
     public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
     });
 
-    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
-            part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
-    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH =
-            item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
+    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH = item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
 
     public static final ItemDefinition<?> SKY_OSMIUM_INGOT = integrationItem(
             "Sky Osmium Ingot",
@@ -138,8 +126,7 @@ public final class MEGAItems {
             () -> MaterialItem::new,
             Item.Properties::fireResistant,
             Addons.APPMEK);
-    public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem(
-            "MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
+    public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem("MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
 
     public static final ItemDefinition<?> CHEMICAL_CELL_1M = integrationCell(TIER_1M, "Chemical", Addons.APPMEK);
     public static final ItemDefinition<?> CHEMICAL_CELL_4M = integrationCell(TIER_4M, "Chemical", Addons.APPMEK);
@@ -147,27 +134,30 @@ public final class MEGAItems {
     public static final ItemDefinition<?> CHEMICAL_CELL_64M = integrationCell(TIER_64M, "Chemical", Addons.APPMEK);
     public static final ItemDefinition<?> CHEMICAL_CELL_256M = integrationCell(TIER_256M, "Chemical", Addons.APPMEK);
 
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_1M =
-            integrationPortable(TIER_1M, "Chemical", Addons.APPMEK);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_4M =
-            integrationPortable(TIER_4M, "Chemical", Addons.APPMEK);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_16M =
-            integrationPortable(TIER_16M, "Chemical", Addons.APPMEK);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_64M =
-            integrationPortable(TIER_64M, "Chemical", Addons.APPMEK);
-    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M =
-            integrationPortable(TIER_256M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_1M = integrationPortable(TIER_1M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_4M = integrationPortable(TIER_4M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_16M = integrationPortable(TIER_16M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_64M = integrationPortable(TIER_64M, "Chemical", Addons.APPMEK);
+    public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M = integrationPortable(TIER_256M, "Chemical", Addons.APPMEK);
 
-    public static final ItemDefinition<?> RADIOACTIVE_CELL_COMPONENT = integrationItem(
-            "MEGA Radioactive Storage Component", "radioactive_cell_component", () -> MaterialItem::new, Addons.APPMEK);
-    public static final ItemDefinition<?> RADIOACTIVE_CHEMICAL_CELL = integrationItem(
-            "MEGA Radioactive Chemical Storage Cell",
-            "radioactive_chemical_cell",
-            () -> RadioactiveCellItem::new,
-            Addons.APPMEK);
+    public static final ItemDefinition<?> RADIOACTIVE_CELL_COMPONENT = integrationItem("MEGA Radioactive Storage Component", "radioactive_cell_component", () -> MaterialItem::new, Addons.APPMEK);
+    public static final ItemDefinition<?> RADIOACTIVE_CHEMICAL_CELL = integrationItem("MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", () -> RadioactiveCellItem::new, Addons.APPMEK);
 
-    public static final ItemDefinition<?> MEGA_SOURCE_CELL_HOUSING = integrationItem(
-            "MEGA Source Cell Housing", "mega_source_cell_housing", () -> MaterialItem::new, Addons.ARSENG);
+    public static final ItemDefinition<?> MEGA_MANA_CELL_HOUSING = integrationItem("MEGA Mana Cell Housing", "mega_mana_cell_housing", () -> MaterialItem::new, Addons.APPBOT);
+
+    public static final ItemDefinition<?> MANA_CELL_1M = integrationCell(TIER_1M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> MANA_CELL_4M = integrationCell(TIER_4M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> MANA_CELL_16M = integrationCell(TIER_16M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> MANA_CELL_64M = integrationCell(TIER_64M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> MANA_CELL_256M = integrationCell(TIER_256M, "Mana", Addons.APPBOT);
+
+    public static final ItemDefinition<?> PORTABLE_MANA_CELL_1M = integrationPortable(TIER_1M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> PORTABLE_MANA_CELL_4M = integrationPortable(TIER_4M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> PORTABLE_MANA_CELL_16M = integrationPortable(TIER_16M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> PORTABLE_MANA_CELL_64M = integrationPortable(TIER_64M, "Mana", Addons.APPBOT);
+    public static final ItemDefinition<?> PORTABLE_MANA_CELL_256M = integrationPortable(TIER_256M, "Mana", Addons.APPBOT);
+
+    public static final ItemDefinition<?> MEGA_SOURCE_CELL_HOUSING = integrationItem("MEGA Source Cell Housing", "mega_source_cell_housing", () -> MaterialItem::new, Addons.ARSENG);
 
     public static final ItemDefinition<?> SOURCE_CELL_1M = integrationCell(TIER_1M, "Source", Addons.ARSENG);
     public static final ItemDefinition<?> SOURCE_CELL_4M = integrationCell(TIER_4M, "Source", Addons.ARSENG);
@@ -175,19 +165,13 @@ public final class MEGAItems {
     public static final ItemDefinition<?> SOURCE_CELL_64M = integrationCell(TIER_64M, "Source", Addons.ARSENG);
     public static final ItemDefinition<?> SOURCE_CELL_256M = integrationCell(TIER_256M, "Source", Addons.ARSENG);
 
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_1M =
-            integrationPortable(TIER_1M, "Source", Addons.ARSENG);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_4M =
-            integrationPortable(TIER_4M, "Source", Addons.ARSENG);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_16M =
-            integrationPortable(TIER_16M, "Source", Addons.ARSENG);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_64M =
-            integrationPortable(TIER_64M, "Source", Addons.ARSENG);
-    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M =
-            integrationPortable(TIER_256M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_1M = integrationPortable(TIER_1M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_4M = integrationPortable(TIER_4M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_16M = integrationPortable(TIER_16M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_64M = integrationPortable(TIER_64M, "Source", Addons.ARSENG);
+    public static final ItemDefinition<?> PORTABLE_SOURCE_CELL_256M = integrationPortable(TIER_256M, "Source", Addons.ARSENG);
 
-    public static final ItemDefinition<?> MEGA_EXPERIENCE_CELL_HOUSING = integrationItem(
-            "MEGA Experience Cell Housing", "mega_experience_cell_housing", () -> MaterialItem::new, Addons.APPEX);
+    public static final ItemDefinition<?> MEGA_EXPERIENCE_CELL_HOUSING = integrationItem("MEGA Experience Cell Housing", "mega_experience_cell_housing", () -> MaterialItem::new, Addons.APPEX);
 
     public static final ItemDefinition<?> EXPERIENCE_CELL_1M = integrationCell(TIER_1M, "Experience", Addons.APPEX);
     public static final ItemDefinition<?> EXPERIENCE_CELL_4M = integrationCell(TIER_4M, "Experience", Addons.APPEX);
@@ -195,16 +179,12 @@ public final class MEGAItems {
     public static final ItemDefinition<?> EXPERIENCE_CELL_64M = integrationCell(TIER_64M, "Experience", Addons.APPEX);
     public static final ItemDefinition<?> EXPERIENCE_CELL_256M = integrationCell(TIER_256M, "Experience", Addons.APPEX);
 
-    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_1M =
-            integrationPortable(TIER_1M, "Experience", Addons.APPEX);
-    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_4M =
-            integrationPortable(TIER_4M, "Experience", Addons.APPEX);
-    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_16M =
-            integrationPortable(TIER_16M, "Experience", Addons.APPEX);
-    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_64M =
-            integrationPortable(TIER_64M, "Experience", Addons.APPEX);
-    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_256M =
-            integrationPortable(TIER_256M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_1M = integrationPortable(TIER_1M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_4M = integrationPortable(TIER_4M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_16M = integrationPortable(TIER_16M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_64M = integrationPortable(TIER_64M, "Experience", Addons.APPEX);
+    public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_256M = integrationPortable(TIER_256M, "Experience", Addons.APPEX);
+    // spotless:on
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
         int multiplier = (int) Math.pow(4, index - 1);

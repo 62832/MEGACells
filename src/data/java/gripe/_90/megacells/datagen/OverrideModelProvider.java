@@ -12,12 +12,12 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 
-import me.ramidzkh.mekae2.AMItems;
-
-import gripe._90.arseng.definition.ArsEngItems;
 import gripe._90.megacells.MEGACells;
-
-import es.degrassi.appexp.definition.AExpItems;
+import gripe._90.megacells.datagen.integration.AppBotIntegrationData;
+import gripe._90.megacells.datagen.integration.AppExIntegrationData;
+import gripe._90.megacells.datagen.integration.AppMekIntegrationData;
+import gripe._90.megacells.datagen.integration.ArsEngIntegrationData;
+import gripe._90.megacells.integration.Addons;
 
 public class OverrideModelProvider extends ItemModelProvider {
     public OverrideModelProvider(PackOutput output, ExistingFileHelper existing) {
@@ -38,26 +38,25 @@ public class OverrideModelProvider extends ItemModelProvider {
         cell(AEItems.FLUID_CELL_64K, AEItems.FLUID_CELL_HOUSING);
         cell(AEItems.FLUID_CELL_256K, AEItems.FLUID_CELL_HOUSING);
 
-        existingFileHelper.trackGenerated(textureLocation(AMItems.CHEMICAL_CELL_HOUSING), TEXTURE);
-        cell(AMItems.CHEMICAL_CELL_1K, AMItems.CHEMICAL_CELL_HOUSING);
-        cell(AMItems.CHEMICAL_CELL_4K, AMItems.CHEMICAL_CELL_HOUSING);
-        cell(AMItems.CHEMICAL_CELL_16K, AMItems.CHEMICAL_CELL_HOUSING);
-        cell(AMItems.CHEMICAL_CELL_64K, AMItems.CHEMICAL_CELL_HOUSING);
-        cell(AMItems.CHEMICAL_CELL_256K, AMItems.CHEMICAL_CELL_HOUSING);
+        if (Addons.APPMEK.isLoaded()) {
+            existingFileHelper.trackGenerated(textureLocation(AppMekIntegrationData.CHEMICAL_CELL_HOUSING), TEXTURE);
+            AppMekIntegrationData.getCells().forEach(c -> cell(c, AppMekIntegrationData.CHEMICAL_CELL_HOUSING));
+        }
 
-        existingFileHelper.trackGenerated(textureLocation(ArsEngItems.SOURCE_CELL_HOUSING), TEXTURE);
-        cell(ArsEngItems.SOURCE_CELL_1K, ArsEngItems.SOURCE_CELL_HOUSING);
-        cell(ArsEngItems.SOURCE_CELL_4K, ArsEngItems.SOURCE_CELL_HOUSING);
-        cell(ArsEngItems.SOURCE_CELL_16K, ArsEngItems.SOURCE_CELL_HOUSING);
-        cell(ArsEngItems.SOURCE_CELL_64K, ArsEngItems.SOURCE_CELL_HOUSING);
-        cell(ArsEngItems.SOURCE_CELL_256K, ArsEngItems.SOURCE_CELL_HOUSING);
+        if (Addons.APPBOT.isLoaded()) {
+            existingFileHelper.trackGenerated(textureLocation(AppBotIntegrationData.MANA_CELL_HOUSING), TEXTURE);
+            AppBotIntegrationData.getCells().forEach(c -> cell(c, AppBotIntegrationData.MANA_CELL_HOUSING));
+        }
 
-        existingFileHelper.trackGenerated(textureLocation(AExpItems.EXPERIENCE_CELL_HOUSING), TEXTURE);
-        cell(AExpItems.EXPERIENCE_CELL_1K, AExpItems.EXPERIENCE_CELL_HOUSING);
-        cell(AExpItems.EXPERIENCE_CELL_4K, AExpItems.EXPERIENCE_CELL_HOUSING);
-        cell(AExpItems.EXPERIENCE_CELL_16K, AExpItems.EXPERIENCE_CELL_HOUSING);
-        cell(AExpItems.EXPERIENCE_CELL_64K, AExpItems.EXPERIENCE_CELL_HOUSING);
-        cell(AExpItems.EXPERIENCE_CELL_256K, AExpItems.EXPERIENCE_CELL_HOUSING);
+        if (Addons.ARSENG.isLoaded()) {
+            existingFileHelper.trackGenerated(textureLocation(ArsEngIntegrationData.SOURCE_CELL_HOUSING), TEXTURE);
+            ArsEngIntegrationData.getCells().forEach(c -> cell(c, ArsEngIntegrationData.SOURCE_CELL_HOUSING));
+        }
+
+        if (Addons.APPEX.isLoaded()) {
+            existingFileHelper.trackGenerated(textureLocation(AppExIntegrationData.EXPERIENCE_CELL_HOUSING), TEXTURE);
+            AppExIntegrationData.getCells().forEach(c -> cell(c, AppExIntegrationData.EXPERIENCE_CELL_HOUSING));
+        }
     }
 
     private void cell(ItemLike cell, ItemLike housing) {

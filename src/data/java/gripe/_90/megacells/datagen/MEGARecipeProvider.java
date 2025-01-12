@@ -3,10 +3,6 @@ package gripe._90.megacells.datagen;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
-import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
-
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
@@ -25,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 import appeng.api.util.AEColor;
 import appeng.core.definitions.AEBlocks;
@@ -41,12 +38,10 @@ import appeng.recipes.handlers.InscriberRecipeBuilder;
 import appeng.recipes.transform.TransformCircumstance;
 import appeng.recipes.transform.TransformRecipeBuilder;
 
-import mekanism.common.registries.MekanismBlocks;
-import mekanism.common.registries.MekanismItems;
-import mekanism.generators.common.registries.GeneratorsBlocks;
-
-import gripe._90.arseng.definition.ArsEngItems;
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.datagen.integration.AppBotIntegrationData;
+import gripe._90.megacells.datagen.integration.AppMekIntegrationData;
+import gripe._90.megacells.datagen.integration.ArsEngIntegrationData;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
@@ -68,38 +63,44 @@ public class MEGARecipeProvider extends RecipeProvider {
 
         housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
         housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        housing(Addons.APPMEK.conditionalRecipe(output), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        housing(Addons.APPEX.conditionalRecipe(output), MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        housing(conditional(output, Addons.APPMEK), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        housing(conditional(output, Addons.APPEX), MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
 
-        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
 
-        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
 
-        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
-        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
-        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
-        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
-        cell(Addons.APPMEK.conditionalRecipe(output), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
 
-        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        cell(Addons.ARSENG.conditionalRecipe(output), MEGAItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_MANA_CELL_HOUSING);
 
-        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        cell(Addons.APPEX.conditionalRecipe(output), MEGAItems.EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
 
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -113,23 +114,29 @@ public class MEGARecipeProvider extends RecipeProvider {
         portable(output, MEGAItems.PORTABLE_FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING);
 
-        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
-        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
-        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
-        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
-        portable(Addons.APPMEK.conditionalRecipe(output), MEGAItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(conditional(output, Addons.APPMEK), MEGAItems.PORTABLE_CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(conditional(output, Addons.APPMEK), MEGAItems.PORTABLE_CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(conditional(output, Addons.APPMEK), MEGAItems.PORTABLE_CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(conditional(output, Addons.APPMEK), MEGAItems.PORTABLE_CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        portable(conditional(output, Addons.APPMEK), MEGAItems.PORTABLE_CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
 
-        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
-        portable(Addons.ARSENG.conditionalRecipe(output), MEGAItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(conditional(output, Addons.APPBOT), MEGAItems.PORTABLE_MANA_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        portable(conditional(output, Addons.APPBOT), MEGAItems.PORTABLE_MANA_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        portable(conditional(output, Addons.APPBOT), MEGAItems.PORTABLE_MANA_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        portable(conditional(output, Addons.APPBOT), MEGAItems.PORTABLE_MANA_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_MANA_CELL_HOUSING);
+        portable(conditional(output, Addons.APPBOT), MEGAItems.PORTABLE_MANA_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_MANA_CELL_HOUSING);
 
-        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
-        portable(Addons.APPEX.conditionalRecipe(output), MEGAItems.PORTABLE_EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(conditional(output, Addons.ARSENG), MEGAItems.PORTABLE_SOURCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(conditional(output, Addons.ARSENG), MEGAItems.PORTABLE_SOURCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(conditional(output, Addons.ARSENG), MEGAItems.PORTABLE_SOURCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(conditional(output, Addons.ARSENG), MEGAItems.PORTABLE_SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+        portable(conditional(output, Addons.ARSENG), MEGAItems.PORTABLE_SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
+
+        portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+        portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
@@ -350,52 +357,17 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cell_workbench", has(AEBlocks.CELL_WORKBENCH))
                 .save(output, MEGACells.makeId("network/portable_cell_workbench"));
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CELL_COMPONENT)
-                .pattern("aba")
-                .pattern("cdc")
-                .pattern("aea")
-                .define('a', AEItems.SKY_DUST)
-                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
-                .define('c', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
-                .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .define('e', AEItems.CELL_COMPONENT_256K)
-                .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
-                .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
-                .save(Addons.APPMEK.conditionalRecipe(output), MEGACells.makeId("crafting/radioactive_cell_component"));
+        if (Addons.APPMEK.isLoaded()) {
+            AppMekIntegrationData.recipes(output);
+        }
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CHEMICAL_CELL)
-                .pattern("aba")
-                .pattern("bcb")
-                .pattern("ded")
-                .define('a', GeneratorsBlocks.REACTOR_GLASS)
-                .define('b', AEItems.SKY_DUST)
-                .define('c', MEGAItems.RADIOACTIVE_CELL_COMPONENT)
-                .define('d', MekanismItems.HDPE_SHEET)
-                .define('e', MekanismItems.POLONIUM_PELLET)
-                .unlockedBy("has_radioactive_cell_component", has(MEGAItems.RADIOACTIVE_CELL_COMPONENT))
-                .save(
-                        Addons.APPMEK.conditionalRecipe(output),
-                        MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
+        if (Addons.APPBOT.isLoaded()) {
+            AppBotIntegrationData.recipes(output);
+        }
 
-        Addons.ARSENG
-                .conditionalRecipe(output)
-                .accept(
-                        MEGAItems.MEGA_SOURCE_CELL_HOUSING.id(),
-                        new EnchantingApparatusRecipe(
-                                Ingredient.of(ArsEngItems.SOURCE_CELL_HOUSING),
-                                MEGAItems.MEGA_SOURCE_CELL_HOUSING.stack(),
-                                List.of(
-                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
-                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
-                                        Ingredient.of(ItemsRegistry.MANIPULATION_ESSENCE),
-                                        Ingredient.of(BlockRegistry.SOURCE_GEM_BLOCK),
-                                        Ingredient.of(BlockRegistry.SOURCE_GEM_BLOCK),
-                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT),
-                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT),
-                                        Ingredient.of(MEGAItems.SKY_STEEL_INGOT)),
-                                2000,
-                                false),
-                        null);
+        if (Addons.ARSENG.isLoaded()) {
+            ArsEngIntegrationData.recipes(output);
+        }
     }
 
     private static void component(
@@ -469,16 +441,23 @@ public class MEGARecipeProvider extends RecipeProvider {
             ItemDefinition<?> cell,
             ItemDefinition<?> component,
             ItemDefinition<?> housing,
-            TagKey<Item> housingMaterial) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
+            ItemLike materialItem,
+            TagKey<Item> materialTag) {
+        var builder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                 .pattern("aba")
                 .pattern("bcb")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .define('b', AEItems.SKY_DUST)
-                .define('c', component)
-                .define('d', housingMaterial)
-                .unlockedBy("has_" + component.id().getPath(), has(component))
+                .define('c', component);
+
+        if (materialItem != null) {
+            builder.define('d', materialItem);
+        } else if (materialTag != null) {
+            builder.define('d', materialTag);
+        }
+
+        builder.unlockedBy("has_" + component.id().getPath(), has(component))
                 .save(output, MEGACells.makeId("cells/standard/" + cell.id().getPath()));
         cell(output, cell, component, housing);
     }
@@ -516,5 +495,9 @@ public class MEGARecipeProvider extends RecipeProvider {
                 MEGACells.makeId("crafting/" + unit.id().getPath() + "_disassembly"),
                 new CraftingUnitTransformRecipe(unit.block(), part.asItem()),
                 null);
+    }
+
+    public static RecipeOutput conditional(RecipeOutput output, Addons addon) {
+        return output.withConditions(new ModLoadedCondition(addon.getModId()));
     }
 }

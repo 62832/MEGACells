@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appex"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_component_16m": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:cell_component_16m"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/standard/experience_storage_cell_16m"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cell_component_16m"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/standard/experience_storage_cell_16m"
+    ]
+  }
+}

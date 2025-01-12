@@ -36,6 +36,7 @@ run {
                 url = uri("https://maven.blamejared.com")
                 content {
                     includeGroup("com.hollingsworth.ars_nouveau")
+                    includeGroup("vazkii.botania")
                     includeGroup("vazkii.patchouli")
                 }
             }
@@ -100,6 +101,13 @@ run {
                 version("appmek", "1.6.2")
                 library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
+
+                library("appbot", "curse.maven", "applied-botanics-addon-610632").version("4904185")
+                val botaniaVersion = "446"
+                val botaniaSnapshot = false
+                library("botania", "vazkii.botania", "Botania").version(
+                    "1.20.1-$botaniaVersion-FORGE${if (botaniaSnapshot) "-SNAPSHOT" else ""}"
+                )
 
                 version("arseng", "2.0.5-beta")
                 library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")

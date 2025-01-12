@@ -1,0 +1,60 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appbot"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cell_component_16m": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:cell_component_16m"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_dense_energy_cell": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2:dense_energy_cell"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_mega_mana_cell_housing": {
+      "conditions": {
+        "items": [
+          {
+            "items": "megacells:mega_mana_cell_housing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "megacells:cells/portable/portable_mana_cell_16m"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mega_mana_cell_housing",
+      "has_cell_component_16m",
+      "has_dense_energy_cell"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "megacells:cells/portable/portable_mana_cell_16m"
+    ]
+  }
+}

@@ -30,6 +30,9 @@ dependencies {
 
     implementation(libs.appex)
     runtimeOnly(libs.explib)
+
+    compileOnly(libs.appbot)
+    compileOnly(libs.botania)
 }
 
 sourceSets {

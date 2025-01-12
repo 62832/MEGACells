@@ -48,6 +48,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         basicItem(MEGAItems.MEGA_ITEM_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_FLUID_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_CHEMICAL_CELL_HOUSING);
+        basicItem(MEGAItems.MEGA_MANA_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         basicItem(MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
 
@@ -241,6 +242,7 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                     case "experience" -> 10;
                     default -> throw new IllegalArgumentException();
                 };
+
         var tierOffset = (cell.tier().index() - 6) * 2;
         driveCell(cell.tier().namePrefix() + "_" + cell.keyType() + "_cell", "standard_cell", typeOffset)
                 .texture("tier", "block/drive/cells/standard_cell_tiers")
