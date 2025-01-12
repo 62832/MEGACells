@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import gripe._90.megacells.mixin.SpinMappingAccessor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +66,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.client.render.FaceRotatingModel;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
+import gripe._90.megacells.mixin.SpinMappingAccessor;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IStorageProvider, IPriorityHost {
@@ -420,7 +420,7 @@ public class CellDockPart extends AEBasePart
 
     // FIXME (AE2): This is what SpinMapping::getUpFromSpin is meant to be rather than a duplicate of getSpinFromUp
     private Direction getUpFromSpin(Direction facing, int spin) {
-       return SpinMappingAccessor.getSpinDirections()[facing.ordinal()][spin];
+        return SpinMappingAccessor.getSpinDirections()[facing.ordinal()][spin];
     }
 
     @Override
