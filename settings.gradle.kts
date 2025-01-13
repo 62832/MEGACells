@@ -2,7 +2,7 @@ pluginManagement {
     plugins {
         id("net.neoforged.moddev") version "1.0.11"
         id("net.neoforged.moddev.repositories") version "1.0.11"
-        id("com.diffplug.spotless") version "6.25.0"
+        id("com.diffplug.spotless") version "7.0.1"
     }
 }
 

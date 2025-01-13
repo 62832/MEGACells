@@ -107,14 +107,9 @@ tasks {
     processResources {
         exclude("**/.cache")
 
-        val props = mapOf(
-            "version" to version,
-            "ae2Version" to libs.versions.ae2.get(),
-            "appmekVersion" to libs.versions.appmek.get(),
-            "arsengVersion" to libs.versions.arseng.get()
-        )
-
+        val props = mapOf("version" to version)
         inputs.properties(props)
+
         filesMatching("META-INF/neoforge.mods.toml") {
             expand(props)
         }
@@ -125,14 +120,14 @@ spotless {
     kotlinGradle {
         target("*.kts")
         diktat()
-        indentWithSpaces(4)
+        leadingTabsToSpaces(4)
         endWithNewline()
     }
 
     java {
         target("/src/**/java/**/*.java")
         endWithNewline()
-        indentWithSpaces(4)
+        leadingTabsToSpaces(4)
         removeUnusedImports()
         palantirJavaFormat()
         importOrderFile(file("mega.importorder"))
@@ -140,13 +135,16 @@ spotless {
 
         // courtesy of diffplug/spotless#240
         // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
-        custom("noWildcardImports") {
-            if (it.contains("*;\n")) {
-                throw Error("No wildcard imports allowed")
-            }
+        // also, ew (7.x): https://github.com/diffplug/spotless/issues/2387#issuecomment-2576459901
+        custom("noWildcardImports", object : java.io.Serializable, com.diffplug.spotless.FormatterFunc {
+            override fun apply(input: String): String {
+                if (input.contains("*;\n")) {
+                    throw GradleException("No wildcard imports allowed.")
+                }
 
-            it
-        }
+                return input
+            }
+        })
 
         bumpThisNumberIfACustomStepChanges(1)
     }
@@ -155,7 +153,7 @@ spotless {
         target("src/**/resources/**/*.json")
         targetExclude("src/generated/resources/**")
         biome()
-        indentWithSpaces(2)
+        leadingTabsToSpaces(2)
         endWithNewline()
     }
 }
