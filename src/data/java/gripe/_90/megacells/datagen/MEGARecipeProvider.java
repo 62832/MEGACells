@@ -16,8 +16,6 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -55,34 +53,34 @@ public class MEGARecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(@NotNull RecipeOutput output) {
         // spotless:off
-        component(output, MEGAItems.TIER_1M, StorageTier.SIZE_256K, AEItems.SKY_DUST.asItem(), null);
-        component(output, MEGAItems.TIER_4M, MEGAItems.TIER_1M, null, ConventionTags.ENDER_PEARL_DUST);
-        component(output, MEGAItems.TIER_16M, MEGAItems.TIER_4M, null, ConventionTags.ENDER_PEARL_DUST);
-        component(output, MEGAItems.TIER_64M, MEGAItems.TIER_16M, AEItems.MATTER_BALL.asItem(), null);
-        component(output, MEGAItems.TIER_256M, MEGAItems.TIER_64M, AEItems.MATTER_BALL.asItem(), null);
+        component(output, MEGAItems.TIER_1M, StorageTier.SIZE_256K, Ingredient.of(AEItems.SKY_DUST.asItem()));
+        component(output, MEGAItems.TIER_4M, MEGAItems.TIER_1M, Ingredient.of(ConventionTags.ENDER_PEARL_DUST));
+        component(output, MEGAItems.TIER_16M, MEGAItems.TIER_4M, Ingredient.of(ConventionTags.ENDER_PEARL_DUST));
+        component(output, MEGAItems.TIER_64M, MEGAItems.TIER_16M, Ingredient.of(AEItems.MATTER_BALL.asItem()));
+        component(output, MEGAItems.TIER_256M, MEGAItems.TIER_64M, Ingredient.of(AEItems.MATTER_BALL.asItem()));
 
-        housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
-        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        housing(conditional(output, Addons.APPMEK), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        housing(conditional(output, Addons.APPEX), MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        housing(output, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
+        housing(output, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
+        housing(conditional(output, Addons.APPMEK), MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
+        housing(conditional(output, Addons.APPEX), MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
 
-        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
-        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, null, MEGATags.SKY_STEEL_INGOT);
+        cell(output, MEGAItems.ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
+        cell(output, MEGAItems.ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
+        cell(output, MEGAItems.ITEM_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
+        cell(output, MEGAItems.ITEM_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
+        cell(output, MEGAItems.ITEM_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_ITEM_CELL_HOUSING, Ingredient.of(MEGATags.SKY_STEEL_INGOT));
 
-        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
-        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, null, MEGATags.SKY_BRONZE_INGOT);
+        cell(output, MEGAItems.FLUID_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
+        cell(output, MEGAItems.FLUID_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
+        cell(output, MEGAItems.FLUID_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
+        cell(output, MEGAItems.FLUID_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
+        cell(output, MEGAItems.FLUID_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_FLUID_CELL_HOUSING, Ingredient.of(MEGATags.SKY_BRONZE_INGOT));
 
-        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
-        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, null, MEGATags.SKY_OSMIUM_INGOT);
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
+        cell(conditional(output, Addons.APPMEK), MEGAItems.CHEMICAL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_CHEMICAL_CELL_HOUSING, Ingredient.of(MEGATags.SKY_OSMIUM_INGOT));
 
         cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_MANA_CELL_HOUSING);
         cell(conditional(output, Addons.APPBOT), MEGAItems.MANA_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_MANA_CELL_HOUSING);
@@ -96,11 +94,11 @@ public class MEGARecipeProvider extends RecipeProvider {
         cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
         cell(conditional(output, Addons.ARSENG), MEGAItems.SOURCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOURCE_CELL_HOUSING);
 
-        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
-        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
-        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
-        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
-        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Items.EXPERIENCE_BOTTLE, null);
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
+        cell(conditional(output, Addons.APPEX), MEGAItems.EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING, Ingredient.of(Items.EXPERIENCE_BOTTLE));
 
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
         portable(output, MEGAItems.PORTABLE_ITEM_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_ITEM_CELL_HOUSING);
@@ -370,22 +368,14 @@ public class MEGARecipeProvider extends RecipeProvider {
         }
     }
 
-    private static void component(
-            RecipeOutput output, StorageTier tier, StorageTier preceding, ItemLike binderItem, TagKey<Item> binderTag) {
+    private static void component(RecipeOutput output, StorageTier tier, StorageTier preceding, Ingredient binder) {
         var precedingComponent = preceding.componentSupplier().get();
-        var recipe = ShapedRecipeBuilder.shaped(
-                        RecipeCategory.MISC, tier.componentSupplier().get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, tier.componentSupplier().get())
                 .pattern("aba")
                 .pattern("cdc")
-                .pattern("aca");
-
-        if (binderItem != null) {
-            recipe.define('a', binderItem);
-        } else if (binderTag != null) {
-            recipe.define('a', binderTag);
-        }
-
-        recipe.define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                .pattern("aca")
+                .define('a', binder)
+                .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
                 .define('c', precedingComponent)
                 .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
@@ -403,22 +393,15 @@ public class MEGARecipeProvider extends RecipeProvider {
                                         .getPath()));
     }
 
-    private static void housing(
-            RecipeOutput output, ItemDefinition<?> housing, ItemLike materialItem, TagKey<Item> materialTag) {
-        var builder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, housing)
+    private static void housing(RecipeOutput output, ItemDefinition<?> housing, Ingredient housingMaterial) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, housing)
                 .pattern("aba")
                 .pattern("b b")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
-                .define('b', AEItems.SKY_DUST);
-
-        if (materialItem != null) {
-            builder.define('d', materialItem);
-        } else if (materialTag != null) {
-            builder.define('d', materialTag);
-        }
-
-        builder.unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
+                .define('b', AEItems.SKY_DUST)
+                .define('d', housingMaterial)
+                .unlockedBy("has_dusts/sky_stone", has(AEItems.SKY_DUST))
                 .save(output, MEGACells.makeId("cells/" + housing.id().getPath()));
     }
 
@@ -441,23 +424,16 @@ public class MEGARecipeProvider extends RecipeProvider {
             ItemDefinition<?> cell,
             ItemDefinition<?> component,
             ItemDefinition<?> housing,
-            ItemLike materialItem,
-            TagKey<Item> materialTag) {
-        var builder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
+            Ingredient housingMaterial) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                 .pattern("aba")
                 .pattern("bcb")
                 .pattern("ddd")
                 .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
                 .define('b', AEItems.SKY_DUST)
-                .define('c', component);
-
-        if (materialItem != null) {
-            builder.define('d', materialItem);
-        } else if (materialTag != null) {
-            builder.define('d', materialTag);
-        }
-
-        builder.unlockedBy("has_" + component.id().getPath(), has(component))
+                .define('c', component)
+                .define('d', housingMaterial)
+                .unlockedBy("has_" + component.id().getPath(), has(component))
                 .save(output, MEGACells.makeId("cells/standard/" + cell.id().getPath()));
         cell(output, cell, component, housing);
     }
