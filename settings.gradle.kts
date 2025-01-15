@@ -91,7 +91,7 @@ run {
                 version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.91")
                 version("parchment", "2024.07.28")
 
-                version("ae2", "19.1.2-beta")
+                version("ae2", "19.1.3-beta")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")

@@ -43,6 +43,7 @@ import appeng.api.storage.MEStorage;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.StorageCell;
+import appeng.block.orientation.SpinMapping;
 import appeng.blockentity.inventory.AppEngCellInventory;
 import appeng.client.render.BakedModelUnwrapper;
 import appeng.client.render.model.AEModelData;
@@ -66,7 +67,6 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.client.render.FaceRotatingModel;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
-import gripe._90.megacells.mixin.SpinMappingAccessor;
 
 public class CellDockPart extends AEBasePart
         implements InternalInventoryHost, IChestOrDrive, IStorageProvider, IPriorityHost {
@@ -387,7 +387,8 @@ public class CellDockPart extends AEBasePart
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
 
-        var orientation = BlockOrientation.get(getUpFromSpin(getSide(), spin), getSide());
+        var front = SpinMapping.getUpFromSpin(getSide(), spin);
+        var orientation = BlockOrientation.get(front, getSide());
         poseStack.mulPose(orientation.getQuaternion());
         poseStack.translate(-3F / 16, 5F / 16, -4F / 16);
 
@@ -416,11 +417,6 @@ public class CellDockPart extends AEBasePart
         poseStack.translate(-8F / 16, -3F / 16, -8F / 16);
         CellLedRenderer.renderLed(this, 0, buffers.getBuffer(CellLedRenderer.RENDER_LAYER), poseStack, partialTicks);
         poseStack.popPose();
-    }
-
-    // FIXME (AE2): This is what SpinMapping::getUpFromSpin is meant to be rather than a duplicate of getSpinFromUp
-    private Direction getUpFromSpin(Direction facing, int spin) {
-        return SpinMappingAccessor.getSpinDirections()[facing.ordinal()][spin];
     }
 
     @Override
