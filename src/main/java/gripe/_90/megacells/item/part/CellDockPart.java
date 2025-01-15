@@ -381,6 +381,7 @@ public class CellDockPart extends AEBasePart
                 DriveBakedModel.class);
 
         if (driveModel == null) {
+            LOGGER.error("Could not retrieve ME Drive model for associated cell chassis models.");
             return;
         }
 
