@@ -1,7 +1,6 @@
 package gripe._90.megacells.misc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -237,10 +236,24 @@ public class CompressionService {
             var input = candidate.getIngredients().getFirst().getItems();
             var output = candidate.getResultItem(access).getItem();
 
-            // spotless:off
-            var compressible = Arrays.stream(input).anyMatch(i -> i.is(testOutput) && !i.is(MEGATags.COMPRESSION_BLACKLIST));
-            var decompressible = Arrays.stream(testInput).anyMatch(i -> i.is(output) && !i.is(MEGATags.COMPRESSION_BLACKLIST));
+            var compressible = false;
+            var decompressible = false;
 
+            for (var i : input) {
+                if (i.is(testOutput) && !i.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                    compressible = true;
+                    break;
+                }
+            }
+
+            for (var i : testInput) {
+                if (i.is(output) && !i.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                    decompressible = true;
+                    break;
+                }
+            }
+
+            // spotless:off
             var sameQuantity = candidate.getResultItem(access).getCount() == recipe.getIngredients().size()
                             && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
             // spotless:on
