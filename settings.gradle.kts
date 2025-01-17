@@ -1,7 +1,7 @@
 pluginManagement {
     plugins {
-        id("net.neoforged.moddev") version "1.0.11"
-        id("net.neoforged.moddev.repositories") version "1.0.11"
+        id("net.neoforged.moddev") version "2.0.74"
+        id("net.neoforged.moddev.repositories") version "2.0.74"
         id("com.diffplug.spotless") version "7.0.1"
     }
 }
@@ -88,7 +88,7 @@ run {
                 version("minecraft", mc)
 
                 val nf = mc.substringAfter('.')
-                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.91")
+                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.95")
                 version("parchment", "2024.07.28")
 
                 version("ae2", "19.1.3-beta")
