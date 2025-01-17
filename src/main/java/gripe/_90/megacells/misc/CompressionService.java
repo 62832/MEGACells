@@ -5,12 +5,13 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
@@ -29,6 +30,7 @@ import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompressionService.class);
+    private static final CompressionChain EMPTY = new CompressionChain(List.of());
 
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
@@ -40,11 +42,19 @@ public class CompressionService {
     // based on its usually irreversible recipe.
     private static final Set<Override> overrides = new HashSet<>();
 
-    public static Optional<CompressionChain> getChain(AEItemKey item) {
-        return chains.stream().filter(chain -> chain.containsVariant(item)).findFirst();
+    public static CompressionChain getChain(AEItemKey item) {
+        for (var chain : chains) {
+            if (chain.containsVariant(item)) {
+                return chain;
+            }
+        }
+
+        return EMPTY;
     }
 
     public static void init() {
+        GridServices.register(DecompressionService.class, DecompressionService.class);
+
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
             var server = event.getServer();
             CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
@@ -57,8 +67,6 @@ public class CompressionService {
                 CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
             }
         });
-
-        GridServices.register(DecompressionService.class, DecompressionService.class);
     }
 
     private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
@@ -90,9 +98,9 @@ public class CompressionService {
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
         Stream.concat(compressed.stream(), decompressed.stream()).forEach(recipe -> {
-            var baseVariant = recipe.getResultItem(access).getItem();
+            var baseVariant = AEItemKey.of(recipe.getResultItem(access).getItem());
 
-            if (getChain(AEItemKey.of(baseVariant)).isEmpty()) {
+            if (getChain(baseVariant).isEmpty()) {
                 chains.add(generateChain(baseVariant, compressed, decompressed, access));
             }
         });
@@ -101,17 +109,17 @@ public class CompressionService {
     }
 
     private static CompressionChain generateChain(
-            Item baseVariant,
+            AEItemKey baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
             RegistryAccess access) {
-        var variants = new LinkedList<Item>();
+        var variants = new LinkedList<AEItemKey>();
         var multipliers = new LinkedList<Integer>();
 
         variants.addFirst(baseVariant);
 
         for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
-            var item = lower.item().getItem();
+            var item = lower.item();
 
             if (variants.contains(item)) {
                 if (lower.factor() != 1) {
@@ -129,10 +137,10 @@ public class CompressionService {
         }
 
         multipliers.addFirst(1);
-        var chain = new CompressionChain();
+        var chain = new ObjectArrayList<CompressionChain.Variant>();
 
         for (var i = 0; i < variants.size(); i++) {
-            chain.add(AEItemKey.of(variants.get(i)), multipliers.get(i));
+            chain.add(new CompressionChain.Variant(variants.get(i), multipliers.get(i)));
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
@@ -147,28 +155,28 @@ public class CompressionService {
             }
 
             chain.add(higher);
-            higher = getNextVariant(higher.item().getItem(), compressed, true, access);
+            higher = getNextVariant(higher.item(), compressed, true, access);
         }
 
         LOGGER.debug("Gathered bulk compression chain: {}", chain);
-        return chain;
+        return new CompressionChain(chain);
     }
 
     private static CompressionChain.Variant getNextVariant(
-            Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
+            AEItemKey item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
-            if (compressed && override.smaller.equals(item)) {
+            if (compressed && override.smaller.equals(item.getItem())) {
                 return new CompressionChain.Variant(override.larger, override.factor);
             }
 
-            if (!compressed && override.larger.equals(item)) {
+            if (!compressed && override.larger.equals(item.getItem())) {
                 return new CompressionChain.Variant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (input.getItem().equals(item)) {
+                if (input.getItem().equals(item.getItem())) {
                     return new CompressionChain.Variant(
                             recipe.getResultItem(access).getItem(),
                             compressed

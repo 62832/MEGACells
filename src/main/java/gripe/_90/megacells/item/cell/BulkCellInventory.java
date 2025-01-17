@@ -54,8 +54,7 @@ public class BulkCellInventory implements StorageCell {
         unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
 
         compressionEnabled = cell.getUpgrades(stack).isInstalled(MEGAItems.COMPRESSION_CARD);
-        compressionChain = CompressionService.getChain(storedItem != null ? storedItem : filterItem)
-                .orElseGet(CompressionChain::new);
+        compressionChain = CompressionService.getChain(storedItem != null ? storedItem : filterItem);
         unitFactor = compressionChain.unitFactor(storedItem != null ? storedItem : filterItem);
 
         // Check newly-calculated factor against what's already recorded in order to adjust for a compression chain that
@@ -132,7 +131,7 @@ public class BulkCellInventory implements StorageCell {
                 decompressionPatterns.add(new DecompressionPattern(decompressed.item(), variant, false));
             }
 
-            var remainingChain = compressionChain.subList(decompressionChain.size() - 1, compressionChain.size());
+            var remainingChain = compressionChain.trailing(decompressionChain.size() - 1);
 
             for (var variant : remainingChain) {
                 if (variant == remainingChain.getFirst()) {
@@ -271,7 +270,7 @@ public class BulkCellInventory implements StorageCell {
         if (storedItem != null) {
             if (compressionEnabled && storedItem.equals(filterItem) && !compressionChain.isEmpty()) {
                 var count = unitCount;
-                var chain = compressionChain.limited(compressionCutoff).lastMultiplierSwapped();
+                var chain = compressionChain.lastMultiplierSwapped(compressionCutoff);
 
                 for (var variant : chain) {
                     var compressionFactor = BigInteger.valueOf(variant.factor());
