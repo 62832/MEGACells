@@ -14,12 +14,10 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import appeng.api.features.P2PTunnelAttunement;
-import appeng.datagen.providers.tags.ConventionTags;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -88,24 +86,8 @@ public class MEGATagProvider {
             tag(MEGATags.MEGA_PATTERN_PROVIDER)
                     .add(MEGABlocks.MEGA_PATTERN_PROVIDER.asItem(), MEGAItems.MEGA_PATTERN_PROVIDER.asItem());
 
-            tag(MEGATags.COMPRESSION_OVERRIDES)
-                    .add(Items.QUARTZ)
-                    .add(Items.GLOWSTONE_DUST)
-                    .add(Items.AMETHYST_SHARD)
-                    .add(Items.MAGMA_CREAM)
-                    .add(Items.CLAY_BALL)
-                    .add(Items.MELON_SLICE)
-                    .add(Items.ICE, Items.PACKED_ICE)
-                    .add(Items.STRING)
-                    .add(Items.SNOWBALL)
-                    .add(Items.HONEYCOMB)
-                    .add(Items.POINTED_DRIPSTONE)
-                    .addOptionalTag(
-                            ResourceLocation.fromNamespaceAndPath("functionalstorage", "ignore_crafting_check"));
-
             tag(MEGATags.COMPRESSION_BLACKLIST)
                     .addTag(Tags.Items.SEEDS)
-                    .addTag(ConventionTags.WRENCH)
                     .addOptionalTag(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "essences"))
                     .remove(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "inferium_essence"));
 
