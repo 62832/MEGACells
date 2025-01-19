@@ -24,6 +24,8 @@ public final class MEGATags {
     public static final TagKey<Item> MEGA_INTERFACE = ItemTags.create(MEGABlocks.MEGA_INTERFACE.id());
     public static final TagKey<Item> MEGA_PATTERN_PROVIDER = ItemTags.create(MEGABlocks.MEGA_PATTERN_PROVIDER.id());
 
-    public static final TagKey<Item> COMPRESSION_OVERRIDES = ItemTags.create(MEGACells.makeId("compression_overrides"));
     public static final TagKey<Item> COMPRESSION_BLACKLIST = ItemTags.create(MEGACells.makeId("compression_blacklist"));
+
+    @Deprecated(forRemoval = true)
+    public static final TagKey<Item> COMPRESSION_OVERRIDES = ItemTags.create(MEGACells.makeId("compression_overrides"));
 }

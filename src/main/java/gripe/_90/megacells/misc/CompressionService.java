@@ -280,24 +280,35 @@ public class CompressionService {
                 return false;
             }
 
-            if (input.is(MEGATags.COMPRESSION_OVERRIDES)) {
-                var output = recipe.getResultItem(access);
+            var output = recipe.getResultItem(access);
 
-                if (output.is(MEGATags.COMPRESSION_BLACKLIST)) {
+            if (output.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                return false;
+            }
+
+            var overrideData = input.getItemHolder().getData(CompressionOverride.DATA);
+
+            // TODO: remove old tag altogether in favour of data map
+            if (overrideData == null && !input.is(MEGATags.COMPRESSION_OVERRIDES)) {
+                return false;
+            }
+
+            if (overrideData != null) {
+                if (!output.is(overrideData.variant())) {
                     return false;
                 }
-
-                var decompressed = isDecompressionRecipe(recipe);
-                var smaller = (decompressed ? output : input).getItem();
-                var larger = (decompressed ? input : output).getItem();
-                var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
-
-                var override = new Override(smaller, larger, factor);
-                LOGGER.debug("Found bulk compression override: {}", override);
-                overrides.add(override);
-
-                return true;
             }
+
+            var decompressed = isDecompressionRecipe(recipe);
+            var smaller = (decompressed ? output : input).getItem();
+            var larger = (decompressed ? input : output).getItem();
+            var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
+
+            var override = new Override(smaller, larger, factor);
+            LOGGER.debug("Found bulk compression override: {}", override);
+            overrides.add(override);
+
+            return true;
         }
 
         return false;

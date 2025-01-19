@@ -88,12 +88,12 @@ public class DecompressionPattern implements IPatternDetails {
     }
 
     public record Encoded(ItemStack base, ItemStack variant, int factor, boolean toCompress) {
-        public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+        public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                         ItemStack.CODEC.fieldOf("base").forGetter(Encoded::base),
                         ItemStack.CODEC.fieldOf("variant").forGetter(Encoded::variant),
                         Codec.INT.fieldOf("factor").forGetter(Encoded::factor),
                         Codec.BOOL.fieldOf("toCompress").forGetter(Encoded::toCompress))
-                .apply(builder, Encoded::new));
+                .apply(instance, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
                 ItemStack.STREAM_CODEC,

@@ -22,6 +22,7 @@ public class MEGADataGenerators {
         var registries = event.getLookupProvider();
         generator.addProvider(event.includeServer(), new MEGARecipeProvider(output, registries));
         generator.addProvider(event.includeServer(), new MEGALootProvider(output, registries));
+        generator.addProvider(event.includeServer(), new MEGADataMapProvider(output, registries));
 
         var blockTags = new MEGATagProvider.Block(output, registries, existing);
         generator.addProvider(event.includeServer(), blockTags);
