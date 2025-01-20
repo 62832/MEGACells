@@ -37,12 +37,12 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAConfig;
 import gripe._90.megacells.definition.MEGACreativeTab;
+import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
-import gripe._90.megacells.misc.CompressionOverride;
 import gripe._90.megacells.misc.CompressionService;
 
 @Mod(MEGACells.MODID)
@@ -56,13 +56,13 @@ public class MEGACells {
         MEGAMenus.DR.register(eventBus);
         MEGAComponents.DR.register(eventBus);
         MEGACreativeTab.DR.register(eventBus);
+        eventBus.addListener(MEGADataMaps::register);
 
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
 
         CompressionService.init();
-        eventBus.addListener(CompressionOverride::register);
         NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
