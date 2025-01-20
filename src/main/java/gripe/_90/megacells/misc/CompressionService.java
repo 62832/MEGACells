@@ -26,6 +26,7 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
 
+import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
@@ -286,7 +287,7 @@ public class CompressionService {
                 return false;
             }
 
-            var overrideData = input.getItemHolder().getData(CompressionOverride.DATA);
+            var overrideData = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
 
             // TODO: remove old tag altogether in favour of data map
             if (overrideData == null && !input.is(MEGATags.COMPRESSION_OVERRIDES)) {
@@ -294,7 +295,7 @@ public class CompressionService {
             }
 
             if (overrideData != null) {
-                if (!output.is(overrideData.variant())) {
+                if (!output.is(overrideData)) {
                     return false;
                 }
             }
