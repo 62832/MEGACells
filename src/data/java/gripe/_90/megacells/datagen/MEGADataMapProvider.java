@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 
-import gripe._90.megacells.definition.MEGADataMaps;
+import gripe._90.megacells.misc.CompressionOverride;
 
 public class MEGADataMapProvider extends DataMapProvider {
     protected MEGADataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -18,7 +18,7 @@ public class MEGADataMapProvider extends DataMapProvider {
 
     @Override
     protected void gather() {
-        var overrides = builder(MEGADataMaps.COMPRESSION_OVERRIDE);
+        var overrides = builder(CompressionOverride.DATA);
         compressionOverride(overrides, Items.QUARTZ, Items.QUARTZ_BLOCK);
         compressionOverride(overrides, Items.GLOWSTONE_DUST, Items.GLOWSTONE);
         compressionOverride(overrides, Items.AMETHYST_SHARD, Items.AMETHYST_BLOCK);
@@ -33,7 +33,7 @@ public class MEGADataMapProvider extends DataMapProvider {
         compressionOverride(overrides, Items.POINTED_DRIPSTONE, Items.DRIPSTONE_BLOCK);
     }
 
-    private static void compressionOverride(Builder<Item, Item> builder, Item base, Item variant) {
-        builder.add(BuiltInRegistries.ITEM.getKey(base), variant, false);
+    private static void compressionOverride(Builder<CompressionOverride, Item> builder, Item base, Item variant) {
+        builder.add(BuiltInRegistries.ITEM.getKey(base), new CompressionOverride(variant), false);
     }
 }

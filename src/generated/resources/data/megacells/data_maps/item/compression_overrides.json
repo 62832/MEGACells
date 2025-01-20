@@ -1,16 +1,40 @@
 {
   "values": {
-    "minecraft:amethyst_shard": "minecraft:amethyst_block",
-    "minecraft:clay_ball": "minecraft:clay",
-    "minecraft:glowstone_dust": "minecraft:glowstone",
-    "minecraft:honeycomb": "minecraft:honeycomb_block",
-    "minecraft:ice": "minecraft:packed_ice",
-    "minecraft:magma_cream": "minecraft:magma_block",
-    "minecraft:melon_slice": "minecraft:melon",
-    "minecraft:packed_ice": "minecraft:blue_ice",
-    "minecraft:pointed_dripstone": "minecraft:dripstone_block",
-    "minecraft:quartz": "minecraft:quartz_block",
-    "minecraft:snowball": "minecraft:snow_block",
-    "minecraft:string": "minecraft:white_wool"
+    "minecraft:amethyst_shard": {
+      "variant": "minecraft:amethyst_block"
+    },
+    "minecraft:clay_ball": {
+      "variant": "minecraft:clay"
+    },
+    "minecraft:glowstone_dust": {
+      "variant": "minecraft:glowstone"
+    },
+    "minecraft:honeycomb": {
+      "variant": "minecraft:honeycomb_block"
+    },
+    "minecraft:ice": {
+      "variant": "minecraft:packed_ice"
+    },
+    "minecraft:magma_cream": {
+      "variant": "minecraft:magma_block"
+    },
+    "minecraft:melon_slice": {
+      "variant": "minecraft:melon"
+    },
+    "minecraft:packed_ice": {
+      "variant": "minecraft:blue_ice"
+    },
+    "minecraft:pointed_dripstone": {
+      "variant": "minecraft:dripstone_block"
+    },
+    "minecraft:quartz": {
+      "variant": "minecraft:quartz_block"
+    },
+    "minecraft:snowball": {
+      "variant": "minecraft:snow_block"
+    },
+    "minecraft:string": {
+      "variant": "minecraft:white_wool"
+    }
   }
 }
