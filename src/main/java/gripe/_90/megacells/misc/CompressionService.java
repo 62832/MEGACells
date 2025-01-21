@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -249,14 +250,14 @@ public class CompressionService {
             var decompressible = false;
 
             for (var i : input) {
-                if (i.is(testOutput) && !i.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                if (i.is(testOutput) && !isBlacklisted(i)) {
                     compressible = true;
                     break;
                 }
             }
 
             for (var i : testInput) {
-                if (i.is(output) && !i.is(MEGATags.COMPRESSION_BLACKLIST)) {
+                if (i.is(output) && !isBlacklisted(i)) {
                     decompressible = true;
                     break;
                 }
@@ -275,29 +276,27 @@ public class CompressionService {
         return true;
     }
 
+    // TODO: Remove old tag usage
     private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
         for (var input : recipe.getIngredients().getFirst().getItems()) {
-            if (input.is(MEGATags.COMPRESSION_BLACKLIST)) {
+            if (isBlacklisted(input)) {
+                return false;
+            }
+
+            var inputVariant = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
+
+            if (inputVariant == null && !input.is(MEGATags.COMPRESSION_OVERRIDES)) {
                 return false;
             }
 
             var output = recipe.getResultItem(access);
 
-            if (output.is(MEGATags.COMPRESSION_BLACKLIST)) {
+            if (isBlacklisted(output)) {
                 return false;
             }
 
-            var overrideVariant = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
-
-            // TODO: remove old tag altogether in favour of data map
-            if (overrideVariant == null && !input.is(MEGATags.COMPRESSION_OVERRIDES)) {
+            if (inputVariant != output.getItem()) {
                 return false;
-            }
-
-            if (overrideVariant != null) {
-                if (!output.is(overrideVariant)) {
-                    return false;
-                }
             }
 
             var decompressed = isDecompressionRecipe(recipe);
@@ -313,6 +312,11 @@ public class CompressionService {
         }
 
         return false;
+    }
+
+    private static boolean isBlacklisted(ItemStack stack) {
+        return stack.is(MEGATags.COMPRESSION_BLACKLIST)
+                || stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
     }
 
     private record Override(Item smaller, Item larger, int factor) {

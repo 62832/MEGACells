@@ -24,11 +24,11 @@ public class MEGADataGenerators {
         generator.addProvider(event.includeServer(), new MEGALootProvider(output, registries));
         generator.addProvider(event.includeServer(), new MEGADataMapProvider(output, registries));
 
-        var blockTags = new MEGATagProvider.Block(output, registries, existing);
+        var blockTags = new MEGATagProvider.Blocks(output, registries, existing);
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(
                 event.includeServer(),
-                new MEGATagProvider.Item(output, registries, blockTags.contentsGetter(), existing));
+                new MEGATagProvider.Items(output, registries, blockTags.contentsGetter(), existing));
 
         generator.addProvider(
                 event.includeClient(),

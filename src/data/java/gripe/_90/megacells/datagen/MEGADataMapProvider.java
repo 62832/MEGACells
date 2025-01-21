@@ -6,8 +6,11 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 
 import gripe._90.megacells.definition.MEGADataMaps;
@@ -19,6 +22,7 @@ public class MEGADataMapProvider extends DataMapProvider {
 
     @Override
     protected void gather() {
+        var none = Items.AIR;
         builder(MEGADataMaps.COMPRESSION_OVERRIDE)
                 .add(itemId(Items.QUARTZ), Items.QUARTZ_BLOCK, false)
                 .add(itemId(Items.GLOWSTONE_DUST), Items.GLOWSTONE, false)
@@ -31,7 +35,14 @@ public class MEGADataMapProvider extends DataMapProvider {
                 .add(itemId(Items.STRING), Items.WHITE_WOOL, false)
                 .add(itemId(Items.SNOWBALL), Items.SNOW_BLOCK, false)
                 .add(itemId(Items.HONEYCOMB), Items.HONEYCOMB_BLOCK, false)
-                .add(itemId(Items.POINTED_DRIPSTONE), Items.DRIPSTONE_BLOCK, false);
+                .add(itemId(Items.POINTED_DRIPSTONE), Items.DRIPSTONE_BLOCK, false)
+                .add(Tags.Items.SEEDS, none, false)
+                .add(
+                        ItemTags.create(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "essences")),
+                        none,
+                        false,
+                        new ModLoadedCondition("mysticalagriculture"))
+                .remove(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "inferium_essence"));
     }
 
     private static ResourceLocation itemId(Item item) {
