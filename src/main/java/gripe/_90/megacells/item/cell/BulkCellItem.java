@@ -93,7 +93,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                 lines.add(Tooltips.of(MEGATranslations.Cutoff.text(inv.getCompressionChain()
                         .get(inv.getCompressionCutoff() - 1)
                         .item()
-                        .getDisplayName())));
+                        .getDescription())));
             }
         }
     }

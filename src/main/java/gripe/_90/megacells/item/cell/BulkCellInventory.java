@@ -165,7 +165,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item)) {
+        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item.getItem())) {
             return 0;
         }
 
@@ -198,7 +198,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item)) {
+        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item.getItem())) {
             return 0;
         }
 
@@ -274,7 +274,7 @@ public class BulkCellInventory implements StorageCell {
 
                 for (var variant : chain) {
                     var compressionFactor = BigInteger.valueOf(variant.factor());
-                    var key = variant.item();
+                    var key = AEItemKey.of(variant.item());
 
                     if (count.divide(compressionFactor).signum() == 1 && variant != chain.getLast()) {
                         out.add(key, count.remainder(compressionFactor).longValue());
@@ -293,7 +293,9 @@ public class BulkCellInventory implements StorageCell {
     @Override
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
         return what instanceof AEItemKey item
-                && (item.equals(storedItem) || item.equals(filterItem) || compressionChain.containsVariant(item));
+                && (item.equals(storedItem)
+                        || item.equals(filterItem)
+                        || compressionChain.containsVariant(item.getItem()));
     }
 
     @Override

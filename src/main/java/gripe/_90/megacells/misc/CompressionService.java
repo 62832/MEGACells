@@ -45,6 +45,10 @@ public class CompressionService {
     private static final Set<Override> overrides = new HashSet<>();
 
     public static CompressionChain getChain(AEItemKey item) {
+        return item != null ? getChain(item.getItem()) : EMPTY;
+    }
+
+    public static CompressionChain getChain(Item item) {
         for (var chain : chains) {
             if (chain.containsVariant(item)) {
                 return chain;
@@ -100,7 +104,7 @@ public class CompressionService {
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
         Stream.concat(compressed.stream(), decompressed.stream()).forEach(recipe -> {
-            var baseVariant = AEItemKey.of(recipe.getResultItem(access).getItem());
+            var baseVariant = recipe.getResultItem(access).getItem();
 
             if (getChain(baseVariant).isEmpty()) {
                 chains.add(generateChain(baseVariant, compressed, decompressed, access));
@@ -111,11 +115,11 @@ public class CompressionService {
     }
 
     private static CompressionChain generateChain(
-            AEItemKey baseVariant,
+            Item baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
             RegistryAccess access) {
-        var variants = new LinkedList<AEItemKey>();
+        var variants = new LinkedList<Item>();
         var multipliers = new LinkedList<Integer>();
 
         variants.addFirst(baseVariant);
@@ -165,20 +169,20 @@ public class CompressionService {
     }
 
     private static CompressionChain.Variant getNextVariant(
-            AEItemKey item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
+            Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
         for (var override : overrides) {
-            if (compressed && override.smaller.equals(item.getItem())) {
+            if (compressed && override.smaller.equals(item)) {
                 return new CompressionChain.Variant(override.larger, override.factor);
             }
 
-            if (!compressed && override.larger.equals(item.getItem())) {
+            if (!compressed && override.larger.equals(item)) {
                 return new CompressionChain.Variant(override.smaller, override.factor);
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (input.getItem().equals(item.getItem())) {
+                if (input.getItem().equals(item)) {
                     return new CompressionChain.Variant(
                             recipe.getResultItem(access).getItem(),
                             compressed

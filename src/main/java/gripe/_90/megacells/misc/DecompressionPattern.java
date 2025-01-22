@@ -9,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -22,12 +23,12 @@ import gripe._90.megacells.definition.MEGAItems;
 
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final AEItemKey base;
-    private final AEItemKey variant;
+    private final Item base;
+    private final Item variant;
     private final int factor;
     private final boolean toCompress;
 
-    public DecompressionPattern(AEItemKey base, CompressionChain.Variant variant, boolean toCompress) {
+    public DecompressionPattern(Item base, CompressionChain.Variant variant, boolean toCompress) {
         this.base = base;
         this.variant = variant.item();
         this.factor = variant.factor();
@@ -36,7 +37,8 @@ public class DecompressionPattern implements IPatternDetails {
         var definition = new ItemStack(MEGAItems.SKY_STEEL_INGOT);
         definition.set(
                 MEGAComponents.ENCODED_DECOMPRESSION_PATTERN,
-                new Encoded(base.toStack(), variant.item().toStack(), variant.factor(), toCompress));
+                new Encoded(
+                        base.getDefaultInstance(), variant.item().getDefaultInstance(), variant.factor(), toCompress));
         this.definition = AEItemKey.of(definition);
     }
 
@@ -52,7 +54,8 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public List<GenericStack> getOutputs() {
-        return Collections.singletonList(toCompress ? new GenericStack(variant, 1) : new GenericStack(base, factor));
+        return Collections.singletonList(
+                toCompress ? new GenericStack(AEItemKey.of(variant), 1) : new GenericStack(AEItemKey.of(base), factor));
     }
 
     @Override
@@ -65,10 +68,10 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private record Input(AEItemKey input, int factor) implements IInput {
+    private record Input(Item input, int factor) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
-            return new GenericStack[] {new GenericStack(input, 1)};
+            return new GenericStack[] {new GenericStack(AEItemKey.of(input), 1)};
         }
 
         @Override

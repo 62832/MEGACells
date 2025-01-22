@@ -22,7 +22,7 @@ public class CompressionChain {
         return variants.isEmpty();
     }
 
-    public boolean containsVariant(AEItemKey item) {
+    public boolean containsVariant(Item item) {
         for (var variant : variants) {
             if (variant.item().equals(item)) {
                 return true;
@@ -37,8 +37,12 @@ public class CompressionChain {
     }
 
     public BigInteger unitFactor(AEItemKey item) {
+        if (item == null) {
+            return BigInteger.ONE;
+        }
+
         for (var variant : variants) {
-            if (variant.item().equals(item)) {
+            if (variant.item().equals(item.getItem())) {
                 return limited(variants.indexOf(variant) + 1).stream()
                         .map(v -> BigInteger.valueOf(v.factor()))
                         .reduce(BigInteger.ONE, BigInteger::multiply);
@@ -75,11 +79,7 @@ public class CompressionChain {
         return Collections.unmodifiableList(swapped);
     }
 
-    public record Variant(AEItemKey item, int factor) {
-        Variant(Item item, int factor) {
-            this(AEItemKey.of(item), factor);
-        }
-
+    public record Variant(Item item, int factor) {
         @Override
         public String toString() {
             return factor + "x → " + item;

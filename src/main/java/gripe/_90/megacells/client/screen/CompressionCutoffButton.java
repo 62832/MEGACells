@@ -22,7 +22,7 @@ public class CompressionCutoffButton extends IconButton {
     }
 
     public void setItem(CompressionChain.Variant variant) {
-        item = variant.item().getItem();
+        item = variant.item();
     }
 
     @Override
