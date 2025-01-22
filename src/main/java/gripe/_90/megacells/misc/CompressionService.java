@@ -311,7 +311,7 @@ public class CompressionService {
                 return false;
             }
 
-            if (inputVariant != output.getItem()) {
+            if (inputVariant != null && inputVariant != output.getItem()) {
                 return false;
             }
 
