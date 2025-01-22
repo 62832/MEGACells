@@ -23,6 +23,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
@@ -61,17 +63,27 @@ public class CompressionService {
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
 
-        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> {
+        NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, event -> {
             var server = event.getServer();
             CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
         });
 
-        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+        NeoForge.EVENT_BUS.addListener(OnDatapackSyncEvent.class, event -> {
             // Only rebuild cache in the event of a data pack /reload and not when a new player joins
             if (event.getPlayer() == null) {
                 var server = event.getPlayerList().getServer();
                 CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
+                PacketDistributor.sendToAllPlayers(new SyncCompressionChainsPacket(chains));
+            } else {
+                PacketDistributor.sendToPlayer(event.getPlayer(), new SyncCompressionChainsPacket(chains));
             }
+        });
+    }
+
+    public static void syncToClient(SyncCompressionChainsPacket packet, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            chains.clear();
+            chains.addAll(packet.chains());
         });
     }
 

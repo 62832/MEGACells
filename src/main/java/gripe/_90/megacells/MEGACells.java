@@ -18,6 +18,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 import appeng.api.AECapabilities;
 import appeng.api.features.HotkeyAction;
@@ -44,6 +45,7 @@ import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.misc.CompressionService;
+import gripe._90.megacells.misc.SyncCompressionChainsPacket;
 
 @Mod(MEGACells.MODID)
 public class MEGACells {
@@ -61,6 +63,7 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
+        eventBus.addListener(MEGACells::initPacketHandlers);
 
         CompressionService.init();
         NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
@@ -195,5 +198,13 @@ public class MEGACells {
                         cell.item());
             }
         }
+    }
+
+    private static void initPacketHandlers(RegisterPayloadHandlersEvent event) {
+        var registrar = event.registrar("1");
+        registrar.playToClient(
+                SyncCompressionChainsPacket.TYPE,
+                SyncCompressionChainsPacket.STREAM_CODEC,
+                CompressionService::syncToClient);
     }
 }
