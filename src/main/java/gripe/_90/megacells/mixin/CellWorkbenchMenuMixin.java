@@ -26,19 +26,25 @@ public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkben
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void registerAction(int id, Inventory ip, CellWorkbenchBlockEntity te, CallbackInfo ci) {
-        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, this::mega$nextCompressionLimit);
+        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, Boolean.class, this::mega$nextCompressionLimit);
     }
 
     @Override
-    public void mega$nextCompressionLimit() {
+    public void mega$nextCompressionLimit(boolean backwards) {
         if (isClientSide()) {
-            sendClientAction(ACTION_SET_COMPRESSION_LIMIT);
+            sendClientAction(ACTION_SET_COMPRESSION_LIMIT, backwards);
         } else {
             if (BulkCellItem.HANDLER.getCellInventory(((CellWorkbenchHost) getHost()).mega$getContainedStack(), null)
                     instanceof BulkCellInventory bulkCell) {
-                var currentLimit = bulkCell.getCompressionCutoff();
-                bulkCell.setCompressionCutoff(
-                        currentLimit == 1 ? bulkCell.getCompressionChain().size() : currentLimit - 1);
+                var limit = bulkCell.getCompressionCutoff();
+
+                if (backwards) {
+                    limit = limit == bulkCell.getCompressionChain().size() ? 1 : limit + 1;
+                } else {
+                    limit = limit == 1 ? bulkCell.getCompressionChain().size() : limit - 1;
+                }
+
+                bulkCell.setCompressionCutoff(limit);
                 getHost().saveChanges();
             }
         }

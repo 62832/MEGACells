@@ -33,8 +33,8 @@ public abstract class CellWorkbenchScreenMixin extends AEBaseScreen<CellWorkbenc
     @Inject(method = "<init>", at = @At("RETURN"))
     private void initCutoffButton(
             CellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
-        mega$compressionCutoff = addToLeftToolbar(
-                new CompressionCutoffButton(button -> ((CompressionCutoffHost) menu).mega$nextCompressionLimit()));
+        mega$compressionCutoff = addToLeftToolbar(new CompressionCutoffButton(
+                (button, backwards) -> ((CompressionCutoffHost) menu).mega$nextCompressionLimit(backwards)));
     }
 
     @Inject(method = "updateBeforeRender", at = @At("RETURN"))
