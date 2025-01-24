@@ -80,6 +80,7 @@ neoForge {
 
         create("data") {
             data()
+            logLevel = org.slf4j.event.Level.INFO
             programArguments.addAll(
                 "--mod", modId,
                 "--all",
