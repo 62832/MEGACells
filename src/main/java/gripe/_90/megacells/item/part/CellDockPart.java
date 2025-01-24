@@ -152,6 +152,8 @@ public class CellDockPart extends AEBasePart
             LOGGER.warn("Couldn't read cell status for {} from {}", this, data);
             clientCellState = CellState.ABSENT;
         }
+
+        spin = data.getByte("spin");
     }
 
     @Override
@@ -160,6 +162,7 @@ public class CellDockPart extends AEBasePart
         data.putString(
                 "cellId", BuiltInRegistries.ITEM.getKey(getCell().getItem()).toString());
         data.putString("cellStatus", getCellStatus(0).name());
+        data.putByte("spin", spin);
     }
 
     private void recalculateDisplay() {
