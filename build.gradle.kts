@@ -6,7 +6,7 @@ plugins {
 val modId = "megacells"
 
 base.archivesName = modId
-version = System.getenv("MEGA_VERSION") ?: "0.0.0"
+version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "0.0.0"
 group = "gripe.90"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)

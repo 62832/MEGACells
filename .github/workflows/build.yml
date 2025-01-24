@@ -41,8 +41,6 @@ jobs:
           git status
           if [ -n "$(git status --porcelain)" ]; then exit 1; fi
       - name: Build release files
-        env:
-          MEGA_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build
       - name: Publish release files
         if: ${{ github.event_name == 'release' }}
