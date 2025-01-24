@@ -12,9 +12,8 @@
     "PatternProviderMenuAccessor"
   ],
   "client": [
-    "client.BuiltInModelHooksAccessor",
-    "client.CellWorkbenchScreenMixin",
-    "client.ModelBakeryMixin"
+    "client.BuiltInModelHooksMixin",
+    "client.CellWorkbenchScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
