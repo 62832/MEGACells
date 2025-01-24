@@ -1,22 +1,53 @@
 name: Build
 on:
-  - pull_request
-  - push
+  pull_request:
+  push:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'temurin'
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
-      - name: Build
+        uses: gradle/actions/setup-gradle@v3
+      - name: Build release files
+        env:
+          MEGA_VERSION: ${{ github.event.release.tag_name }}
         run: ./gradlew build
+      - name: Publish release files
+        if: ${{ github.event_name == 'release' }}
+        uses: Kir-Antipov/mc-publish@995edadc13559a8b28d0b7e6571229f067ec7659
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          curseforge-id: 622112
+          curseforge-token: ${{ secrets.CURSEFORGE_API_KEY }}
+
+          modrinth-id: jjuIRIVr
+          modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
+
+          game-versions: |
+            1.21
+            1.21.1
+          loaders: neoforge
+          dependencies: |
+            ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
+            appmek(optional){curseforge:574300}{modrinth:IiATswDj}
+            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
+            arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
+            appflux(optional){curseforge:965012}
+            appex(optional){curseforge:1157608}{modrinth:yKwUnZCV}
+#           appbot(optional){curseforge:610632}{modrinth:545hUrw9}
