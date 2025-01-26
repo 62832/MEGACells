@@ -14,8 +14,6 @@ import appeng.menu.me.common.MEStorageMenu;
 import gripe._90.megacells.MEGACells;
 
 public class MEGAPortableCell extends PortableCellItem {
-    private final StorageTier tier;
-
     public MEGAPortableCell(
             Properties props, StorageTier tier, AEKeyType keyType, MenuType<MEStorageMenu> menu, int defaultColour) {
         super(
@@ -25,17 +23,11 @@ public class MEGAPortableCell extends PortableCellItem {
                 tier,
                 props.stacksTo(1),
                 defaultColour);
-        this.tier = tier;
     }
 
     @Override
     public double getIdleDrain() {
         return 1.0;
-    }
-
-    @Override
-    public StorageTier getTier() {
-        return tier;
     }
 
     @Override

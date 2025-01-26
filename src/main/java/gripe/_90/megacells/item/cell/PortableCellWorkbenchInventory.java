@@ -37,7 +37,7 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
             .build();
 
     public PortableCellWorkbenchInventory(ItemStack stack) {
-        super(null, 1, 1, new Filter());
+        super(null, 1, 1, Filter.FILTER);
         this.stack = stack;
 
         setHost(this);
@@ -189,6 +189,8 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
     }
 
     private static class Filter implements IAEItemFilter {
+        private static final IAEItemFilter FILTER = new Filter();
+
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
             return stack.getItem() instanceof ICellWorkbenchItem;
