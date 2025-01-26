@@ -473,7 +473,7 @@ public class MEGARecipeProvider extends RecipeProvider {
                 null);
     }
 
-    public static RecipeOutput conditional(RecipeOutput output, Addons addon) {
+    private static RecipeOutput conditional(RecipeOutput output, Addons addon) {
         return output.withConditions(new ModLoadedCondition(addon.getModId()));
     }
 }

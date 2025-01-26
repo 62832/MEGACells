@@ -7,13 +7,13 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 
 import appbot.AppliedBotanics;
 
-import gripe._90.megacells.datagen.MEGARecipeProvider;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
@@ -31,7 +31,7 @@ public class AppBotIntegrationData {
     }
 
     public static void recipes(RecipeOutput output) {
-        MEGARecipeProvider.conditional(output, Addons.APPBOT)
+        output.withConditions(new ModLoadedCondition(Addons.APPBOT.getModId()))
                 .accept(
                         MEGAItems.MEGA_MANA_CELL_HOUSING.id(),
                         new RecipeTerraPlate(

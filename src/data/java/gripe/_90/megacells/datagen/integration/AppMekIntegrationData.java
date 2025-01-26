@@ -10,6 +10,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -20,7 +21,6 @@ import mekanism.common.registries.MekanismItems;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.datagen.MEGARecipeProvider;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.integration.Addons;
 
@@ -42,6 +42,7 @@ public class AppMekIntegrationData extends RecipeProvider {
     }
 
     public static void recipes(RecipeOutput output) {
+        var conditional = output.withConditions(new ModLoadedCondition(Addons.APPMEK.getModId()));
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CELL_COMPONENT)
                 .pattern("aba")
                 .pattern("cdc")
@@ -53,10 +54,7 @@ public class AppMekIntegrationData extends RecipeProvider {
                 .define('e', AEItems.CELL_COMPONENT_256K)
                 .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
                 .unlockedBy("has_waste_barrel", has(MekanismBlocks.RADIOACTIVE_WASTE_BARREL))
-                .save(
-                        MEGARecipeProvider.conditional(output, Addons.APPMEK),
-                        MEGACells.makeId("crafting/radioactive_cell_component"));
-
+                .save(conditional, MEGACells.makeId("crafting/radioactive_cell_component"));
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CHEMICAL_CELL)
                 .pattern("aba")
                 .pattern("bcb")
@@ -67,8 +65,6 @@ public class AppMekIntegrationData extends RecipeProvider {
                 .define('d', MekanismItems.HDPE_SHEET)
                 .define('e', MekanismItems.POLONIUM_PELLET)
                 .unlockedBy("has_radioactive_cell_component", has(MEGAItems.RADIOACTIVE_CELL_COMPONENT))
-                .save(
-                        MEGARecipeProvider.conditional(output, Addons.APPMEK),
-                        MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
+                .save(conditional, MEGACells.makeId("cells/standard/radioactive_chemical_cell"));
     }
 }
