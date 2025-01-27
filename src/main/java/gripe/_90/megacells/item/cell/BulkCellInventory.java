@@ -7,6 +7,7 @@ import java.util.Set;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.config.Actionable;
@@ -26,7 +27,7 @@ import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.DecompressionPattern;
 
 public class BulkCellInventory implements StorageCell {
-    private static final long STACK_LIMIT = (long) Math.pow(2, 42);
+    public static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
     private final ISaveProvider container;
     private final ItemStack stack;
@@ -263,6 +264,10 @@ public class BulkCellInventory implements StorageCell {
 
     public int getCompressionCutoff() {
         return compressionCutoff;
+    }
+
+    public Item getCutoffItem() {
+        return compressionChain.getCutoffItem(compressionCutoff);
     }
 
     @Override

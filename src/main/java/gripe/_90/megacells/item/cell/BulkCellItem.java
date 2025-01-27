@@ -90,10 +90,8 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
 
             if (inv.isCompressionEnabled()
                     && inv.getCompressionCutoff() < inv.getCompressionChain().size()) {
-                lines.add(Tooltips.of(MEGATranslations.Cutoff.text(inv.getCompressionChain()
-                        .get(inv.getCompressionCutoff() - 1)
-                        .item()
-                        .getDescription())));
+                lines.add(Tooltips.of(
+                        MEGATranslations.Cutoff.text(inv.getCutoffItem().getDescription())));
             }
         }
     }

@@ -43,7 +43,7 @@ public abstract class CellWorkbenchScreenMixin extends AEBaseScreen<CellWorkbenc
                         instanceof BulkCellInventory bulkCell
                 && !bulkCell.getCompressionChain().isEmpty()) {
             mega$compressionCutoff.setVisibility(bulkCell.isCompressionEnabled());
-            mega$compressionCutoff.setItem(bulkCell.getCompressionChain().get(bulkCell.getCompressionCutoff() - 1));
+            mega$compressionCutoff.setItem(bulkCell.getCutoffItem());
         } else {
             mega$compressionCutoff.setVisibility(false);
         }

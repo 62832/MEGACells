@@ -14,7 +14,6 @@ import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.IconButton;
 
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.misc.CompressionChain;
 
 public class CompressionCutoffButton extends IconButton {
     private final Handler onPress;
@@ -31,8 +30,8 @@ public class CompressionCutoffButton extends IconButton {
         this.onPress = onPress;
     }
 
-    public void setItem(CompressionChain.Variant variant) {
-        item = variant.item();
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     @Override

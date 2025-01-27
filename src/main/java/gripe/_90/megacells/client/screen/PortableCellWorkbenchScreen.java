@@ -67,7 +67,7 @@ public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellW
                         instanceof BulkCellInventory bulkCell
                 && !bulkCell.getCompressionChain().isEmpty()) {
             compressionCutoff.setVisibility(bulkCell.isCompressionEnabled());
-            compressionCutoff.setItem(bulkCell.getCompressionChain().get(bulkCell.getCompressionCutoff() - 1));
+            compressionCutoff.setItem(bulkCell.getCutoffItem());
         } else {
             compressionCutoff.setVisibility(false);
         }

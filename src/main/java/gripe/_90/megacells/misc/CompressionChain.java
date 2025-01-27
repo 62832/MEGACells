@@ -32,7 +32,7 @@ public class CompressionChain {
 
     public boolean containsVariant(Item item) {
         for (var variant : variants) {
-            if (variant.item().equals(item)) {
+            if (variant.item.equals(item)) {
                 return true;
             }
         }
@@ -40,8 +40,8 @@ public class CompressionChain {
         return false;
     }
 
-    public Variant get(int index) {
-        return variants.get(index);
+    public Item getCutoffItem(int cutoff) {
+        return variants.get(cutoff - 1).item;
     }
 
     public BigInteger unitFactor(AEItemKey item) {
@@ -50,9 +50,9 @@ public class CompressionChain {
         }
 
         for (var variant : variants) {
-            if (variant.item().equals(item.getItem())) {
+            if (variant.item.equals(item.getItem())) {
                 return limited(variants.indexOf(variant) + 1).stream()
-                        .map(v -> BigInteger.valueOf(v.factor()))
+                        .map(v -> BigInteger.valueOf(v.factor))
                         .reduce(BigInteger.ONE, BigInteger::multiply);
             }
         }
