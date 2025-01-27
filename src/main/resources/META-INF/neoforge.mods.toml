@@ -20,6 +20,10 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
 config = "megacells.mixins.json"
 
 [[dependencies]]
+modId = "neoforge"
+versionRange = "[21.1.104,)"
+
+[[dependencies]]
 modId = "ae2"
 versionRange = "[19,)"
 
