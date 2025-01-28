@@ -36,6 +36,10 @@ modId = "appmek"
 type = "optional"
 
 [[dependencies]]
+modId = "appbot"
+type = "optional"
+
+[[dependencies]]
 modId = "arseng"
 type = "optional"
 
