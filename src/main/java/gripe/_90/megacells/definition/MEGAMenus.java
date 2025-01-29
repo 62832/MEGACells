@@ -18,7 +18,6 @@ import gripe._90.megacells.item.cell.PortableCellWorkbenchMenuHost;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.menu.CellDockMenu;
 import gripe._90.megacells.menu.PortableCellWorkbenchMenu;
-import gripe._90.megacells.mixin.PatternProviderMenuAccessor;
 
 public final class MEGAMenus {
     public static final DeferredRegister<MenuType<?>> DR = DeferredRegister.create(Registries.MENU, MEGACells.MODID);
@@ -26,7 +25,7 @@ public final class MEGAMenus {
     public static final Supplier<MenuType<InterfaceMenu>> MEGA_INTERFACE =
             createTyped("mega_interface", InterfaceMenu::new, InterfaceLogicHost.class);
     public static final Supplier<MenuType<PatternProviderMenu>> MEGA_PATTERN_PROVIDER =
-            createTyped("mega_pattern_provider", PatternProviderMenuAccessor::create, PatternProviderLogicHost.class);
+            createTyped("mega_pattern_provider", PatternProviderMenu::new, PatternProviderLogicHost.class);
 
     public static final Supplier<MenuType<CellDockMenu>> CELL_DOCK =
             create("cell_dock", CellDockMenu::new, CellDockPart.class);

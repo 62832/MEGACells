@@ -8,8 +8,7 @@
     "CellWorkbenchMenuMixin",
     "CraftingBlockItemMixin",
     "ItemEntityMixin",
-    "ItemMenuHostMixin",
-    "PatternProviderMenuAccessor"
+    "ItemMenuHostMixin"
   ],
   "client": [
     "client.BuiltInModelHooksMixin",

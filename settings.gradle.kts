@@ -91,9 +91,9 @@ run {
                 version("minecraft", mc)
 
                 version("neoforge", nf)
-                version("parchment", "2024.07.28")
+                version("parchment", "2024.11.17")
 
-                version("ae2", "19.1.3-beta")
+                version("ae2", "19.2.0-beta")
                 library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")
