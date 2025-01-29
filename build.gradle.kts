@@ -33,6 +33,11 @@ dependencies {
 
     compileOnly(libs.appbot)
     compileOnly(libs.botania)
+
+    testImplementation(testlibs.junit.jupiter)
+    testImplementation(testlibs.assertj)
+    testImplementation(testlibs.neoforge.test)
+    testRuntimeOnly(testlibs.junit.platform)
 }
 
 sourceSets {
@@ -92,6 +97,11 @@ neoForge {
             sourceSet = sourceSets.getByName("data")
         }
     }
+
+    unitTest {
+        enable()
+        testedMod = mods.getByName(modId)
+    }
 }
 
 tasks {
@@ -115,6 +125,10 @@ tasks {
             expand(props)
         }
     }
+
+    test {
+        useJUnitPlatform()
+    }
 }
 
 spotless {
@@ -133,6 +147,7 @@ spotless {
         palantirJavaFormat()
         importOrderFile(file("mega.importorder"))
         toggleOffOn()
+        trimTrailingWhitespace()
 
         // courtesy of diffplug/spotless#240
         // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606

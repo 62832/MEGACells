@@ -83,12 +83,14 @@ run {
         }
 
         versionCatalogs {
+            val mc = "1.21.1"
+            val maj = mc.substringAfter('.')
+            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.104"
+
             create("libs") {
-                val mc = "1.21.1"
                 version("minecraft", mc)
 
-                val nf = mc.substringAfter('.')
-                version("neoforge", "${nf + (if (!nf.contains('.')) ".0" else "")}.104")
+                version("neoforge", nf)
                 version("parchment", "2024.07.28")
 
                 version("ae2", "19.1.3-beta")
@@ -118,6 +120,13 @@ run {
 
                 library("appex", "curse.maven", "applied-experienced-1157608").version("6080443")
                 library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
+            }
+
+            create("testlibs") {
+                library("neoforge-test", "net.neoforged", "testframework").version(nf)
+                library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").version("5.7.1")
+                library("junit-platform", "org.junit.platform", "junit-platform-launcher").version("1.11.4")
+                library("assertj", "org.assertj", "assertj-core").version("3.26.0")
             }
         }
     }
