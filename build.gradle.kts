@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.ae2)
 
     compileOnly(libs.ae2wtlibapi)
-    runtimeOnly(libs.ae2wtlib)
+    runtimeOnly(libs.ae2wtlib) { exclude("appeng") }
 
     implementation(libs.appmek)
     compileOnly(libs.mekanism)
@@ -23,7 +23,7 @@ dependencies {
     runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
 
     implementation(libs.arseng)
-    implementation(libs.arsnouveau)
+    implementation(libs.arsnouveau) { exclude("mezz.jei") }
 
     implementation(libs.appflux)
     runtimeOnly(libs.glodium)

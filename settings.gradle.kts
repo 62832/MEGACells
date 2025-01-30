@@ -24,10 +24,8 @@ run {
                 name = "ModMaven (K4U-NL)"
                 url = uri("https://modmaven.dev/")
                 content {
-                    includeGroup("appeng")
                     includeGroup("mekanism")
                     includeGroup("de.mari_023")
-                    includeGroup("mezz.jei")
                 }
             }
 
@@ -85,7 +83,7 @@ run {
         versionCatalogs {
             val mc = "1.21.1"
             val maj = mc.substringAfter('.')
-            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.104"
+            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.113"
 
             create("libs") {
                 version("minecraft", mc)
@@ -93,8 +91,8 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.0-beta")
-                library("ae2", "appeng", "appliedenergistics2").versionRef("ae2")
+                version("ae2", "19.2.1-beta")
+                library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
 
                 version("ae2wtlib", "19.1.3-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
