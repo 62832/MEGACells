@@ -75,17 +75,18 @@ public final class MEGACells {
 
             Stream.of(MEGAItems.getItemCells(), MEGAItems.getItemPortables())
                     .flatMap(Collection::stream)
-                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_item_cell")));
+                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/" + c.id().getPath())));
             Stream.of(MEGAItems.getFluidCells(), MEGAItems.getFluidPortables())
                     .flatMap(Collection::stream)
-                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_fluid_cell")));
+                    .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/" + c.id().getPath())));
 
             StorageCellModels.registerModel(MEGAItems.BULK_ITEM_CELL, makeId("block/drive/cells/bulk_item_cell"));
 
             if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
                 Stream.of(AppBotItems.getCells(), AppBotItems.getPortables())
                         .flatMap(Collection::stream)
-                        .forEach(c -> StorageCellModels.registerModel(c, makeId("block/drive/cells/mega_mana_cell")));
+                        .forEach(c ->
+                                StorageCellModels.registerModel(c, makeId("block/drive/cells/" + c.id().getPath())));
             }
 
             BlockEntityRenderers.register(MEGABlockEntities.MEGA_CRAFTING_MONITOR, CraftingMonitorRenderer::new);

@@ -26,7 +26,7 @@ public final class AppMekIntegration {
             Stream.of(AppMekItems.getCells(), AppMekItems.getPortables())
                     .flatMap(Collection::stream)
                     .forEach(c -> StorageCellModels.registerModel(
-                            c, MEGACells.makeId("block/drive/cells/mega_chemical_cell")));
+                            c, MEGACells.makeId("block/drive/cells/" + c.id().getPath())));
 
             StorageCellModels.registerModel(
                     AppMekItems.RADIOACTIVE_CHEMICAL_CELL.asItem(),

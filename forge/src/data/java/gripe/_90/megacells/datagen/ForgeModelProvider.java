@@ -31,23 +31,33 @@ class ForgeModelProvider extends ItemModelProvider {
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPMEK)) {
             basicItem(AppMekItems.MEGA_CHEMICAL_CELL_HOUSING.asItem());
 
-            AppMekItems.getCells().forEach(c -> cell(c, "standard", STORAGE_CELL_LED));
-            AppMekItems.getPortables().forEach(c -> cell(c, "portable", PORTABLE_CELL_LED));
+            for (var cell : AppMekItems.getCells()) {
+                cell(cell, "standard", STORAGE_CELL_LED);
+                driveCell(cell, "mega_chemical_cell");
+            }
+
+            for (var portable : AppMekItems.getPortables()) {
+                cell(portable, "portable", PORTABLE_CELL_LED);
+                driveCell(portable, "mega_chemical_cell");
+            }
 
             basicItem(AppMekItems.RADIOACTIVE_CELL_COMPONENT.asItem());
             cell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL, "standard", STORAGE_CELL_LED);
-
-            driveCell("mega_chemical_cell");
-            driveCell("radioactive_chemical_cell");
+            driveCell(AppMekItems.RADIOACTIVE_CHEMICAL_CELL, "radioactive_chemical_cell");
         }
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.ARSENG)) {
             basicItem(ArsEngItems.MEGA_SOURCE_CELL_HOUSING.asItem());
 
-            ArsEngItems.getCells().forEach(c -> cell(c, "standard", STORAGE_CELL_LED));
-            ArsEngItems.getPortables().forEach(c -> cell(c, "portable", PORTABLE_CELL_LED));
+            for (var cell : ArsEngItems.getCells()) {
+                cell(cell, "standard", STORAGE_CELL_LED);
+                driveCell(cell, "mega_source_cell");
+            }
 
-            driveCell("mega_source_cell");
+            for (var portable : ArsEngItems.getPortables()) {
+                cell(portable, "portable", PORTABLE_CELL_LED);
+                driveCell(portable, "mega_source_cell");
+            }
         }
     }
 
@@ -57,8 +67,8 @@ class ForgeModelProvider extends ItemModelProvider {
                 .texture("layer1", led);
     }
 
-    private void driveCell(String texture) {
-        var path = "block/drive/cells/" + texture;
-        withExistingParent(path, DRIVE_CELL).texture("cell", path);
+    private void driveCell(ItemDefinition<?> cell, String texture) {
+        var prefix = "block/drive/cells/";
+        withExistingParent(prefix + cell.id().getPath(), DRIVE_CELL).texture("cell", prefix + texture);
     }
 }

@@ -17,8 +17,8 @@ public class ArsEngIntegration {
         if (FMLEnvironment.dist.isClient()) {
             Stream.of(ArsEngItems.getCells(), ArsEngItems.getPortables())
                     .flatMap(Collection::stream)
-                    .forEach(c ->
-                            StorageCellModels.registerModel(c, MEGACells.makeId("block/drive/cells/mega_source_cell")));
+                    .forEach(c -> StorageCellModels.registerModel(
+                            c, MEGACells.makeId("block/drive/cells/" + c.id().getPath())));
         }
     }
 

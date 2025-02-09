@@ -165,27 +165,41 @@ public class CommonModelProvider implements DataProvider {
                 TextureMapping.layer0(AEItems.CRAFTING_PATTERN.asItem()),
                 output);
 
-        MEGAItems.getItemCells().forEach(cell -> cellModel(cell, output));
-        MEGAItems.getFluidCells().forEach(cell -> cellModel(cell, output));
+        for (var cell : MEGAItems.getItemCells()) {
+            cellModel(cell, output);
+            driveCell(cell, "mega_item_cell", output);
+        }
+
+        for (var cell : MEGAItems.getFluidCells()) {
+            cellModel(cell, output);
+            driveCell(cell, "mega_fluid_cell", output);
+        }
+
         cellModel(MEGAItems.BULK_ITEM_CELL, output);
+        driveCell(MEGAItems.BULK_ITEM_CELL, "bulk_item_cell", output);
 
         for (var portable : MEGAItems.getItemPortables()) {
             portableModel(portable, "item", AppEng.makeId("item/portable_cell_item_housing"), output);
+            driveCell(portable, "mega_item_cell", output);
         }
 
         for (var portable : MEGAItems.getFluidPortables()) {
             portableModel(portable, "fluid", AppEng.makeId("item/portable_cell_fluid_housing"), output);
+            driveCell(portable, "mega_fluid_cell", output);
         }
-
-        driveCell("mega_item_cell", output);
-        driveCell("mega_fluid_cell", output);
-        driveCell("bulk_item_cell", output);
 
         if (MEGACells.PLATFORM.isAddonLoaded(Addons.APPBOT)) {
             flatItem(AppBotItems.MEGA_MANA_CELL_HOUSING, output);
-            AppBotItems.getCells().forEach(cell -> cellModel(cell, output));
-            AppBotItems.getPortables().forEach(portable -> portableModel(portable, output));
-            driveCell("mega_mana_cell", output);
+
+            for (var cell : AppBotItems.getCells()) {
+                cellModel(cell, output);
+                driveCell(cell, "mega_mana_cell", output);
+            }
+
+            for (var portable : AppBotItems.getPortables()) {
+                portableModel(portable, output);
+                driveCell(portable, "mega_mana_cell", output);
+            }
         }
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE, output);
@@ -234,9 +248,13 @@ public class CommonModelProvider implements DataProvider {
                 output);
     }
 
-    private void driveCell(String texture, BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
-        var path = MEGACells.makeId("block/drive/cells/" + texture);
-        DRIVE_CELL.create(path, new TextureMapping().put(CELL, path), output);
+    private void driveCell(
+            ItemDefinition<?> cell, String texture, BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
+        var prefix = "block/drive/cells/";
+        DRIVE_CELL.create(
+                MEGACells.makeId(prefix + cell.id().getPath()),
+                new TextureMapping().put(CELL, MEGACells.makeId(prefix + texture)),
+                output);
     }
 
     private void interfaceOrProviderPart(
