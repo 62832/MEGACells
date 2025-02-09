@@ -18,8 +18,6 @@ run {
         rulesMode = RulesMode.PREFER_SETTINGS
 
         repositories {
-            mavenCentral()
-
             maven {
                 name = "ModMaven (K4U-NL)"
                 url = uri("https://modmaven.dev/")

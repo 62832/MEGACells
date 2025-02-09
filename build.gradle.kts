@@ -12,7 +12,7 @@ group = "gripe.90"
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 dependencies {
-    implementation(libs.ae2)
+    api(libs.ae2)
 
     compileOnly(libs.ae2wtlibapi)
     runtimeOnly(libs.ae2wtlib) { exclude("appeng") }
