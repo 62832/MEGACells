@@ -1,4 +1,6 @@
 plugins {
+    eclipse
+    idea
     id("net.neoforged.moddev")
     id("com.diffplug.spotless")
 }
@@ -9,7 +11,11 @@ base.archivesName = modId
 version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "0.0.0"
 group = "gripe.90"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+    withJavadocJar()
+}
 
 dependencies {
     api(libs.ae2)
@@ -127,6 +133,13 @@ tasks {
 
     test {
         useJUnitPlatform()
+    }
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
     }
 }
 
