@@ -3,6 +3,7 @@ package gripe._90.megacells.item.part;
 import java.util.List;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMaps;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 import net.minecraft.core.HolderLookup;
@@ -118,7 +119,7 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
         var storage = node.getGrid().getStorageService().getInventory();
 
-        for (var output : new Object2LongOpenHashMap<>(outputs).object2LongEntrySet()) {
+        for (var output : Object2LongMaps.fastIterable(outputs)) {
             var what = output.getKey();
             var amount = output.getLongValue();
             var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
