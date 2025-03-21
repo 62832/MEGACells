@@ -83,9 +83,11 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.SKY_OSMIUM_BLOCK.block(), cubeAll(MEGABlocks.SKY_OSMIUM_BLOCK.block()));
         simpleBlockWithItem(MEGABlocks.MEGA_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_INTERFACE.block()));
+        simpleBlockWithItem(MEGABlocks.MEGA_EMC_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_EMC_INTERFACE.block()));
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);
         interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER);
+        interfaceOrProviderPart(MEGAItems.MEGA_EMC_INTERFACE);
 
         // CRAFTING UNITS
         for (var type : MEGACraftingUnitType.values()) {

@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import appeng.block.AEBaseBlock;
 import appeng.block.AEBaseBlockItem;
 import appeng.block.crafting.CraftingBlockItem;
 import appeng.block.crafting.CraftingMonitorBlock;
@@ -35,6 +36,7 @@ import gripe._90.megacells.block.MEGAPatternProviderBlock;
 import gripe._90.megacells.block.MEGAPatternProviderBlockItem;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.DummyIntegrationBlock;
+import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceBlock;
 
 public final class MEGABlocks {
     public static final DeferredRegister.Blocks DR = DeferredRegister.createBlocks(MEGACells.MODID);
@@ -135,6 +137,14 @@ public final class MEGABlocks {
             "mega_pattern_provider",
             MEGAPatternProviderBlock::new,
             MEGAPatternProviderBlockItem::new);
+
+    public static final BlockDefinition<?> MEGA_EMC_INTERFACE = integrationBlock(
+            "MEGA Transmutation Interface",
+            "mega_emc_interface",
+            () -> MEGAEMCInterfaceBlock::new,
+            AEBaseBlock.metalProps(),
+            AEBaseBlockItem::new,
+            Addons.APPLIEDE);
 
     private static <T extends Block> BlockDefinition<T> block(
             String englishName,

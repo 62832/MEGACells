@@ -20,8 +20,12 @@ import appeng.core.definitions.BlockDefinition;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.entity.MEGAInterfaceBlockEntity;
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
+import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.appliede.AppliedEIntegration;
+import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceBlock;
+import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceBlockEntity;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public final class MEGABlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> DR =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MEGACells.MODID);
@@ -58,7 +62,19 @@ public final class MEGABlockEntities {
             MEGAPatternProviderBlockEntity::new,
             MEGABlocks.MEGA_PATTERN_PROVIDER);
 
-    @SuppressWarnings({"DataFlowIssue", "unchecked"})
+    static {
+        if (Addons.APPLIEDE.isLoaded()) {
+            if (AppliedEIntegration.MEGA_EMC_INTERFACE_BE == null) {
+                AppliedEIntegration.MEGA_EMC_INTERFACE_BE = create(
+                        "mega_emc_interface",
+                        MEGAEMCInterfaceBlockEntity.class,
+                        MEGAEMCInterfaceBlockEntity::new,
+                        (BlockDefinition<MEGAEMCInterfaceBlock>) MEGABlocks.MEGA_EMC_INTERFACE);
+            }
+        }
+    }
+
+    @SuppressWarnings("DataFlowIssue")
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> Supplier<BlockEntityType<T>> create(
             String id,

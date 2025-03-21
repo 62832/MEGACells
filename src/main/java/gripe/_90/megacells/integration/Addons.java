@@ -14,18 +14,19 @@ import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appbot.AppBotIntegration;
 import gripe._90.megacells.integration.appex.AppExIntegration;
 import gripe._90.megacells.integration.appflux.AppFluxIntegration;
+import gripe._90.megacells.integration.appliede.AppliedEIntegration;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
 import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 
 @SuppressWarnings("Convert2MethodRef")
 public enum Addons {
-    AE2WTLIB_API("AE2WTLib", () -> new AE2WTIntegration()),
+    AE2WTLIB("AE2WTLib", () -> new AE2WTIntegration()),
     APPMEK("Applied Mekanistics", () -> new AppMekIntegration()),
     APPBOT("Applied Botanics", () -> new AppBotIntegration(), false),
     ARSENG("Ars Énergistique", () -> new ArsEngIntegration()),
     APPEX("Applied Experienced", () -> new AppExIntegration()),
     APPFLUX("Applied Flux", () -> new AppFluxIntegration()),
-// APPLIEDE("AppliedE"),
+    APPLIEDE("AppliedE", () -> new AppliedEIntegration()),
 // APPELEM("Applied Elemental"),
 ;
 

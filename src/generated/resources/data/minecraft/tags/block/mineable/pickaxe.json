@@ -13,6 +13,7 @@
     "megacells:256m_crafting_storage",
     "megacells:mega_crafting_monitor",
     "megacells:mega_interface",
-    "megacells:mega_pattern_provider"
+    "megacells:mega_pattern_provider",
+    "megacells:mega_emc_interface"
   ]
 }

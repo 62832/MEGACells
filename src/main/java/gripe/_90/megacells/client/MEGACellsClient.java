@@ -44,6 +44,8 @@ import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.appliede.AppliedEIntegration;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchTooltipComponent;
 
 @Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
@@ -86,6 +88,14 @@ public class MEGACellsClient {
                 MEGAMenus.PORTABLE_CELL_WORKBENCH.get(),
                 PortableCellWorkbenchScreen::new,
                 "/screens/megacells/portable_cell_workbench.json");
+
+        if (Addons.APPLIEDE.isLoaded()) {
+            InitScreens.register(
+                    event,
+                    AppliedEIntegration.MEGA_EMC_INTERFACE_MENU.get(),
+                    gripe._90.appliede.client.screen.EMCInterfaceScreen<gripe._90.appliede.menu.EMCInterfaceMenu>::new,
+                    "/screens/megacells/mega_emc_interface.json");
+        }
     }
 
     private static void initBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {

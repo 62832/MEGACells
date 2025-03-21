@@ -21,7 +21,7 @@ dependencies {
     api(libs.ae2)
 
     compileOnly(libs.ae2wtlibapi)
-    runtimeOnly(libs.ae2wtlib) { exclude("appeng") }
+    runtimeOnly(libs.ae2wtlib)
 
     implementation(libs.appmek)
     compileOnly(libs.mekanism)
@@ -36,6 +36,9 @@ dependencies {
 
     implementation(libs.appex)
     runtimeOnly(libs.explib)
+
+    implementation(libs.appliede)
+    runtimeOnly(libs.projecte)
 
     compileOnly(libs.appbot)
     compileOnly(libs.botania)

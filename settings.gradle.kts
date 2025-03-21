@@ -81,7 +81,7 @@ run {
         versionCatalogs {
             val mc = "1.21.1"
             val maj = mc.substringAfter('.')
-            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.113"
+            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.119"
 
             create("libs") {
                 version("minecraft", mc)
@@ -89,16 +89,16 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.1-beta")
+                version("ae2", "19.2.5-beta")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
 
-                version("ae2wtlib", "19.1.3-beta")
+                version("ae2wtlib", "19.2.2")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
 
                 version("appmek", "1.6.2")
                 library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
-                library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.4.60")
+                library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.9.72")
 
                 library("appbot", "curse.maven", "applied-botanics-addon-610632").version("4904185")
                 val botaniaVersion = "446"
@@ -114,8 +114,11 @@ run {
                 library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
                 library("glodium", "curse.maven", "glodium-957920").version("5821676")
 
-                library("appex", "curse.maven", "applied-experienced-1157608").version("6080443")
+                library("appex", "curse.maven", "applied-experienced-1157608").version("6112629")
                 library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
+
+                library("appliede", "curse.maven", "appliede-1009940").version("6328848")
+                library("projecte", "curse.maven", "projecte-226410").version("6301953")
             }
 
             create("testlibs") {

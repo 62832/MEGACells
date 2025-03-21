@@ -63,7 +63,7 @@ public class AppMekIntegration implements IntegrationHelper {
                 AMItems.PORTABLE_CHEMICAL_CELL_16K,
                 AMItems.PORTABLE_CHEMICAL_CELL_64K,
                 AMItems.PORTABLE_CHEMICAL_CELL_256K)) {
-            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portable.get(), 2, portableCellGroup);
+            Upgrades.add(MEGAItems.GREATER_ENERGY_CARD, portable, 2, portableCellGroup);
         }
     }
 }
