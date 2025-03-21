@@ -46,3 +46,7 @@ type = "optional"
 [[dependencies]]
 modId = "appex"
 type = "optional"
+
+[[dependencies]]
+modId = "appliede"
+type = "optional"

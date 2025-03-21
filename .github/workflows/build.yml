@@ -54,9 +54,7 @@ jobs:
           modrinth-id: jjuIRIVr
           modrinth-token: ${{ secrets.MODRINTH_API_KEY }}
 
-          game-versions: |
-            1.21
-            1.21.1
+          game-versions: 1.21.1
           loaders: neoforge
           dependencies: |
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
@@ -66,3 +64,4 @@ jobs:
             appflux(optional){curseforge:965012}
             appex(optional){curseforge:1157608}{modrinth:yKwUnZCV}
             appbot(optional){curseforge:610632}{modrinth:545hUrw9}
+            appliede(optional){curseforge:1009940}{modrinth:SyKS54UY}
