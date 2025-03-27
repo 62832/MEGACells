@@ -4,13 +4,14 @@ import java.util.Objects;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +26,6 @@ import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.ICraftingUnitType;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.BlockDefinition;
-import appeng.recipes.AERecipeTypes;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -71,26 +71,19 @@ public abstract class AbstractCraftingUnitBlockMixin extends AEBaseBlock {
     }
 
     // spotless:off
-    @Redirect(
+    @WrapOperation(
             method = "upgrade",
             at = @At(
                     value = "INVOKE",
                     target = "Lappeng/recipes/game/CraftingUnitTransformRecipe;getUpgradedBlock(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/level/block/Block;"))
     // spotless:on
-    private Block isMegaUpgrade(Level level, ItemStack heldItem) {
-        for (var holder : level.getRecipeManager().getAllRecipesFor(AERecipeTypes.CRAFTING_UNIT_TRANSFORM)) {
-            if (heldItem.is(holder.value().getUpgradeItem())) {
-                var upgraded = holder.value().getUpgradedBlock();
-
-                if (Objects.requireNonNull(getRegistryName())
+    private Block isMegaUpgrade(Level level, ItemStack heldItem, Operation<Block> original) {
+        var upgraded = original.call(level, heldItem);
+        return Objects.requireNonNull(getRegistryName())
                         .getNamespace()
-                        .equals(BuiltInRegistries.BLOCK.getKey(upgraded).getNamespace())) {
-                    return upgraded;
-                }
-            }
-        }
-
-        return null;
+                        .equals(BuiltInRegistries.BLOCK.getKey(upgraded).getNamespace())
+                ? upgraded
+                : null;
     }
 
     // spotless:off
@@ -105,7 +98,7 @@ public abstract class AbstractCraftingUnitBlockMixin extends AEBaseBlock {
             @Local(argsOnly = true) BlockState state,
             @Local(argsOnly = true) Level level,
             @Local(argsOnly = true) BlockPos pos,
-            @Local(name = "newState") BlockState newState) {
+            @Local(ordinal = 1) BlockState newState) {
         return state.getBlock() == MEGABlocks.MEGA_CRAFTING_UNIT.block()
                 ? transform(level, pos, newState) ? InteractionResult.SUCCESS : InteractionResult.FAIL
                 : original;
