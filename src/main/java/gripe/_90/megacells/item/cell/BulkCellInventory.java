@@ -1,10 +1,9 @@
 package gripe._90.megacells.item.cell;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
-
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import java.util.List;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -40,7 +39,7 @@ public class BulkCellInventory implements StorageCell {
     private BigInteger unitCount;
     private final BigInteger unitFactor;
     private final int compressionCutoff;
-    private Set<IPatternDetails> decompressionPatterns;
+    private List<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
 
@@ -59,7 +58,7 @@ public class BulkCellInventory implements StorageCell {
         unitFactor = compressionChain.unitFactor(storedItem != null ? storedItem : filterItem);
 
         // Check newly-calculated factor against what's already recorded in order to adjust for a compression chain that
-        // has changed from the left of the stored item
+        // has changed from the left of the item filtered to or stored
         var recordedFactor = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
 
         if (!unitFactor.equals(recordedFactor)) {
@@ -87,7 +86,7 @@ public class BulkCellInventory implements StorageCell {
             return CellState.EMPTY;
         }
 
-        if (!storedItem.equals(filterItem)) {
+        if (isFilterMismatched()) {
             return CellState.FULL;
         }
 
@@ -106,6 +105,10 @@ public class BulkCellInventory implements StorageCell {
         return filterItem;
     }
 
+    private boolean isFilterMismatched() {
+        return storedItem != null && !storedItem.equals(filterItem);
+    }
+
     public boolean isCompressionEnabled() {
         return compressionEnabled;
     }
@@ -114,14 +117,14 @@ public class BulkCellInventory implements StorageCell {
         return compressionChain;
     }
 
-    public Set<IPatternDetails> getDecompressionPatterns() {
-        if (!compressionEnabled || compressionChain.isEmpty()) {
-            return Set.of();
+    public List<IPatternDetails> getDecompressionPatterns() {
+        if (filterItem == null || !compressionEnabled || compressionChain.isEmpty() || isFilterMismatched()) {
+            return List.of();
         }
 
         if (decompressionPatterns == null) {
             var decompressionChain = compressionChain.limited(compressionCutoff).reversed();
-            decompressionPatterns = new ObjectLinkedOpenHashSet<>();
+            decompressionPatterns = new ArrayList<>();
 
             for (var variant : decompressionChain) {
                 if (variant == decompressionChain.getLast()) {
@@ -144,7 +147,7 @@ public class BulkCellInventory implements StorageCell {
             }
         }
 
-        return Collections.unmodifiableSet(decompressionPatterns);
+        return Collections.unmodifiableList(decompressionPatterns);
     }
 
     @Override
@@ -158,15 +161,11 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
+        if (filterItem == null || isFilterMismatched()) {
             return 0;
         }
 
-        if (!compressionEnabled && !what.equals(filterItem)) {
-            return 0;
-        }
-
-        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item.getItem())) {
+        if (!item.equals(filterItem) && (!compressionEnabled || !compressionChain.containsVariant(item.getItem()))) {
             return 0;
         }
 
@@ -187,20 +186,22 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
-        if (unitCount.signum() < 1 || !(what instanceof AEItemKey item)) {
+        if (storedItem == null || unitCount.signum() < 1 || !(what instanceof AEItemKey item)) {
             return 0;
         }
 
-        if (filterItem == null || (storedItem != null && !filterItem.equals(storedItem))) {
+        var inRecovery = isFilterMismatched();
+
+        if (!compressionChain.isEmpty() && !compressionChain.containsVariant(item.getItem())) {
             return 0;
         }
 
-        if (!compressionEnabled && (unitCount.divide(unitFactor).signum() < 1 || !what.equals(storedItem))) {
+        if (!compressionEnabled && !item.equals(storedItem) && !inRecovery) {
             return 0;
         }
 
-        if (compressionEnabled && !what.equals(filterItem) && !compressionChain.containsVariant(item.getItem())) {
-            return 0;
+        if (inRecovery) {
+            amount = Math.min(amount, getAvailableStacks().get(item));
         }
 
         var factor = compressionChain.unitFactor(item);
@@ -272,26 +273,24 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (storedItem != null) {
-            if (compressionEnabled && storedItem.equals(filterItem) && !compressionChain.isEmpty()) {
-                var count = unitCount;
-                var chain = compressionChain.lastMultiplierSwapped(compressionCutoff);
+        if (!compressionChain.isEmpty() && (compressionEnabled || isFilterMismatched())) {
+            var count = unitCount;
+            var chain = compressionChain.lastMultiplierSwapped(compressionCutoff);
 
-                for (var variant : chain) {
-                    var compressionFactor = BigInteger.valueOf(variant.factor());
-                    var key = AEItemKey.of(variant.item());
+            for (var variant : chain) {
+                var compressionFactor = BigInteger.valueOf(variant.factor());
+                var key = AEItemKey.of(variant.item());
 
-                    if (count.divide(compressionFactor).signum() == 1 && variant != chain.getLast()) {
-                        out.add(key, count.remainder(compressionFactor).longValue());
-                        count = count.divide(compressionFactor);
-                    } else {
-                        out.add(key, clampedLong(count, STACK_LIMIT));
-                        break;
-                    }
+                if (count.divide(compressionFactor).signum() == 1 && variant != chain.getLast()) {
+                    out.add(key, count.remainder(compressionFactor).longValue());
+                    count = count.divide(compressionFactor);
+                } else {
+                    out.add(key, clampedLong(count, STACK_LIMIT));
+                    break;
                 }
-            } else {
-                out.add(storedItem, clampedLong(unitCount.divide(unitFactor), STACK_LIMIT));
             }
+        } else if (storedItem != null) {
+            out.add(storedItem, clampedLong(unitCount.divide(unitFactor), STACK_LIMIT));
         }
     }
 

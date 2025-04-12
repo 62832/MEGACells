@@ -13,6 +13,7 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
+import appeng.api.storage.cells.CellState;
 import appeng.me.helpers.BaseActionSource;
 
 import gripe._90.megacells.definition.MEGAComponents;
@@ -23,7 +24,7 @@ public class BulkCellInventoryTest {
     private static final IActionSource SRC = new BaseActionSource();
 
     @Test
-    void testNoopWhenUnfiltered() {
+    void testNoOpBeforeFiltering() {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 
@@ -33,13 +34,8 @@ public class BulkCellInventoryTest {
 
         item.getConfigInventory(stack).addFilter(content);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.insert(content, 1, Actionable.MODULATE, SRC)).isEqualTo(1);
-        assertThat(cell.extract(content, 1, Actionable.MODULATE, SRC)).isEqualTo(1);
-        assertThat(cell.insert(content, 1, Actionable.MODULATE, SRC)).isEqualTo(1);
-
-        item.getConfigInventory(stack).clear();
-        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.extract(content, 1, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.insert(content, 1, Actionable.MODULATE, SRC)).isOne();
+        assertThat(cell.extract(content, 1, Actionable.MODULATE, SRC)).isOne();
     }
 
     @Test
@@ -63,16 +59,54 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testFilterLimit() {
+    void testFilterMismatchOperations() {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 
         var allowed = AEItemKey.of(Items.STONE);
         var rejected = AEItemKey.of(Items.COBBLESTONE);
-        item.getConfigInventory(stack).addFilter(allowed).addFilter(rejected);
+        item.getConfigInventory(stack).addFilter(allowed);
 
         var cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.insert(allowed, 1, Actionable.MODULATE, SRC)).isEqualTo(1);
+        assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
+        cell.insert(allowed, 1, Actionable.MODULATE, SRC);
+        assertThat(cell.getStatus()).isEqualTo(CellState.NOT_EMPTY);
+
+        // no-op on insert for items not matching filter
         assertThat(cell.insert(rejected, 1, Actionable.MODULATE, SRC)).isZero();
+
+        // no-op on any insertion when the cell's filter is cleared, but it still contains an item
+        item.getConfigInventory(stack).clear();
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isEqualTo(CellState.FULL);
+        assertThat(cell.insert(allowed, 1, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.insert(rejected, 1, Actionable.MODULATE, SRC)).isZero();
+
+        // allow item recovery when filter is accidentally cleared
+        assertThat(cell.extract(allowed, 1, Actionable.MODULATE, SRC)).isOne();
+        assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
+
+        // reset filter and contents
+        item.getConfigInventory(stack).addFilter(allowed);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        cell.insert(allowed, 1, Actionable.MODULATE, SRC);
+
+        // no-op on any insertion when filter item does not match already-stored item
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(rejected);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isEqualTo(CellState.FULL);
+        assertThat(cell.insert(allowed, 1, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.insert(rejected, 1, Actionable.MODULATE, SRC)).isZero();
+
+        // still allow item recovery, but make sure the right item is being recovered
+        assertThat(cell.extract(rejected, 1, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.extract(allowed, 1, Actionable.MODULATE, SRC)).isOne();
+
+        // check that replaced filter works instead now that the cell has been emptied
+        assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
+        assertThat(cell.insert(rejected, 1, Actionable.MODULATE, SRC)).isOne();
+        assertThat(cell.getStatus()).isEqualTo(CellState.NOT_EMPTY);
+        assertThat(cell.insert(allowed, 1, Actionable.MODULATE, SRC)).isZero();
     }
 }
