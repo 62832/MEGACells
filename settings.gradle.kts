@@ -83,7 +83,7 @@ run {
             val maj = mc.substringAfter('.')
             val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.119"
 
-            create("libs") {
+            create("core") {
                 version("minecraft", mc)
 
                 version("neoforge", nf)
@@ -91,7 +91,9 @@ run {
 
                 version("ae2", "19.2.5-beta")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
+            }
 
+            create("integration") {
                 version("ae2wtlib", "19.2.2")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")

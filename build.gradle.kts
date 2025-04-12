@@ -16,31 +16,57 @@ java {
     withSourcesJar()
 }
 
+sourceSets {
+    main {
+        resources.srcDir(file("src/generated/resources"))
+    }
+
+    val addons = create("addons") {
+        val main = main.get()
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath + main.output
+    }
+
+    create("data") {
+        compileClasspath += addons.compileClasspath + addons.output
+        runtimeClasspath += addons.runtimeClasspath + addons.output
+    }
+}
+
 dependencies {
-    api(libs.ae2)
+    api(core.ae2)
 
-    compileOnly(libs.ae2wtlibapi)
-    runtimeOnly(libs.ae2wtlib)
+    compileOnly(integration.ae2wtlibapi)
+    "addonsRuntimeOnly"(integration.ae2wtlib)
 
-    implementation(libs.appmek)
-    compileOnly(libs.mekanism)
-    compileOnly(variantOf(libs.mekanism) { classifier("generators") })
-    runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
+    compileOnly(integration.appmek)
+    compileOnly(integration.mekanism)
+    "addonsRuntimeOnly"(integration.appmek)
+    "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
+    "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
 
-    implementation(libs.arseng)
-    implementation(libs.arsnouveau) { exclude("mezz.jei") }
+    compileOnly(integration.arseng)
+    "addonsRuntimeOnly"(integration.arseng)
 
-    implementation(libs.appflux)
-    runtimeOnly(libs.glodium)
+    @Suppress("UnstableApiUsage")
+    "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
+    @Suppress("UnstableApiUsage")
+    "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
 
-    implementation(libs.appex)
-    runtimeOnly(libs.explib)
+    compileOnly(integration.appflux)
+    "addonsRuntimeOnly"(integration.appflux)
+    "addonsRuntimeOnly"(integration.glodium)
 
-    implementation(libs.appliede)
-    runtimeOnly(libs.projecte)
+    compileOnly(integration.appex)
+    "addonsRuntimeOnly"(integration.appex)
+    "addonsRuntimeOnly"(integration.explib)
 
-    compileOnly(libs.appbot)
-    compileOnly(libs.botania)
+    compileOnly(integration.appliede)
+    "addonsRuntimeOnly"(integration.appliede)
+    "addonsRuntimeOnly"(integration.projecte)
+
+    compileOnly(integration.appbot)
+    "addonsCompileOnly"(integration.botania)
 
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
@@ -48,24 +74,12 @@ dependencies {
     testRuntimeOnly(testlibs.junit.platform)
 }
 
-sourceSets {
-    main {
-        resources.srcDir(file("src/generated/resources"))
-    }
-
-    create("data") {
-        val main = main.get()
-        compileClasspath += main.compileClasspath + main.output
-        runtimeClasspath += main.runtimeClasspath + main.output
-    }
-}
-
 neoForge {
-    version = libs.versions.neoforge.get()
+    version = core.versions.neoforge.get()
 
     parchment {
-        minecraftVersion = libs.versions.minecraft.get()
-        mappingsVersion = libs.versions.parchment.get()
+        minecraftVersion = core.versions.minecraft.get()
+        mappingsVersion = core.versions.parchment.get()
     }
     
     mods {
@@ -78,11 +92,12 @@ neoForge {
     runs {
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
-            gameDirectory = file("run")
+            sourceSet = sourceSets.getByName("addons")
         }
 
         create("client") {
             client()
+            gameDirectory = file("run/client")
         }
 
         create("server") {
@@ -92,6 +107,7 @@ neoForge {
 
         create("data") {
             data()
+            gameDirectory = file("run/data")
             logLevel = org.slf4j.event.Level.INFO
             programArguments.addAll(
                 "--mod", modId,
