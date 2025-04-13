@@ -137,7 +137,7 @@ public class MEGACells {
 
     private static void initStorageCells(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            StorageCells.addCellHandler(BulkCellItem.HANDLER);
+            BulkCellItem.registerHandler();
 
             for (var cell : MEGAItems.getTieredCells()) {
                 if (cell.item().asItem() instanceof AbstractPortableCell portable) {

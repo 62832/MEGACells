@@ -81,7 +81,7 @@ public class BulkCellInventoryTest {
         cell.insert(ingot, 1, Actionable.MODULATE, SRC);
 
         // ensure variants cannot be inserted or extracted without a card regardless of the chain
-        assertThat(((BulkCellInventory) cell).getCompressionChain()).isEqualTo(chain);
+        assertThat(((BulkCellInventory) cell).hasCompressionChain()).isTrue();
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isZero();
 
         cell.extract(ingot, 1, Actionable.MODULATE, SRC);
@@ -239,5 +239,37 @@ public class BulkCellInventoryTest {
         block = AEItemKey.of(Items.GOLD_BLOCK);
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isOne();
         assertThat(cell.insert(block, 1, Actionable.SIMULATE, SRC)).isOne();
+    }
+
+    @Test
+    void testCompressionCutoff(MinecraftServer ignored) {
+        var nugget = AEItemKey.of(Items.IRON_NUGGET);
+        var ingot = AEItemKey.of(Items.IRON_INGOT);
+        var block = AEItemKey.of(Items.IRON_BLOCK);
+
+        var item = MEGAItems.BULK_ITEM_CELL.asItem();
+        var stack = item.getDefaultInstance();
+        item.getUpgrades(stack).addItems(MEGAItems.COMPRESSION_CARD.stack());
+        item.getConfigInventory(stack).addFilter(ingot);
+
+        var cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        cell.insert(nugget, 1, Actionable.MODULATE, SRC);
+        cell.insert(ingot, 1, Actionable.MODULATE, SRC);
+        cell.insert(block, 1, Actionable.MODULATE, SRC);
+        assertThat(cell.getCutoffItem()).isEqualTo(block.getItem());
+        assertThat(cell.getAvailableStacks().get(ingot)).isOne();
+        assertThat(cell.getAvailableStacks().get(block)).isOne();
+
+        cell.switchCompressionCutoff(false);
+        cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getCutoffItem()).isEqualTo(ingot.getItem());
+        assertThat(cell.getAvailableStacks().get(block)).isZero();
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(10);
+
+        cell.switchCompressionCutoff(true);
+        cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getCutoffItem()).isEqualTo(block.getItem());
+        assertThat(cell.getAvailableStacks().get(block)).isOne();
+        assertThat(cell.getAvailableStacks().get(ingot)).isOne();
     }
 }

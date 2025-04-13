@@ -50,8 +50,8 @@ public class CompressionChain {
         return false;
     }
 
-    public Item getCutoffItem(int cutoff) {
-        return variants.get(cutoff - 1).item;
+    public Item getItem(int index) {
+        return variants.get(index).item;
     }
 
     public BigInteger unitFactor(Item item) {
@@ -97,7 +97,7 @@ public class CompressionChain {
         }
 
         var decompressionPatterns = new ObjectArrayList<IPatternDetails>();
-        var decompressionChain = variants.subList(0, cutoff).reversed();
+        var decompressionChain = variants.subList(0, cutoff + 1).reversed();
 
         for (var i = 0; i < decompressionChain.size() - 1; i++) {
             decompressionPatterns.add(patterns.get(patterns.size() - i - 1).right());
@@ -160,7 +160,7 @@ public class CompressionChain {
             var factor = variant.big();
             var amount = BigInteger.valueOf(stackMap.get(variant.item));
 
-            if (unitsToAdd.divide(factor).signum() != 0 && variant != swapped.getLast()) {
+            if (unitsToAdd.divide(factor).signum() != 0 && variant.item != swapped.getLast().item) {
                 var added = unitsToAdd.remainder(factor);
                 amount = amount.add(added);
                 unitsToAdd = unitsToAdd.subtract(added);
@@ -181,7 +181,7 @@ public class CompressionChain {
     }
 
     private List<Variant> lastMultiplierSwapped(int cutoff) {
-        var subChain = variants.subList(0, cutoff);
+        var subChain = variants.subList(0, cutoff + 1);
 
         if (subChain.isEmpty()) {
             return subChain;

@@ -31,7 +31,6 @@ import appeng.util.inv.SupplierInternalInventory;
 
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.item.cell.BulkCellInventory;
-import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchMenuHost;
 
 /**
@@ -77,17 +76,9 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
         if (isClientSide()) {
             sendClientAction(ACTION_SET_COMPRESSION_LIMIT, backwards);
         } else {
-            if (BulkCellItem.HANDLER.getCellInventory(getHost().mega$getContainedStack(), null)
+            if (StorageCells.getCellInventory(getHost().mega$getContainedStack(), null)
                     instanceof BulkCellInventory bulkCell) {
-                var limit = bulkCell.getCompressionCutoff();
-
-                if (backwards) {
-                    limit = limit == bulkCell.getCompressionChain().size() ? 1 : limit + 1;
-                } else {
-                    limit = limit == 1 ? bulkCell.getCompressionChain().size() : limit - 1;
-                }
-
-                bulkCell.setCompressionCutoff(limit);
+                bulkCell.switchCompressionCutoff(backwards);
                 getHost().saveChanges();
             }
         }

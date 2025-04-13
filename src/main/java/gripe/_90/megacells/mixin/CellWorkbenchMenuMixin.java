@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
+import appeng.api.storage.StorageCells;
 import appeng.blockentity.misc.CellWorkbenchBlockEntity;
 import appeng.menu.implementations.CellWorkbenchMenu;
 import appeng.menu.implementations.UpgradeableMenu;
 
 import gripe._90.megacells.item.cell.BulkCellInventory;
-import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.menu.CompressionCutoffHost;
 import gripe._90.megacells.misc.CellWorkbenchHost;
 
@@ -34,17 +34,9 @@ public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkben
         if (isClientSide()) {
             sendClientAction(ACTION_SET_COMPRESSION_LIMIT, backwards);
         } else {
-            if (BulkCellItem.HANDLER.getCellInventory(((CellWorkbenchHost) getHost()).mega$getContainedStack(), null)
+            if (StorageCells.getCellInventory(((CellWorkbenchHost) getHost()).mega$getContainedStack(), null)
                     instanceof BulkCellInventory bulkCell) {
-                var limit = bulkCell.getCompressionCutoff();
-
-                if (backwards) {
-                    limit = limit == bulkCell.getCompressionChain().size() ? 1 : limit + 1;
-                } else {
-                    limit = limit == 1 ? bulkCell.getCompressionChain().size() : limit - 1;
-                }
-
-                bulkCell.setCompressionCutoff(limit);
+                bulkCell.switchCompressionCutoff(backwards);
                 getHost().saveChanges();
             }
         }
