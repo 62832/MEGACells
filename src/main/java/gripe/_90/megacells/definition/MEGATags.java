@@ -7,8 +7,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import gripe._90.megacells.MEGACells;
-
 public final class MEGATags {
     public static final TagKey<Item> SKY_STEEL_INGOT = ItemTags.create(ResourceLocation.parse("c:ingots/sky_steel"));
     public static final TagKey<Item> SKY_BRONZE_INGOT = ItemTags.create(ResourceLocation.parse("c:ingots/sky_bronze"));
@@ -23,10 +21,4 @@ public final class MEGATags {
 
     public static final TagKey<Item> MEGA_INTERFACE = ItemTags.create(MEGABlocks.MEGA_INTERFACE.id());
     public static final TagKey<Item> MEGA_PATTERN_PROVIDER = ItemTags.create(MEGABlocks.MEGA_PATTERN_PROVIDER.id());
-
-    @Deprecated(forRemoval = true)
-    public static final TagKey<Item> COMPRESSION_OVERRIDES = ItemTags.create(MEGACells.makeId("compression_overrides"));
-
-    @Deprecated(forRemoval = true)
-    public static final TagKey<Item> COMPRESSION_BLACKLIST = ItemTags.create(MEGACells.makeId("compression_blacklist"));
 }

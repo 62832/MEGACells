@@ -29,7 +29,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import appeng.api.networking.GridServices;
 
 import gripe._90.megacells.definition.MEGADataMaps;
-import gripe._90.megacells.definition.MEGATags;
 
 public class CompressionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompressionService.class);
@@ -315,27 +314,22 @@ public class CompressionService {
     // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
     // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
     // based on its usually irreversible recipe.
-    // TODO: Remove old tag usage
     private static boolean overrideRecipe(CraftingRecipe recipe, List<Override> overrides, RegistryAccess access) {
-        for (var input : recipe.getIngredients().getFirst().getItems()) {
-            if (isBlacklisted(input)) {
-                return false;
-            }
+        var output = recipe.getResultItem(access);
 
+        if (isBlacklisted(output)) {
+            return false;
+        }
+
+        for (var input : recipe.getIngredients().getFirst().getItems()) {
             var inputVariant = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
 
-            if (inputVariant == null && !input.is(MEGATags.COMPRESSION_OVERRIDES)) {
-                return false;
+            if (inputVariant == null) {
+                continue;
             }
 
-            var output = recipe.getResultItem(access);
-
-            if (isBlacklisted(output)) {
-                return false;
-            }
-
-            if (inputVariant != null && inputVariant != output.getItem()) {
-                return false;
+            if (inputVariant != output.getItem()) {
+                continue;
             }
 
             var decompressed = isDecompressionRecipe(recipe);
@@ -354,8 +348,7 @@ public class CompressionService {
     }
 
     private static boolean isBlacklisted(ItemStack stack) {
-        return stack.is(MEGATags.COMPRESSION_BLACKLIST)
-                || stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
+        return stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
     }
 
     private record Override(Item smaller, Item larger, int factor) {
