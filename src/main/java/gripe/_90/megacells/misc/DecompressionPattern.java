@@ -6,6 +6,8 @@ import java.util.List;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -28,17 +30,14 @@ public class DecompressionPattern implements IPatternDetails {
     private final int factor;
     private final boolean toCompress;
 
-    public DecompressionPattern(Item base, CompressionChain.Variant variant, boolean toCompress) {
+    public DecompressionPattern(Item base, Item variant, int factor, boolean toCompress) {
         this.base = base;
-        this.variant = variant.item();
-        this.factor = variant.factor();
+        this.variant = variant;
+        this.factor = factor;
         this.toCompress = toCompress;
 
         var definition = new ItemStack(MEGAItems.SKY_STEEL_INGOT);
-        definition.set(
-                MEGAComponents.ENCODED_DECOMPRESSION_PATTERN,
-                new Encoded(
-                        base.getDefaultInstance(), variant.item().getDefaultInstance(), variant.factor(), toCompress));
+        definition.set(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN, new Encoded(base, variant, factor, toCompress));
         this.definition = AEItemKey.of(definition);
     }
 
@@ -59,8 +58,8 @@ public class DecompressionPattern implements IPatternDetails {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof DecompressionPattern pattern && pattern.definition.equals(definition);
+    public boolean equals(Object o) {
+        return o != null && o.getClass() == getClass() && ((DecompressionPattern) o).definition.equals(definition);
     }
 
     @Override
@@ -90,18 +89,18 @@ public class DecompressionPattern implements IPatternDetails {
         }
     }
 
-    public record Encoded(ItemStack base, ItemStack variant, int factor, boolean toCompress) {
+    public record Encoded(Item base, Item variant, int factor, boolean toCompress) {
         public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        ItemStack.CODEC.fieldOf("base").forGetter(Encoded::base),
-                        ItemStack.CODEC.fieldOf("variant").forGetter(Encoded::variant),
+                        BuiltInRegistries.ITEM.byNameCodec().fieldOf("base").forGetter(Encoded::base),
+                        BuiltInRegistries.ITEM.byNameCodec().fieldOf("variant").forGetter(Encoded::variant),
                         Codec.INT.fieldOf("factor").forGetter(Encoded::factor),
                         Codec.BOOL.fieldOf("toCompress").forGetter(Encoded::toCompress))
                 .apply(instance, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
-                ItemStack.STREAM_CODEC,
+                ByteBufCodecs.registry(Registries.ITEM),
                 Encoded::base,
-                ItemStack.STREAM_CODEC,
+                ByteBufCodecs.registry(Registries.ITEM),
                 Encoded::variant,
                 ByteBufCodecs.VAR_INT,
                 Encoded::factor,

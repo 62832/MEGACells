@@ -2,10 +2,10 @@ package gripe._90.megacells.misc;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -27,7 +27,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import appeng.api.networking.GridServices;
-import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGATags;
@@ -39,40 +38,25 @@ public class CompressionService {
     // Each chain is a list of "variants", where each variant consists of the item itself along with an associated value
     // dictating how much of the previous variant's item is needed to compress into that variant.
     // This value will be between 1 and 9 (inclusive) for any given item, or just 1 for the smallest base variant.
-    private static final Set<CompressionChain> chains = new HashSet<>();
+    private static final List<CompressionChain> chains = new ArrayList<>();
+    private static final Map<Item, Integer> chainIndexCache = new HashMap<>();
 
-    // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
-    // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
-    // based on its usually irreversible recipe.
-    private static final Set<Override> overrides = new HashSet<>();
-
-    public static CompressionChain getChain(AEItemKey item) {
-        return item != null ? getChain(item.getItem()) : EMPTY;
-    }
-
-    public static CompressionChain getChain(Item item) {
-        for (var chain : chains) {
-            if (chain.containsVariant(item)) {
-                return chain;
-            }
-        }
-
-        return EMPTY;
-    }
+    // Should always be true on the client side, only the server needs to toggle this when loading
+    private static boolean loaded = true;
 
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
 
         NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, event -> {
             var server = event.getServer();
-            CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
+            loadRecipes(server.getRecipeManager(), server.registryAccess());
         });
 
         NeoForge.EVENT_BUS.addListener(OnDatapackSyncEvent.class, event -> {
             // Only rebuild cache in the event of a data pack /reload and not when a new player joins
             if (event.getPlayer() == null) {
                 var server = event.getPlayerList().getServer();
-                CompressionService.loadRecipes(server.getRecipeManager(), server.registryAccess());
+                loadRecipes(server.getRecipeManager(), server.registryAccess());
                 PacketDistributor.sendToAllPlayers(new SyncCompressionChainsPacket(chains));
             } else {
                 PacketDistributor.sendToPlayer(event.getPlayer(), new SyncCompressionChainsPacket(chains));
@@ -80,22 +64,51 @@ public class CompressionService {
         });
     }
 
+    public static CompressionChain getChain(Item item) {
+        if (item == null) {
+            return EMPTY;
+        }
+
+        var cachedIndex = chainIndexCache.get(item);
+
+        if (cachedIndex != null) {
+            return cachedIndex >= 0 ? chains.get(cachedIndex) : EMPTY;
+        }
+
+        for (var i = 0; i < chains.size(); i++) {
+            var chain = chains.get(i);
+
+            if (chain.containsVariant(item)) {
+                chainIndexCache.put(item, i);
+                return chain;
+            }
+        }
+
+        if (loaded) {
+            chainIndexCache.put(item, -1);
+        }
+
+        return EMPTY;
+    }
+
     public static void syncToClient(SyncCompressionChainsPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             chains.clear();
+            chainIndexCache.clear();
             chains.addAll(packet.chains());
         });
     }
 
     private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old chain cache in case of the server restarting or recipes being reloaded
+        loaded = false;
         chains.clear();
-        overrides.clear();
 
-        // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
         var compressed = new ArrayList<CraftingRecipe>();
         var decompressed = new ArrayList<CraftingRecipe>();
+        var overrides = new ArrayList<Override>();
 
+        // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
         for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
             if (isCompressionRecipe(recipe.value(), access)) {
                 compressed.add(recipe.value());
@@ -106,8 +119,8 @@ public class CompressionService {
 
         // Filter gathered candidate recipes and retain only those that are reversible (i.e. those which can be carried
         // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
-        compressed.removeIf(recipe -> isIrreversible(recipe, decompressed, access));
-        decompressed.removeIf(recipe -> isIrreversible(recipe, compressed, access));
+        compressed.removeIf(recipe -> isIrreversible(recipe, decompressed, overrides, access));
+        decompressed.removeIf(recipe -> isIrreversible(recipe, compressed, overrides, access));
 
         var ingredientSize = Comparator.<CraftingRecipe>comparingInt(
                 r -> r.getIngredients().getFirst().getItems().length);
@@ -119,24 +132,27 @@ public class CompressionService {
             var baseVariant = recipe.getResultItem(access).getItem();
 
             if (getChain(baseVariant).isEmpty()) {
-                chains.add(generateChain(baseVariant, compressed, decompressed, access));
+                chains.add(generateChain(baseVariant, compressed, decompressed, overrides, access));
             }
         });
 
         LOGGER.info("Initialised bulk compression. {} compression chains gathered.", chains.size());
+        loaded = true;
+        chainIndexCache.clear();
     }
 
     private static CompressionChain generateChain(
             Item baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
+            List<Override> overrides,
             RegistryAccess access) {
         var variants = new LinkedList<Item>();
         var multipliers = new LinkedList<Integer>();
 
         variants.addFirst(baseVariant);
 
-        for (var lower = getNextVariant(baseVariant, decompressed, false, access); lower != null; ) {
+        for (var lower = getNextVariant(baseVariant, decompressed, overrides, false, access); lower != null; ) {
             var item = lower.item();
 
             if (variants.contains(item)) {
@@ -151,7 +167,7 @@ public class CompressionService {
 
             variants.addFirst(item);
             multipliers.addFirst(lower.factor());
-            lower = getNextVariant(item, decompressed, false, access);
+            lower = getNextVariant(item, decompressed, overrides, false, access);
         }
 
         multipliers.addFirst(1);
@@ -161,7 +177,7 @@ public class CompressionService {
             chain.add(new CompressionChain.Variant(variants.get(i), multipliers.get(i)));
         }
 
-        for (var higher = getNextVariant(baseVariant, compressed, true, access); higher != null; ) {
+        for (var higher = getNextVariant(baseVariant, compressed, overrides, true, access); higher != null; ) {
             if (chain.contains(higher)) {
                 if (higher.factor() != 1) {
                     LOGGER.warn(
@@ -173,7 +189,7 @@ public class CompressionService {
             }
 
             chain.add(higher);
-            higher = getNextVariant(higher.item(), compressed, true, access);
+            higher = getNextVariant(higher.item(), compressed, overrides, true, access);
         }
 
         LOGGER.debug("Gathered bulk compression chain: {}", chain);
@@ -181,7 +197,11 @@ public class CompressionService {
     }
 
     private static CompressionChain.Variant getNextVariant(
-            Item item, List<CraftingRecipe> recipes, boolean compressed, RegistryAccess access) {
+            Item item,
+            List<CraftingRecipe> recipes,
+            List<Override> overrides,
+            boolean compressed,
+            RegistryAccess access) {
         for (var override : overrides) {
             if (compressed && override.smaller.equals(item)) {
                 return new CompressionChain.Variant(override.larger, override.factor);
@@ -232,15 +252,15 @@ public class CompressionService {
         // Check further for any odd cases such as certain mods' metal ingot/block recipes post-unification
         var first = ingredients.getFirst().getItems();
 
-        for (var ingredient : ingredients) {
-            var stacks = ingredient.getItems();
+        for (var i = 1; i < ingredients.size(); i++) {
+            var stacks = ingredients.get(i).getItems();
 
             if (stacks.length != first.length) {
                 return false;
             }
 
-            for (var i = 0; i < stacks.length; i++) {
-                if (!ItemStack.isSameItemSameComponents(stacks[i], first[i])) {
+            for (var j = 0; j < stacks.length; j++) {
+                if (!ItemStack.isSameItemSameComponents(stacks[j], first[j])) {
                     return false;
                 }
             }
@@ -250,8 +270,8 @@ public class CompressionService {
     }
 
     private static boolean isIrreversible(
-            CraftingRecipe recipe, List<CraftingRecipe> candidates, RegistryAccess access) {
-        if (overrideRecipe(recipe, access)) {
+            CraftingRecipe recipe, List<CraftingRecipe> candidates, List<Override> overrides, RegistryAccess access) {
+        if (overrideRecipe(recipe, overrides, access)) {
             return false;
         }
 
@@ -292,8 +312,11 @@ public class CompressionService {
         return true;
     }
 
+    // It may be desirable for some items to be included as variants in a chain in spite of any recipes involving those
+    // items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
+    // based on its usually irreversible recipe.
     // TODO: Remove old tag usage
-    private static boolean overrideRecipe(CraftingRecipe recipe, RegistryAccess access) {
+    private static boolean overrideRecipe(CraftingRecipe recipe, List<Override> overrides, RegistryAccess access) {
         for (var input : recipe.getIngredients().getFirst().getItems()) {
             if (isBlacklisted(input)) {
                 return false;

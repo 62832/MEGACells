@@ -22,6 +22,7 @@ import appeng.me.helpers.BaseActionSource;
 import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
+import gripe._90.megacells.misc.CompressionChain;
 import gripe._90.megacells.misc.CompressionService;
 
 @ExtendWith(EphemeralTestServerProvider.class)
@@ -60,18 +61,18 @@ public class BulkCellInventoryTest {
         assertThat(amount).isEqualTo(BigInteger.valueOf(MAX).multiply(BigInteger.TWO));
 
         var reported = cell.getAvailableStacks().get(content);
-        assertThat(reported).isEqualTo(BulkCellInventory.STACK_LIMIT);
+        assertThat(reported).isEqualTo(CompressionChain.STACK_LIMIT);
     }
 
     @Test
     void testBulkCompression(MinecraftServer ignored) {
         var ingot = AEItemKey.of(Items.IRON_INGOT);
-        var chain = CompressionService.getChain(ingot);
+        var chain = CompressionService.getChain(ingot.getItem());
         assertThat(chain.isEmpty()).isFalse();
 
         var nugget = AEItemKey.of(Items.IRON_NUGGET);
         assertThat(chain.containsVariant(Items.IRON_NUGGET)).isTrue();
-        assertThat(CompressionService.getChain(nugget)).isEqualTo(chain);
+        assertThat(CompressionService.getChain(nugget.getItem())).isEqualTo(chain);
 
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();

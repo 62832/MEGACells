@@ -22,10 +22,11 @@ public final class MEGADataMaps {
                             return DataResult.success(Items.AIR);
                         } else {
                             try {
-                                var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(str));
-                                return item == Items.AIR
+                                var id = ResourceLocation.parse(str);
+                                var item = BuiltInRegistries.ITEM.get(id);
+                                return item == Items.AIR && id != BuiltInRegistries.ITEM.getKey(Items.AIR)
                                         ? DataResult.error(() -> "Could not find override variant item: " + str)
-                                        : DataResult.success(BuiltInRegistries.ITEM.get(ResourceLocation.parse(str)));
+                                        : DataResult.success(item);
                             } catch (ResourceLocationException e) {
                                 return DataResult.error(e::getMessage);
                             }
