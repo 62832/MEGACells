@@ -228,13 +228,14 @@ public class BulkCellInventoryTest {
 
         // ensure variant contents are recoverable even without a card
         assertThat(cell.extract(nugget, MAX, Actionable.MODULATE, SRC)).isOne();
-        assertThat(cell.extract(ingot, MAX, Actionable.MODULATE, SRC)).isOne();
-        assertThat(cell.extract(block, MAX, Actionable.MODULATE, SRC)).isOne();
-        assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
 
-        // ensure compression works with new filter item after emptying
         item.getUpgrades(stack).addItems(card);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        cell.extract(ingot, MAX, Actionable.MODULATE, SRC);
+        cell.extract(block, MAX, Actionable.MODULATE, SRC);
+        assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
+
+        // ensure compression works with new filter item after emptying (without needing to recreate the cell inv
         nugget = AEItemKey.of(Items.GOLD_NUGGET);
         block = AEItemKey.of(Items.GOLD_BLOCK);
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isOne();
@@ -271,5 +272,71 @@ public class BulkCellInventoryTest {
         assertThat(cell.getCutoffItem()).isEqualTo(block.getItem());
         assertThat(cell.getAvailableStacks().get(block)).isOne();
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
+    }
+
+    @Test
+    void testFilterChangeWithinCompressionChain(MinecraftServer ignored) {
+        var nugget = AEItemKey.of(Items.IRON_NUGGET);
+        var ingot = AEItemKey.of(Items.IRON_INGOT);
+
+        var item = MEGAItems.BULK_ITEM_CELL.asItem();
+        var stack = item.getDefaultInstance();
+        item.getUpgrades(stack).addItems(MEGAItems.COMPRESSION_CARD.stack());
+        item.getConfigInventory(stack).addFilter(ingot);
+
+        var cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        var ingots = cell.insert(ingot, 2, Actionable.MODULATE, SRC);
+        var nuggets = cell.insert(nugget, 3, Actionable.MODULATE, SRC);
+        var units = cell.extract(nugget, MAX, Actionable.SIMULATE, SRC);
+
+        // first pass: switch filter to a smaller variant
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(nugget);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isNotEqualTo(CellState.FULL);
+        assertThat(cell.insert(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.insert(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(ingots * 2);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(nuggets * 2);
+        assertThat(cell.extract(nugget, MAX, Actionable.SIMULATE, SRC)).isEqualTo(units * 2);
+        assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+
+        // second pass: switch filter back to initial variant
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(ingot);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isNotEqualTo(CellState.FULL);
+        assertThat(cell.insert(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.insert(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(ingots * 2);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(nuggets * 2);
+        assertThat(cell.extract(nugget, MAX, Actionable.SIMULATE, SRC)).isEqualTo(units * 2);
+        assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+
+        // second pass: switch filter to even larger variant
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(Items.IRON_BLOCK);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isNotEqualTo(CellState.FULL);
+        assertThat(cell.insert(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.insert(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(ingots * 2);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(nuggets * 2);
+        assertThat(cell.extract(nugget, MAX, Actionable.SIMULATE, SRC)).isEqualTo(units * 2);
+        assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
+        assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
+
+        // fourth pass: switch filter to a non-variant altogether
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(Items.GOLD_INGOT);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getStatus()).isEqualTo(CellState.FULL);
+        assertThat(cell.insert(ingot, ingots, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.insert(nugget, nuggets, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(ingots);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(nuggets);
+        assertThat(cell.extract(nugget, MAX, Actionable.SIMULATE, SRC)).isEqualTo(nuggets);
     }
 }

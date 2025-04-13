@@ -31,12 +31,12 @@ public class BulkCellInventory implements StorageCell {
     private final AEItemKey filterItem;
 
     private final boolean compressionEnabled;
-    private final CompressionChain compressionChain;
+    private CompressionChain compressionChain;
     private BigInteger unitCount;
-    private final BigInteger unitFactor;
-    private final int compressionCutoff;
+    private BigInteger unitFactor;
+    private int compressionCutoff;
 
-    private final Map<Item, Long> availableStacks;
+    private Map<Item, Long> availableStacks;
     private List<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
@@ -47,6 +47,7 @@ public class BulkCellInventory implements StorageCell {
 
         var cell = (BulkCellItem) stack.getItem();
         filterItem = (AEItemKey) cell.getConfigInventory(stack).getKey(0);
+        compressionEnabled = cell.getUpgrades(stack).isInstalled(MEGAItems.COMPRESSION_CARD);
 
         storedItem = (AEItemKey) stack.get(MEGAComponents.BULK_CELL_ITEM);
         unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
@@ -54,10 +55,8 @@ public class BulkCellInventory implements StorageCell {
         var determiningKey = storedItem != null ? storedItem : filterItem;
         var determiningItem = determiningKey != null ? determiningKey.getItem() : null;
         compressionChain = CompressionService.getChain(determiningItem);
-        unitFactor = compressionChain.unitFactor(determiningItem);
 
-        // Check newly-calculated factor against what's already recorded in order to adjust for a compression chain that
-        // has changed from the left of the item filtered to or stored
+        unitFactor = compressionChain.unitFactor(determiningItem);
         var recordedFactor = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
 
         if (!unitFactor.equals(recordedFactor)) {
@@ -70,12 +69,7 @@ public class BulkCellInventory implements StorageCell {
         int recordedCutoff = stack.getOrDefault(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, maxCutoff);
         compressionCutoff = recordedCutoff < 0 ? maxCutoff : Math.min(recordedCutoff, maxCutoff);
 
-        if (hasCompressionChain()) {
-            stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionCutoff);
-        }
-
         availableStacks = compressionChain.initStacks(unitCount, compressionCutoff, determiningItem);
-        compressionEnabled = cell.getUpgrades(stack).isInstalled(MEGAItems.COMPRESSION_CARD);
     }
 
     @Override
@@ -91,11 +85,11 @@ public class BulkCellInventory implements StorageCell {
         return CellState.NOT_EMPTY;
     }
 
-    public AEItemKey getStoredItem() {
+    AEItemKey getStoredItem() {
         return storedItem;
     }
 
-    public long getStoredQuantity() {
+    long getStoredQuantity() {
         return CompressionChain.clamp(unitCount.divide(unitFactor), Long.MAX_VALUE);
     }
 
@@ -104,7 +98,26 @@ public class BulkCellInventory implements StorageCell {
     }
 
     private boolean isFilterMismatched() {
-        return storedItem != null && !storedItem.equals(filterItem);
+        if (storedItem == null) {
+            return false;
+        }
+
+        if (storedItem.equals(filterItem)) {
+            return false;
+        }
+
+        if (filterItem == null) {
+            return true;
+        }
+
+        if (compressionChain.containsVariant(filterItem.getItem())) {
+            storedItem = filterItem;
+            unitFactor = compressionChain.unitFactor(storedItem.getItem());
+            saveChanges();
+            return false;
+        }
+
+        return true;
     }
 
     public boolean isCompressionEnabled() {
@@ -138,7 +151,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (filterItem == null || isFilterMismatched()) {
+        if (isFilterMismatched()) {
             return 0;
         }
 
@@ -154,7 +167,7 @@ public class BulkCellInventory implements StorageCell {
                 storedItem = filterItem;
             }
 
-            saveChanges(units);
+            updateContents(units);
         }
 
         return amount;
@@ -187,21 +200,32 @@ public class BulkCellInventory implements StorageCell {
         if (currentUnitCount.compareTo(units) <= 0) {
             if (mode == Actionable.MODULATE) {
                 storedItem = null;
-                saveChanges(unitCount.negate());
+                unitCount = BigInteger.ZERO;
+
+                var filter = filterItem != null ? filterItem.getItem() : null;
+                compressionChain = CompressionService.getChain(filter);
+                availableStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
+
+                saveChanges();
             }
 
             return CompressionChain.clamp(currentUnitCount.divide(factor), Long.MAX_VALUE);
         } else {
             if (mode == Actionable.MODULATE) {
-                saveChanges(units.negate());
+                updateContents(units.negate());
             }
 
             return CompressionChain.clamp(units.divide(factor), Long.MAX_VALUE);
         }
     }
 
-    private void saveChanges(BigInteger unitsToAdd) {
+    private void updateContents(BigInteger unitsToAdd) {
         unitCount = unitCount.add(unitsToAdd);
+        saveChanges();
+        compressionChain.updateStacks(availableStacks, unitsToAdd, compressionCutoff);
+    }
+
+    private void saveChanges() {
         isPersisted = false;
 
         if (container != null) {
@@ -209,8 +233,6 @@ public class BulkCellInventory implements StorageCell {
         } else {
             persist();
         }
-
-        compressionChain.updateStacks(availableStacks, unitsToAdd, compressionCutoff);
     }
 
     @Override
@@ -229,6 +251,12 @@ public class BulkCellInventory implements StorageCell {
             stack.set(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
         }
 
+        if (hasCompressionChain()) {
+            stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionCutoff);
+        } else {
+            stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
+        }
+
         isPersisted = true;
     }
 
@@ -240,7 +268,8 @@ public class BulkCellInventory implements StorageCell {
         var newCutoff = compressionCutoff;
         newCutoff += compressionChain.size() + (backwards ? 1 : -1);
         newCutoff %= compressionChain.size();
-        stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, newCutoff);
+        compressionCutoff = newCutoff;
+        stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionCutoff);
     }
 
     public Item getCutoffItem() {
@@ -253,7 +282,7 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (!compressionEnabled && storedItem != null && !isFilterMismatched()) {
+        if (!compressionEnabled && !isFilterMismatched() && storedItem != null) {
             out.add(storedItem, availableStacks.get(storedItem.getItem()));
         } else {
             availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
