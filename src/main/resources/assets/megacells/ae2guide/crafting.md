@@ -6,11 +6,22 @@ navigation:
 categories:
   - megacells
 item_ids:
+  - 1m_crafting_storage
+  - 4m_crafting_storage
+  - 16m_crafting_storage
+  - 64m_crafting_storage
+  - 256m_crafting_storage
   - mega_pattern_provider
   - mega_interface
 ---
 
 # MEGA Crafting
+
+## Crafting Storage
+
+Handle the biggest jobs easily with more memory.
+
+<RecipeFor id="256m_crafting_storage" />
 
 ## MEGA Pattern Provider
 
