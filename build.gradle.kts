@@ -96,6 +96,8 @@ neoForge {
         create("client") {
             client()
             gameDirectory = file("run/client")
+            systemProperty("guideme.ae2.guide.sources", file("src/main/resources/assets/$modId/ae2guide").absolutePath)
+            systemProperty("guideme.ae2.guide.sourcesNamespace", modId)
         }
 
         create("server") {
