@@ -17,7 +17,6 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
-import appeng.me.helpers.BaseActionSource;
 
 import gripe._90.megacells.definition.MEGAComponents;
 import gripe._90.megacells.definition.MEGAItems;
@@ -27,7 +26,7 @@ import gripe._90.megacells.misc.CompressionService;
 
 @ExtendWith(EphemeralTestServerProvider.class)
 public class BulkCellInventoryTest {
-    private static final IActionSource SRC = new BaseActionSource();
+    private static final IActionSource SRC = IActionSource.empty();
     private static final long MAX = Long.MAX_VALUE;
 
     @Test
@@ -102,9 +101,24 @@ public class BulkCellInventoryTest {
         assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
 
         // ensure lower variants get appropriately split into higher variants by remainder when reported
+        cell.insert(nugget, 9, Actionable.MODULATE, SRC);
+        assertThat(cell.getAvailableStacks().get(nugget)).isZero();
+        assertThat(cell.getAvailableStacks().get(ingot)).isOne();
+
         cell.insert(nugget, 11, Actionable.MODULATE, SRC);
-        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(1);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(2);
         assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(2);
+
+        // regression testing: ensure units properly flow over when inserting smaller variants in amounts less than
+        // the next variant's compression factor
+        cell.insert(nugget, 8, Actionable.MODULATE, SRC);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(3);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(1);
+
+        cell.insert(nugget, 8, Actionable.MODULATE, SRC);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(4);
+        assertThat(cell.getAvailableStacks().get(nugget)).isZero();
+        cell.insert(nugget, 1, Actionable.MODULATE, SRC);
 
         // ensure only filtered variant works again once card is removed
         item.getUpgrades(stack).clear();
@@ -112,10 +126,10 @@ public class BulkCellInventoryTest {
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isZero();
         assertThat(cell.extract(nugget, 1, Actionable.SIMULATE, SRC)).isZero();
         assertThat(cell.insert(ingot, 1, Actionable.SIMULATE, SRC)).isOne();
-        assertThat(cell.extract(ingot, 1, Actionable.MODULATE, SRC)).isOne();
+        assertThat(cell.extract(ingot, 1, Actionable.SIMULATE, SRC)).isOne();
 
         // ensure other variants are not reported at all without a card
-        assertThat(cell.getAvailableStacks().get(ingot)).isZero();
+        assertThat(cell.getAvailableStacks().get(ingot)).isNotZero();
         assertThat(cell.getAvailableStacks().get(nugget)).isZero();
         assertThat(cell.getStatus()).isEqualTo(CellState.NOT_EMPTY);
     }

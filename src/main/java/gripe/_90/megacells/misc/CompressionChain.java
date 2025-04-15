@@ -160,15 +160,15 @@ public class CompressionChain {
             var factor = variant.big();
             var amount = BigInteger.valueOf(stackMap.get(variant.item));
 
-            if (unitsToAdd.divide(factor).signum() != 0 && variant.item != swapped.getLast().item) {
+            if (unitsToAdd.signum() != 0 && variant.item != swapped.getLast().item) {
                 var added = unitsToAdd.remainder(factor);
                 amount = amount.add(added);
                 unitsToAdd = unitsToAdd.subtract(added);
 
                 if (amount.signum() == -1 || amount.divide(factor).signum() == 1) {
                     var outflow = amount.remainder(factor);
-                    amount = amount.subtract(outflow);
-                    unitsToAdd = unitsToAdd.add(outflow);
+                    unitsToAdd = unitsToAdd.add(amount.subtract(outflow));
+                    amount = outflow;
                 }
 
                 stackMap.put(variant.item, amount.longValue());

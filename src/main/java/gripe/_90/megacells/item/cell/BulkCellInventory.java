@@ -282,10 +282,12 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (!compressionEnabled && !isFilterMismatched() && storedItem != null) {
-            out.add(storedItem, availableStacks.get(storedItem.getItem()));
-        } else {
-            availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
+        if (storedItem != null) {
+            if (!compressionEnabled && !isFilterMismatched()) {
+                out.add(storedItem, availableStacks.get(storedItem.getItem()));
+            } else {
+                availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
+            }
         }
     }
 
