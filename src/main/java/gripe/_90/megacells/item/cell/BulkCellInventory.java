@@ -266,10 +266,11 @@ public class BulkCellInventory implements StorageCell {
         }
 
         var newCutoff = compressionCutoff;
-        newCutoff += compressionChain.size() + (backwards ? 1 : -1);
+        newCutoff += (backwards ? 1 : -1);
         newCutoff %= compressionChain.size();
         compressionCutoff = newCutoff;
         stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionCutoff);
+        decompressionPatterns = null;
     }
 
     public Item getCutoffItem() {
@@ -282,12 +283,10 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (storedItem != null) {
-            if (!compressionEnabled && !isFilterMismatched()) {
-                out.add(storedItem, availableStacks.get(storedItem.getItem()));
-            } else {
-                availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
-            }
+        if (!compressionEnabled && !isFilterMismatched() && storedItem != null) {
+            out.add(storedItem, availableStacks.get(storedItem.getItem()));
+        } else {
+            availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
         }
     }
 

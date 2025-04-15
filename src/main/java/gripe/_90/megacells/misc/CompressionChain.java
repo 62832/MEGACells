@@ -85,27 +85,24 @@ public class CompressionChain {
         if (patterns == null) {
             patterns = new ObjectArrayList<>();
 
-            for (var i = 1; i < variants.size(); i++) {
-                var current = variants.get(i);
-                var previous = variants.get(i - 1);
+            for (var i = 0; i < variants.size() - 1; i++) {
+                var smaller = variants.get(i);
+                var larger = variants.get(i + 1);
 
-                var compression = new DecompressionPattern(previous.item, current.item, current.factor, true);
-                var decompression = new DecompressionPattern(current.item, previous.item, current.factor, false);
+                var compression = new DecompressionPattern(smaller.item, larger.item, larger.factor, true);
+                var decompression = new DecompressionPattern(larger.item, smaller.item, larger.factor, false);
 
                 patterns.add(Pair.of(compression, decompression));
             }
         }
 
         var decompressionPatterns = new ObjectArrayList<IPatternDetails>();
-        var decompressionChain = variants.subList(0, cutoff + 1).reversed();
 
-        for (var i = 0; i < decompressionChain.size() - 1; i++) {
-            decompressionPatterns.add(patterns.get(patterns.size() - i - 1).right());
+        for (var i = 0; i < variants.subList(0, cutoff).size(); i++) {
+            decompressionPatterns.add(patterns.get(i).right());
         }
 
-        var remainingChain = variants.subList(decompressionChain.size() - 1, variants.size());
-
-        for (var i = 1; i < remainingChain.size(); i++) {
+        for (var i = cutoff; i < variants.size() - 1; i++) {
             decompressionPatterns.add(patterns.get(i).left());
         }
 
