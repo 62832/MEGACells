@@ -18,6 +18,8 @@ run {
         rulesMode = RulesMode.PREFER_SETTINGS
 
         repositories {
+            mavenLocal()
+
             maven {
                 name = "ModMaven (K4U-NL)"
                 url = uri("https://modmaven.dev/")
@@ -89,7 +91,7 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.5-beta")
+                version("ae2", "19.2.9-alpha.1+global-crafting-providers")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
