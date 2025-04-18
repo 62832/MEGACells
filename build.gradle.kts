@@ -48,9 +48,7 @@ dependencies {
     compileOnly(integration.arseng)
     "addonsRuntimeOnly"(integration.arseng)
 
-    @Suppress("UnstableApiUsage")
     "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
-    @Suppress("UnstableApiUsage")
     "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
 
     compileOnly(integration.appflux)
