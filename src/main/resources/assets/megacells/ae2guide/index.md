@@ -4,23 +4,8 @@ navigation:
   position: 80
 item_ids:
   - accumulation_processor
-  - cell_component_1m
-  - cell_component_4m
-  - cell_component_16m
-  - cell_component_64m
-  - cell_component_256m
-  - fluid_storage_cell_1m
-  - fluid_storage_cell_4m
-  - fluid_storage_cell_16m
-  - fluid_storage_cell_64m
-  - fluid_storage_cell_256m
-  - item_storage_cell_1m
-  - item_storage_cell_4m
-  - item_storage_cell_16m
-  - item_storage_cell_64m
-  - item_storage_cell_256m
-  - mega_item_cell_housing
-  - mega_fluid_cell_housing
+  - accumulation_processor_press
+  - printed_accumulation_processor
   - sky_steel_ingot
   - sky_bronze_ingot
 ---
@@ -47,22 +32,14 @@ To reach new heights on storage, new materials are needed.
   <RecipeFor id="sky_bronze_ingot" />
 </Row>
 
-## Components
+## Accululation Processor
 
-Enabled by the powerful Accumulation Processor, storage components come in new variants, starting with 1m.
+MEGA sized components require Accumulation Processors.
 
 <Row>
+  <RecipeFor id="accumulation_processor_press" />
+  <RecipeFor id="printed_accumulation_processor" />
   <RecipeFor id="accumulation_processor" />
-  <RecipeFor id="cell_component_1m" />
-</Row>
-
-## Storage Cells
-
-Cells come in the full range of sizes for items, fluids and mod-specific versions, each with its own housing. Some integrated mod items can be discovered outside this guide.
-
-<Row>
-  <RecipeFor id="mega_item_cell_housing" />
-  <RecipeFor id="mega_fluid_cell_housing" />
 </Row>
 
 ## Additional Features
