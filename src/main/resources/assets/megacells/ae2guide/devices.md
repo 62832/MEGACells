@@ -1,16 +1,17 @@
 ---
 navigation:
-  title: Portables
+  title: Devices
   icon: portable_cell_workbench
   parent: index.md
 categories:
   - megacells
 item_ids:
   - cell_dock
+  - mega_energy_cell
   - portable_cell_workbench
 ---
 
-# MEGA Portables
+# MEGA Cells: Devices
 
 ## Portable Cell Workbench
 
@@ -20,6 +21,12 @@ The Portable Cell Workbench is like a <ItemLink id="ae2:cell_workbench" /> in yo
 
 ## Cell Dock
 
-The easiest way to park your portable cell on the network (especially a MEGA sized one).
+A smaller <ItemLink id="ae2:me_chest" />.
 
 <RecipeFor id="cell_dock" />
+
+## Energy Cell
+
+Extra energy storage for those demanding crafting jobs.
+
+<RecipeFor id="mega_energy_cell" />
