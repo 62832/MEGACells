@@ -77,13 +77,18 @@ public class BulkCellInventoryTest {
         var stack = item.getDefaultInstance();
         item.getConfigInventory(stack).addFilter(ingot);
         var cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        cell.insert(ingot, 1, Actionable.MODULATE, SRC);
 
         // ensure variants cannot be inserted or extracted without a card regardless of the chain
         assertThat(((BulkCellInventory) cell).hasCompressionChain()).isTrue();
+        assertThat(cell.insert(ingot, 1, Actionable.SIMULATE, SRC)).isOne();
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isZero();
 
-        cell.extract(ingot, 1, Actionable.MODULATE, SRC);
+        // regression test: ensure that the full amount of an item that happens to be compressible to a higher variant
+        // is reported when compression is disabled
+        cell.insert(ingot, 64, Actionable.MODULATE, SRC);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(64);
+        cell.extract(ingot, 64, Actionable.MODULATE, SRC);
+
         item.getUpgrades(stack).addItems(MEGAItems.COMPRESSION_CARD.stack());
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
 
