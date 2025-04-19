@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -352,6 +353,7 @@ public class CompressionService {
     }
 
     private record Override(Item smaller, Item larger, int factor) {
+        @NotNull
         @java.lang.Override
         public String toString() {
             return larger + " → " + factor + "x " + smaller;

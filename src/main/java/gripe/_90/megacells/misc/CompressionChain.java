@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -216,6 +218,7 @@ public class CompressionChain {
             return BigInteger.valueOf(factor);
         }
 
+        @NotNull
         @Override
         public String toString() {
             return factor + "x → " + item;
