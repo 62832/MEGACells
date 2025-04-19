@@ -88,6 +88,8 @@ neoForge {
     }
 
     runs {
+        val main = file("src/main/resources").absolutePath
+
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
             sourceSet = sourceSets.getByName("addons")
@@ -96,6 +98,8 @@ neoForge {
         create("client") {
             client()
             gameDirectory = file("run/client")
+            systemProperty("guideme.ae2.guide.sources", "$main/assets/$modId/ae2guide")
+            systemProperty("guideme.ae2.guide.sourcesNamespace", modId)
         }
 
         create("server") {
@@ -111,8 +115,8 @@ neoForge {
                 "--mod", modId,
                 "--all",
                 "--output", file("src/generated/resources/").absolutePath,
-                "--existing", file("src/main/resources/").absolutePath,
-                "--existing", file("src/main/resources/optional_cell_colours").absolutePath,
+                "--existing", main,
+                "--existing", "$main/optional_cell_colours",
                 "--existing-mod", "ae2"
             )
             sourceSet = sourceSets.getByName("data")
