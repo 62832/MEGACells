@@ -24,7 +24,7 @@
   "gui.tooltips.megacells.Empty": "空",
   "gui.tooltips.megacells.Enabled": "有効",
   "gui.tooltips.megacells.FilterChemicalUnsupported": "化学フィルターが未サポートです！",
-  "gui.tooltips.megacells.MismatchedFilter": "フィルターが一致しません！",
+  "gui.tooltips.megacells.MismatchedFilter": "フィルターが一致しません！ (%s)",
   "gui.tooltips.megacells.NotInstalled": "%s がインストールされていません。",
   "gui.tooltips.megacells.NotPartitioned": "パーティション無し",
   "gui.tooltips.megacells.PartitionedFor": "パーティション: %s",

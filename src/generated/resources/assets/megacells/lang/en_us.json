@@ -25,7 +25,7 @@
   "gui.tooltips.megacells.Empty": "Empty",
   "gui.tooltips.megacells.Enabled": "Enabled",
   "gui.tooltips.megacells.FilterChemicalUnsupported": "Filter chemical unsupported!",
-  "gui.tooltips.megacells.MismatchedFilter": "Mismatched filter!",
+  "gui.tooltips.megacells.MismatchedFilter": "Mismatched filter! (%s)",
   "gui.tooltips.megacells.NotInstalled": "%s not installed.",
   "gui.tooltips.megacells.NotPartitioned": "Not Partitioned",
   "gui.tooltips.megacells.NotYetAvailable": "Not yet available.",

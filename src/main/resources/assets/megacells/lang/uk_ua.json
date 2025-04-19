@@ -47,7 +47,6 @@
   "item.megacells.cable_mega_pattern_provider": "МЕГА постачальник шаблонів",
   "item.megacells.cable_mega_interface": "МЕГА інтерфейс",
   "item.megacells.decompression_module": "Модуль декомпресії",
-  "item.megacells.decompression_pattern": "Декомпресійний постачальник",
   "item.megacells.accumulation_processor": "Акумулюючий процесор",
   "item.megacells.accumulation_processor_press": "Акумулюючий прес",
   "item.megacells.printed_accumulation_processor": "Друкована акумулююча схема",
@@ -73,14 +72,9 @@
   "gui.tooltips.megacells.Empty": "Пустий",
   "gui.tooltips.megacells.Enabled": "Ввімкнено",
   "gui.tooltips.megacells.FilterChemicalUnsupported": "Хімічний фільтр не підтримується!",
-  "gui.tooltips.megacells.MismatchedFilter": "Невідповідний фільтр!",
+  "gui.tooltips.megacells.MismatchedFilter": "Невідповідний фільтр! (%s)",
   "gui.tooltips.megacells.NotPartitioned": "Не розбитий на розділи",
   "gui.tooltips.megacells.PartitionedFor": "Розбито на розділи для: %s",
   "gui.tooltips.megacells.ProcessingOnly": "Підтримуються лише шаблони обробки.",
-  "gui.tooltips.megacells.Quantity": "Кількість: %s",
-  "text.autoconfig.megacells.option.AllowSpentWaste": "(AppMek) Дозволити використання відпрацьованих ядерних відходів",
-  "text.autoconfig.megacells.option.AllowSpentWaste.@Tooltip": "Чи повинна МЕГА радіоактивна мати можливість зберігати відпрацьовані ядерні відходи.",
-  "text.autoconfig.megacells.option.CompressionChainLimit": "Граничний обсяг стиснення",
-  "text.autoconfig.megacells.option.CompressionChainLimit.@Tooltip": "Максимальна кількість варіантів, про які масового зберігання з підтримкою стиснення може повідомити як про збережені.",
-  "text.autoconfig.megacells.title": "MEGA Cells"
+  "gui.tooltips.megacells.Quantity": "Кількість: %s"
 }

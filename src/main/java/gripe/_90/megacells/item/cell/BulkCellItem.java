@@ -79,12 +79,14 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                 if (storedItem == null) {
                     lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
                 } else if (!storedItem.equals(filterItem)) {
-                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
+                    lines.add(MEGATranslations.MismatchedFilter.text(filterItem.getDisplayName())
+                            .withStyle(ChatFormatting.DARK_RED));
                 }
             } else {
                 lines.add(
                         storedItem != null
-                                ? MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED)
+                                ? MEGATranslations.MismatchedFilter.text(MEGATranslations.Empty.text())
+                                        .withStyle(ChatFormatting.DARK_RED)
                                 : Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
 
