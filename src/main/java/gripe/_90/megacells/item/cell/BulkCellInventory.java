@@ -36,7 +36,7 @@ public class BulkCellInventory implements StorageCell {
     private BigInteger unitFactor;
     private int compressionCutoff;
 
-    private Map<Item, Long> availableStacks;
+    private Map<Item, Long> compressedStacks;
     private List<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
@@ -65,11 +65,11 @@ public class BulkCellInventory implements StorageCell {
             stack.set(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
         }
 
-        int maxCutoff = compressionChain.size() - 1;
+        int maxCutoff = Math.max(0, compressionChain.size() - 1);
         int recordedCutoff = stack.getOrDefault(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, maxCutoff);
         compressionCutoff = recordedCutoff < 0 ? maxCutoff : Math.min(recordedCutoff, maxCutoff);
 
-        availableStacks = compressionChain.initStacks(unitCount, compressionCutoff, determiningItem);
+        compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, determiningItem);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class BulkCellInventory implements StorageCell {
 
                 var filter = filterItem != null ? filterItem.getItem() : null;
                 compressionChain = CompressionService.getChain(filter);
-                availableStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
+                compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
 
                 saveChanges();
             }
@@ -222,7 +222,7 @@ public class BulkCellInventory implements StorageCell {
     private void updateContents(BigInteger unitsToAdd) {
         unitCount = unitCount.add(unitsToAdd);
         saveChanges();
-        compressionChain.updateStacks(availableStacks, unitsToAdd, compressionCutoff);
+        compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
     }
 
     private void saveChanges() {
@@ -274,19 +274,21 @@ public class BulkCellInventory implements StorageCell {
     }
 
     public Item getCutoffItem() {
-        return compressionChain.getItem(compressionCutoff);
+        return hasCompressionChain() ? compressionChain.getItem(compressionCutoff) : null;
     }
 
     Item getHighestVariant() {
-        return compressionChain.getItem(compressionChain.size() - 1);
+        return hasCompressionChain() ? compressionChain.getItem(compressionChain.size() - 1) : null;
     }
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
-        if (!compressionEnabled && !isFilterMismatched() && storedItem != null) {
-            out.add(storedItem, CompressionChain.clamp(unitCount.divide(unitFactor), CompressionChain.STACK_LIMIT));
-        } else {
-            availableStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
+        if (storedItem != null) {
+            if (compressionEnabled) {
+                compressedStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
+            } else {
+                out.add(storedItem, CompressionChain.clamp(unitCount.divide(unitFactor), CompressionChain.STACK_LIMIT));
+            }
         }
     }
 
