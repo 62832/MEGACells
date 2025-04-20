@@ -288,6 +288,12 @@ public class BulkCellInventory implements StorageCell {
                 compressedStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
             } else {
                 out.add(storedItem, CompressionChain.clamp(unitCount.divide(unitFactor), CompressionChain.STACK_LIMIT));
+
+                if (isFilterMismatched()) {
+                    compressedStacks.keySet().stream()
+                            .takeWhile(i -> !storedItem.is(i))
+                            .forEach(i -> out.add(AEItemKey.of(i), compressedStacks.get(i)));
+                }
             }
         }
     }

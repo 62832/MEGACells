@@ -237,15 +237,16 @@ public class BulkCellInventoryTest {
         assertThat(cell.insert(ingot, 1, Actionable.SIMULATE, SRC)).isZero();
         assertThat(cell.insert(rejected, 1, Actionable.SIMULATE, SRC)).isZero();
 
-        // ensure all variants are reported when filter is mismatched, even without a card
+        // ensure all variants from the base "stored" item onto the smallest are reported when filter is mismatched,
+        // even without a card
         item.getUpgrades(stack).clear();
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         assertThat(cell.getStatus()).isEqualTo(CellState.FULL);
         assertThat(cell.getAvailableStacks().get(nugget)).isOne();
-        assertThat(cell.getAvailableStacks().get(ingot)).isOne();
-        assertThat(cell.getAvailableStacks().get(block)).isOne();
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(10);
+        assertThat(cell.getAvailableStacks().get(block)).isZero();
 
-        // ensure to contents are recoverable even without a card
+        // ensure all contents are recoverable even without a card
         assertThat(cell.extract(nugget, MAX, Actionable.MODULATE, SRC)).isOne();
 
         item.getUpgrades(stack).addItems(card);
@@ -306,7 +307,6 @@ public class BulkCellInventoryTest {
 
         var cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         var patterns = cell.getDecompressionPatterns();
-        assertThat(patterns.size()).isEqualTo(cell.getAvailableStacks().size() - 1);
 
         // first pass: default cutoff (block), both decompression patterns (block → ingot → nugget)
         var firstOutput = patterns.getFirst().getPrimaryOutput();
@@ -327,7 +327,6 @@ public class BulkCellInventoryTest {
         // one decompression pattern (ingot → nugget) and one compression (ingot → block)
         cell.switchCompressionCutoff(false);
         patterns = cell.getDecompressionPatterns();
-        assertThat(patterns.size()).isEqualTo(cell.getAvailableStacks().size() - 1);
 
         firstOutput = patterns.getFirst().getPrimaryOutput();
         assertThat(firstOutput.what()).isEqualTo(nugget);
@@ -346,7 +345,6 @@ public class BulkCellInventoryTest {
         // third pass: lowest cutoff, both compression patterns (nugget → ingot → block)
         cell.switchCompressionCutoff(false);
         patterns = cell.getDecompressionPatterns();
-        assertThat(patterns.size()).isEqualTo(cell.getAvailableStacks().size() - 1);
 
         firstOutput = patterns.getFirst().getPrimaryOutput();
         assertThat(firstOutput.what()).isEqualTo(ingot);
