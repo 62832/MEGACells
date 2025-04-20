@@ -8,17 +8,11 @@ item_ids:
   - printed_accumulation_processor
   - sky_steel_ingot
   - sky_steel_block
-  - sky_bronze_ingot
-  - sky_bronze_block
-  - sky_osmium_ingot
-  - sky_osmium_block
 ---
 
 # MEGA Cells
 
-![MEGA Cells logo](../../../logo.png)
-
-(TODO: Larger overall game scene)
+![MEGA Cells logo](assets/logo.png)
 
 ## Introduction
 
@@ -58,4 +52,4 @@ of your ME storage and infrastructure.
 
 ## Further Reading
 
-<CategoryIndex category="megacells" />
+<SubPages />
