@@ -89,7 +89,7 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.8")
+                version("ae2", "19.2.9")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
