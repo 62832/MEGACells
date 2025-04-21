@@ -119,13 +119,14 @@ public class DecompressionModulePart extends AEBasePart implements ICraftingProv
     public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
         var storage = node.getGrid().getStorageService().getInventory();
 
-        for (var output : Object2LongMaps.fastIterable(outputs)) {
+        for (var it = Object2LongMaps.fastIterator(outputs); it.hasNext(); ) {
+            var output = it.next();
             var what = output.getKey();
             var amount = output.getLongValue();
             var inserted = storage.insert(what, amount, Actionable.MODULATE, IActionSource.ofMachine(this));
 
             if (inserted >= amount) {
-                outputs.removeLong(what);
+                it.remove();
             } else if (inserted > 0) {
                 outputs.put(what, amount - inserted);
             }
