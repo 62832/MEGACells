@@ -34,7 +34,8 @@ energy buffer, now in a more compact block space!
 Further still, the Superdense Energy Cell can be used to craft a more souped up version of the
 <ItemLink id="ae2:energy_card" />, providing an even greater energy buffer to any wireless infrastructure such as
 portable storage cells and [wireless terminals](ae2:items-blocks-machines/wireless_terminals.md). AE2's own such devices
-will support it just as well as the regular Energy Card, however, the more demanding [MEGA portable cells](storage.md)
-will support *only* the Greater Energy Card to increase their battery capacity with.
+will support it just as well as the regular Energy Card, however, the more demanding
+[MEGA portable cells](storage.md#portable-cells) will support *only* the Greater Energy Card to increase their battery
+capacity with.
 
 <RecipeFor id="greater_energy_card" />

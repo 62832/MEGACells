@@ -63,3 +63,24 @@ one-block space. Perhaps one may find it useful in the case of a compact subnetw
 buffer storage.
 
 <RecipeFor id="cell_dock" />
+
+## "Classic Cell Colours"
+
+As an optional visual throwback, MEGA provides the following bundled resource pack which the user may choose to enable.
+
+![Classic Cell Colours resource pack](assets/diagrams/cell_colours_pack.png)
+
+In releases of both AE2 and its add-ons prior to Minecraft 1.21, the old textures for any sets of storage cells followed
+a 5-point colour scheme starting from a reddish brown for 1k cells and a light lavender/violet hue for 256k. MEGA also
+followed this trend with its own cell tiers, starting from a deep red at 1M and ending with a deeper violet at 256M.
+
+![Old cell textures](assets/diagrams/cell_colours_old.png)
+
+With the wider texture overhaul introduced in AE2 post-1.20.x, storage cells were also adapted to follow a somewhat
+wider colour palette, with AE2's base storage cells following a blue-to-green hue shift along its tier progression and
+MEGA intending to continue the progression starting from yellow to red to pink. While this is also quite nice, it didn't
+seem like a bad idea to also include the option for the old colouring system for those who may have preferred it over
+the current one.
+
+![AE2 cell colours](assets/diagrams/cell_colours_ae2.png)
+![MEGA cell colours](assets/diagrams/cell_colours_mega.png)

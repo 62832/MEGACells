@@ -38,7 +38,7 @@ item_ids:
 </Row>
 
 As with storage cells, MEGA also provides its larger tiers of storage for
-[crafting CPUs](ae2:ae2-mechanics/autocrafting.md). Although these, too, require their own dedicated version of the
+[crafting CPUs](ae2:items-blocks-machines/crafting_cpu_multiblock.md). Although these, too, require their own dedicated version of the
 <ItemLink id="ae2:crafting_unit" /> to accommodate for their increase in power, they will still handle even the biggest
 crafting jobs easily with more memory, while also looking *pretty damn cool* in black.
 

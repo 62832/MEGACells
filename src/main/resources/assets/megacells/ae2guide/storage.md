@@ -145,9 +145,10 @@ type, MEGA can (likely) also accommodate for with its own housing.
 
 ## Portable Cells
 
-MEGA also provides portable versions of all its cells just as AE2 itself does, though the increased capacity of these
-cells will demand a fair bit more energy. As such, note that these are crafted with a
-<ItemLink id="ae2:dense_energy_cell" /> as opposed to a regular <ItemLink id="ae2:energy_cell" />.
+MEGA also provides [portable](ae2:items-blocks-machines/storage_cells.md#portable-item-storage) versions of all its
+cells just as AE2 itself does, though the increased capacity of these cells will demand a fair bit more energy. As such,
+note that these are crafted with a <ItemLink id="ae2:dense_energy_cell" /> as opposed to a regular
+<ItemLink id="ae2:energy_cell" />.
 
 While these portable cells also support the full range of [upgrades](ae2:items-blocks-machines/upgrade_cards.md) that
 regular ME portable cells do, their increased battery and overall hunger for power means that the regular

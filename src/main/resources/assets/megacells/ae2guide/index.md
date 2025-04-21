@@ -16,9 +16,9 @@ item_ids:
 
 ## Introduction
 
-**MEGA Cells** is an add-on for Applied Energistics 2 providing higher tiers of storage, ranging in capacity from 1M to
-as high as 256M, while also providing some bespoke features such as more specialised storage cells and extra related
-tooling.
+**MEGA Cells** is an add-on for Applied Energistics 2 providing higher tiers of storage, ranging in capacity from **1M**
+to as high as **256M**, while also providing some bespoke features such as more specialised storage cells and extra
+related tooling.
 
 ## Getting Started
 
