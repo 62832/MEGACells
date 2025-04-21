@@ -128,6 +128,10 @@ public class BulkCellInventory implements StorageCell {
         return !compressionChain.isEmpty();
     }
 
+    long getTraceUnits() {
+        return CompressionChain.clamp(unitCount.remainder(unitFactor), Long.MAX_VALUE);
+    }
+
     public List<IPatternDetails> getDecompressionPatterns() {
         if (filterItem == null || !compressionEnabled || !hasCompressionChain() || isFilterMismatched()) {
             return List.of();
@@ -279,6 +283,10 @@ public class BulkCellInventory implements StorageCell {
 
     Item getHighestVariant() {
         return hasCompressionChain() ? compressionChain.getItem(compressionChain.size() - 1) : null;
+    }
+
+    Item getLowestVariant() {
+        return hasCompressionChain() ? compressionChain.getItem(0) : null;
     }
 
     @Override

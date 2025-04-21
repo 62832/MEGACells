@@ -95,6 +95,18 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                             ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                             : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
 
+            var trace = inv.getTraceUnits();
+
+            if (trace > 0) {
+                lines.add(Tooltips.of(
+                                inv.isCompressionEnabled()
+                                        ? MEGATranslations.TraceUnits.text(
+                                                Tooltips.ofNumber(trace),
+                                                inv.getLowestVariant().getDescription())
+                                        : MEGATranslations.ContainsTraceUnits.text())
+                        .withStyle(ChatFormatting.GOLD));
+            }
+
             if (inv.isCompressionEnabled()) {
                 var cutoffItem = inv.getCutoffItem();
 

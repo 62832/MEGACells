@@ -13,6 +13,7 @@ public enum MEGATranslations implements LocalizationEnum {
     CompressionCutoff("Bulk Compression Cutoff"),
     Cutoff("Cutoff: %s"),
     Contains("Contains: %s"),
+    ContainsTraceUnits("Contains trace units!"),
     Disabled("Disabled"),
     Empty("Empty"),
     Enabled("Enabled"),
@@ -25,6 +26,7 @@ public enum MEGATranslations implements LocalizationEnum {
     ProcessingOnly("Supports processing patterns only."),
     Quantity("Quantity: %s"),
     NotPartitioned("Not Partitioned"),
+    TraceUnits("Trace Units: %s (%s)"),
     WorkbenchCell("Cell:"),
     WorkbenchConfig("Config:");
 
