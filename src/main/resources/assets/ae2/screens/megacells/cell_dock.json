@@ -1,15 +1,5 @@
 {
-  "includes": ["../common/common.json", "../common/player_inventory.json"],
-  "background": {
-    "texture": "guis/me_chest.png",
-    "srcRect": [0, 0, 176, 168]
-  },
-  "slots": {
-    "STORAGE_CELL": {
-      "left": 80,
-      "top": 37
-    }
-  },
+  "includes": ["../me_chest.json"],
   "text": {
     "dialog_title": {
       "text": {
@@ -19,14 +9,6 @@
         "left": 8,
         "top": 6
       }
-    }
-  },
-  "widgets": {
-    "openPriority": {
-      "left": 154,
-      "top": -5,
-      "width": 20,
-      "height": 20
     }
   }
 }

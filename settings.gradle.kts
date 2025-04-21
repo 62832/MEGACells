@@ -89,7 +89,7 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.5-beta")
+                version("ae2", "19.2.8")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
@@ -119,7 +119,7 @@ run {
                 library("appex", "curse.maven", "applied-experienced-1157608").version("6112629")
                 library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
 
-                library("appliede", "curse.maven", "appliede-1009940").version("6328848")
+                library("appliede", "curse.maven", "appliede-1009940").version("6430033")
                 library("projecte", "curse.maven", "projecte-226410").version("6301953")
             }
 
