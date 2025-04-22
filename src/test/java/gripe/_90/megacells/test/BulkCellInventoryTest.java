@@ -125,6 +125,12 @@ public class BulkCellInventoryTest {
         assertThat(cell.getAvailableStacks().get(nugget)).isZero();
         cell.insert(nugget, 1, Actionable.MODULATE, SRC);
 
+        // regression testing: ensure backflow is properly handled when extracting more of a smaller variant than the
+        // amount reported for it
+        cell.extract(nugget, 8, Actionable.MODULATE, SRC);
+        assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(2);
+        assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(3);
+
         // ensure only filtered to works again once card is removed
         item.getUpgrades(stack).clear();
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));

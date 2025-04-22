@@ -168,7 +168,7 @@ public class CompressionChain {
                 unitsToAdd = unitsToAdd.subtract(added);
 
                 if (amount.signum() == -1 || amount.divide(factor).signum() == 1) {
-                    var outflow = amount.remainder(factor);
+                    var outflow = amount.add(factor).remainder(factor);
                     unitsToAdd = unitsToAdd.add(amount.subtract(outflow));
                     amount = outflow;
                 }
