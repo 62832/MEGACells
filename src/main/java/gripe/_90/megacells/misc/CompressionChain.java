@@ -18,6 +18,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.common.util.Lazy;
 
 import appeng.api.crafting.IPatternDetails;
 
@@ -28,7 +29,7 @@ public class CompressionChain {
     public static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
     private final List<Variant> variants;
-    private List<Pair<IPatternDetails, IPatternDetails>> patterns;
+    private final Lazy<List<Pair<IPatternDetails, IPatternDetails>>> patterns = Lazy.of(this::gatherPatterns);
 
     CompressionChain(List<Variant> variants) {
         this.variants = Collections.unmodifiableList(variants);
@@ -83,32 +84,34 @@ public class CompressionChain {
             return List.of();
         }
 
-        // lazily initialise full pattern list if it hasn't been already
-        if (patterns == null) {
-            patterns = new ObjectArrayList<>();
-
-            for (var i = 0; i < variants.size() - 1; i++) {
-                var smaller = variants.get(i);
-                var larger = variants.get(i + 1);
-
-                var compression = new DecompressionPattern(smaller.item, larger.item, larger.factor, true);
-                var decompression = new DecompressionPattern(larger.item, smaller.item, larger.factor, false);
-
-                patterns.add(Pair.of(compression, decompression));
-            }
-        }
-
         var decompressionPatterns = new ObjectArrayList<IPatternDetails>();
+        var availablePatterns = patterns.get();
 
         for (var i = 0; i < variants.subList(0, cutoff).size(); i++) {
-            decompressionPatterns.add(patterns.get(i).right());
+            decompressionPatterns.add(availablePatterns.get(i).right());
         }
 
         for (var i = cutoff; i < variants.size() - 1; i++) {
-            decompressionPatterns.add(patterns.get(i).left());
+            decompressionPatterns.add(availablePatterns.get(i).left());
         }
 
         return Collections.unmodifiableList(decompressionPatterns);
+    }
+
+    private List<Pair<IPatternDetails, IPatternDetails>> gatherPatterns() {
+        var patterns = new ObjectArrayList<Pair<IPatternDetails, IPatternDetails>>();
+
+        for (var i = 0; i < variants.size() - 1; i++) {
+            var smaller = variants.get(i);
+            var larger = variants.get(i + 1);
+
+            var compression = new DecompressionPattern(smaller.item, larger.item, larger.factor, true);
+            var decompression = new DecompressionPattern(larger.item, smaller.item, larger.factor, false);
+
+            patterns.add(Pair.of(compression, decompression));
+        }
+
+        return patterns;
     }
 
     public Map<Item, Long> initStacks(BigInteger unitCount, int cutoff, Item fallback) {
