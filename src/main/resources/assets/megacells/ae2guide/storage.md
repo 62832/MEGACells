@@ -106,7 +106,7 @@ As mentioned earlier, the <ItemLink id="megacells:accumulation_processor" /> ser
 together any MEGA infrastructure, and this includes its own higher tiers of
 [storage cell](ae2:items-blocks-machines/storage_cells.md) to start with. With this processor, a
 <ItemLink id="ae2:cell_component_256k" /> can be taken *even further beyond*, from **1M** (equivalent to "1024k")
-onwards to the highest M tier of 256M — over *one thousand* times higher in capacity than 256k.
+onwards to the highest M tier of **256M** — over *one thousand* times higher in capacity than 256k.
 
 <RecipeFor id="cell_component_1m" />
 <RecipeFor id="cell_component_4m" />

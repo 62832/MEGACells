@@ -18,9 +18,7 @@
                 hasRedstone: 2,
                 id: "ae2:cable_bus",
                 north: {
-                    gn: {p: 0},
-                    id: "megacells:cable_mega_pattern_provider",
-                    priority: 0,
+                    id: "megacells:decompression_module",
                     visual: {missingChannel: 0b, powered: 1b}
                 },
                 visual: {}
