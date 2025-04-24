@@ -36,11 +36,10 @@ The Radioactive Cell, of course, stores nothing *but* the aforementioned chemica
 </Row>
 
 The Radioactive Cell is not too dissimilar to the <ItemLink id="megacells:bulk_item_cell" /> in that it can only store
-one given type of radioactive chemical and it must be partitioned before it
-can operate. This where the similarities end between the two, however; the Radioactive Cell only stores a finite amount
-of this chemical, at a maximum of *256 [bytes](ae2:ae2-mechanics/bytes-and-types.md)*. That is, however, the
-equivalent of *2048 buckets* — or 4 Nuclear Waste Barrels' worth of this radioactive chemical — in the space of a single
-cell.
+one given type of radioactive chemical and it must be partitioned before it can operate. This where the similarities end
+between the two, however; the Radioactive Cell only stores a finite amount of this chemical, at a maximum of *256
+[bytes](ae2:ae2-mechanics/bytes-and-types.md)*. That is, however, the equivalent of *2048 buckets* — or 4 Nuclear Waste
+Barrels' worth of this radioactive chemical — in the space of a single cell.
 
 ![Radioactive Cell with polonium](assets/diagrams/radioactive_cell.png)
 

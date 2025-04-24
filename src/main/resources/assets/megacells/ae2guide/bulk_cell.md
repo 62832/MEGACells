@@ -43,10 +43,11 @@ wouldn't be much point in doing so anyway.
   <RecipeFor id="bulk_item_cell" />
 </Row>
 
-A newly-crafted Bulk Cell cannot yet function; first it needs to be *partitioned* (filtered) to designate what item it will store.
-This is done using a <ItemLink id="ae2:cell_workbench" /> or our convenient <ItemLink id="portable_cell_workbench" />.
-Once this has been done, the cell will begin to take in that respective item, even prioritising itself as the first and
-probably only place that this item will be sent to from the moment its filter is set.
+A newly-crafted Bulk Cell cannot yet function; first it needs to be *partitioned* (filtered) to designate what item it
+will store. This is done using a <ItemLink id="ae2:cell_workbench" /> or our convenient
+<ItemLink id="portable_cell_workbench" />. Once this has been done, the cell will begin to take in that respective item,
+even prioritising itself as the first and probably only place that this item will be sent to from the moment its filter
+is set.
 
 ![Empty Bulk Cell](assets/diagrams/bulk_cell_empty.png)
 ![Partitioned Bulk Cell](assets/diagrams/bulk_cell_partitioned.png)
@@ -72,8 +73,8 @@ wouldn't be suitable here at all for working with whole-number quantities).
 The Bulk Cell casts all of these primitive types by the wayside, and is instead designed in such a way to hold any
 arbitrarily large quantity a user could reasonably conceive. Indeed, even though any given ME network will only ever be
 able to handle and display up to the aforementioned 9.2 quintillion of any given item type stored within it, the Bulk
-Cell is internally capable of going beyond this limit, and at the very least alluding to the fact that it may
-have done so.
+Cell is internally capable of going beyond this limit, and at the very least alluding to the fact that it may have done
+so.
 
 ![Bulk cell item count of (Long.MAX_VALUE - 1)](assets/diagrams/bulk_cell_max_count_1.png)
 ![Bulk cell item count as displayed past Long.MAX_VALUE](assets/diagrams/bulk_cell_max_count_2.png)
@@ -104,8 +105,8 @@ recipe turned those nine nuggets back into the one original ingot, a Bulk Cell c
 able to accept both the ingot and nugget form of that metal, turning every 9 nuggets inserted into another ingot on the
 fly.
 
-Furthermore, this automatic compression extends to *all* higher variants, such as metal blocks and even more
-heavily "compressed" versions of those blocks provided by such mods, altogether handled as one long "chain" of variants
+Furthermore, this automatic compression extends to *all* higher variants, such as metal blocks and even more heavily
+"compressed" versions of those blocks provided by such mods, altogether handled as one long "chain" of variants
 from smallest to largest.
 
 ![Bulk cell with compression enabled](assets/diagrams/bulk_cell_compressed_1.png)
@@ -190,9 +191,8 @@ The module also allows for a "global" [priority](ae2:ae2-mechanics/autocrafting.
 patterns together, relative to any regular crafting infrastructure such as Pattern Providers with their own patterns for
 a given variant item, by right-clicking on the module to open the priority menu.
 
-The Decompression Module is very much a "set it and forget it" device, and you typically only need one module
-on a given network for all of its auto-crafting functionality to be enabled. ***KEEP IN MIND, HOWEVER***, that the
-module only functions on a same-network basis and can only keep track of any cells hooked up to ME Chests and Drives on
-the same main network as itself. It ***WILL NOT WORK*** across [subnetworks](ae2:ae2-mechanics/subnetworks.md), for
-example, so you should ensure that your Bulk storage remains centralised within your main network for the module to
-recognise it all.
+The Decompression Module is very much a "set it and forget it" device, and you typically only need one module on a given
+network for all of its auto-crafting functionality to be enabled. ***KEEP IN MIND, HOWEVER***, that the module only
+functions on a same-network basis and can only keep track of any cells hooked up to ME Chests and Drives on the same
+main network as itself. It ***WILL NOT WORK*** across [subnetworks](ae2:ae2-mechanics/subnetworks.md), for example, so you should ensure that your
+Bulk storage remains centralised within your main network for the module to recognise it all.
