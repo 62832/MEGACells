@@ -122,10 +122,9 @@ to craft an item cell housing for your new M-tier components.
   <Recipe id="cells/standard/item_storage_cell_1m_with_housing" />
 </Row>
 
-For fluids and everything inbetween, there are also dedicated housings. As it turns out, Sky Stone is powerful enough
+For fluids and everything beyond, there are also dedicated housings. As it turns out, Sky Stone is powerful enough
 that it can alloy with some other metals to also form the appropriate cells, such as copper to make fluid cell housings
-out of **Sky Bronze**. Even outside of this guide, whatever you can think of that may be supported by a dedicated cell
-type, MEGA can (likely) also accommodate for with its own housing.
+out of **Sky Bronze**. Even outside of this guide, whatever you can think of may be supported by MEGA and a dedicated cell with its own housing type.
 
 <Row>
   <ItemImage id="sky_bronze_ingot" scale="4" />

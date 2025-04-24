@@ -43,9 +43,8 @@ wouldn't be much point in doing so anyway.
   <RecipeFor id="bulk_item_cell" />
 </Row>
 
-In order for a Bulk Cell to function once you have made it, the cell needs to know in advance what item it should be
-trying to store and handle, so it will not accept any items until their type has been configured. For the cell to begin
-working, it needs to be *partitioned* (filtered) to the item in question using a <ItemLink id="ae2:cell_workbench" />.
+A newly-crafted Bulk Cell cannot yet function; first it needs to be *partitioned* (filtered) to designate what item it will store.
+This is done using a <ItemLink id="ae2:cell_workbench" /> or our convenient <ItemLink id="portable_cell_workbench" />.
 Once this has been done, the cell will begin to take in that respective item, even prioritising itself as the first and
 probably only place that this item will be sent to from the moment its filter is set.
 
@@ -73,7 +72,7 @@ wouldn't be suitable here at all for working with whole-number quantities).
 The Bulk Cell casts all of these primitive types by the wayside, and is instead designed in such a way to hold any
 arbitrarily large quantity a user could reasonably conceive. Indeed, even though any given ME network will only ever be
 able to handle and display up to the aforementioned 9.2 quintillion of any given item type stored within it, the Bulk
-Cell is perfectly capable internally of going beyond this limit, and at the very least alluding to the fact that it may
+Cell is internally capable of going beyond this limit, and at the very least alluding to the fact that it may
 have done so.
 
 ![Bulk cell item count of (Long.MAX_VALUE - 1)](assets/diagrams/bulk_cell_max_count_1.png)
@@ -155,7 +154,7 @@ base item the cell was initially partitioned to.
 </GameScene>
 
 So far, so good. We know that with Compression enabled, a Bulk Cell can easily work with any corresponding variants when
-inserted or extracted either by a player or a device like the <ItemLink id="ae2:import_bus" /> and
+inserted or extracted either by a player or devices like the <ItemLink id="ae2:import_bus" /> and
 <ItemLink id="ae2:export_bus" />. Now, what about auto-crafting?
 
 This one is a bit more complicated. In AE2, the [auto-crafting](ae2:ae2-mechanics/autocrafting.md) system relies on the
@@ -191,7 +190,7 @@ The module also allows for a "global" [priority](ae2:ae2-mechanics/autocrafting.
 patterns together, relative to any regular crafting infrastructure such as Pattern Providers with their own patterns for
 a given variant item, by right-clicking on the module to open the priority menu.
 
-The Decompression Module is very much a "set it and forget it" sort of device, and you typically only need one module
+The Decompression Module is very much a "set it and forget it" device, and you typically only need one module
 on a given network for all of its auto-crafting functionality to be enabled. ***KEEP IN MIND, HOWEVER***, that the
 module only functions on a same-network basis and can only keep track of any cells hooked up to ME Chests and Drives on
 the same main network as itself. It ***WILL NOT WORK*** across [subnetworks](ae2:ae2-mechanics/subnetworks.md), for
