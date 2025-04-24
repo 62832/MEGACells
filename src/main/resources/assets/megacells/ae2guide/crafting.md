@@ -26,7 +26,7 @@ item_ids:
   <IsometricCamera yaw="195" pitch="10" />
 </GameScene>
 
-## Crafting Storage
+## MEGA [Crafting CPUs](ae2:items-blocks-machines/crafting_cpu_multiblock.md)
 
 <Row>
   <BlockImage id="mega_crafting_unit" scale="4" />
@@ -37,10 +37,10 @@ item_ids:
   <BlockImage id="256m_crafting_storage" scale="4" />
 </Row>
 
-As with storage cells, MEGA also provides its larger tiers of storage for
-[crafting CPUs](ae2:items-blocks-machines/crafting_cpu_multiblock.md). Although these, too, require their own dedicated version of the
-<ItemLink id="ae2:crafting_unit" /> to accommodate for their increase in power, they will still handle even the biggest
-crafting jobs easily with more memory, while also looking *pretty damn cool* in black.
+As with storage cells, MEGA also provides its larger tiers of storage for crafting CPUs. Although these, too, require
+their own dedicated version of the <ItemLink id="ae2:crafting_unit" /> to accommodate for their increase in power, they
+will still handle even the biggest crafting jobs easily with more memory, while also looking *pretty damn cool* in
+black.
 
 <RecipeFor id="mega_crafting_unit" />
 <RecipeFor id="1m_crafting_storage" />

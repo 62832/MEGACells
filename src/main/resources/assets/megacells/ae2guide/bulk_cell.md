@@ -33,13 +33,18 @@ Cell does have one key advantage to start with: unlike the finite quantity of ea
 Cell is able to store an ***infinite*** amount of that single item type. And I do mean *infinite*, at least in a
 practical sense. *(see the "Technical Bore" section a bit lower down if you're curious enough)*
 
+Also worth noting is that the Bulk Cell is not craftable with any of the existing cell housings offered by either AE2 or
+MEGA, instead opting for its own dedicated Netherite housing, always crafted from scratch together with its dedicated
+component. For this reason, the Bulk Cell also cannot be disassembled back into its component and housing — though there
+wouldn't be much point in doing so anyway.
+
 <Row>
   <RecipeFor id="bulk_cell_component" />
   <RecipeFor id="bulk_item_cell" />
 </Row>
 
 In order for a Bulk Cell to function once you have made it, the cell needs to know in advance what item it should be
-trying to store and handle, so it will not accept any items until this item has been configured. For the cell to begin
+trying to store and handle, so it will not accept any items until their type has been configured. For the cell to begin
 working, it needs to be *partitioned* (filtered) to the item in question using a <ItemLink id="ae2:cell_workbench" />.
 Once this has been done, the cell will begin to take in that respective item, even prioritising itself as the first and
 probably only place that this item will be sent to from the moment its filter is set.

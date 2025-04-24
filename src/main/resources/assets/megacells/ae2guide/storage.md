@@ -91,7 +91,7 @@ item_ids:
   <IsometricCamera yaw="195" pitch="10" />
 </GameScene>
 
-## Storage Cells
+## MEGA [Storage Cells](ae2:items-blocks-machines/storage_cells.md)
 
 <Row>
   <ItemImage id="mega_item_cell_housing" scale="4" />
@@ -103,10 +103,9 @@ item_ids:
 </Row>
 
 As mentioned earlier, the <ItemLink id="megacells:accumulation_processor" /> serves as the first step towards putting
-together any MEGA infrastructure, and this includes its own higher tiers of
-[storage cell](ae2:items-blocks-machines/storage_cells.md) to start with. With this processor, a
-<ItemLink id="ae2:cell_component_256k" /> can be taken *even further beyond*, from **1M** (equivalent to "1024k")
-onwards to the highest M tier of **256M** — over *one thousand* times higher in capacity than 256k.
+together any MEGA infrastructure, and this includes its own higher tiers of storage cells to start with. With this
+processor, a <ItemLink id="ae2:cell_component_256k" /> can be taken *even further beyond*, from **1M** (equivalent to
+"1024k") onwards to the highest M tier of **256M** — over *one thousand* times higher in capacity than 256k.
 
 <RecipeFor id="cell_component_1m" />
 <RecipeFor id="cell_component_4m" />
@@ -143,12 +142,11 @@ type, MEGA can (likely) also accommodate for with its own housing.
   <RecipeFor id="mega_fluid_cell_housing" />
 </Row>
 
-## Portable Cells
+## MEGA [Portable Cells](ae2:items-blocks-machines/storage_cells.md#portable-item-storage)
 
-MEGA also provides [portable](ae2:items-blocks-machines/storage_cells.md#portable-item-storage) versions of all its
-cells just as AE2 itself does, though the increased capacity of these cells will demand a fair bit more energy. As such,
-note that these are crafted with a <ItemLink id="ae2:dense_energy_cell" /> as opposed to a regular
-<ItemLink id="ae2:energy_cell" />.
+MEGA also provides portable versions of all its cells just as AE2 itself does, though the increased capacity of these
+cells will demand a fair bit more energy. As such, note that these are crafted with a
+<ItemLink id="ae2:dense_energy_cell" /> as opposed to a regular <ItemLink id="ae2:energy_cell" />.
 
 While these portable cells also support the full range of [upgrades](ae2:items-blocks-machines/upgrade_cards.md) that
 regular ME portable cells do, their increased battery and overall hunger for power means that the regular
