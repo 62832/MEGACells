@@ -45,11 +45,11 @@ public final class MEGAMenus {
 
     private static <M extends AEBaseMenu, H> Supplier<MenuType<M>> create(
             String id, MenuTypeBuilder.MenuFactory<M, H> factory, Class<H> host) {
-        return DR.register(id, () -> MenuTypeBuilder.create(factory, host).build(MEGACells.makeId(id)));
+        return DR.register(id, () -> MenuTypeBuilder.create(factory, host).buildUnregistered(MEGACells.makeId(id)));
     }
 
     private static <M extends AEBaseMenu, H> Supplier<MenuType<M>> createTyped(
             String id, MenuTypeBuilder.TypedMenuFactory<M, H> factory, Class<H> host) {
-        return DR.register(id, () -> MenuTypeBuilder.create(factory, host).build(MEGACells.makeId(id)));
+        return DR.register(id, () -> MenuTypeBuilder.create(factory, host).buildUnregistered(MEGACells.makeId(id)));
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.item.TooltipFlag;
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.api.storage.cells.ISaveProvider;
@@ -34,10 +35,14 @@ import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATranslations;
 
 public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
-    public static final Handler HANDLER = new Handler();
+    private static final ICellHandler HANDLER = new Handler();
 
     public BulkCellItem(Properties properties) {
         super(properties.stacksTo(1));
+    }
+
+    public static void registerHandler() {
+        StorageCells.addCellHandler(HANDLER);
     }
 
     @Override
@@ -53,7 +58,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
     @ParametersAreNonnullByDefault
     @Override
     public void appendHoverText(ItemStack is, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        var inv = HANDLER.getCellInventory(is, null);
+        var inv = (BulkCellInventory) HANDLER.getCellInventory(is, null);
 
         if (inv != null) {
             var storedItem = inv.getStoredItem();
@@ -74,12 +79,14 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                 if (storedItem == null) {
                     lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
                 } else if (!storedItem.equals(filterItem)) {
-                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
+                    lines.add(MEGATranslations.MismatchedFilter.text(filterItem.getDisplayName())
+                            .withStyle(ChatFormatting.DARK_RED));
                 }
             } else {
                 lines.add(
                         storedItem != null
-                                ? MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED)
+                                ? MEGATranslations.MismatchedFilter.text(MEGATranslations.Empty.text())
+                                        .withStyle(ChatFormatting.DARK_RED)
                                 : Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
 
@@ -88,10 +95,24 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                             ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                             : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
 
-            if (inv.isCompressionEnabled()
-                    && inv.getCompressionCutoff() < inv.getCompressionChain().size()) {
+            var trace = inv.getTraceUnits();
+
+            if (trace > 0) {
                 lines.add(Tooltips.of(
-                        MEGATranslations.Cutoff.text(inv.getCutoffItem().getDescription())));
+                                inv.isCompressionEnabled()
+                                        ? MEGATranslations.TraceUnits.text(
+                                                Tooltips.ofNumber(trace),
+                                                inv.getLowestVariant().getDescription())
+                                        : MEGATranslations.ContainsTraceUnits.text())
+                        .withStyle(ChatFormatting.GOLD));
+            }
+
+            if (inv.isCompressionEnabled()) {
+                var cutoffItem = inv.getCutoffItem();
+
+                if (cutoffItem != inv.getHighestVariant()) {
+                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getDescription())));
+                }
             }
         }
     }
@@ -99,7 +120,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
     @NotNull
     @Override
     public Optional<TooltipComponent> getTooltipImage(@NotNull ItemStack is) {
-        var inv = HANDLER.getCellInventory(is, null);
+        var inv = (BulkCellInventory) HANDLER.getCellInventory(is, null);
 
         if (inv == null) {
             return Optional.empty();
@@ -131,12 +152,12 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
     @Override
     public void setFuzzyMode(ItemStack itemStack, FuzzyMode fuzzyMode) {}
 
-    public static class Handler implements ICellHandler {
+    private static class Handler implements ICellHandler {
         private Handler() {}
 
         @Override
         public boolean isCell(ItemStack is) {
-            return is != null && is.getItem() instanceof BulkCellItem;
+            return is != null && is.is(MEGAItems.BULK_ITEM_CELL.asItem());
         }
 
         @Nullable

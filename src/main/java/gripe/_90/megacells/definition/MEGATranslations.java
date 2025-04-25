@@ -13,11 +13,12 @@ public enum MEGATranslations implements LocalizationEnum {
     CompressionCutoff("Bulk Compression Cutoff"),
     Cutoff("Cutoff: %s"),
     Contains("Contains: %s"),
+    ContainsTraceUnits("Contains trace units!"),
     Disabled("Disabled"),
     Empty("Empty"),
     Enabled("Enabled"),
     FilterChemicalUnsupported("Filter chemical unsupported!"),
-    MismatchedFilter("Mismatched filter!"),
+    MismatchedFilter("Mismatched filter! (%s)"),
     ModName("MEGA Cells", "gui"),
     NotInstalled("%s not installed."),
     NotYetAvailable("Not yet available."),
@@ -25,6 +26,7 @@ public enum MEGATranslations implements LocalizationEnum {
     ProcessingOnly("Supports processing patterns only."),
     Quantity("Quantity: %s"),
     NotPartitioned("Not Partitioned"),
+    TraceUnits("Trace Units: %s (%s)"),
     WorkbenchCell("Cell:"),
     WorkbenchConfig("Config:");
 

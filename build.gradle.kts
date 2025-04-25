@@ -14,39 +14,6 @@ group = "gripe.90"
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
-    withJavadocJar()
-}
-
-dependencies {
-    api(libs.ae2)
-
-    compileOnly(libs.ae2wtlibapi)
-    runtimeOnly(libs.ae2wtlib)
-
-    implementation(libs.appmek)
-    compileOnly(libs.mekanism)
-    compileOnly(variantOf(libs.mekanism) { classifier("generators") })
-    runtimeOnly(variantOf(libs.mekanism) { classifier("all") })
-
-    implementation(libs.arseng)
-    implementation(libs.arsnouveau) { exclude("mezz.jei") }
-
-    implementation(libs.appflux)
-    runtimeOnly(libs.glodium)
-
-    implementation(libs.appex)
-    runtimeOnly(libs.explib)
-
-    implementation(libs.appliede)
-    runtimeOnly(libs.projecte)
-
-    compileOnly(libs.appbot)
-    compileOnly(libs.botania)
-
-    testImplementation(testlibs.junit.jupiter)
-    testImplementation(testlibs.assertj)
-    testImplementation(testlibs.neoforge.test)
-    testRuntimeOnly(testlibs.junit.platform)
 }
 
 sourceSets {
@@ -54,19 +21,63 @@ sourceSets {
         resources.srcDir(file("src/generated/resources"))
     }
 
-    create("data") {
+    val addons = create("addons") {
         val main = main.get()
         compileClasspath += main.compileClasspath + main.output
         runtimeClasspath += main.runtimeClasspath + main.output
     }
+
+    create("data") {
+        compileClasspath += addons.compileClasspath + addons.output
+        runtimeClasspath += addons.runtimeClasspath + addons.output
+    }
+}
+
+dependencies {
+    api(core.ae2)
+
+    compileOnly(integration.ae2wtlibapi)
+    "addonsRuntimeOnly"(integration.ae2wtlib)
+
+    compileOnly(integration.appmek)
+    compileOnly(integration.mekanism)
+    "addonsRuntimeOnly"(integration.appmek)
+    "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
+    "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
+
+    compileOnly(integration.arseng)
+    "addonsRuntimeOnly"(integration.arseng)
+
+    "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
+    "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
+
+    compileOnly(integration.appflux)
+    "addonsRuntimeOnly"(integration.appflux)
+    "addonsRuntimeOnly"(integration.glodium)
+
+    compileOnly(integration.appex)
+    "addonsRuntimeOnly"(integration.appex)
+    "addonsRuntimeOnly"(integration.explib)
+
+    compileOnly(integration.appliede)
+    "addonsRuntimeOnly"(integration.appliede)
+    "addonsRuntimeOnly"(integration.projecte)
+
+    compileOnly(integration.appbot)
+    "addonsCompileOnly"(integration.botania)
+
+    testImplementation(testlibs.junit.jupiter)
+    testImplementation(testlibs.assertj)
+    testImplementation(testlibs.neoforge.test)
+    testRuntimeOnly(testlibs.junit.platform)
 }
 
 neoForge {
-    version = libs.versions.neoforge.get()
+    version = core.versions.neoforge.get()
 
     parchment {
-        minecraftVersion = libs.versions.minecraft.get()
-        mappingsVersion = libs.versions.parchment.get()
+        minecraftVersion = core.versions.minecraft.get()
+        mappingsVersion = core.versions.parchment.get()
     }
     
     mods {
@@ -77,13 +88,18 @@ neoForge {
     }
 
     runs {
+        val main = file("src/main/resources").absolutePath
+
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
-            gameDirectory = file("run")
+            sourceSet = sourceSets.getByName("addons")
         }
 
         create("client") {
             client()
+            gameDirectory = file("run/client")
+            systemProperty("guideme.ae2.guide.sources", "$main/assets/$modId/ae2guide")
+            systemProperty("guideme.ae2.guide.sourcesNamespace", modId)
         }
 
         create("server") {
@@ -93,13 +109,14 @@ neoForge {
 
         create("data") {
             data()
+            gameDirectory = file("run/data")
             logLevel = org.slf4j.event.Level.INFO
             programArguments.addAll(
                 "--mod", modId,
                 "--all",
                 "--output", file("src/generated/resources/").absolutePath,
-                "--existing", file("src/main/resources/").absolutePath,
-                "--existing", file("src/main/resources/optional_cell_colours").absolutePath,
+                "--existing", main,
+                "--existing", "$main/optional_cell_colours",
                 "--existing-mod", "ae2"
             )
             sourceSet = sourceSets.getByName("data")

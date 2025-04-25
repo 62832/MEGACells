@@ -25,7 +25,7 @@
   "gui.tooltips.megacells.Empty": "空",
   "gui.tooltips.megacells.Enabled": "启用",
   "gui.tooltips.megacells.FilterChemicalUnsupported": "尚未支持化学品过滤！",
-  "gui.tooltips.megacells.MismatchedFilter": "过滤不匹配！",
+  "gui.tooltips.megacells.MismatchedFilter": "过滤不匹配！ (%s)",
   "gui.tooltips.megacells.NotInstalled": "未安装%s。",
   "gui.tooltips.megacells.NotPartitioned": "未分区",
   "gui.tooltips.megacells.NotYetAvailable": "尚未可用。",

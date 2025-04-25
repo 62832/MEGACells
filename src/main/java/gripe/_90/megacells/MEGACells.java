@@ -65,7 +65,7 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initCapabilities);
         eventBus.addListener(MEGACells::initPacketHandlers);
 
-        CompressionService.init();
+        eventBus.addListener(CompressionService::init);
         NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
@@ -137,7 +137,7 @@ public class MEGACells {
 
     private static void initStorageCells(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            StorageCells.addCellHandler(BulkCellItem.HANDLER);
+            BulkCellItem.registerHandler();
 
             for (var cell : MEGAItems.getTieredCells()) {
                 if (cell.item().asItem() instanceof AbstractPortableCell portable) {

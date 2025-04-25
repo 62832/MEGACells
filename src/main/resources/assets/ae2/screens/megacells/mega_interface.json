@@ -1,5 +1,6 @@
 {
-  "includes": ["../common/common.json", "../common/player_inventory.json"],
+  "includes": ["../interface.json"],
+  "helpTopic": "items-blocks-machines/interface.md",
   "background": {
     "texture": "guis/megacells/mega_interface.png",
     "srcRect": [0, 0, 176, 240]
@@ -26,15 +27,6 @@
         "top": 6
       }
     },
-    "interface_config": {
-      "text": {
-        "translate": "gui.ae2.Config"
-      },
-      "position": {
-        "left": 8,
-        "top": 24
-      }
-    },
     "interface_stored_items": {
       "text": {
         "translate": "gui.ae2.StoredItems"
@@ -46,66 +38,6 @@
     }
   },
   "widgets": {
-    "openPriority": {
-      "left": 152,
-      "top": -5,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton1": {
-      "left": 8,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton2": {
-      "left": 26,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton3": {
-      "left": 44,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton4": {
-      "left": 62,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton5": {
-      "left": 80,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton6": {
-      "left": 98,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton7": {
-      "left": 116,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton8": {
-      "left": 134,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
-    "amtButton9": {
-      "left": 152,
-      "top": 35,
-      "width": 16,
-      "height": 16
-    },
     "amtButton10": {
       "left": 8,
       "top": 89,

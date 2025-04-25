@@ -31,6 +31,10 @@ import me.ramidzkh.mekae2.ae2.MekanismKeyType;
 
 import gripe._90.megacells.definition.MEGATranslations;
 
+// TODO: Writing up an in-game guide page for this cell has reminded me again just how fucking boring the cell is right
+//  now. Need to look into how to make it more "interesting" to work with and deal with in 1.22+.
+//  Also, maybe get rid of some of the constraints that were initially borrowed from the Bulk Cell; requiring this cell
+//  to be partitioned in advance, for example, is kind of pointless.
 public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchItem {
     public static final Handler HANDLER = new Handler();
 
