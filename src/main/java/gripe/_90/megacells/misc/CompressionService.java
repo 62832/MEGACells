@@ -18,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -48,8 +49,10 @@ public class CompressionService {
      */
     private static final Map<Item, Integer> chainIndexes = new HashMap<>();
 
-    public static void init() {
-        GridServices.register(DecompressionService.class, DecompressionService.class);
+    // FIXME: I don't think this is how grid services *should* be registered just to avoid current mod-loading order
+    //  shenanigans, but it'll do for now
+    public static void init(FMLCommonSetupEvent setup) {
+        setup.enqueueWork(() -> GridServices.register(DecompressionService.class, DecompressionService.class));
 
         NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, event -> {
             var server = event.getServer();
