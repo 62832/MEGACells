@@ -19,34 +19,35 @@ description = "ME Greater Accumulation Cells - For when kilobytes just won't do.
 [[mixins]]
 config = "megacells.mixins.json"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "ae2"
 versionRange = "[19.2.9,)"
+ordering = "AFTER"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "ae2wtlib"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "appmek"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "appbot"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "arseng"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "appflux"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "appex"
 type = "optional"
 
-[[dependencies]]
+[[dependencies.megacells]]
 modId = "appliede"
 type = "optional"
