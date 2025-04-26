@@ -65,7 +65,7 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initCapabilities);
         eventBus.addListener(MEGACells::initPacketHandlers);
 
-        eventBus.addListener(CompressionService::init);
+        CompressionService.init();
         NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
