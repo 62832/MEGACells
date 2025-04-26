@@ -23,31 +23,3 @@ config = "megacells.mixins.json"
 modId = "ae2"
 versionRange = "[19.2.9,)"
 ordering = "AFTER"
-
-[[dependencies.megacells]]
-modId = "ae2wtlib"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "appmek"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "appbot"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "arseng"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "appflux"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "appex"
-type = "optional"
-
-[[dependencies.megacells]]
-modId = "appliede"
-type = "optional"
