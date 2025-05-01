@@ -143,6 +143,23 @@ public class BulkCellInventoryTest {
         assertThat(cell.getAvailableStacks().get(ingot)).isNotZero();
         assertThat(cell.getAvailableStacks().get(nugget)).isZero();
         assertThat(cell.getStatus()).isEqualTo(CellState.NOT_EMPTY);
+
+        // regression testing: ensure bulk cells with compression enabled but storing an item that can't be compressed
+        // can't accidentally convert their stored item into any other item when extracted
+        //
+        // see: https://github.com/62832/MEGACells/issues/183
+        item.getUpgrades(stack).addItems(MEGAItems.COMPRESSION_CARD.stack());
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        cell.extract(nugget, MAX, Actionable.MODULATE, SRC); // empty cell before re-partitioning
+
+        var dud = AEItemKey.of(Items.BEDROCK); // uncraftable, therefore cannot be compressed in any way
+        item.getConfigInventory(stack).clear();
+        item.getConfigInventory(stack).addFilter(dud);
+        cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+
+        cell.insert(dud, 256, Actionable.MODULATE, SRC);
+        assertThat(cell.extract(ingot, 64, Actionable.MODULATE, SRC)).isZero();
+        assertThat(cell.getAvailableStacks().get(dud)).isEqualTo(256);
     }
 
     @Test
@@ -301,7 +318,7 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testCompressionPatterns() {
+    void testCompressionPatterns(MinecraftServer ignored) {
         var nugget = AEItemKey.of(Items.IRON_NUGGET);
         var ingot = AEItemKey.of(Items.IRON_INGOT);
         var block = AEItemKey.of(Items.IRON_BLOCK);

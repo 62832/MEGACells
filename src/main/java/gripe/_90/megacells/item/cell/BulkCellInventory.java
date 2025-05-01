@@ -183,18 +183,14 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        var inRecovery = isFilterMismatched();
-
-        if (hasCompressionChain() && !compressionChain.containsVariant(item.getItem())) {
+        if (!compressionChain.containsVariant(item.getItem()) && !item.equals(storedItem)) {
             return 0;
         }
 
-        if (!compressionEnabled && !item.equals(storedItem) && !inRecovery) {
-            return 0;
-        }
-
-        if (inRecovery) {
+        if (isFilterMismatched()) {
             amount = Math.min(amount, getAvailableStacks().get(item));
+        } else if (!compressionEnabled && !item.equals(storedItem)) {
+            return 0;
         }
 
         var factor = compressionChain.unitFactor(item.getItem());
