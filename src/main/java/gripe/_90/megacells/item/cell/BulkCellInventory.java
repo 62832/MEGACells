@@ -194,35 +194,30 @@ public class BulkCellInventory implements StorageCell {
         }
 
         var factor = compressionChain.unitFactor(item.getItem());
-        var units = BigInteger.valueOf(amount).multiply(factor);
-        var currentUnitCount = unitCount;
+        var units = BigInteger.valueOf(amount).multiply(factor).min(unitCount);
 
-        if (currentUnitCount.compareTo(units) <= 0) {
-            if (mode == Actionable.MODULATE) {
-                storedItem = null;
-                unitCount = BigInteger.ZERO;
-
-                var filter = filterItem != null ? filterItem.getItem() : null;
-                compressionChain = CompressionService.getChain(filter);
-                compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
-
-                saveChanges();
-            }
-
-            return CompressionChain.clamp(currentUnitCount.divide(factor), Long.MAX_VALUE);
-        } else {
-            if (mode == Actionable.MODULATE) {
-                updateContents(units.negate());
-            }
-
-            return CompressionChain.clamp(units.divide(factor), Long.MAX_VALUE);
+        if (mode == Actionable.MODULATE) {
+            updateContents(units.negate());
         }
+
+        return CompressionChain.clamp(units.divide(factor), Long.MAX_VALUE);
     }
 
     private void updateContents(BigInteger unitsToAdd) {
         unitCount = unitCount.add(unitsToAdd);
+
+        if (unitCount.signum() < 1) {
+            storedItem = null;
+
+            var filter = filterItem != null ? filterItem.getItem() : null;
+            compressionChain = CompressionService.getChain(filter);
+            compressionCutoff = Math.max(0, compressionChain.size() - 1);
+            compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
+        } else {
+            compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
+        }
+
         saveChanges();
-        compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
     }
 
     private void saveChanges() {
