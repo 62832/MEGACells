@@ -1,7 +1,6 @@
 package gripe._90.megacells.misc;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -125,11 +124,12 @@ public class CompressionChain {
             return stacks;
         }
 
-        var swapped = lastMultiplierSwapped(cutoff);
+        for (var i = 0; i < cutoff + 1; i++) {
+            var variant = variants.get(i);
 
-        for (var variant : swapped) {
-            if (variant != swapped.getLast()) {
-                var factor = variant.big();
+            if (i < cutoff) {
+                // use factor of the next variant along (determines how many of *this* variant fit into the next)
+                var factor = variants.get((i + 1) % variants.size()).big();
                 stacks.put(variant.item(), unitCount.remainder(factor).longValue());
                 unitCount = unitCount.divide(factor);
             } else {
@@ -156,13 +156,14 @@ public class CompressionChain {
             return;
         }
 
-        var swapped = lastMultiplierSwapped(cutoff);
-
-        for (var variant : lastMultiplierSwapped(cutoff)) {
-            var factor = variant.big();
+        for (var i = 0; i < cutoff + 1; i++) {
+            var variant = variants.get(i);
             var amount = BigInteger.valueOf(stackMap.get(variant.item));
 
-            if (unitsToAdd.signum() != 0 && variant.item != swapped.getLast().item) {
+            if (unitsToAdd.signum() != 0 && i < cutoff) {
+                // use factor of the next variant along (determines how many of *this* variant fit into the next)
+                var factor = variants.get((i + 1) % variants.size()).big();
+
                 var added = unitsToAdd.remainder(factor);
                 amount = amount.add(added);
                 unitsToAdd = unitsToAdd.subtract(added);
@@ -180,23 +181,6 @@ public class CompressionChain {
                 break;
             }
         }
-    }
-
-    private List<Variant> lastMultiplierSwapped(int cutoff) {
-        var subChain = variants.subList(0, cutoff + 1);
-
-        if (subChain.isEmpty()) {
-            return subChain;
-        }
-
-        var swapped = new ArrayList<Variant>();
-
-        for (var i = 1; i < subChain.size(); i++) {
-            swapped.add(new Variant(subChain.get(i - 1).item, subChain.get(i).factor));
-        }
-
-        swapped.add(new Variant(subChain.getLast().item, subChain.getFirst().factor));
-        return swapped;
     }
 
     @Override

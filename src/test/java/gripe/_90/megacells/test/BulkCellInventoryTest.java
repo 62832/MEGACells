@@ -278,7 +278,7 @@ public class BulkCellInventoryTest {
         cell.extract(block, MAX, Actionable.MODULATE, SRC);
         assertThat(cell.getStatus()).isEqualTo(CellState.EMPTY);
 
-        // ensure compression works with new filter item after emptying (without needing to recreate the cell inv
+        // ensure compression works with new filter item after emptying (without needing to recreate the cell inv)
         nugget = AEItemKey.of(Items.GOLD_NUGGET);
         block = AEItemKey.of(Items.GOLD_BLOCK);
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isOne();
@@ -399,7 +399,7 @@ public class BulkCellInventoryTest {
         var nuggets = cell.insert(nugget, 3, Actionable.MODULATE, SRC);
         var units = cell.extract(nugget, MAX, Actionable.SIMULATE, SRC);
 
-        // first pass: switch filter to a smaller to
+        // first pass: switch filter to a smaller variant
         item.getConfigInventory(stack).clear();
         item.getConfigInventory(stack).addFilter(nugget);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
@@ -412,7 +412,7 @@ public class BulkCellInventoryTest {
         assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
         assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
 
-        // second pass: switch filter back to initial to
+        // second pass: switch filter back to initial variant
         item.getConfigInventory(stack).clear();
         item.getConfigInventory(stack).addFilter(ingot);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
@@ -425,7 +425,7 @@ public class BulkCellInventoryTest {
         assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
         assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
 
-        // second pass: switch filter to even larger to
+        // second pass: switch filter to even larger variant
         item.getConfigInventory(stack).clear();
         item.getConfigInventory(stack).addFilter(Items.IRON_BLOCK);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
@@ -438,7 +438,7 @@ public class BulkCellInventoryTest {
         assertThat(cell.extract(ingot, ingots, Actionable.MODULATE, SRC)).isEqualTo(ingots);
         assertThat(cell.extract(nugget, nuggets, Actionable.MODULATE, SRC)).isEqualTo(nuggets);
 
-        // fourth pass: switch filter to a non-to altogether
+        // fourth pass: switch filter to a non-variant altogether
         item.getConfigInventory(stack).clear();
         item.getConfigInventory(stack).addFilter(Items.GOLD_INGOT);
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
