@@ -24,6 +24,7 @@ import appeng.api.AECapabilities;
 import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.IInWorldGridNodeHost;
+import appeng.api.parts.RegisterPartCapabilitiesEvent;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
@@ -44,6 +45,8 @@ import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
+import gripe._90.megacells.item.part.MEGAInterfacePart;
+import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 import gripe._90.megacells.misc.CompressionService;
 import gripe._90.megacells.misc.SyncCompressionChainsPacket;
 
@@ -63,6 +66,7 @@ public class MEGACells {
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
+        eventBus.addListener(MEGACells::initPartCapabilities);
         eventBus.addListener(MEGACells::initPacketHandlers);
 
         CompressionService.init();
@@ -198,6 +202,23 @@ public class MEGACells {
                         cell.item());
             }
         }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static void initPartCapabilities(RegisterPartCapabilitiesEvent event) {
+        event.register(
+                AECapabilities.GENERIC_INTERNAL_INV,
+                (part, ctx) -> part.getInterfaceLogic().getStorage(),
+                MEGAInterfacePart.class);
+        event.register(
+                AECapabilities.ME_STORAGE,
+                (part, ctx) -> part.getInterfaceLogic().getInventory(),
+                MEGAInterfacePart.class);
+
+        event.register(
+                AECapabilities.GENERIC_INTERNAL_INV,
+                (part, ctx) -> part.getLogic().getReturnInv(),
+                MEGAPatternProviderPart.class);
     }
 
     private static void initPacketHandlers(RegisterPayloadHandlersEvent event) {
