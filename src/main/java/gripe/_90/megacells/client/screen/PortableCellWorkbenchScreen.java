@@ -53,7 +53,7 @@ public class PortableCellWorkbenchScreen extends UpgradeableScreen<PortableCellW
                 GuiText.CopyModeDesc.text(),
                 act -> menu.nextWorkBenchCopyMode()));
         compressionCutoff = addToLeftToolbar(
-                new CompressionCutoffButton((button, backwards) -> menu.mega$nextCompressionLimit(backwards)));
+                new CompressionCutoffButton(button -> menu.mega$nextCompressionLimit(isHandlingRightClick())));
     }
 
     @Override
