@@ -1,5 +1,6 @@
 {
   "includes": ["mega_interface.json"],
+  "helpTopic": "appliede:transmutation_devices.md",
   "text": {
     "dialog_title": {
       "text": {
