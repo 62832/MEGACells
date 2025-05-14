@@ -113,9 +113,9 @@ public class DecompressionService implements IGridService, IGridServiceProvider,
                     }
                 }
             }
-        }
 
-        grid.getCraftingService().refreshGlobalCraftingProvider(this);
+            grid.getCraftingService().refreshGlobalCraftingProvider(this);
+        }
     }
 
     @Override
