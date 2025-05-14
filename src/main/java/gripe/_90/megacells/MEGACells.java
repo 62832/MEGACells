@@ -45,6 +45,7 @@ import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
+import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 import gripe._90.megacells.misc.CompressionService;
@@ -219,6 +220,11 @@ public class MEGACells {
                 AECapabilities.GENERIC_INTERNAL_INV,
                 (part, ctx) -> part.getLogic().getReturnInv(),
                 MEGAPatternProviderPart.class);
+
+        event.register(
+                Capabilities.ItemHandler.BLOCK,
+                (part, ctx) -> part.getCellInventory().toItemHandler(),
+                CellDockPart.class);
     }
 
     private static void initPacketHandlers(RegisterPayloadHandlersEvent event) {
