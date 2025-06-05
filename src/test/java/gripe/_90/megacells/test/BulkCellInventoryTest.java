@@ -66,12 +66,12 @@ public class BulkCellInventoryTest {
     @Test
     void testBulkCompression(MinecraftServer ignored) {
         var ingot = AEItemKey.of(Items.IRON_INGOT);
-        var chain = CompressionService.getChain(ingot.getItem());
+        var chain = CompressionService.getChain(ingot);
         assertThat(chain.isEmpty()).isFalse();
 
         var nugget = AEItemKey.of(Items.IRON_NUGGET);
-        assertThat(chain.containsVariant(Items.IRON_NUGGET)).isTrue();
-        assertThat(CompressionService.getChain(nugget.getItem())).isEqualTo(chain);
+        assertThat(chain.containsVariant(nugget)).isTrue();
+        assertThat(CompressionService.getChain(nugget)).isEqualTo(chain);
 
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
@@ -300,19 +300,19 @@ public class BulkCellInventoryTest {
         cell.insert(nugget, 1, Actionable.MODULATE, SRC);
         cell.insert(ingot, 1, Actionable.MODULATE, SRC);
         cell.insert(block, 1, Actionable.MODULATE, SRC);
-        assertThat(cell.getCutoffItem()).isEqualTo(block.getItem());
+        assertThat(cell.getCutoffItem()).isEqualTo(block);
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
         assertThat(cell.getAvailableStacks().get(block)).isOne();
 
         cell.switchCompressionCutoff(false);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.getCutoffItem()).isEqualTo(ingot.getItem());
+        assertThat(cell.getCutoffItem()).isEqualTo(ingot);
         assertThat(cell.getAvailableStacks().get(block)).isZero();
         assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(10);
 
         cell.switchCompressionCutoff(true);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.getCutoffItem()).isEqualTo(block.getItem());
+        assertThat(cell.getCutoffItem()).isEqualTo(block);
         assertThat(cell.getAvailableStacks().get(block)).isOne();
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
     }

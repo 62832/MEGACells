@@ -12,14 +12,13 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import appeng.api.crafting.IPatternDetails;
+import appeng.api.stacks.AEItemKey;
 
 public class CompressionChain {
     public static final StreamCodec<RegistryFriendlyByteBuf, CompressionChain> STREAM_CODEC =
@@ -42,7 +41,7 @@ public class CompressionChain {
         return variants.isEmpty();
     }
 
-    public boolean containsVariant(Item item) {
+    public boolean containsVariant(AEItemKey item) {
         for (var variant : variants) {
             if (variant.item.equals(item)) {
                 return true;
@@ -52,11 +51,11 @@ public class CompressionChain {
         return false;
     }
 
-    public Item getItem(int index) {
+    public AEItemKey getItem(int index) {
         return variants.get(index).item;
     }
 
-    public BigInteger unitFactor(Item item) {
+    public BigInteger unitFactor(AEItemKey item) {
         if (item == null) {
             return BigInteger.ONE;
         }
@@ -113,8 +112,8 @@ public class CompressionChain {
         return patterns;
     }
 
-    public Map<Item, Long> initStacks(BigInteger unitCount, int cutoff, Item fallback) {
-        var stacks = new Object2LongLinkedOpenHashMap<Item>();
+    public Map<AEItemKey, Long> initStacks(BigInteger unitCount, int cutoff, AEItemKey fallback) {
+        var stacks = new Object2LongLinkedOpenHashMap<AEItemKey>();
 
         if (isEmpty()) {
             if (fallback != null) {
@@ -141,7 +140,7 @@ public class CompressionChain {
         return stacks;
     }
 
-    public void updateStacks(Map<Item, Long> stackMap, BigInteger unitsToAdd, int cutoff) {
+    public void updateStacks(Map<AEItemKey, Long> stackMap, BigInteger unitsToAdd, int cutoff) {
         if (isEmpty()) {
             if (stackMap.size() > 1) {
                 throw new IllegalStateException("Bulk cell reported more than one stack for empty compression chain");
@@ -193,13 +192,11 @@ public class CompressionChain {
         return Objects.hashCode(variants);
     }
 
-    record Variant(Item item, int factor) {
+    record Variant(AEItemKey item, int factor) {
+        private static final StreamCodec<RegistryFriendlyByteBuf, AEItemKey> ITEM_KEY_CODEC =
+                AEItemKey.STREAM_CODEC.map(k -> (AEItemKey) k, k -> k);
         private static final StreamCodec<RegistryFriendlyByteBuf, Variant> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.registry(Registries.ITEM),
-                Variant::item,
-                ByteBufCodecs.VAR_INT,
-                Variant::factor,
-                Variant::new);
+                ITEM_KEY_CODEC, Variant::item, ByteBufCodecs.VAR_INT, Variant::factor, Variant::new);
 
         private BigInteger big() {
             return BigInteger.valueOf(factor);

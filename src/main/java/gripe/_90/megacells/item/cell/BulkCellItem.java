@@ -102,7 +102,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                                 inv.isCompressionEnabled()
                                         ? MEGATranslations.TraceUnits.text(
                                                 Tooltips.ofNumber(trace),
-                                                inv.getLowestVariant().getDescription())
+                                                inv.getLowestVariant().getDisplayName())
                                         : MEGATranslations.ContainsTraceUnits.text())
                         .withStyle(ChatFormatting.GOLD));
             }
@@ -111,7 +111,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                 var cutoffItem = inv.getCutoffItem();
 
                 if (cutoffItem != inv.getHighestVariant()) {
-                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getDescription())));
+                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getDisplayName())));
                 }
             }
         }

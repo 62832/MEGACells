@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.config.Actionable;
@@ -36,7 +35,7 @@ public class BulkCellInventory implements StorageCell {
     private BigInteger unitFactor;
     private int compressionCutoff;
 
-    private Map<Item, Long> compressedStacks;
+    private Map<AEItemKey, Long> compressedStacks;
     private List<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
@@ -52,8 +51,7 @@ public class BulkCellInventory implements StorageCell {
         storedItem = (AEItemKey) stack.get(MEGAComponents.BULK_CELL_ITEM);
         unitCount = stack.getOrDefault(MEGAComponents.BULK_CELL_UNIT_COUNT, BigInteger.ZERO);
 
-        var determiningKey = storedItem != null ? storedItem : filterItem;
-        var determiningItem = determiningKey != null ? determiningKey.getItem() : null;
+        var determiningItem = storedItem != null ? storedItem : filterItem;
         compressionChain = CompressionService.getChain(determiningItem);
 
         unitFactor = compressionChain.unitFactor(determiningItem);
@@ -110,9 +108,9 @@ public class BulkCellInventory implements StorageCell {
             return true;
         }
 
-        if (compressionChain.containsVariant(filterItem.getItem())) {
+        if (compressionChain.containsVariant(filterItem)) {
             storedItem = filterItem;
-            unitFactor = compressionChain.unitFactor(storedItem.getItem());
+            unitFactor = compressionChain.unitFactor(storedItem);
             saveChanges();
             return false;
         }
@@ -159,11 +157,11 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (!item.equals(filterItem) && (!compressionEnabled || !compressionChain.containsVariant(item.getItem()))) {
+        if (!item.equals(filterItem) && (!compressionEnabled || !compressionChain.containsVariant(item))) {
             return 0;
         }
 
-        var factor = compressionChain.unitFactor(item.getItem());
+        var factor = compressionChain.unitFactor(item);
         var units = BigInteger.valueOf(amount).multiply(factor);
 
         if (mode == Actionable.MODULATE) {
@@ -183,7 +181,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        if (!compressionChain.containsVariant(item.getItem()) && !item.equals(storedItem)) {
+        if (!compressionChain.containsVariant(item) && !item.equals(storedItem)) {
             return 0;
         }
 
@@ -193,7 +191,7 @@ public class BulkCellInventory implements StorageCell {
             return 0;
         }
 
-        var factor = compressionChain.unitFactor(item.getItem());
+        var factor = compressionChain.unitFactor(item);
         var units = BigInteger.valueOf(amount).multiply(factor).min(unitCount);
 
         if (mode == Actionable.MODULATE) {
@@ -209,10 +207,9 @@ public class BulkCellInventory implements StorageCell {
         if (unitCount.signum() < 1) {
             storedItem = null;
 
-            var filter = filterItem != null ? filterItem.getItem() : null;
-            compressionChain = CompressionService.getChain(filter);
+            compressionChain = CompressionService.getChain(filterItem);
             compressionCutoff = Math.max(0, compressionChain.size() - 1);
-            compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filter);
+            compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filterItem);
         } else {
             compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
         }
@@ -268,15 +265,15 @@ public class BulkCellInventory implements StorageCell {
         decompressionPatterns = null;
     }
 
-    public Item getCutoffItem() {
+    public AEItemKey getCutoffItem() {
         return hasCompressionChain() ? compressionChain.getItem(compressionCutoff) : null;
     }
 
-    Item getHighestVariant() {
+    AEItemKey getHighestVariant() {
         return hasCompressionChain() ? compressionChain.getItem(compressionChain.size() - 1) : null;
     }
 
-    Item getLowestVariant() {
+    AEItemKey getLowestVariant() {
         return hasCompressionChain() ? compressionChain.getItem(0) : null;
     }
 
@@ -284,14 +281,14 @@ public class BulkCellInventory implements StorageCell {
     public void getAvailableStacks(KeyCounter out) {
         if (storedItem != null) {
             if (compressionEnabled) {
-                compressedStacks.forEach((item, amount) -> out.add(AEItemKey.of(item), amount));
+                compressedStacks.forEach(out::add);
             } else {
                 out.add(storedItem, CompressionChain.clamp(unitCount.divide(unitFactor), CompressionChain.STACK_LIMIT));
 
                 if (isFilterMismatched()) {
                     compressedStacks.keySet().stream()
-                            .takeWhile(i -> !storedItem.is(i))
-                            .forEach(i -> out.add(AEItemKey.of(i), compressedStacks.get(i)));
+                            .takeWhile(i -> !storedItem.equals(i))
+                            .forEach(i -> out.add(i, compressedStacks.get(i)));
                 }
             }
         }
@@ -300,9 +297,7 @@ public class BulkCellInventory implements StorageCell {
     @Override
     public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
         return what instanceof AEItemKey item
-                && (item.equals(storedItem)
-                        || item.equals(filterItem)
-                        || compressionChain.containsVariant(item.getItem()));
+                && (item.equals(storedItem) || item.equals(filterItem) || compressionChain.containsVariant(item));
     }
 
     @Override

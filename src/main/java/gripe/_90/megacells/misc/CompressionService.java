@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -25,6 +25,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import appeng.api.networking.GridServices;
+import appeng.api.stacks.AEItemKey;
 
 import gripe._90.megacells.definition.MEGADataMaps;
 
@@ -46,7 +47,7 @@ public class CompressionService {
      * tracked for every variant item within it, otherwise an index of {@code -1} is used to denote that a chain does
      * not exist for the item.
      */
-    private static final Map<Item, Integer> chainIndexes = new HashMap<>();
+    private static final Map<AEItemKey, Integer> chainIndexes = new HashMap<>();
 
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
@@ -76,7 +77,7 @@ public class CompressionService {
      * exists for it or the given item was {@code null}.
      */
     @NotNull
-    public static CompressionChain getChain(@Nullable Item item) {
+    public static CompressionChain getChain(@Nullable AEItemKey item) {
         if (item == null) {
             return EMPTY;
         }
@@ -152,8 +153,9 @@ public class CompressionService {
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
         while (!compressed.isEmpty()) {
-            var baseVariant = compressed.removeFirst().getResultItem(access).getItem();
-            decompressed.removeIf(recipe -> recipe.getResultItem(access).is(baseVariant));
+            var baseVariant =
+                    Objects.requireNonNull(AEItemKey.of(compressed.removeFirst().getResultItem(access)));
+            decompressed.removeIf(recipe -> baseVariant.matches(recipe.getResultItem(access)));
             chains.add(generateChain(baseVariant, compressed, decompressed, overrides, access));
         }
 
@@ -167,12 +169,12 @@ public class CompressionService {
      * unnecessary reiterations with items already put into a previous chain.
      */
     private static CompressionChain generateChain(
-            Item baseVariant,
+            AEItemKey baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
             List<Override> overrides,
             RegistryAccess access) {
-        var variants = new ArrayList<Item>();
+        var variants = new ArrayList<AEItemKey>();
         var multipliers = new ArrayList<Integer>();
 
         variants.add(baseVariant);
@@ -192,7 +194,7 @@ public class CompressionService {
 
             variants.add(item);
             multipliers.add(lower.factor());
-            compressed.removeIf(recipe -> recipe.getResultItem(access).is(item));
+            compressed.removeIf(recipe -> item.matches(recipe.getResultItem(access)));
             lower = getNextVariant(item, decompressed, overrides, false, access);
         }
 
@@ -216,7 +218,7 @@ public class CompressionService {
 
             chain.add(higher);
             var item = higher.item();
-            decompressed.removeIf(recipe -> recipe.getResultItem(access).is(item));
+            decompressed.removeIf(recipe -> item.matches(recipe.getResultItem(access)));
             higher = getNextVariant(higher.item(), compressed, overrides, true, access);
         }
 
@@ -229,7 +231,7 @@ public class CompressionService {
      * overrides and whether the recipes given are "compression" or "decompression" recipes.
      */
     private static CompressionChain.Variant getNextVariant(
-            Item item,
+            AEItemKey item,
             List<CraftingRecipe> recipes,
             List<Override> overrides,
             boolean compressed,
@@ -248,10 +250,10 @@ public class CompressionService {
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (input.getItem().equals(item)) {
+                if (item.matches(input)) {
                     recipes.remove(recipe);
                     return new CompressionChain.Variant(
-                            recipe.getResultItem(access).getItem(),
+                            AEItemKey.of(recipe.getResultItem(access)),
                             compressed
                                     ? recipe.getIngredients().size()
                                     : recipe.getResultItem(access).getCount());
@@ -388,8 +390,8 @@ public class CompressionService {
             }
 
             var decompressed = isDecompressionRecipe(recipe);
-            var smaller = (decompressed ? output : input).getItem();
-            var larger = (decompressed ? input : output).getItem();
+            var smaller = AEItemKey.of(decompressed ? output : input);
+            var larger = AEItemKey.of(decompressed ? input : output);
             var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
 
             var override = new Override(smaller, larger, factor);
@@ -411,7 +413,7 @@ public class CompressionService {
         return stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
     }
 
-    private record Override(Item smaller, Item larger, int factor) {
+    private record Override(AEItemKey smaller, AEItemKey larger, int factor) {
         @NotNull
         @java.lang.Override
         public String toString() {

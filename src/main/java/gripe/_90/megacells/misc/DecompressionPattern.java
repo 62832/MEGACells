@@ -6,12 +6,9 @@ import java.util.List;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -25,12 +22,12 @@ import gripe._90.megacells.definition.MEGAItems;
 
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final Item from;
-    private final Item to;
+    private final AEKey from;
+    private final AEKey to;
     private final int factor;
     private final boolean compress;
 
-    public DecompressionPattern(Item from, Item to, int factor, boolean compress) {
+    public DecompressionPattern(AEKey from, AEKey to, int factor, boolean compress) {
         this.from = from;
         this.to = to;
         this.factor = factor;
@@ -53,7 +50,7 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public List<GenericStack> getOutputs() {
-        return Collections.singletonList(new GenericStack(AEItemKey.of(to), compress ? 1 : factor));
+        return Collections.singletonList(new GenericStack(to, compress ? 1 : factor));
     }
 
     @Override
@@ -66,10 +63,10 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private record Input(Item input, int factor) implements IInput {
+    private record Input(AEKey input, int factor) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
-            return new GenericStack[] {new GenericStack(AEItemKey.of(input), factor)};
+            return new GenericStack[] {new GenericStack(input, factor)};
         }
 
         @Override
@@ -88,18 +85,18 @@ public class DecompressionPattern implements IPatternDetails {
         }
     }
 
-    public record Encoded(Item from, Item to, int factor, boolean compress) {
+    public record Encoded(AEKey from, AEKey to, int factor, boolean compress) {
         public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        BuiltInRegistries.ITEM.byNameCodec().fieldOf("from").forGetter(Encoded::from),
-                        BuiltInRegistries.ITEM.byNameCodec().fieldOf("to").forGetter(Encoded::to),
+                        AEKey.CODEC.fieldOf("from").forGetter(Encoded::from),
+                        AEKey.CODEC.fieldOf("to").forGetter(Encoded::to),
                         Codec.INT.fieldOf("factor").forGetter(Encoded::factor),
                         Codec.BOOL.fieldOf("compress").forGetter(Encoded::compress))
                 .apply(instance, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.registry(Registries.ITEM),
+                AEKey.STREAM_CODEC,
                 Encoded::from,
-                ByteBufCodecs.registry(Registries.ITEM),
+                AEKey.STREAM_CODEC,
                 Encoded::to,
                 ByteBufCodecs.VAR_INT,
                 Encoded::factor,
