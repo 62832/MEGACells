@@ -115,26 +115,22 @@ public class CompressionChain {
     public Map<AEItemKey, Long> initStacks(BigInteger unitCount, int cutoff, AEItemKey fallback) {
         var stacks = new Object2LongLinkedOpenHashMap<AEItemKey>();
 
-        if (isEmpty()) {
-            if (fallback != null) {
-                stacks.put(fallback, clamp(unitCount, STACK_LIMIT));
+        if (!isEmpty()) {
+            for (var i = 0; i < cutoff + 1; i++) {
+                var variant = variants.get(i);
+
+                if (i < cutoff) {
+                    // use factor of the next variant along (determines how many of *this* variant fit into the next)
+                    var factor = variants.get((i + 1) % variants.size()).big();
+                    stacks.put(variant.item(), unitCount.remainder(factor).longValue());
+                    unitCount = unitCount.divide(factor);
+                } else {
+                    stacks.put(variant.item(), clamp(unitCount, STACK_LIMIT));
+                    break;
+                }
             }
-
-            return stacks;
-        }
-
-        for (var i = 0; i < cutoff + 1; i++) {
-            var variant = variants.get(i);
-
-            if (i < cutoff) {
-                // use factor of the next variant along (determines how many of *this* variant fit into the next)
-                var factor = variants.get((i + 1) % variants.size()).big();
-                stacks.put(variant.item(), unitCount.remainder(factor).longValue());
-                unitCount = unitCount.divide(factor);
-            } else {
-                stacks.put(variant.item(), clamp(unitCount, STACK_LIMIT));
-                break;
-            }
+        } else if (fallback != null) {
+            stacks.put(fallback, clamp(unitCount, STACK_LIMIT));
         }
 
         return stacks;

@@ -206,9 +206,13 @@ public class BulkCellInventory implements StorageCell {
 
         if (unitCount.signum() < 1) {
             storedItem = null;
+            var filterChain = CompressionService.getChain(filterItem);
 
-            compressionChain = CompressionService.getChain(filterItem);
-            compressionCutoff = Math.max(0, compressionChain.size() - 1);
+            if (compressionChain != filterChain) {
+                compressionChain = filterChain;
+                compressionCutoff = Math.max(0, compressionChain.size() - 1);
+            }
+
             compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filterItem);
         } else {
             compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
@@ -237,16 +241,12 @@ public class BulkCellInventory implements StorageCell {
             stack.remove(MEGAComponents.BULK_CELL_ITEM);
             stack.remove(MEGAComponents.BULK_CELL_UNIT_COUNT);
             stack.remove(MEGAComponents.BULK_CELL_UNIT_FACTOR);
+            stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
         } else {
             stack.set(MEGAComponents.BULK_CELL_ITEM, storedItem);
             stack.set(MEGAComponents.BULK_CELL_UNIT_COUNT, unitCount);
             stack.set(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
-        }
-
-        if (hasCompressionChain()) {
             stack.set(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF, compressionCutoff);
-        } else {
-            stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
         }
 
         isPersisted = true;

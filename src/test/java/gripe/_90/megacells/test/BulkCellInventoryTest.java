@@ -114,8 +114,8 @@ public class BulkCellInventoryTest {
         assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(2);
         assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(2);
 
-        // regression testing: ensure units properly flow over when inserting smaller variants in amounts less than
-        // the next to's compression factor
+        // regression test: ensure units properly flow over when inserting smaller variants in amounts less than the
+        // next variant's compression factor
         cell.insert(nugget, 8, Actionable.MODULATE, SRC);
         assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(3);
         assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(1);
@@ -125,13 +125,13 @@ public class BulkCellInventoryTest {
         assertThat(cell.getAvailableStacks().get(nugget)).isZero();
         cell.insert(nugget, 1, Actionable.MODULATE, SRC);
 
-        // regression testing: ensure backflow is properly handled when extracting more of a smaller variant than the
+        // regression test: ensure backflow is properly handled when extracting more of a smaller variant than the
         // amount reported for it
         cell.extract(nugget, 8, Actionable.MODULATE, SRC);
         assertThat(cell.getAvailableStacks().get(nugget)).isEqualTo(2);
         assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(3);
 
-        // ensure only filtered to works again once card is removed
+        // ensure only filtered variant works again once card is removed
         item.getUpgrades(stack).clear();
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         assertThat(cell.insert(nugget, 1, Actionable.SIMULATE, SRC)).isZero();
@@ -144,7 +144,7 @@ public class BulkCellInventoryTest {
         assertThat(cell.getAvailableStacks().get(nugget)).isZero();
         assertThat(cell.getStatus()).isEqualTo(CellState.NOT_EMPTY);
 
-        // regression testing: ensure bulk cells with compression enabled but storing an item that can't be compressed
+        // regression test: ensure bulk cells with compression enabled but storing an item that can't be compressed
         // can't accidentally convert their stored item into any other item when extracted
         //
         // see: https://github.com/62832/MEGACells/issues/183
@@ -260,8 +260,8 @@ public class BulkCellInventoryTest {
         assertThat(cell.insert(ingot, 1, Actionable.SIMULATE, SRC)).isZero();
         assertThat(cell.insert(rejected, 1, Actionable.SIMULATE, SRC)).isZero();
 
-        // ensure all variants from the base "stored" item onto the smallest are reported when filter is mismatched,
-        // even without a card
+        // ensure all variants from the base "stored" item to the smallest are reported when filter is mismatched, even
+        // without a card
         item.getUpgrades(stack).clear();
         cell = Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         assertThat(cell.getStatus()).isEqualTo(CellState.FULL);
@@ -315,6 +315,24 @@ public class BulkCellInventoryTest {
         assertThat(cell.getCutoffItem()).isEqualTo(block);
         assertThat(cell.getAvailableStacks().get(block)).isOne();
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
+
+        // regression test: ensure compression cutoff persists when bulk cells are emptied but their filter doesn't
+        // change
+        //
+        // see: https://github.com/62832/MEGACells/issues/183
+        cell.switchCompressionCutoff(false);
+        cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        cell.extract(ingot, Long.MAX_VALUE, Actionable.MODULATE, SRC);
+        assertThat(cell.getCutoffItem()).isEqualTo(ingot);
+
+        // ensure compression cutoff is removed when the filter does change and a new compression chain is used instead
+        item.getConfigInventory(stack).clear();
+        cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        assertThat(cell.getCutoffItem()).isNull();
+        item.getConfigInventory(stack).addFilter(Items.GOLD_INGOT);
+        cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
+        // must be default "block" form rather than "ingot" as before
+        assertThat(cell.getCutoffItem()).isEqualTo(AEItemKey.of(Items.GOLD_BLOCK));
     }
 
     @Test
@@ -331,7 +349,8 @@ public class BulkCellInventoryTest {
         var cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         var patterns = cell.getDecompressionPatterns();
 
-        // first pass: default cutoff (block), both decompression patterns (block → ingot → nugget)
+        // first pass: default cutoff (block)
+        // both decompression patterns (block → ingot → nugget)
         var firstOutput = patterns.getFirst().getPrimaryOutput();
         assertThat(firstOutput.what()).isEqualTo(nugget);
         assertThat(firstOutput.amount()).isEqualTo(9);
@@ -365,7 +384,8 @@ public class BulkCellInventoryTest {
         assertThat(secondInput.what()).isEqualTo(ingot);
         assertThat(secondInput.amount()).isEqualTo(9);
 
-        // third pass: lowest cutoff, both compression patterns (nugget → ingot → block)
+        // third pass: lowest cutoff
+        // both compression patterns (nugget → ingot → block)
         cell.switchCompressionCutoff(false);
         patterns = cell.getDecompressionPatterns();
 
