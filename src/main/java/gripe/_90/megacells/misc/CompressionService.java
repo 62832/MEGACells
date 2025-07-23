@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,7 +92,7 @@ public class CompressionService {
 
             if (chain.containsVariant(item)) {
                 for (var j = 0; j < chain.size(); j++) {
-                    chainIndexes.put(chain.getItem(j), i);
+                    chainIndexes.put(AEItemKey.of(chain.getItem(j)), i);
                 }
 
                 return chain;
@@ -153,10 +152,9 @@ public class CompressionService {
 
         // Pull all available compression chains from the recipe shortlist and add these to the cache
         while (!compressed.isEmpty()) {
-            var baseVariant =
-                    Objects.requireNonNull(AEItemKey.of(compressed.removeFirst().getResultItem(access)));
-            decompressed.removeIf(recipe -> baseVariant.matches(recipe.getResultItem(access)));
-            chains.add(generateChain(baseVariant, compressed, decompressed, overrides, access));
+            var base = compressed.removeFirst().getResultItem(access).copy();
+            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, recipe.getResultItem(access)));
+            chains.add(generateChain(base, compressed, decompressed, overrides, access));
         }
 
         LOGGER.info("Initialised bulk compression. {} compression chains gathered.", chains.size());
@@ -169,45 +167,46 @@ public class CompressionService {
      * unnecessary reiterations with items already put into a previous chain.
      */
     private static CompressionChain generateChain(
-            AEItemKey baseVariant,
+            ItemStack baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
             List<Override> overrides,
             RegistryAccess access) {
-        var variants = new ArrayList<AEItemKey>();
-        var multipliers = new ArrayList<Integer>();
+        var lowerChain = new ArrayList<ItemStack>();
+        lowerChain.add(baseVariant);
 
-        variants.add(baseVariant);
+        var stackHashes = new ArrayList<Integer>();
+        stackHashes.add(ItemStack.hashItemAndComponents(baseVariant));
 
         for (var lower = getNextVariant(baseVariant, decompressed, overrides, false, access); lower != null; ) {
-            var item = lower.item();
+            var stack = lower;
 
-            if (variants.contains(item)) {
-                if (lower.factor() != 1) {
+            if (stackHashes.contains(ItemStack.hashItemAndComponents(stack))) {
+                if (stack.getCount() != 1) {
                     LOGGER.warn(
                             "Duplicate lower compression variant detected: {}. Check any recipe involving this item for problems.",
-                            lower);
+                            stack);
                 }
 
                 break;
             }
 
-            variants.add(item);
-            multipliers.add(lower.factor());
-            compressed.removeIf(recipe -> item.matches(recipe.getResultItem(access)));
-            lower = getNextVariant(item, decompressed, overrides, false, access);
+            lowerChain.add(stack);
+            compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            lower = getNextVariant(stack, decompressed, overrides, false, access);
         }
 
-        multipliers.add(1);
-        var chain = new ArrayList<CompressionChain.Variant>();
+        var chain = new ArrayList<ItemStack>();
 
-        for (var i = variants.size(); i > 0; i--) {
-            chain.add(new CompressionChain.Variant(variants.get(i - 1), multipliers.get(i - 1)));
+        for (var i = lowerChain.size(); i > 0; i--) {
+            chain.add(lowerChain
+                    .get(i - 1)
+                    .copyWithCount(lowerChain.get((i) % lowerChain.size()).getCount()));
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, overrides, true, access); higher != null; ) {
-            if (chain.contains(higher)) {
-                if (higher.factor() != 1) {
+            if (stackHashes.contains(ItemStack.hashItemAndComponents(higher))) {
+                if (higher.getCount() != 1) {
                     LOGGER.warn(
                             "Duplicate higher compression variant detected: {}. Check any recipe involving this item for problems.",
                             higher);
@@ -216,10 +215,10 @@ public class CompressionService {
                 break;
             }
 
-            chain.add(higher);
-            var item = higher.item();
-            decompressed.removeIf(recipe -> item.matches(recipe.getResultItem(access)));
-            higher = getNextVariant(higher.item(), compressed, overrides, true, access);
+            var stack = higher;
+            chain.add(stack);
+            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            higher = getNextVariant(stack, compressed, overrides, true, access);
         }
 
         LOGGER.debug("Gathered bulk compression chain: {}", chain);
@@ -227,36 +226,36 @@ public class CompressionService {
     }
 
     /**
-     * Retrieves the "next" {@link CompressionChain.Variant} for a given item based on a given list of recipes and
-     * overrides and whether the recipes given are "compression" or "decompression" recipes.
+     * Retrieves the "next" variant for a given item based on a given list of recipes and overrides, and whether the
+     * recipes given are "compression" or "decompression" recipes.
      */
-    private static CompressionChain.Variant getNextVariant(
-            AEItemKey item,
+    private static ItemStack getNextVariant(
+            ItemStack item,
             List<CraftingRecipe> recipes,
             List<Override> overrides,
             boolean compressed,
             RegistryAccess access) {
         for (var override : overrides) {
-            if (compressed && override.smaller.equals(item)) {
+            if (compressed && ItemStack.isSameItemSameComponents(override.smaller, item)) {
                 overrides.remove(override);
-                return new CompressionChain.Variant(override.larger, override.factor);
+                return override.larger;
             }
 
-            if (!compressed && override.larger.equals(item)) {
+            if (!compressed && ItemStack.isSameItemSameComponents(override.larger, item)) {
                 overrides.remove(override);
-                return new CompressionChain.Variant(override.smaller, override.factor);
+                return override.smaller;
             }
         }
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (item.matches(input)) {
+                if (ItemStack.isSameItemSameComponents(item, input)) {
                     recipes.remove(recipe);
-                    return new CompressionChain.Variant(
-                            AEItemKey.of(recipe.getResultItem(access)),
-                            compressed
-                                    ? recipe.getIngredients().size()
-                                    : recipe.getResultItem(access).getCount());
+                    return recipe.getResultItem(access)
+                            .copyWithCount(
+                                    compressed
+                                            ? recipe.getIngredients().size()
+                                            : recipe.getResultItem(access).getCount());
                 }
             }
         }
@@ -390,11 +389,12 @@ public class CompressionService {
             }
 
             var decompressed = isDecompressionRecipe(recipe);
-            var smaller = AEItemKey.of(decompressed ? output : input);
-            var larger = AEItemKey.of(decompressed ? input : output);
-            var factor = !decompressed ? recipe.getIngredients().size() : output.getCount();
+            var larger = (decompressed ? input : output).copy();
+            var smaller = decompressed
+                    ? output.copy()
+                    : input.copyWithCount(recipe.getIngredients().size());
 
-            var override = new Override(smaller, larger, factor);
+            var override = new Override(larger, smaller);
             LOGGER.debug("Found bulk compression override: {}", override);
             overrides.add(override);
 
@@ -413,11 +413,11 @@ public class CompressionService {
         return stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
     }
 
-    private record Override(AEItemKey smaller, AEItemKey larger, int factor) {
+    private record Override(ItemStack larger, ItemStack smaller) {
         @NotNull
         @java.lang.Override
         public String toString() {
-            return larger + " → " + factor + "x " + smaller;
+            return larger + " → " + smaller;
         }
     }
 }

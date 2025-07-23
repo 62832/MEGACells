@@ -266,15 +266,15 @@ public class BulkCellInventory implements StorageCell {
     }
 
     public AEItemKey getCutoffItem() {
-        return hasCompressionChain() ? compressionChain.getItem(compressionCutoff) : null;
+        return hasCompressionChain() ? AEItemKey.of(compressionChain.getItem(compressionCutoff)) : null;
     }
 
     AEItemKey getHighestVariant() {
-        return hasCompressionChain() ? compressionChain.getItem(compressionChain.size() - 1) : null;
+        return hasCompressionChain() ? AEItemKey.of(compressionChain.getItem(compressionChain.size() - 1)) : null;
     }
 
     AEItemKey getLowestVariant() {
-        return hasCompressionChain() ? compressionChain.getItem(0) : null;
+        return hasCompressionChain() ? AEItemKey.of(compressionChain.getItem(0)) : null;
     }
 
     @Override

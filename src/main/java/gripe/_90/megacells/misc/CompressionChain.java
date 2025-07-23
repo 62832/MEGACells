@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
-
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -15,6 +13,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import appeng.api.crafting.IPatternDetails;
@@ -22,19 +21,23 @@ import appeng.api.stacks.AEItemKey;
 
 public class CompressionChain {
     public static final StreamCodec<RegistryFriendlyByteBuf, CompressionChain> STREAM_CODEC =
-            Variant.STREAM_CODEC.apply(ByteBufCodecs.list()).map(CompressionChain::new, chain -> chain.variants);
+            ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).map(CompressionChain::new, chain -> chain.variants);
 
     public static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
-    private final List<Variant> variants;
+    private final List<ItemStack> variants;
     private final Lazy<List<Pair<IPatternDetails, IPatternDetails>>> patterns = Lazy.of(this::gatherPatterns);
 
-    CompressionChain(List<Variant> variants) {
+    CompressionChain(List<ItemStack> variants) {
         this.variants = Collections.unmodifiableList(variants);
     }
 
     public static long clamp(BigInteger toClamp, long limit) {
         return toClamp.min(BigInteger.valueOf(limit)).longValue();
+    }
+
+    private static BigInteger bigCount(ItemStack stack) {
+        return BigInteger.valueOf(stack.getCount());
     }
 
     public boolean isEmpty() {
@@ -43,7 +46,7 @@ public class CompressionChain {
 
     public boolean containsVariant(AEItemKey item) {
         for (var variant : variants) {
-            if (variant.item.equals(item)) {
+            if (ItemStack.isSameItemSameComponents(item.getReadOnlyStack(), variant)) {
                 return true;
             }
         }
@@ -51,8 +54,8 @@ public class CompressionChain {
         return false;
     }
 
-    public AEItemKey getItem(int index) {
-        return variants.get(index).item;
+    public ItemStack getItem(int index) {
+        return variants.get(index);
     }
 
     public BigInteger unitFactor(AEItemKey item) {
@@ -63,9 +66,9 @@ public class CompressionChain {
         var potentialFactor = BigInteger.ONE;
 
         for (var variant : variants) {
-            potentialFactor = potentialFactor.multiply(variant.big());
+            potentialFactor = potentialFactor.multiply(bigCount(variant));
 
-            if (variant.item.equals(item)) {
+            if (ItemStack.isSameItemSameComponents(item.getReadOnlyStack(), variant)) {
                 return potentialFactor;
             }
         }
@@ -100,11 +103,11 @@ public class CompressionChain {
         var patterns = new ObjectArrayList<Pair<IPatternDetails, IPatternDetails>>();
 
         for (var i = 0; i < variants.size() - 1; i++) {
-            var smaller = variants.get(i);
-            var larger = variants.get(i + 1);
+            var smaller = variants.get(i).copyWithCount(variants.get(i + 1).getCount());
+            var larger = variants.get(i + 1).copyWithCount(1);
 
-            var compression = new DecompressionPattern(smaller.item, larger.item, larger.factor, true);
-            var decompression = new DecompressionPattern(larger.item, smaller.item, larger.factor, false);
+            var compression = new DecompressionPattern(smaller, larger);
+            var decompression = new DecompressionPattern(larger, smaller);
 
             patterns.add(Pair.of(compression, decompression));
         }
@@ -117,15 +120,15 @@ public class CompressionChain {
 
         if (!isEmpty()) {
             for (var i = 0; i < cutoff + 1; i++) {
-                var variant = variants.get(i);
+                var variant = AEItemKey.of(variants.get(i));
 
                 if (i < cutoff) {
                     // use factor of the next variant along (determines how many of *this* variant fit into the next)
-                    var factor = variants.get((i + 1) % variants.size()).big();
-                    stacks.put(variant.item(), unitCount.remainder(factor).longValue());
+                    var factor = bigCount(variants.get((i + 1) % variants.size()));
+                    stacks.put(variant, unitCount.remainder(factor).longValue());
                     unitCount = unitCount.divide(factor);
                 } else {
-                    stacks.put(variant.item(), clamp(unitCount, STACK_LIMIT));
+                    stacks.put(variant, clamp(unitCount, STACK_LIMIT));
                     break;
                 }
             }
@@ -152,12 +155,12 @@ public class CompressionChain {
         }
 
         for (var i = 0; i < cutoff + 1; i++) {
-            var variant = variants.get(i);
-            var amount = BigInteger.valueOf(stackMap.get(variant.item));
+            var variant = AEItemKey.of(variants.get(i));
+            var amount = BigInteger.valueOf(stackMap.get(variant));
 
             if (unitsToAdd.signum() != 0 && i < cutoff) {
                 // use factor of the next variant along (determines how many of *this* variant fit into the next)
-                var factor = variants.get((i + 1) % variants.size()).big();
+                var factor = bigCount(variants.get((i + 1) % variants.size()));
 
                 var added = unitsToAdd.remainder(factor);
                 amount = amount.add(added);
@@ -169,10 +172,10 @@ public class CompressionChain {
                     amount = outflow;
                 }
 
-                stackMap.put(variant.item, amount.longValue());
+                stackMap.put(variant, amount.longValue());
                 unitsToAdd = unitsToAdd.divide(factor);
             } else {
-                stackMap.put(variant.item, clamp(amount.add(unitsToAdd), STACK_LIMIT));
+                stackMap.put(variant, clamp(amount.add(unitsToAdd), STACK_LIMIT));
                 break;
             }
         }
@@ -186,22 +189,5 @@ public class CompressionChain {
     @Override
     public int hashCode() {
         return Objects.hashCode(variants);
-    }
-
-    record Variant(AEItemKey item, int factor) {
-        private static final StreamCodec<RegistryFriendlyByteBuf, AEItemKey> ITEM_KEY_CODEC =
-                AEItemKey.STREAM_CODEC.map(k -> (AEItemKey) k, k -> k);
-        private static final StreamCodec<RegistryFriendlyByteBuf, Variant> STREAM_CODEC = StreamCodec.composite(
-                ITEM_KEY_CODEC, Variant::item, ByteBufCodecs.VAR_INT, Variant::factor, Variant::new);
-
-        private BigInteger big() {
-            return BigInteger.valueOf(factor);
-        }
-
-        @NotNull
-        @Override
-        public String toString() {
-            return factor + "x → " + item;
-        }
     }
 }

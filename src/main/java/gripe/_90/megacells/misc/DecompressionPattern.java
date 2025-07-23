@@ -7,7 +7,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,19 +21,15 @@ import gripe._90.megacells.definition.MEGAItems;
 
 public class DecompressionPattern implements IPatternDetails {
     private final AEItemKey definition;
-    private final AEKey from;
-    private final AEKey to;
-    private final int factor;
-    private final boolean compress;
+    private final ItemStack from;
+    private final ItemStack to;
 
-    public DecompressionPattern(AEKey from, AEKey to, int factor, boolean compress) {
+    public DecompressionPattern(ItemStack from, ItemStack to) {
         this.from = from;
         this.to = to;
-        this.factor = factor;
-        this.compress = compress;
 
         var definition = new ItemStack(MEGAItems.SKY_STEEL_INGOT);
-        definition.set(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN, new Encoded(from, to, factor, compress));
+        definition.set(MEGAComponents.ENCODED_DECOMPRESSION_PATTERN, new Encoded(from, to));
         this.definition = AEItemKey.of(definition);
     }
 
@@ -45,12 +40,12 @@ public class DecompressionPattern implements IPatternDetails {
 
     @Override
     public IInput[] getInputs() {
-        return new IInput[] {new Input(from, compress ? factor : 1)};
+        return new IInput[] {new Input(from)};
     }
 
     @Override
     public List<GenericStack> getOutputs() {
-        return Collections.singletonList(new GenericStack(to, compress ? 1 : factor));
+        return Collections.singletonList(new GenericStack(AEItemKey.of(to), to.getCount()));
     }
 
     @Override
@@ -63,10 +58,10 @@ public class DecompressionPattern implements IPatternDetails {
         return definition.hashCode();
     }
 
-    private record Input(AEKey input, int factor) implements IInput {
+    private record Input(ItemStack stack) implements IInput {
         @Override
         public GenericStack[] getPossibleInputs() {
-            return new GenericStack[] {new GenericStack(input, factor)};
+            return new GenericStack[] {new GenericStack(AEItemKey.of(stack), stack.getCount())};
         }
 
         @Override
@@ -85,23 +80,13 @@ public class DecompressionPattern implements IPatternDetails {
         }
     }
 
-    public record Encoded(AEKey from, AEKey to, int factor, boolean compress) {
+    public record Encoded(ItemStack from, ItemStack to) {
         public static final Codec<Encoded> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                        AEKey.CODEC.fieldOf("from").forGetter(Encoded::from),
-                        AEKey.CODEC.fieldOf("to").forGetter(Encoded::to),
-                        Codec.INT.fieldOf("factor").forGetter(Encoded::factor),
-                        Codec.BOOL.fieldOf("compress").forGetter(Encoded::compress))
+                        ItemStack.CODEC.fieldOf("from").forGetter(Encoded::from),
+                        ItemStack.CODEC.fieldOf("to").forGetter(Encoded::to))
                 .apply(instance, Encoded::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, Encoded> STREAM_CODEC = StreamCodec.composite(
-                AEKey.STREAM_CODEC,
-                Encoded::from,
-                AEKey.STREAM_CODEC,
-                Encoded::to,
-                ByteBufCodecs.VAR_INT,
-                Encoded::factor,
-                ByteBufCodecs.BOOL,
-                Encoded::compress,
-                Encoded::new);
+                ItemStack.STREAM_CODEC, Encoded::from, ItemStack.STREAM_CODEC, Encoded::to, Encoded::new);
     }
 }
