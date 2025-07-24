@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -172,8 +173,8 @@ public class CompressionService {
             List<CraftingRecipe> decompressed,
             List<Override> overrides,
             RegistryAccess access) {
-        var lowerChain = new ArrayList<ItemStack>();
-        lowerChain.add(baseVariant);
+        var lowerList = new ArrayList<ItemStack>();
+        lowerList.add(baseVariant);
 
         var stackHashes = new ArrayList<Integer>();
         stackHashes.add(ItemStack.hashItemAndComponents(baseVariant));
@@ -191,17 +192,17 @@ public class CompressionService {
                 break;
             }
 
-            lowerChain.add(stack);
+            lowerList.add(stack);
             compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
             lower = getNextVariant(stack, decompressed, overrides, false, access);
         }
 
-        var chain = new ArrayList<ItemStack>();
+        var variantList = new ArrayList<ItemStack>();
 
-        for (var i = lowerChain.size(); i > 0; i--) {
-            chain.add(lowerChain
+        for (var i = lowerList.size(); i > 0; i--) {
+            variantList.add(lowerList
                     .get(i - 1)
-                    .copyWithCount(lowerChain.get((i) % lowerChain.size()).getCount()));
+                    .copyWithCount(lowerList.get((i) % lowerList.size()).getCount()));
         }
 
         for (var higher = getNextVariant(baseVariant, compressed, overrides, true, access); higher != null; ) {
@@ -216,13 +217,14 @@ public class CompressionService {
             }
 
             var stack = higher;
-            chain.add(stack);
+            variantList.add(stack);
             decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
             higher = getNextVariant(stack, compressed, overrides, true, access);
         }
 
+        var chain = new CompressionChain(variantList);
         LOGGER.debug("Gathered bulk compression chain: {}", chain);
-        return new CompressionChain(chain);
+        return chain;
     }
 
     /**
@@ -413,11 +415,21 @@ public class CompressionService {
         return stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
     }
 
+    static String variantString(ItemStack stack) {
+        var s = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+
+        if (!stack.isComponentsPatchEmpty()) {
+            s += "(*)";
+        }
+
+        return s;
+    }
+
     private record Override(ItemStack larger, ItemStack smaller) {
         @NotNull
         @java.lang.Override
         public String toString() {
-            return larger + " → " + smaller;
+            return variantString(larger) + " → " + smaller.getCount() + "x " + variantString(smaller);
         }
     }
 }

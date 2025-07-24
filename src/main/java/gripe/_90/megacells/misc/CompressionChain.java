@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
@@ -26,7 +27,7 @@ public class CompressionChain {
     public static final long STACK_LIMIT = (long) Math.pow(2, 42);
 
     private final List<ItemStack> variants;
-    private final Lazy<List<Pair<IPatternDetails, IPatternDetails>>> patterns = Lazy.of(this::gatherPatterns);
+    private final Supplier<List<Pair<IPatternDetails, IPatternDetails>>> patterns = Lazy.of(this::gatherPatterns);
 
     CompressionChain(List<ItemStack> variants) {
         this.variants = Collections.unmodifiableList(variants);
@@ -189,5 +190,30 @@ public class CompressionChain {
     @Override
     public int hashCode() {
         return Objects.hashCode(variants);
+    }
+
+    @Override
+    public String toString() {
+        var it = variants.iterator();
+
+        if (!it.hasNext()) {
+            return "[]";
+        }
+
+        var sb = new StringBuilder();
+        sb.append('[');
+
+        for (; ; ) {
+            var stack = it.next();
+            sb.append(stack.getCount());
+            sb.append("x → ");
+            sb.append(CompressionService.variantString(stack));
+
+            if (!it.hasNext()) {
+                return sb.append(']').toString();
+            }
+
+            sb.append(", ");
+        }
     }
 }
