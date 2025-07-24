@@ -1,0 +1,112 @@
+{
+    DataVersion: 3955,
+    size: [3, 1, 1],
+    data: [
+        {
+            pos: [0, 0, 0],
+            state: "ae2:drive{facing:north,spin:0}",
+            nbt: {
+                id: "ae2:drive",
+                inv: {
+                    item0: {count: 1, id: "megacells:source_storage_cell_1m"},
+                    item1: {count: 1, id: "megacells:experience_storage_cell_1m"},
+                    item2: {count: 1, id: "megacells:source_storage_cell_4m"},
+                    item3: {count: 1, id: "megacells:experience_storage_cell_4m"},
+                    item4: {count: 1, id: "megacells:source_storage_cell_16m"},
+                    item5: {count: 1, id: "megacells:experience_storage_cell_16m"},
+                    item6: {count: 1, id: "megacells:source_storage_cell_64m"},
+                    item7: {count: 1, id: "megacells:experience_storage_cell_64m"},
+                    item8: {count: 1, id: "megacells:source_storage_cell_256m"},
+                    item9: {count: 1, id: "megacells:experience_storage_cell_256m"}
+                },
+                priority: 0,
+                proxy: {p: 0},
+                visual: {
+                    cell0: {id: "megacells:source_storage_cell_1m", state: "empty"},
+                    cell1: {id: "megacells:experience_storage_cell_1m", state: "empty"},
+                    cell2: {id: "megacells:source_storage_cell_4m", state: "empty"},
+                    cell3: {id: "megacells:experience_storage_cell_4m", state: "empty"},
+                    cell4: {id: "megacells:source_storage_cell_16m", state: "empty"},
+                    cell5: {id: "megacells:experience_storage_cell_16m", state: "empty"},
+                    cell6: {id: "megacells:source_storage_cell_64m", state: "empty"},
+                    cell7: {id: "megacells:experience_storage_cell_64m", state: "empty"},
+                    cell8: {id: "megacells:source_storage_cell_256m", state: "empty"},
+                    cell9: {id: "megacells:experience_storage_cell_256m", state: "empty"},
+                    online: 1b
+                }
+            }
+        },
+        {
+            pos: [1, 0, 0],
+            state: "ae2:drive{facing:north,spin:0}",
+            nbt: {
+                id: "ae2:drive",
+                inv: {
+                    item0: {count: 1, id: "megacells:chemical_storage_cell_1m"},
+                    item1: {count: 1, id: "megacells:mana_storage_cell_1m"},
+                    item2: {count: 1, id: "megacells:chemical_storage_cell_4m"},
+                    item3: {count: 1, id: "megacells:mana_storage_cell_4m"},
+                    item4: {count: 1, id: "megacells:chemical_storage_cell_16m"},
+                    item5: {count: 1, id: "megacells:mana_storage_cell_16m"},
+                    item6: {count: 1, id: "megacells:chemical_storage_cell_64m"},
+                    item7: {count: 1, id: "megacells:mana_storage_cell_64m"},
+                    item8: {count: 1, id: "megacells:chemical_storage_cell_256m"},
+                    item9: {count: 1, id: "megacells:mana_storage_cell_256m"}
+                },
+                priority: 0,
+                proxy: {p: 0},
+                visual: {
+                    cell0: {id: "megacells:chemical_storage_cell_1m", state: "empty"},
+                    cell1: {id: "megacells:mana_storage_cell_1m", state: "empty"},
+                    cell2: {id: "megacells:chemical_storage_cell_4m", state: "empty"},
+                    cell3: {id: "megacells:mana_storage_cell_4m", state: "empty"},
+                    cell4: {id: "megacells:chemical_storage_cell_16m", state: "empty"},
+                    cell5: {id: "megacells:mana_storage_cell_16m", state: "empty"},
+                    cell6: {id: "megacells:chemical_storage_cell_64m", state: "empty"},
+                    cell7: {id: "megacells:mana_storage_cell_64m", state: "empty"},
+                    cell8: {id: "megacells:chemical_storage_cell_256m", state: "empty"},
+                    cell9: {id: "megacells:mana_storage_cell_256m", state: "empty"},
+                    online: 1b
+                }
+            }
+        },
+        {
+            pos: [2, 0, 0],
+            state: "ae2:drive{facing:north,spin:0}",
+            nbt: {
+                id: "ae2:drive",
+                inv: {
+                    item0: {count: 1, id: "megacells:item_storage_cell_1m"},
+                    item1: {count: 1, id: "megacells:fluid_storage_cell_1m"},
+                    item2: {count: 1, id: "megacells:item_storage_cell_4m"},
+                    item3: {count: 1, id: "megacells:fluid_storage_cell_4m"},
+                    item4: {count: 1, id: "megacells:item_storage_cell_16m"},
+                    item5: {count: 1, id: "megacells:fluid_storage_cell_16m"},
+                    item6: {count: 1, id: "megacells:item_storage_cell_64m"},
+                    item7: {count: 1, id: "megacells:fluid_storage_cell_64m"},
+                    item8: {count: 1, id: "megacells:item_storage_cell_256m"},
+                    item9: {count: 1, id: "megacells:fluid_storage_cell_256m"}
+                },
+                priority: 0,
+                proxy: {p: 0},
+                visual: {
+                    cell0: {id: "megacells:item_storage_cell_1m", state: "empty"},
+                    cell1: {id: "megacells:fluid_storage_cell_1m", state: "empty"},
+                    cell2: {id: "megacells:item_storage_cell_4m", state: "empty"},
+                    cell3: {id: "megacells:fluid_storage_cell_4m", state: "empty"},
+                    cell4: {id: "megacells:item_storage_cell_16m", state: "empty"},
+                    cell5: {id: "megacells:fluid_storage_cell_16m", state: "empty"},
+                    cell6: {id: "megacells:item_storage_cell_64m", state: "empty"},
+                    cell7: {id: "megacells:fluid_storage_cell_64m", state: "empty"},
+                    cell8: {id: "megacells:item_storage_cell_256m", state: "empty"},
+                    cell9: {id: "megacells:fluid_storage_cell_256m", state: "empty"},
+                    online: 1b
+                }
+            }
+        }
+    ],
+    entities: [],
+    palette: [
+        "ae2:drive{facing:north,spin:0}"
+    ]
+}

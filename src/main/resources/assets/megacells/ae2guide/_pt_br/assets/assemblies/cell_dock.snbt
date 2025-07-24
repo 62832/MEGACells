@@ -1,0 +1,56 @@
+{
+    DataVersion: 3955,
+    size: [1, 1, 1],
+    data: [
+        {
+            pos: [0, 0, 0],
+            state: "ae2:cable_bus{light_level:0,waterlogged:false}",
+            nbt: {
+                cable: {
+                    gn: {p: 0},
+                    id: "ae2:fluix_smart_cable",
+                    visual: {
+                        connections: ["down"],
+                        missingChannel: 0b,
+                        powered: 1b
+                    }
+                },
+                hasRedstone: 2,
+                id: "ae2:cable_bus",
+                up: {
+                    cell: {count: 1, id: "megacells:bulk_item_cell"},
+                    gn: {p: 0},
+                    id: "megacells:cell_dock",
+                    priority: 0,
+                    spin: 0b,
+                    visual: {
+                        cellId: "megacells:bulk_item_cell",
+                        cellStatus: "NOT_EMPTY",
+                        missingChannel: 0b,
+                        powered: 1b,
+                        spin: 0b
+                    }
+                },
+                west: {
+                    cell: {count: 1, id: "megacells:bulk_item_cell"},
+                    gn: {p: 0},
+                    id: "megacells:cell_dock",
+                    priority: 0,
+                    spin: 3b,
+                    visual: {
+                        cellId: "megacells:bulk_item_cell",
+                        cellStatus: "NOT_EMPTY",
+                        missingChannel: 0b,
+                        powered: 1b,
+                        spin: 0b
+                    }
+                },
+                visual: {}
+            }
+        }
+    ],
+    entities: [],
+    palette: [
+        "ae2:cable_bus{light_level:0,waterlogged:false}"
+    ]
+}
