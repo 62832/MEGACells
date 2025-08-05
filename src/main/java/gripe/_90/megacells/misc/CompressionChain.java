@@ -140,48 +140,6 @@ public class CompressionChain {
         return stacks;
     }
 
-    public void updateStacks(Map<AEItemKey, Long> stackMap, BigInteger unitsToAdd, int cutoff) {
-        if (isEmpty()) {
-            if (stackMap.size() > 1) {
-                throw new IllegalStateException("Bulk cell reported more than one stack for empty compression chain");
-            }
-
-            if (!stackMap.isEmpty()) {
-                var item = stackMap.keySet().iterator().next();
-                var amount = BigInteger.valueOf(stackMap.get(item));
-                stackMap.put(item, clamp(amount.add(unitsToAdd), STACK_LIMIT));
-            }
-
-            return;
-        }
-
-        for (var i = 0; i < cutoff + 1; i++) {
-            var variant = AEItemKey.of(variants.get(i));
-            var amount = BigInteger.valueOf(stackMap.get(variant));
-
-            if (unitsToAdd.signum() != 0 && i < cutoff) {
-                // use factor of the next variant along (determines how many of *this* variant fit into the next)
-                var factor = bigCount(variants.get((i + 1) % variants.size()));
-
-                var added = unitsToAdd.remainder(factor);
-                amount = amount.add(added);
-                unitsToAdd = unitsToAdd.subtract(added);
-
-                if (amount.signum() == -1 || amount.divide(factor).signum() == 1) {
-                    var outflow = amount.add(factor).remainder(factor);
-                    unitsToAdd = unitsToAdd.add(amount.subtract(outflow));
-                    amount = outflow;
-                }
-
-                stackMap.put(variant, amount.longValue());
-                unitsToAdd = unitsToAdd.divide(factor);
-            } else {
-                stackMap.put(variant, clamp(amount.add(unitsToAdd), STACK_LIMIT));
-                break;
-            }
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         return o != null && o.getClass() == getClass() && ((CompressionChain) o).variants.equals(variants);

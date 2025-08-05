@@ -36,6 +36,7 @@ public class BulkCellInventory implements StorageCell {
     private int compressionCutoff;
 
     private Map<AEItemKey, Long> compressedStacks;
+    private boolean needsStackUpdate;
     private List<IPatternDetails> decompressionPatterns;
 
     private boolean isPersisted = true;
@@ -169,7 +170,9 @@ public class BulkCellInventory implements StorageCell {
                 storedItem = filterItem;
             }
 
-            updateContents(units);
+            unitCount = unitCount.add(units);
+            saveChanges();
+            needsStackUpdate = true;
         }
 
         return amount;
@@ -195,30 +198,23 @@ public class BulkCellInventory implements StorageCell {
         var units = BigInteger.valueOf(amount).multiply(factor).min(unitCount);
 
         if (mode == Actionable.MODULATE) {
-            updateContents(units.negate());
+            unitCount = unitCount.subtract(units).max(BigInteger.ZERO);
+
+            if (unitCount.signum() < 1) {
+                storedItem = null;
+                var filterChain = CompressionService.getChain(filterItem);
+
+                if (compressionChain != filterChain) {
+                    compressionChain = filterChain;
+                    compressionCutoff = Math.max(0, compressionChain.size() - 1);
+                }
+            }
+
+            saveChanges();
+            needsStackUpdate = true;
         }
 
         return CompressionChain.clamp(units.divide(factor), Long.MAX_VALUE);
-    }
-
-    private void updateContents(BigInteger unitsToAdd) {
-        unitCount = unitCount.add(unitsToAdd);
-
-        if (unitCount.signum() < 1) {
-            storedItem = null;
-            var filterChain = CompressionService.getChain(filterItem);
-
-            if (compressionChain != filterChain) {
-                compressionChain = filterChain;
-                compressionCutoff = Math.max(0, compressionChain.size() - 1);
-            }
-
-            compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, filterItem);
-        } else {
-            compressionChain.updateStacks(compressedStacks, unitsToAdd, compressionCutoff);
-        }
-
-        saveChanges();
     }
 
     private void saveChanges() {
@@ -279,6 +275,12 @@ public class BulkCellInventory implements StorageCell {
 
     @Override
     public void getAvailableStacks(KeyCounter out) {
+        if (needsStackUpdate) {
+            var determiningItem = storedItem != null ? storedItem : filterItem;
+            compressedStacks = compressionChain.initStacks(unitCount, compressionCutoff, determiningItem);
+            needsStackUpdate = false;
+        }
+
         if (storedItem != null) {
             if (compressionEnabled) {
                 compressedStacks.forEach(out::add);
