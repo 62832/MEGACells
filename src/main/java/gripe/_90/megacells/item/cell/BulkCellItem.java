@@ -102,16 +102,16 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                                 inv.isCompressionEnabled()
                                         ? MEGATranslations.TraceUnits.text(
                                                 Tooltips.ofNumber(trace),
-                                                inv.getLowestVariant().getDisplayName())
+                                                inv.getLowestVariant().getHoverName())
                                         : MEGATranslations.ContainsTraceUnits.text())
-                        .withStyle(ChatFormatting.GOLD));
+                        .withStyle(ChatFormatting.YELLOW));
             }
 
             if (inv.isCompressionEnabled()) {
                 var cutoffItem = inv.getCutoffItem();
 
-                if (cutoffItem != inv.getHighestVariant()) {
-                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getDisplayName())));
+                if (!ItemStack.isSameItemSameComponents(cutoffItem, inv.getHighestVariant())) {
+                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getHoverName())));
                 }
             }
         }

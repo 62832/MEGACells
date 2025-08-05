@@ -56,7 +56,7 @@ public class CompressionChain {
     }
 
     public ItemStack getItem(int index) {
-        return variants.get(index);
+        return variants.get(index).copy();
     }
 
     public BigInteger unitFactor(AEItemKey item) {

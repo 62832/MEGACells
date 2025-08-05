@@ -300,19 +300,19 @@ public class BulkCellInventoryTest {
         cell.insert(nugget, 1, Actionable.MODULATE, SRC);
         cell.insert(ingot, 1, Actionable.MODULATE, SRC);
         cell.insert(block, 1, Actionable.MODULATE, SRC);
-        assertThat(cell.getCutoffItem()).isEqualTo(block);
+        assertThat(block.matches(cell.getCutoffItem())).isTrue();
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
         assertThat(cell.getAvailableStacks().get(block)).isOne();
 
         cell.switchCompressionCutoff(false);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.getCutoffItem()).isEqualTo(ingot);
+        assertThat(ingot.matches(cell.getCutoffItem())).isTrue();
         assertThat(cell.getAvailableStacks().get(block)).isZero();
         assertThat(cell.getAvailableStacks().get(ingot)).isEqualTo(10);
 
         cell.switchCompressionCutoff(true);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.getCutoffItem()).isEqualTo(block);
+        assertThat(block.matches(cell.getCutoffItem())).isTrue();
         assertThat(cell.getAvailableStacks().get(block)).isOne();
         assertThat(cell.getAvailableStacks().get(ingot)).isOne();
 
@@ -323,16 +323,16 @@ public class BulkCellInventoryTest {
         cell.switchCompressionCutoff(false);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         cell.extract(ingot, Long.MAX_VALUE, Actionable.MODULATE, SRC);
-        assertThat(cell.getCutoffItem()).isEqualTo(ingot);
+        assertThat(ingot.matches(cell.getCutoffItem())).isTrue();
 
         // ensure compression cutoff is removed when the filter does change and a new compression chain is used instead
         item.getConfigInventory(stack).clear();
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
-        assertThat(cell.getCutoffItem()).isNull();
+        assertThat(cell.getCutoffItem().isEmpty()).isTrue();
         item.getConfigInventory(stack).addFilter(Items.GOLD_INGOT);
         cell = (BulkCellInventory) Objects.requireNonNull(StorageCells.getCellInventory(stack, null));
         // must be default "block" form rather than "ingot" as before
-        assertThat(cell.getCutoffItem()).isEqualTo(AEItemKey.of(Items.GOLD_BLOCK));
+        assertThat(cell.getCutoffItem().is(Items.GOLD_BLOCK)).isTrue();
     }
 
     @Test
