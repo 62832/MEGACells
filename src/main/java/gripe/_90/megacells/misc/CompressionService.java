@@ -2,9 +2,9 @@ package gripe._90.megacells.misc;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,14 +40,7 @@ public class CompressionService {
      */
     private static final List<CompressionChain> chains = new ArrayList<>();
 
-    /**
-     * So as not to keep reiterating a potentially large list of chains to search for the chain containing a given item,
-     * this map is used to keep track of which items have already been used to request a chain and cache the index
-     * within the {@code chains} field at which that chain has been found. If a chain is present, this index is then
-     * tracked for every variant item within it, otherwise an index of {@code -1} is used to denote that a chain does
-     * not exist for the item.
-     */
-    private static final Map<AEItemKey, Integer> chainIndexes = new HashMap<>();
+    private static final Map<AEItemKey, CompressionChain> cachedChains = new WeakHashMap<>();
 
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
@@ -82,25 +75,23 @@ public class CompressionService {
             return EMPTY;
         }
 
-        var cachedIndex = chainIndexes.get(item);
+        var cached = cachedChains.get(item);
 
-        if (cachedIndex != null) {
-            return cachedIndex >= 0 ? chains.get(cachedIndex) : EMPTY;
+        if (cached != null) {
+            return cached;
         }
 
-        for (var i = 0; i < chains.size(); i++) {
-            var chain = chains.get(i);
-
+        for (var chain : chains) {
             if (chain.containsVariant(item)) {
                 for (var j = 0; j < chain.size(); j++) {
-                    chainIndexes.put(AEItemKey.of(chain.getItem(j)), i);
+                    cachedChains.put(AEItemKey.of(chain.getItem(j)), chain);
                 }
 
                 return chain;
             }
         }
 
-        chainIndexes.put(item, -1);
+        cachedChains.put(item, EMPTY);
         return EMPTY;
     }
 
@@ -111,7 +102,7 @@ public class CompressionService {
     public static void syncToClient(SyncCompressionChainsPacket packet, IPayloadContext context) {
         context.enqueueWork(() -> {
             chains.clear();
-            chainIndexes.clear();
+            cachedChains.clear();
             chains.addAll(packet.chains());
         });
     }
@@ -123,7 +114,7 @@ public class CompressionService {
     private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old chain cache in case of the server restarting or recipes being reloaded
         chains.clear();
-        chainIndexes.clear();
+        cachedChains.clear();
 
         var compressed = new ArrayList<CraftingRecipe>();
         var decompressed = new ArrayList<CraftingRecipe>();
