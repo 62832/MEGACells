@@ -73,10 +73,12 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         }
 
         cell(MEGAItems.BULK_ITEM_CELL);
+        cell(MEGAItems.BULK_FLUID_CELL);
         cell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
         MEGAItems.getTieredCells().forEach(this::driveCell);
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
+        driveCell(MEGAItems.BULK_FLUID_CELL, 0);
         driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
 
         simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));

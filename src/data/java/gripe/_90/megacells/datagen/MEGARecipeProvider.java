@@ -245,6 +245,17 @@ public class MEGARecipeProvider extends RecipeProvider {
                 .define('d', Items.NETHERITE_INGOT)
                 .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
                 .save(output, MEGACells.makeId("cells/standard/bulk_item_cell"));
+        
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGAItems.BULK_FLUID_CELL)
+                .pattern("aba")
+                .pattern("bcb")
+                .pattern("ddd")
+                .define('a', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                .define('b', AEItems.SKY_DUST)
+                .define('c', MEGAItems.BULK_CELL_COMPONENT)
+                .define('d', MEGAItems.SKY_BRONZE_INGOT)
+                .unlockedBy("has_bulk_cell_component", has(MEGAItems.BULK_CELL_COMPONENT))
+                .save(output, MEGACells.makeId("cells/standard/bulk_fluid_cell"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MEGABlocks.MEGA_ENERGY_CELL)
                 .pattern("aaa")

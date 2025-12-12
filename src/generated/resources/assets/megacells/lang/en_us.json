@@ -39,6 +39,7 @@
   "item.megacells.accumulation_processor": "Accumulation Processor",
   "item.megacells.accumulation_processor_press": "Inscriber Accumulation Press",
   "item.megacells.bulk_cell_component": "MEGA Bulk Storage Component",
+  "item.megacells.bulk_fluid_cell": "MEGA Bulk Bottomless Storage Well",
   "item.megacells.bulk_item_cell": "MEGA Bulk Item Storage Cell",
   "item.megacells.cable_mega_emc_interface": "MEGA Transmutation Interface",
   "item.megacells.cable_mega_interface": "MEGA Interface",
