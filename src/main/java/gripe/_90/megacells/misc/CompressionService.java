@@ -370,7 +370,11 @@ public class CompressionService {
             return false;
         }
 
-        for (var input : recipe.getIngredients().getFirst().getItems()) {
+        var ingredients = recipe.getIngredients().stream()
+                .filter(ingredient -> !ingredient.isEmpty())
+                .toList();
+
+        for (var input : ingredients.getFirst().getItems()) {
             var inputVariant = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
 
             if (inputVariant == null) {
@@ -383,9 +387,7 @@ public class CompressionService {
 
             var decompressed = isDecompressionRecipe(recipe);
             var larger = (decompressed ? input : output).copy();
-            var smaller = decompressed
-                    ? output.copy()
-                    : input.copyWithCount(recipe.getIngredients().size());
+            var smaller = decompressed ? output.copy() : input.copyWithCount(ingredients.size());
 
             var override = new Override(larger, smaller);
             LOGGER.debug("Found bulk compression override: {}", override);
