@@ -118,9 +118,8 @@ public class CompressionService {
 
         var compressed = new ArrayList<CraftingRecipe>();
         var decompressed = new ArrayList<CraftingRecipe>();
-        var overrides = new ArrayList<Override>();
+        var overrides = new ArrayList<CompressionOverride>();
 
-        // Retrieve all available "compression" and "decompression" recipes from the current server's recipe manager
         for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
             if (isCompressionRecipe(recipe.value(), access)) {
                 compressed.add(recipe.value());
@@ -129,10 +128,11 @@ public class CompressionService {
             }
         }
 
-        // Filter gathered candidate recipes and retain only those that are reversible (i.e. those which can be carried
-        // out back and forth to compress/decompress a resource without affecting the underlying quantity of it)
         compressed.removeIf(recipe -> isIrreversible(recipe, decompressed, overrides, access));
         decompressed.removeIf(recipe -> isIrreversible(recipe, compressed, overrides, access));
+
+        // Keep a copy of the overrides list for logging purposes
+        var initialOverrides = List.copyOf(overrides);
 
         // Prioritise recipes whose ingredients have only one potential item, to try and mitigate situations where items
         // have not been unified properly and some (modded) item's subsequent variant is of an identical resource from
@@ -142,14 +142,16 @@ public class CompressionService {
         compressed.sort(ingredientSize);
         decompressed.sort(ingredientSize);
 
-        // Pull all available compression chains from the recipe shortlist and add these to the cache
         while (!compressed.isEmpty()) {
             var base = compressed.removeFirst().getResultItem(access).copy();
             decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, recipe.getResultItem(access)));
             chains.add(generateChain(base, compressed, decompressed, overrides, access));
         }
 
-        LOGGER.info("Initialised bulk compression. {} compression chains gathered.", chains.size());
+        LOGGER.info(
+                "Initialised bulk compression. Gathered {} compression chains, with {} overrides.",
+                chains.size(),
+                initialOverrides.size() - overrides.size());
     }
 
     /**
@@ -162,7 +164,7 @@ public class CompressionService {
             ItemStack baseVariant,
             List<CraftingRecipe> compressed,
             List<CraftingRecipe> decompressed,
-            List<Override> overrides,
+            List<CompressionOverride> overrides,
             RegistryAccess access) {
         var lowerList = new ArrayList<ItemStack>();
         lowerList.add(baseVariant);
@@ -225,18 +227,18 @@ public class CompressionService {
     private static ItemStack getNextVariant(
             ItemStack item,
             List<CraftingRecipe> recipes,
-            List<Override> overrides,
+            List<CompressionOverride> overrides,
             boolean compressed,
             RegistryAccess access) {
         for (var override : overrides) {
-            if (compressed && ItemStack.isSameItemSameComponents(override.smaller, item)) {
+            if (compressed && ItemStack.isSameItemSameComponents(override.smaller(), item)) {
                 overrides.remove(override);
-                return override.larger;
+                return override.larger();
             }
 
-            if (!compressed && ItemStack.isSameItemSameComponents(override.larger, item)) {
+            if (!compressed && ItemStack.isSameItemSameComponents(override.larger(), item)) {
                 overrides.remove(override);
-                return override.smaller;
+                return override.smaller();
             }
         }
 
@@ -316,7 +318,10 @@ public class CompressionService {
      * recipe and hence restore the original quantity of the smaller variant item previously compressed.
      */
     private static boolean isIrreversible(
-            CraftingRecipe recipe, List<CraftingRecipe> candidates, List<Override> overrides, RegistryAccess access) {
+            CraftingRecipe recipe,
+            List<CraftingRecipe> candidates,
+            List<CompressionOverride> overrides,
+            RegistryAccess access) {
         if (overrideRecipe(recipe, overrides, access)) {
             return false;
         }
@@ -363,7 +368,8 @@ public class CompressionService {
      * items not being reversible. Hence, we override any reversibility checks and generate a variant for such an item
      * based on its usually irreversible recipe.
      */
-    private static boolean overrideRecipe(CraftingRecipe recipe, List<Override> overrides, RegistryAccess access) {
+    private static boolean overrideRecipe(
+            CraftingRecipe recipe, List<CompressionOverride> overrides, RegistryAccess access) {
         var output = recipe.getResultItem(access);
 
         if (isBlacklisted(output)) {
@@ -389,7 +395,7 @@ public class CompressionService {
             var larger = (decompressed ? input : output).copy();
             var smaller = decompressed ? output.copy() : input.copyWithCount(ingredients.size());
 
-            var override = new Override(larger, smaller);
+            var override = new CompressionOverride(larger, smaller);
             LOGGER.debug("Found bulk compression override: {}", override);
             overrides.add(override);
 
@@ -416,13 +422,5 @@ public class CompressionService {
         }
 
         return s;
-    }
-
-    private record Override(ItemStack larger, ItemStack smaller) {
-        @NotNull
-        @java.lang.Override
-        public String toString() {
-            return variantString(larger) + " → " + smaller.getCount() + "x " + variantString(smaller);
-        }
     }
 }
