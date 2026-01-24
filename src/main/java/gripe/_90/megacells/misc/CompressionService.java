@@ -27,6 +27,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
 
+import appeng.api.stacks.AEKey;
 import gripe._90.megacells.definition.MEGADataMaps;
 
 public class CompressionService {
@@ -65,13 +66,13 @@ public class CompressionService {
     /**
      * Retrieves a compression chain containing a given item as any of its "variants".
      *
-     * @param item The item to retrieve a corresponding chain for.
+     * @param what The item to retrieve a corresponding chain for if it is an ItemKey.
      * @return The {@link CompressionChain} corresponding to this item, or the {@code EMPTY} chain if no real chain
      * exists for it or the given item was {@code null}.
      */
     @NotNull
-    public static CompressionChain getChain(@Nullable AEItemKey item) {
-        if (item == null) {
+    public static CompressionChain getChain(@Nullable AEKey what) {
+        if (!(what instanceof AEItemKey item)) {
             return EMPTY;
         }
 

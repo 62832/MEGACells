@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:quartz_vibrant_glass"
+    },
+    "b": {
+      "item": "ae2:sky_dust"
+    },
+    "c": {
+      "item": "megacells:bulk_cell_component"
+    },
+    "d": {
+      "item": "megacells:sky_bronze_ingot"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bcb",
+    "ddd"
+  ],
+  "result": {
+    "count": 1,
+    "id": "megacells:bulk_fluid_cell"
+  }
+}

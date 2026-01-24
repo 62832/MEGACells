@@ -13,6 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartItem;
 import appeng.api.parts.PartModels;
+import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKeyType;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.EnergyCardItem;
@@ -103,7 +104,8 @@ public final class MEGAItems {
     public static final ItemDefinition<EnergyCardItem> GREATER_ENERGY_CARD = item("Greater Energy Card", "greater_energy_card", p -> new EnergyCardItem(p, 8));
 
     public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
-    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
+    public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", prop -> new BulkCellItem(prop, AEKeyType.items()));
+    public static final ItemDefinition<BulkCellItem> BULK_FLUID_CELL = item("MEGA Bulk Bottomless Storage Well", "bulk_fluid_cell", prop -> new BulkCellItem(prop, AEKeyType.fluids()));
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
     public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part("MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
 
