@@ -126,5 +126,11 @@
   "item.megacells.source_storage_cell_4m": "4M MEGA魔源存储元件",
   "item.megacells.source_storage_cell_64m": "64M MEGA魔源存储元件",
   "pack.megacells.ClassicCellColours": "MEGA：经典元件配色",
-  "pack.megacells.ClassicCellColoursDesc": "AE2和MEGACells各等级元件的旧版红紫配色。"
+  "pack.megacells.ClassicCellColoursDesc": "AE2和MEGACells各等级元件的旧版红紫配色。",
+  "item.megacells.soul_storage_cell_16m": "16M MEGA 灵魂存储元件",
+  "item.megacells.soul_storage_cell_1m": "1M MEGA 灵魂存储元件",
+  "item.megacells.soul_storage_cell_256m": "256M MEGA 灵魂存储元件",
+  "item.megacells.soul_storage_cell_4m": "4M MEGA 灵魂存储元件",
+  "item.megacells.soul_storage_cell_64m": "64M MEGA 灵魂存储元件",
+  "item.megacells.mega_soul_cell_housing": "MEGA灵魂元件外壳"
 }
