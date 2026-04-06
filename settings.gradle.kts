@@ -81,7 +81,7 @@ run {
         versionCatalogs {
             val mc = "1.21.1"
             val maj = mc.substringAfter('.')
-            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.119"
+            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.218"
 
             create("core") {
                 version("minecraft", mc)
@@ -89,7 +89,7 @@ run {
                 version("neoforge", nf)
                 version("parchment", "2024.11.17")
 
-                version("ae2", "19.2.10")
+                version("ae2", "19.2.15")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
@@ -102,12 +102,8 @@ run {
                 library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
                 library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.9.72")
 
-                library("appbot", "curse.maven", "applied-botanics-addon-610632").version("4904185")
-                val botaniaVersion = "446"
-                val botaniaSnapshot = false
-                library("botania", "vazkii.botania", "Botania").version(
-                    "1.20.1-$botaniaVersion-FORGE${if (botaniaSnapshot) "-SNAPSHOT" else ""}"
-                )
+                library("appbot", "curse.maven", "applied-botanics-addon-610632").version("7234122")
+                library("botania", "vazkii.botania", "botania-neoforge-1.21.1").version("451-SNAPSHOT")
 
                 version("arseng", "2.0.5-beta")
                 library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
@@ -121,6 +117,14 @@ run {
 
                 library("appliede", "curse.maven", "appliede-1009940").version("6430033")
                 library("projecte", "curse.maven", "projecte-226410").version("6301953")
+
+                library("appsoul", "curse.maven", "applied-soul-1337114").version("7653184")
+                library("industrialforegoingsouls", "curse.maven", "industrial-foregoing-souls-904394").version(
+                    "6235883"
+                )
+                library("industrialforegoing", "curse.maven", "industrial-foregoing-266515").version("6626624")
+                library("titanium", "curse.maven", "titanium-287342").version("6875285")
+                library("soulpliedenergistics", "curse.maven", "soulplied-energistics-1143614").version("6771121")
             }
 
             create("testlibs") {

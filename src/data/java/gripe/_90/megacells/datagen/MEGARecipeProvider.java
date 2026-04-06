@@ -39,6 +39,7 @@ import appeng.recipes.transform.TransformRecipeBuilder;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.integration.AppBotIntegrationData;
 import gripe._90.megacells.datagen.integration.AppMekIntegrationData;
+import gripe._90.megacells.datagen.integration.AppSoulIntegrationData;
 import gripe._90.megacells.datagen.integration.AppliedEIntegrationData;
 import gripe._90.megacells.datagen.integration.ArsEngIntegrationData;
 import gripe._90.megacells.definition.MEGABlocks;
@@ -136,6 +137,14 @@ public class MEGARecipeProvider extends RecipeProvider {
         portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
         portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
         portable(conditional(output, Addons.APPEX), MEGAItems.PORTABLE_EXPERIENCE_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_EXPERIENCE_CELL_HOUSING);
+
+        cell(conditional(output, Addons.APPLIEDSOUL), MEGAItems.SOUL_CELL_1M, MEGAItems.CELL_COMPONENT_1M, MEGAItems.MEGA_SOUL_CELL_HOUSING);
+        cell(conditional(output, Addons.APPLIEDSOUL), MEGAItems.SOUL_CELL_4M, MEGAItems.CELL_COMPONENT_4M, MEGAItems.MEGA_SOUL_CELL_HOUSING);
+        cell(conditional(output, Addons.APPLIEDSOUL), MEGAItems.SOUL_CELL_16M, MEGAItems.CELL_COMPONENT_16M, MEGAItems.MEGA_SOUL_CELL_HOUSING);
+        cell(conditional(output, Addons.APPLIEDSOUL), MEGAItems.SOUL_CELL_64M, MEGAItems.CELL_COMPONENT_64M, MEGAItems.MEGA_SOUL_CELL_HOUSING);
+        cell(conditional(output, Addons.APPLIEDSOUL), MEGAItems.SOUL_CELL_256M, MEGAItems.CELL_COMPONENT_256M, MEGAItems.MEGA_SOUL_CELL_HOUSING);
+
+
         // spotless:on
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MEGABlocks.SKY_STEEL_BLOCK)
@@ -378,6 +387,10 @@ public class MEGARecipeProvider extends RecipeProvider {
 
         if (Addons.APPLIEDE.isLoaded()) {
             AppliedEIntegrationData.recipes(output);
+        }
+
+        if (Addons.APPLIEDSOUL.isLoaded()) {
+            AppSoulIntegrationData.recipes(output);
         }
     }
 

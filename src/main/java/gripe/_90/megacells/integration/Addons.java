@@ -16,6 +16,7 @@ import gripe._90.megacells.integration.appex.AppExIntegration;
 import gripe._90.megacells.integration.appflux.AppFluxIntegration;
 import gripe._90.megacells.integration.appliede.AppliedEIntegration;
 import gripe._90.megacells.integration.appmek.AppMekIntegration;
+import gripe._90.megacells.integration.appsoul.AppSoulIntegration;
 import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 
 @SuppressWarnings("Convert2MethodRef")
@@ -27,6 +28,7 @@ public enum Addons {
     APPEX("Applied Experienced", () -> new AppExIntegration()),
     APPFLUX("Applied Flux", () -> new AppFluxIntegration()),
     APPLIEDE("AppliedE", () -> new AppliedEIntegration()),
+    APPLIEDSOUL("Applied Soul", () -> new AppSoulIntegration()),
 // APPELEM("Applied Elemental"),
 ;
 
