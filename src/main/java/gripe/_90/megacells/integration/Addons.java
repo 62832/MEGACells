@@ -23,7 +23,7 @@ import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 public enum Addons {
     AE2WTLIB("AE2WTLib", () -> new AE2WTIntegration()),
     APPMEK("Applied Mekanistics", () -> new AppMekIntegration()),
-    APPBOT("Applied Botanics", () -> new AppBotIntegration(), false),
+    APPBOT("Applied Botanics", () -> new AppBotIntegration()),
     ARSENG("Ars Énergistique", () -> new ArsEngIntegration()),
     APPEX("Applied Experienced", () -> new AppExIntegration()),
     APPFLUX("Applied Flux", () -> new AppFluxIntegration()),
@@ -34,7 +34,7 @@ public enum Addons {
 
     private final String modName;
     private final Supplier<IntegrationHelper> helper;
-    private final boolean enabled;
+    private final boolean enabled; // TODO: Needs a more dynamic approach than this...
 
     Addons(String modName, Supplier<IntegrationHelper> helper) {
         this(modName, helper, true);
