@@ -16,6 +16,7 @@ import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.datagen.integration.AppBotIntegrationData;
 import gripe._90.megacells.datagen.integration.AppExIntegrationData;
 import gripe._90.megacells.datagen.integration.AppMekIntegrationData;
+import gripe._90.megacells.datagen.integration.AppSoulIntegrationData;
 import gripe._90.megacells.datagen.integration.ArsEngIntegrationData;
 import gripe._90.megacells.integration.Addons;
 
@@ -56,6 +57,11 @@ public class OverrideModelProvider extends ItemModelProvider {
         if (Addons.APPEX.isLoaded()) {
             existingFileHelper.trackGenerated(textureLocation(AppExIntegrationData.EXPERIENCE_CELL_HOUSING), TEXTURE);
             AppExIntegrationData.getCells().forEach(c -> cell(c, AppExIntegrationData.EXPERIENCE_CELL_HOUSING));
+        }
+
+        if (Addons.APPLIEDSOUL.isLoaded()) {
+            existingFileHelper.trackGenerated(textureLocation(AppSoulIntegrationData.SOUL_CELL_HOSING), TEXTURE);
+            AppSoulIntegrationData.getCells().forEach(c -> cell(c, AppSoulIntegrationData.SOUL_CELL_HOSING));
         }
     }
 

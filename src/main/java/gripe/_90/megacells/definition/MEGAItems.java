@@ -176,6 +176,12 @@ public final class MEGAItems {
     public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_64M = integrationPortable(TIER_64M, "Experience", Addons.APPEX);
     public static final ItemDefinition<?> PORTABLE_EXPERIENCE_CELL_256M = integrationPortable(TIER_256M, "Experience", Addons.APPEX);
 
+    public static final ItemDefinition<?> SOUL_CELL_1M = integrationCell(TIER_1M, "Soul", Addons.APPLIEDSOUL);
+    public static final ItemDefinition<?> SOUL_CELL_4M = integrationCell(TIER_4M, "Soul", Addons.APPLIEDSOUL);
+    public static final ItemDefinition<?> SOUL_CELL_16M = integrationCell(TIER_16M, "Soul", Addons.APPLIEDSOUL);
+    public static final ItemDefinition<?> SOUL_CELL_64M = integrationCell(TIER_64M, "Soul", Addons.APPLIEDSOUL);
+    public static final ItemDefinition<?> SOUL_CELL_256M = integrationCell(TIER_256M, "Soul", Addons.APPLIEDSOUL);
+    public static final ItemDefinition<?> MEGA_SOUL_CELL_HOUSING = integrationItem("MEGA Soul Cell Housing", "mega_soul_cell_housing", () -> MaterialItem::new, Addons.APPLIEDSOUL);
     public static final ItemDefinition<?> MEGA_EMC_INTERFACE = integrationItem("MEGA Transmutation Interface", "cable_mega_emc_interface", () -> p -> {
         PartModels.registerModels(PartModelsHelper.createModels(MEGAEMCInterfacePart.class));
         return new PartItem<>(p, MEGAEMCInterfacePart.class, MEGAEMCInterfacePart::new);

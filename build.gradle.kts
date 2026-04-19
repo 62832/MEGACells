@@ -66,6 +66,15 @@ dependencies {
     compileOnly(integration.appbot)
     "addonsCompileOnly"(integration.botania)
 
+    compileOnly(integration.appsoul)
+    "dataCompileOnly"(integration.titanium)
+    "dataCompileOnly"(integration.industrialforegoing)
+    "addonsRuntimeOnly"(integration.appsoul)
+    "addonsRuntimeOnly"(integration.titanium)
+    "addonsRuntimeOnly"(integration.industrialforegoing)
+    "addonsRuntimeOnly"(integration.ifsouls)
+    "addonsRuntimeOnly"(integration.soulpliedenergistics)
+
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
     testImplementation(testlibs.neoforge.test)
