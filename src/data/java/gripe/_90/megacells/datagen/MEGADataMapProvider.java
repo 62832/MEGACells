@@ -2,6 +2,8 @@ package gripe._90.megacells.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -14,7 +16,6 @@ import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 
 import gripe._90.megacells.definition.MEGADataMaps;
-import org.jetbrains.annotations.NotNull;
 
 public class MEGADataMapProvider extends DataMapProvider {
     protected MEGADataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

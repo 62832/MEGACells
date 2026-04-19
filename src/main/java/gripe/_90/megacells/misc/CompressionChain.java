@@ -123,7 +123,9 @@ public class CompressionChain {
             for (var i = 0; i < cutoff; i++) {
                 // use factor of the next variant along (determines how many of *this* variant fit into the next)
                 var factor = bigCount(variants.get((i + 1) % variants.size()));
-                stacks.put(AEItemKey.of(variants.get(i)), unitCount.remainder(factor).longValue());
+                stacks.put(
+                        AEItemKey.of(variants.get(i)),
+                        unitCount.remainder(factor).longValue());
                 unitCount = unitCount.divide(factor);
             }
 
