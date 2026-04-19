@@ -67,12 +67,12 @@ dependencies {
     "addonsCompileOnly"(integration.botania)
 
     compileOnly(integration.appsoul)
-    compileOnly(integration.titanium)
-    compileOnly(integration.industrialforegoing)
+    "dataCompileOnly"(integration.titanium)
+    "dataCompileOnly"(integration.industrialforegoing)
     "addonsRuntimeOnly"(integration.appsoul)
     "addonsRuntimeOnly"(integration.titanium)
     "addonsRuntimeOnly"(integration.industrialforegoing)
-    "addonsRuntimeOnly"(integration.industrialforegoingsouls)
+    "addonsRuntimeOnly"(integration.ifsouls)
     "addonsRuntimeOnly"(integration.soulpliedenergistics)
 
     testImplementation(testlibs.junit.jupiter)
@@ -191,8 +191,7 @@ spotless {
         trimTrailingWhitespace()
 
         // courtesy of diffplug/spotless#240
-        // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606./gradlew spotlessApply./gradlew
-        // spotlessApply
+        // https://github.com/diffplug/spotless/issues/240#issuecomment-385206606
         // also, ew (7.x): https://github.com/diffplug/spotless/issues/2387#issuecomment-2576459901
         custom("noWildcardImports", object : java.io.Serializable, com.diffplug.spotless.FormatterFunc {
             override fun apply(input: String): String {

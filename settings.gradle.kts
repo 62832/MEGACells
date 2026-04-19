@@ -119,10 +119,8 @@ run {
                 library("projecte", "curse.maven", "projecte-226410").version("6301953")
 
                 library("appsoul", "curse.maven", "applied-soul-1337114").version("7653184")
-                library("industrialforegoingsouls", "curse.maven", "industrial-foregoing-souls-904394").version(
-                    "6235883"
-                )
                 library("industrialforegoing", "curse.maven", "industrial-foregoing-266515").version("6626624")
+                library("ifsouls", "curse.maven", "industrial-foregoing-souls-904394").version("6235883")
                 library("titanium", "curse.maven", "titanium-287342").version("6875285")
                 library("soulpliedenergistics", "curse.maven", "soulplied-energistics-1143614").version("6771121")
             }
