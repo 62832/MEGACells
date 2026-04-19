@@ -120,19 +120,14 @@ public class CompressionChain {
         var stacks = new Object2LongLinkedOpenHashMap<AEItemKey>();
 
         if (!isEmpty()) {
-            for (var i = 0; i < cutoff + 1; i++) {
-                var variant = AEItemKey.of(variants.get(i));
-
-                if (i < cutoff) {
-                    // use factor of the next variant along (determines how many of *this* variant fit into the next)
-                    var factor = bigCount(variants.get((i + 1) % variants.size()));
-                    stacks.put(variant, unitCount.remainder(factor).longValue());
-                    unitCount = unitCount.divide(factor);
-                } else {
-                    stacks.put(variant, clamp(unitCount, STACK_LIMIT));
-                    break;
-                }
+            for (var i = 0; i < cutoff; i++) {
+                // use factor of the next variant along (determines how many of *this* variant fit into the next)
+                var factor = bigCount(variants.get((i + 1) % variants.size()));
+                stacks.put(AEItemKey.of(variants.get(i)), unitCount.remainder(factor).longValue());
+                unitCount = unitCount.divide(factor);
             }
+
+            stacks.put(AEItemKey.of(variants.get(cutoff)), clamp(unitCount, STACK_LIMIT));
         } else if (fallback != null) {
             stacks.put(fallback, clamp(unitCount, STACK_LIMIT));
         }
