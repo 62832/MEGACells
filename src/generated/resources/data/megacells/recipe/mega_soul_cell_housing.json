@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appliedsoul"
+    }
+  ],
+  "type": "industrialforegoing:dissolution_chamber",
+  "input": [
+    {
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "industrialforegoing:pink_slime_ingot"
+    },
+    {
+      "item": "industrialforegoing:pink_slime_ingot"
+    },
+    {
+      "tag": "c:plastics"
+    },
+    {
+      "item": "appliedsoul:soul_cell_housing"
+    },
+    {
+      "tag": "c:plastics"
+    }
+  ],
+  "inputFluid": {
+    "amount": 1000,
+    "fluid": "industrialforegoing:ether_gas"
+  },
+  "output": {
+    "count": 1,
+    "id": "megacells:mega_soul_cell_housing"
+  },
+  "processingTime": 100
+}

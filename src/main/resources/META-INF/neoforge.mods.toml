@@ -21,5 +21,5 @@ config = "megacells.mixins.json"
 
 [[dependencies.megacells]]
 modId = "ae2"
-versionRange = "[19.2.10,)"
+versionRange = "[19.2.15,)"
 ordering = "AFTER"

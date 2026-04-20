@@ -7,7 +7,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import gripe._90.megacells.MEGACells;
 
-@EventBusSubscriber(modid = MEGACells.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MEGACells.MODID, value = Dist.CLIENT)
 public class MEGADataGenerators {
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event) {

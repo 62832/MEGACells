@@ -2,6 +2,8 @@ package gripe._90.megacells.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -21,7 +23,7 @@ public class MEGADataMapProvider extends DataMapProvider {
     }
 
     @Override
-    protected void gather() {
+    protected void gather(@NotNull HolderLookup.Provider registries) {
         var none = Items.AIR;
         builder(MEGADataMaps.COMPRESSION_OVERRIDE)
                 .add(itemId(Items.QUARTZ), Items.QUARTZ_BLOCK, false)
