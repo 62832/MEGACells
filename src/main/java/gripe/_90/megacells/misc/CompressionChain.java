@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.AEKeyType;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -59,8 +61,8 @@ public class CompressionChain {
         return variants.get(index).copy();
     }
 
-    public BigInteger unitFactor(AEItemKey item) {
-        if (item == null) {
+    public BigInteger unitFactor(AEKey keyType) {
+        if (!(keyType instanceof AEItemKey item)) {
             return BigInteger.ONE;
         }
 
