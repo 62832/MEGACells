@@ -117,8 +117,6 @@ run {
                 library("ifsouls", "curse.maven", "industrial-foregoing-souls-904394").version("6235883")
                 library("titanium", "curse.maven", "titanium-287342").version("6875285")
                 library("soulpliedenergistics", "curse.maven", "soulplied-energistics-1143614").version("6771121")
-
-                library("productivebees", "curse.maven", "productivebees-377897").version("8022994")
             }
 
             create("testlibs") {

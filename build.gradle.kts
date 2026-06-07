@@ -37,31 +37,31 @@ dependencies {
     api(core.ae2)
 
     compileOnly(integration.ae2wtlibapi)
-    // "addonsRuntimeOnly"(integration.ae2wtlib)
+    "addonsRuntimeOnly"(integration.ae2wtlib)
 
     compileOnly(integration.appmek)
     compileOnly(integration.mekanism)
-    // "addonsRuntimeOnly"(integration.appmek)
+    "addonsRuntimeOnly"(integration.appmek)
     "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
-    // "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
+    "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
 
     compileOnly(integration.arseng)
-    // "addonsRuntimeOnly"(integration.arseng)
+    "addonsRuntimeOnly"(integration.arseng)
 
     "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
-    // "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
+    "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
 
     compileOnly(integration.appflux)
-    // "addonsRuntimeOnly"(integration.appflux)
-    // "addonsRuntimeOnly"(integration.glodium)
+    "addonsRuntimeOnly"(integration.appflux)
+    "addonsRuntimeOnly"(integration.glodium)
 
     compileOnly(integration.appex)
-    // "addonsRuntimeOnly"(integration.appex)
-    // "addonsRuntimeOnly"(integration.explib)
+    "addonsRuntimeOnly"(integration.appex)
+    "addonsRuntimeOnly"(integration.explib)
 
     compileOnly(integration.appliede)
-    // "addonsRuntimeOnly"(integration.appliede)
-    // "addonsRuntimeOnly"(integration.projecte)
+    "addonsRuntimeOnly"(integration.appliede)
+    "addonsRuntimeOnly"(integration.projecte)
 
     compileOnly(integration.appbot)
     "addonsCompileOnly"(integration.botania)
@@ -69,13 +69,11 @@ dependencies {
     compileOnly(integration.appsoul)
     "dataCompileOnly"(integration.titanium)
     "dataCompileOnly"(integration.industrialforegoing)
-    // "addonsRuntimeOnly"(integration.appsoul)
-    // "addonsRuntimeOnly"(integration.titanium)
-    // "addonsRuntimeOnly"(integration.industrialforegoing)
-    // "addonsRuntimeOnly"(integration.ifsouls)
-    // "addonsRuntimeOnly"(integration.soulpliedenergistics)
-
-    "addonsRuntimeOnly"(integration.productivebees)
+    "addonsRuntimeOnly"(integration.appsoul)
+    "addonsRuntimeOnly"(integration.titanium)
+    "addonsRuntimeOnly"(integration.industrialforegoing)
+    "addonsRuntimeOnly"(integration.ifsouls)
+    "addonsRuntimeOnly"(integration.soulpliedenergistics)
 
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
