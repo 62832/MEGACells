@@ -15,6 +15,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -41,6 +42,11 @@ public class CompressionService {
     private static final List<CompressionChain> chains = new ArrayList<>();
 
     private static final Map<AEItemKey, CompressionChain> cachedChains = new WeakHashMap<>();
+
+    private static List<CraftingRecipe> compressionRecipes = List.of();
+    private static List<CraftingRecipe> decompressionRecipes = List.of();
+    private static List<CompressionOverride> compressionOverrides = List.of();
+    private static RegistryAccess recipeAccess;
 
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
@@ -83,16 +89,27 @@ public class CompressionService {
 
         for (var chain : chains) {
             if (chain.containsVariant(item)) {
-                for (var j = 0; j < chain.size(); j++) {
-                    cachedChains.put(AEItemKey.of(chain.getItem(j)), chain);
-                }
-
+                cacheChain(chain);
                 return chain;
             }
         }
 
+        var generated = generateChainFor(item);
+
+        if (generated != EMPTY) {
+            chains.add(generated);
+            cacheChain(generated);
+            return generated;
+        }
+
         cachedChains.put(item, EMPTY);
         return EMPTY;
+    }
+
+    private static void cacheChain(CompressionChain chain) {
+        for (var j = 0; j < chain.size(); j++) {
+            cachedChains.put(AEItemKey.of(chain.getItem(j)), chain);
+        }
     }
 
     /**
@@ -142,9 +159,14 @@ public class CompressionService {
         compressed.sort(ingredientSize);
         decompressed.sort(ingredientSize);
 
+        compressionRecipes = List.copyOf(compressed);
+        decompressionRecipes = List.copyOf(decompressed);
+        compressionOverrides = List.copyOf(overrides);
+        recipeAccess = access;
+
         while (!compressed.isEmpty()) {
             var base = compressed.removeFirst().getResultItem(access).copy();
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, recipe.getResultItem(access)));
+            decompressed.removeIf(recipe -> isSameResultItem(base, recipe, access));
             chains.add(generateChain(base, compressed, decompressed, overrides, access));
         }
 
@@ -172,7 +194,7 @@ public class CompressionService {
         var stackHashes = new ArrayList<Integer>();
         stackHashes.add(ItemStack.hashItemAndComponents(baseVariant));
 
-        for (var lower = getNextVariant(baseVariant, decompressed, overrides, false, access); lower != null; ) {
+        for (var lower = getNextVariant(baseVariant, decompressed, overrides, false, access); lower != null;) {
             var stack = lower;
 
             if (stackHashes.contains(ItemStack.hashItemAndComponents(stack))) {
@@ -186,7 +208,7 @@ public class CompressionService {
             }
 
             lowerList.add(stack);
-            compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            compressed.removeIf(recipe -> isSameResultItem(stack, recipe, access));
             lower = getNextVariant(stack, decompressed, overrides, false, access);
         }
 
@@ -198,7 +220,7 @@ public class CompressionService {
                     .copyWithCount(lowerList.get((i) % lowerList.size()).getCount()));
         }
 
-        for (var higher = getNextVariant(baseVariant, compressed, overrides, true, access); higher != null; ) {
+        for (var higher = getNextVariant(baseVariant, compressed, overrides, true, access); higher != null;) {
             if (stackHashes.contains(ItemStack.hashItemAndComponents(higher))) {
                 if (higher.getCount() != 1) {
                     LOGGER.warn(
@@ -211,13 +233,28 @@ public class CompressionService {
 
             var stack = higher;
             variantList.add(stack);
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            decompressed.removeIf(recipe -> isSameResultItem(stack, recipe, access));
             higher = getNextVariant(stack, compressed, overrides, true, access);
         }
 
         var chain = new CompressionChain(variantList);
         LOGGER.debug("Gathered bulk compression chain: {}", chain);
         return chain;
+    }
+
+    private static CompressionChain generateChainFor(AEItemKey item) {
+        if (recipeAccess == null) {
+            return EMPTY;
+        }
+
+        var chain = generateChain(
+                item.getReadOnlyStack().copyWithCount(1),
+                new ArrayList<>(compressionRecipes),
+                new ArrayList<>(decompressionRecipes),
+                new ArrayList<>(compressionOverrides),
+                recipeAccess);
+
+        return chain.size() > 1 ? chain : EMPTY;
     }
 
     /**
@@ -244,18 +281,77 @@ public class CompressionService {
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (ItemStack.isSameItemSameComponents(item, input)) {
-                    recipes.remove(recipe);
-                    return recipe.getResultItem(access)
-                            .copyWithCount(
-                                    compressed
-                                            ? recipe.getIngredients().size()
-                                            : recipe.getResultItem(access).getCount());
+                var exactMatch = ItemStack.isSameItemSameComponents(item, input);
+
+                if (!exactMatch && !ItemStack.isSameItem(item, input)) {
+                    continue;
                 }
+
+                var result = recipe.getResultItem(access);
+
+                if (!exactMatch || !item.isComponentsPatchEmpty()) {
+                    var dynamicResult = assembleDynamicResult(recipe, item, access);
+
+                    if (dynamicResult == null) {
+                        if (exactMatch) {
+                            dynamicResult = result;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    result = dynamicResult;
+                }
+
+                recipes.remove(recipe);
+                return result.copyWithCount(
+                        compressed
+                                ? recipe.getIngredients().size()
+                                : recipe.getResultItem(access).getCount());
             }
         }
 
         return null;
+    }
+
+    private static ItemStack assembleDynamicResult(CraftingRecipe recipe, ItemStack item, RegistryAccess access) {
+        var template = recipe.getResultItem(access);
+
+        try {
+            var result = recipe.assemble(createCraftingInput(recipe, item), access);
+
+            if (result.isEmpty() || !ItemStack.isSameItem(result, template)) {
+                return null;
+            }
+
+            return ItemStack.isSameItemSameComponents(result, template) ? null : result;
+        } catch (RuntimeException e) {
+            LOGGER.debug("Could not simulate dynamic compression recipe output for {}.", item, e);
+            return null;
+        }
+    }
+
+    private static CraftingInput createCraftingInput(CraftingRecipe recipe, ItemStack item) {
+
+        var slotCount = Math.max(1, recipe.getIngredients().size());
+        var width = switch (slotCount) {
+            case 1 -> 1;
+            case 2, 3 -> slotCount;
+            case 4 -> 2;
+            default -> 3;
+        };
+        var height = (slotCount + width - 1) / width;
+        var stacks = new ArrayList<ItemStack>(width * height);
+
+        for (var i = 0; i < width * height; i++) {
+            stacks.add(i < slotCount ? item.copy() : ItemStack.EMPTY);
+        }
+
+        return CraftingInput.of(width, height, stacks);
+    }
+
+    private static boolean isSameResultItem(ItemStack stack, CraftingRecipe recipe, RegistryAccess access) {
+        return ItemStack.isSameItem(stack, recipe.getResultItem(access));
     }
 
     /**
@@ -352,7 +448,7 @@ public class CompressionService {
 
             // spotless:off
             var sameQuantity = candidate.getResultItem(access).getCount() == recipe.getIngredients().size()
-                            && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
+                    && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
             // spotless:on
 
             if (compressible && decompressible && sameQuantity) {
