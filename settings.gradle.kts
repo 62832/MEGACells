@@ -32,6 +32,7 @@ run {
                 url = uri("https://maven.blamejared.com")
                 content {
                     includeGroup("com.hollingsworth.ars_nouveau")
+                    includeGroup("com.hollingsworth.nuggets")
                     includeGroup("vazkii.botania")
                     includeGroup("vazkii.patchouli")
                 }
@@ -50,6 +51,7 @@ run {
                 url = uri("https://maven.theillusivec4.top/")
                 content {
                     includeGroup("com.illusivesoulworks.caelus")
+                    includeGroup("top.theillusivec4.curios")
                 }
             }
 
@@ -58,14 +60,6 @@ run {
                 url = uri("https://maven.minecraftforge.net/")
                 content {
                     includeGroup("com.github.glitchfiend")
-                }
-            }
-
-            maven {
-                name = "OctoStudios"
-                url = uri("https://maven.octo-studios.com/releases")
-                content {
-                    includeGroup("top.theillusivec4.curios")
                 }
             }
 
@@ -81,7 +75,7 @@ run {
         versionCatalogs {
             val mc = "1.21.1"
             val maj = mc.substringAfter('.')
-            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.218"
+            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.238"
 
             create("core") {
                 version("minecraft", mc)
@@ -107,7 +101,7 @@ run {
 
                 version("arseng", "2.0.5-beta")
                 library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
-                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.3.5.844")
+                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.10.0.1183")
 
                 library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
                 library("glodium", "curse.maven", "glodium-957920").version("5821676")
