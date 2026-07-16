@@ -64,7 +64,7 @@ public class BulkCellInventory implements StorageCell {
             stack.set(MEGAComponents.BULK_CELL_UNIT_FACTOR, unitFactor);
         }
 
-        if (determiningItem == null) {
+        if (determiningItem == null && stack.has(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF)) {
             stack.remove(MEGAComponents.BULK_CELL_COMPRESSION_CUTOFF);
         }
 
