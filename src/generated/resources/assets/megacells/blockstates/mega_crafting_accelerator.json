@@ -4,7 +4,8 @@
       "model": "megacells:block/crafting/accelerator"
     },
     "formed=true": {
-      "model": "megacells:block/crafting/accelerator_formed"
+      "type": "megacells:crafting_cube",
+      "unit_type": "accelerator"
     }
   }
 }

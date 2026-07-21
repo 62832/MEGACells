@@ -5,30 +5,21 @@ import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.LoadingModList;
-import net.neoforged.fml.loading.moddiscovery.ModInfo;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import gripe._90.megacells.definition.MEGATranslations;
-import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
-import gripe._90.megacells.integration.appbot.AppBotIntegration;
-import gripe._90.megacells.integration.appex.AppExIntegration;
 import gripe._90.megacells.integration.appflux.AppFluxIntegration;
-import gripe._90.megacells.integration.appliede.AppliedEIntegration;
-import gripe._90.megacells.integration.appmek.AppMekIntegration;
-import gripe._90.megacells.integration.appsoul.AppSoulIntegration;
-import gripe._90.megacells.integration.arseng.ArsEngIntegration;
 
 @SuppressWarnings("Convert2MethodRef")
 public enum Addons {
-    AE2WTLIB("AE2WTLib", () -> new AE2WTIntegration()),
-    APPMEK("Applied Mekanistics", () -> new AppMekIntegration()),
-    APPBOT("Applied Botanics", () -> new AppBotIntegration()),
-    ARSENG("Ars Énergistique", () -> new ArsEngIntegration()),
-    APPEX("Applied Experienced", () -> new AppExIntegration()),
-    APPFLUX("Applied Flux", () -> new AppFluxIntegration()),
-    APPLIEDE("AppliedE", () -> new AppliedEIntegration()),
-    APPLIEDSOUL("Applied Soul", () -> new AppSoulIntegration()),
+    AE2WTLIB("AE2WTLib"),
+    APPMEK("Applied Mekanistics"),
+    APPBOT("Applied Botanics"),
+    ARSENG("Ars Énergistique"),
+    APPEX("Applied Experienced"),
+    APPFLUX("Applied Flux", () -> new AppFluxIntegration(), true),
+    APPLIEDE("AppliedE"),
+    APPLIEDSOUL("Applied Soul"),
 // APPELEM("Applied Elemental"),
 ;
 
@@ -36,8 +27,8 @@ public enum Addons {
     private final Supplier<IntegrationHelper> helper;
     private final boolean enabled; // TODO: Needs a more dynamic approach than this...
 
-    Addons(String modName, Supplier<IntegrationHelper> helper) {
-        this(modName, helper, true);
+    Addons(String modName) {
+        this(modName, () -> new IntegrationHelper() {}, false);
     }
 
     Addons(String modName, Supplier<IntegrationHelper> helper, boolean enabled) {
@@ -55,12 +46,7 @@ public enum Addons {
     }
 
     public boolean isLoaded() {
-        return enabled
-                && (ModList.get() != null
-                        ? ModList.get().isLoaded(getModId())
-                        : LoadingModList.get().getMods().stream()
-                                .map(ModInfo::getModId)
-                                .anyMatch(getModId()::equals));
+        return enabled && ModList.get().isLoaded(getModId());
     }
 
     public Component getUnavailableTooltip() {

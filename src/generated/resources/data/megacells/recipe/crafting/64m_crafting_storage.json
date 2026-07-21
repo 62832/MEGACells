@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_crafting_unit"
-    },
-    {
-      "item": "megacells:cell_component_64m"
-    }
+    "megacells:mega_crafting_unit",
+    "megacells:cell_component_64m"
   ],
   "result": {
     "count": 1,

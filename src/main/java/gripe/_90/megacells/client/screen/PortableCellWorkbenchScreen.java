@@ -17,7 +17,6 @@ import appeng.api.config.Settings;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.StorageCells;
-import appeng.client.gui.Icon;
 import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.ActionButton;
@@ -25,6 +24,7 @@ import appeng.client.gui.widgets.SettingToggleButton;
 import appeng.client.gui.widgets.ToggleButton;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
+import appeng.util.Icon;
 
 import gripe._90.megacells.item.cell.BulkCellInventory;
 import gripe._90.megacells.menu.PortableCellWorkbenchMenu;

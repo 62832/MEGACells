@@ -1,14 +1,15 @@
 package gripe._90.megacells.client.render;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ModelDebugName;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
+import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 
 import appeng.client.render.crafting.AbstractCraftingUnitModelProvider;
 import appeng.client.render.crafting.LightBakedModel;
@@ -19,82 +20,97 @@ import appeng.core.AppEng;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
 
-public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType> {
-    private static final List<Material> MATERIALS = new ArrayList<>();
-
-    protected static final Material RING_CORNER = texture("ring_corner");
-    protected static final Material RING_SIDE_HOR = texture("ring_side_hor");
-    protected static final Material RING_SIDE_VER = texture("ring_side_ver");
-    protected static final Material UNIT_BASE = texture("unit_base");
-    protected static final Material LIGHT_BASE = texture("light_base");
-    protected static final Material ACCELERATOR_LIGHT = texture("accelerator_light");
-    protected static final Material STORAGE_1M_LIGHT = texture("1m_storage_light");
-    protected static final Material STORAGE_4M_LIGHT = texture("4m_storage_light");
-    protected static final Material STORAGE_16M_LIGHT = texture("16m_storage_light");
-    protected static final Material STORAGE_64M_LIGHT = texture("64m_storage_light");
-    protected static final Material STORAGE_256M_LIGHT = texture("256m_storage_light");
-    protected static final Material MONITOR_BASE = texture("monitor_base");
-    protected static final Material MONITOR_LIGHT_DARK = monitorLight("dark");
-    protected static final Material MONITOR_LIGHT_MEDIUM = monitorLight("medium");
-    protected static final Material MONITOR_LIGHT_BRIGHT = monitorLight("bright");
+public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<MEGACraftingUnitType>
+        implements ModelDebugName {
+    private static final Material RING_CORNER = texture("ring_corner");
+    private static final Material RING_SIDE_HOR = texture("ring_side_hor");
+    private static final Material RING_SIDE_VER = texture("ring_side_ver");
+    private static final Material UNIT_BASE = texture("unit_base");
+    private static final Material LIGHT_BASE = texture("light_base");
+    private static final Material ACCELERATOR_LIGHT = texture("accelerator_light");
+    private static final Material STORAGE_1M_LIGHT = texture("1m_storage_light");
+    private static final Material STORAGE_4M_LIGHT = texture("4m_storage_light");
+    private static final Material STORAGE_16M_LIGHT = texture("16m_storage_light");
+    private static final Material STORAGE_64M_LIGHT = texture("64m_storage_light");
+    private static final Material STORAGE_256M_LIGHT = texture("256m_storage_light");
+    private static final Material MONITOR_BASE = texture("monitor_base");
+    private static final Material MONITOR_LIGHT_DARK = monitorLight("dark");
+    private static final Material MONITOR_LIGHT_MEDIUM = monitorLight("medium");
+    private static final Material MONITOR_LIGHT_BRIGHT = monitorLight("bright");
 
     public MEGACraftingUnitModelProvider(MEGACraftingUnitType type) {
         super(type);
     }
 
-    @Override
-    public List<Material> getMaterials() {
-        return Collections.unmodifiableList(MATERIALS);
-    }
-
-    public TextureAtlasSprite getLightMaterial(Function<Material, TextureAtlasSprite> textureGetter) {
+    private Material.Baked getLightMaterial(MaterialBaker materialBaker) {
         return switch (type) {
-            case ACCELERATOR -> textureGetter.apply(ACCELERATOR_LIGHT);
-            case STORAGE_1M -> textureGetter.apply(STORAGE_1M_LIGHT);
-            case STORAGE_4M -> textureGetter.apply(STORAGE_4M_LIGHT);
-            case STORAGE_16M -> textureGetter.apply(STORAGE_16M_LIGHT);
-            case STORAGE_64M -> textureGetter.apply(STORAGE_64M_LIGHT);
-            case STORAGE_256M -> textureGetter.apply(STORAGE_256M_LIGHT);
+            case ACCELERATOR -> materialBaker.get(ACCELERATOR_LIGHT, this);
+            case STORAGE_1M -> materialBaker.get(STORAGE_1M_LIGHT, this);
+            case STORAGE_4M -> materialBaker.get(STORAGE_4M_LIGHT, this);
+            case STORAGE_16M -> materialBaker.get(STORAGE_16M_LIGHT, this);
+            case STORAGE_64M -> materialBaker.get(STORAGE_64M_LIGHT, this);
+            case STORAGE_256M -> materialBaker.get(STORAGE_256M_LIGHT, this);
             default -> throw new IllegalArgumentException(
                     "Crafting unit type " + type + " does not use a light texture.");
         };
     }
 
     @Override
-    public BakedModel getBakedModel(Function<Material, TextureAtlasSprite> spriteGetter) {
-        TextureAtlasSprite ringCorner = spriteGetter.apply(RING_CORNER);
-        TextureAtlasSprite ringSideHor = spriteGetter.apply(RING_SIDE_HOR);
-        TextureAtlasSprite ringSideVer = spriteGetter.apply(RING_SIDE_VER);
+    public BlockStateModel bake(MaterialBaker materialBaker) {
+        var ringCorner = materialBaker.get(RING_CORNER, this);
+        var ringSideHor = materialBaker.get(RING_SIDE_HOR, this);
+        var ringSideVer = materialBaker.get(RING_SIDE_VER, this);
 
         return switch (type) {
-            case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, spriteGetter.apply(UNIT_BASE));
+            case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, materialBaker.get(UNIT_BASE, this));
             case ACCELERATOR, STORAGE_1M, STORAGE_4M, STORAGE_16M, STORAGE_64M, STORAGE_256M -> new LightBakedModel(
                     ringCorner,
                     ringSideHor,
                     ringSideVer,
-                    spriteGetter.apply(LIGHT_BASE),
-                    getLightMaterial(spriteGetter));
+                    materialBaker.get(LIGHT_BASE, this),
+                    getLightMaterial(materialBaker));
             case MONITOR -> new MonitorBakedModel(
                     ringCorner,
                     ringSideHor,
                     ringSideVer,
-                    spriteGetter.apply(UNIT_BASE),
-                    spriteGetter.apply(MONITOR_BASE),
-                    spriteGetter.apply(MONITOR_LIGHT_DARK),
-                    spriteGetter.apply(MONITOR_LIGHT_MEDIUM),
-                    spriteGetter.apply(MONITOR_LIGHT_BRIGHT));
+                    materialBaker.get(UNIT_BASE, this),
+                    materialBaker.get(MONITOR_BASE, this),
+                    materialBaker.get(MONITOR_LIGHT_DARK, this),
+                    materialBaker.get(MONITOR_LIGHT_MEDIUM, this),
+                    materialBaker.get(MONITOR_LIGHT_BRIGHT, this));
         };
     }
 
     private static Material texture(String name) {
-        var material = new Material(InventoryMenu.BLOCK_ATLAS, MEGACells.makeId("block/crafting/" + name));
-        MATERIALS.add(material);
-        return material;
+        return new Material(MEGACells.makeId("block/crafting/" + name));
     }
 
     private static Material monitorLight(String suffix) {
-        var material = new Material(InventoryMenu.BLOCK_ATLAS, AppEng.makeId("block/crafting/monitor_light_" + suffix));
-        MATERIALS.add(material);
-        return material;
+        return new Material(AppEng.makeId("block/crafting/monitor_light_" + suffix));
+    }
+
+    @Override
+    public String debugName() {
+        return getClass().toString();
+    }
+
+    public record Unbaked(MEGACraftingUnitType type) implements CustomUnbakedBlockStateModel {
+        public static final Identifier ID = MEGACells.makeId("crafting_cube");
+        public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                        MEGACraftingUnitType.CODEC.fieldOf("unit_type").forGetter(Unbaked::type))
+                .apply(instance, Unbaked::new));
+
+        @Override
+        public BlockStateModel bake(ModelBaker baker) {
+            return new MEGACraftingUnitModelProvider(type).bake(baker.materials());
+        }
+
+        @Override
+        public void resolveDependencies(Resolver resolver) {}
+
+        @Override
+        public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
+            return MAP_CODEC;
+        }
     }
 }

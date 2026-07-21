@@ -1,14 +1,14 @@
 pluginManagement {
     plugins {
-        id("net.neoforged.moddev") version "2.0.74"
-        id("net.neoforged.moddev.repositories") version "2.0.74"
+        id("net.neoforged.moddev") version "2.0.141"
+        id("net.neoforged.moddev.repositories") version "2.0.141"
         id("com.diffplug.spotless") version "7.0.1"
     }
 }
 
 plugins {
     id("net.neoforged.moddev.repositories")
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 run {
@@ -17,106 +17,14 @@ run {
         repositoriesMode = RepositoriesMode.PREFER_SETTINGS
         rulesMode = RulesMode.PREFER_SETTINGS
 
-        repositories {
-            maven {
-                name = "ModMaven (K4U-NL)"
-                url = uri("https://modmaven.dev/")
-                content {
-                    includeGroup("mekanism")
-                    includeGroup("de.mari_023")
-                }
-            }
-
-            maven {
-                name = "BlameJared"
-                url = uri("https://maven.blamejared.com")
-                content {
-                    includeGroup("com.hollingsworth.ars_nouveau")
-                    includeGroup("com.hollingsworth.nuggets")
-                    includeGroup("vazkii.botania")
-                    includeGroup("vazkii.patchouli")
-                }
-            }
-
-            maven {
-                name = "GeckoLib"
-                url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-                content {
-                    includeGroup("software.bernie.geckolib")
-                }
-            }
-
-            maven {
-                name = "Illusive Soulworks"
-                url = uri("https://maven.theillusivec4.top/")
-                content {
-                    includeGroup("com.illusivesoulworks.caelus")
-                    includeGroup("top.theillusivec4.curios")
-                }
-            }
-
-            maven {
-                name = "Minecraft Forge"
-                url = uri("https://maven.minecraftforge.net/")
-                content {
-                    includeGroup("com.github.glitchfiend")
-                }
-            }
-
-            maven {
-                name = "CurseMaven"
-                url = uri("https://cursemaven.com")
-                content {
-                    includeGroup("curse.maven")
-                }
-            }
-        }
-
         versionCatalogs {
-            val mc = "1.21.1"
-            val maj = mc.substringAfter('.')
-            val nf = "${maj + (if (!maj.contains('.')) ".0" else "")}.238"
+            val nf = "26.1.2.80"
 
             create("core") {
-                version("minecraft", mc)
-
+                version("minecraft", "26.1.2")
                 version("neoforge", nf)
-                version("parchment", "2024.11.17")
-
-                version("ae2", "19.2.15")
+                version("ae2", "26.1.10-beta")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
-            }
-
-            create("integration") {
-                version("ae2wtlib", "19.2.2")
-                library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
-                library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
-
-                version("appmek", "1.6.2")
-                library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
-                library("mekanism", "mekanism", "Mekanism").version("$mc-10.7.9.72")
-
-                library("appbot", "curse.maven", "applied-botanics-addon-610632").version("7234122")
-                library("botania", "vazkii.botania", "botania-neoforge-1.21.1").version("451-SNAPSHOT")
-
-                version("arseng", "2.0.5-beta")
-                library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
-                library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.10.0.1183")
-
-                library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
-                library("glodium", "curse.maven", "glodium-957920").version("5821676")
-
-                library("appex", "curse.maven", "applied-experienced-1157608").version("6112629")
-                library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
-
-                library("appliede", "curse.maven", "appliede-1009940").version("6430033")
-                library("projecte", "curse.maven", "projecte-226410").version("6301953")
-
-                library("appsoul", "curse.maven", "applied-soul-1337114").version("7653184")
-                library("industrialforegoing", "curse.maven", "industrial-foregoing-266515").version("6626624")
-                library("ifsouls", "curse.maven", "industrial-foregoing-souls-904394").version("6235883")
-                library("titanium", "curse.maven", "titanium-287342").version("6875285")
-                library("soulpliedenergistics", "curse.maven", "soulplied-energistics-1143614").version("6771121")
             }
 
             create("testlibs") {

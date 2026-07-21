@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "appliede:emc_interface"
-    },
-    {
-      "item": "megacells:accumulation_processor"
-    }
+    "appliede:emc_interface",
+    "megacells:accumulation_processor"
   ],
   "result": {
     "count": 1,

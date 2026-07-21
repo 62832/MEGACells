@@ -54,9 +54,12 @@ public class DecompressionService implements IGridService, IGridServiceProvider,
         if (node.getOwner() instanceof DecompressionModulePart) {
             installedModules++;
 
-            if (!priorityLocked && savedData != null && savedData.contains(TAG_PATTERN_PRIORITY, CompoundTag.TAG_INT)) {
-                patternPriority = savedData.getInt(TAG_PATTERN_PRIORITY);
-                priorityLocked = true;
+            if (!priorityLocked && savedData != null) {
+                var savedPriority = savedData.getInt(TAG_PATTERN_PRIORITY);
+                if (savedPriority.isPresent()) {
+                    patternPriority = savedPriority.get();
+                    priorityLocked = true;
+                }
             }
         }
     }

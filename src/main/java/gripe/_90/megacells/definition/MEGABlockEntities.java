@@ -20,10 +20,6 @@ import appeng.core.definitions.BlockDefinition;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.entity.MEGAInterfaceBlockEntity;
 import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
-import gripe._90.megacells.integration.Addons;
-import gripe._90.megacells.integration.appliede.AppliedEIntegration;
-import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceBlock;
-import gripe._90.megacells.integration.appliede.MEGAEMCInterfaceBlockEntity;
 
 @SuppressWarnings({"unused", "unchecked"})
 public final class MEGABlockEntities {
@@ -62,18 +58,6 @@ public final class MEGABlockEntities {
             MEGAPatternProviderBlockEntity::new,
             MEGABlocks.MEGA_PATTERN_PROVIDER);
 
-    static {
-        if (Addons.APPLIEDE.isLoaded()) {
-            if (AppliedEIntegration.MEGA_EMC_INTERFACE_BE == null) {
-                AppliedEIntegration.MEGA_EMC_INTERFACE_BE = create(
-                        "mega_emc_interface",
-                        MEGAEMCInterfaceBlockEntity.class,
-                        MEGAEMCInterfaceBlockEntity::new,
-                        (BlockDefinition<MEGAEMCInterfaceBlock>) MEGABlocks.MEGA_EMC_INTERFACE);
-            }
-        }
-    }
-
     @SuppressWarnings("DataFlowIssue")
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> Supplier<BlockEntityType<T>> create(
@@ -89,8 +73,7 @@ public final class MEGABlockEntities {
             var blocks = Arrays.stream(blockDefs).map(BlockDefinition::block).toArray(AEBaseEntityBlock[]::new);
 
             var typeHolder = new AtomicReference<BlockEntityType<T>>();
-            var type = BlockEntityType.Builder.of((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks)
-                    .build(null);
+            var type = new BlockEntityType<T>((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks);
             typeHolder.set(type);
 
             AEBaseBlockEntity.registerBlockEntityItem(type, blockDefs[0].asItem());

@@ -8,12 +8,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_soul_cell_housing"
-    },
-    {
-      "item": "megacells:cell_component_256m"
-    }
+    "megacells:mega_soul_cell_housing",
+    "megacells:cell_component_256m"
   ],
   "result": {
     "count": 1,

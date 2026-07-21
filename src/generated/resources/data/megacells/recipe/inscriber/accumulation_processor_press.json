@@ -1,15 +1,9 @@
 {
   "type": "ae2:inscriber",
   "ingredients": {
-    "bottom": {
-      "item": "ae2:engineering_processor_press"
-    },
-    "middle": {
-      "item": "ae2:singularity"
-    },
-    "top": {
-      "item": "ae2:calculation_processor_press"
-    }
+    "bottom": "ae2:engineering_processor_press",
+    "middle": "ae2:singularity",
+    "top": "ae2:calculation_processor_press"
   },
   "mode": "press",
   "result": {

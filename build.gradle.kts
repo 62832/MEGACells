@@ -8,72 +8,33 @@ plugins {
 val modId = "megacells"
 
 base.archivesName = modId
-version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "0.0.0"
+version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "4.12.0"
 group = "gripe.90"
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
 }
 
 sourceSets {
     main {
+        java {
+            // These integrations depend on add-ons that do not have Minecraft 26.1 releases yet.
+            // Applied Flux is 26.1-compatible and remains enabled.
+            exclude("gripe/_90/megacells/integration/ae2wt/**")
+            exclude("gripe/_90/megacells/integration/appbot/**")
+            exclude("gripe/_90/megacells/integration/appex/**")
+            exclude("gripe/_90/megacells/integration/appliede/**")
+            exclude("gripe/_90/megacells/integration/appmek/**")
+            exclude("gripe/_90/megacells/integration/appsoul/**")
+            exclude("gripe/_90/megacells/integration/arseng/**")
+        }
         resources.srcDir(file("src/generated/resources"))
-    }
-
-    val addons = create("addons") {
-        val main = main.get()
-        compileClasspath += main.compileClasspath + main.output
-        runtimeClasspath += main.runtimeClasspath + main.output
-    }
-
-    create("data") {
-        compileClasspath += addons.compileClasspath + addons.output
-        runtimeClasspath += addons.runtimeClasspath + addons.output
     }
 }
 
 dependencies {
     api(core.ae2)
-
-    compileOnly(integration.ae2wtlibapi)
-    "addonsRuntimeOnly"(integration.ae2wtlib)
-
-    compileOnly(integration.appmek)
-    compileOnly(integration.mekanism)
-    "addonsRuntimeOnly"(integration.appmek)
-    "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
-    "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
-
-    compileOnly(integration.arseng)
-    "addonsRuntimeOnly"(integration.arseng)
-
-    "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
-    "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
-
-    compileOnly(integration.appflux)
-    "addonsRuntimeOnly"(integration.appflux)
-    "addonsRuntimeOnly"(integration.glodium)
-
-    compileOnly(integration.appex)
-    "addonsRuntimeOnly"(integration.appex)
-    "addonsRuntimeOnly"(integration.explib)
-
-    compileOnly(integration.appliede)
-    "addonsRuntimeOnly"(integration.appliede)
-    "addonsRuntimeOnly"(integration.projecte)
-
-    compileOnly(integration.appbot)
-    "addonsCompileOnly"(integration.botania)
-
-    compileOnly(integration.appsoul)
-    "dataCompileOnly"(integration.titanium)
-    "dataCompileOnly"(integration.industrialforegoing)
-    "addonsRuntimeOnly"(integration.appsoul)
-    "addonsRuntimeOnly"(integration.titanium)
-    "addonsRuntimeOnly"(integration.industrialforegoing)
-    "addonsRuntimeOnly"(integration.ifsouls)
-    "addonsRuntimeOnly"(integration.soulpliedenergistics)
 
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
@@ -84,15 +45,9 @@ dependencies {
 neoForge {
     version = core.versions.neoforge.get()
 
-    parchment {
-        minecraftVersion = core.versions.minecraft.get()
-        mappingsVersion = core.versions.parchment.get()
-    }
-    
     mods {
         create(modId) {
             sourceSet(sourceSets.main.get())
-            sourceSet(sourceSets.getByName("data"))
         }
     }
 
@@ -101,7 +56,7 @@ neoForge {
 
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
-            sourceSet = sourceSets.getByName("addons")
+            sourceSet = sourceSets.main.get()
         }
 
         create("client") {
@@ -114,21 +69,6 @@ neoForge {
         create("server") {
             server()
             gameDirectory = file("run/server")
-        }
-
-        create("data") {
-            data()
-            gameDirectory = file("run/data")
-            logLevel = org.slf4j.event.Level.INFO
-            programArguments.addAll(
-                "--mod", modId,
-                "--all",
-                "--output", file("src/generated/resources/").absolutePath,
-                "--existing", main,
-                "--existing", "$main/optional_cell_colours",
-                "--existing-mod", "ae2"
-            )
-            sourceSet = sourceSets.getByName("data")
         }
     }
 
@@ -151,6 +91,16 @@ tasks {
 
     processResources {
         exclude("**/.cache")
+        // Keep recipes for unavailable third-party integrations out of the release JAR.
+        exclude(
+            "data/megacells/recipe/**/*chemical*",
+            "data/megacells/recipe/**/*experience*",
+            "data/megacells/recipe/**/*mana*",
+            "data/megacells/recipe/**/*source*",
+            "data/megacells/recipe/**/*soul*",
+            "data/megacells/recipe/**/*emc*",
+            "data/megacells/recipe/**/*sky_osmium*",
+        )
 
         val props = mapOf("version" to version)
         inputs.properties(props)

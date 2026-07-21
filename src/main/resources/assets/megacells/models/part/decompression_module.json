@@ -2,7 +2,8 @@
   "credit": "Made with Blockbench by Sea_Kerman",
   "textures": {
     "front": "megacells:part/decompression_module",
-    "side": "megacells:part/decompression_module_side"
+    "side": "megacells:part/decompression_module_side",
+    "particle": "megacells:part/decompression_module"
   },
   "elements": [
     {

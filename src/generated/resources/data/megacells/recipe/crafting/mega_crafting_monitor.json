@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_crafting_unit"
-    },
-    {
-      "item": "ae2:storage_monitor"
-    }
+    "megacells:mega_crafting_unit",
+    "ae2:storage_monitor"
   ],
   "result": {
     "count": 1,

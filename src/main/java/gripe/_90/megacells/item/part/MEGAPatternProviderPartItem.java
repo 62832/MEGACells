@@ -1,11 +1,12 @@
 package gripe._90.megacells.item.part;
 
-import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 import appeng.items.parts.PartItem;
 
@@ -19,7 +20,12 @@ public class MEGAPatternProviderPartItem extends PartItem<MEGAPatternProviderPar
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        lines.add(MEGATranslations.ProcessingOnly.text().withStyle(MEGAPatternProviderBlockItem.NOTICE));
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            TooltipDisplay display,
+            Consumer<Component> lines,
+            TooltipFlag flag) {
+        lines.accept(MEGATranslations.ProcessingOnly.text().withStyle(MEGAPatternProviderBlockItem.NOTICE));
     }
 }

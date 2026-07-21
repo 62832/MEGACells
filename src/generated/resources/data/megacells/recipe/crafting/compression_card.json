@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "ae2:advanced_card"
-    },
-    {
-      "item": "ae2:matter_ball"
-    }
+    "ae2:advanced_card",
+    "ae2:matter_ball"
   ],
   "result": {
     "count": 1,

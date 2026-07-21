@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "ae2:pattern_provider"
-    },
-    {
-      "item": "megacells:accumulation_processor"
-    }
+    "ae2:pattern_provider",
+    "megacells:accumulation_processor"
   ],
   "result": {
     "count": 1,

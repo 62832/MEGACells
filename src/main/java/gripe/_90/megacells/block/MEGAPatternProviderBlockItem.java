@@ -1,6 +1,6 @@
 package gripe._90.megacells.block;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -21,7 +21,7 @@ public class MEGAPatternProviderBlockItem extends AEBaseBlockItem {
 
     @Override
     public void addCheckedInformation(
-            ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag advTooltips) {
-        lines.add(MEGATranslations.ProcessingOnly.text().withStyle(NOTICE));
+            ItemStack stack, TooltipContext context, Consumer<Component> lines, TooltipFlag advTooltips) {
+        lines.accept(MEGATranslations.ProcessingOnly.text().withStyle(NOTICE));
     }
 }

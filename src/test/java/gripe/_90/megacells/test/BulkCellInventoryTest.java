@@ -19,6 +19,7 @@ import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 
 import gripe._90.megacells.definition.MEGAComponents;
+import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.item.cell.BulkCellInventory;
 import gripe._90.megacells.misc.CompressionChain;
@@ -45,7 +46,7 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testGreaterCapacity() {
+    void testGreaterCapacity(MinecraftServer ignored) {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 
@@ -163,7 +164,15 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testFilterMismatchOperations() {
+    void testCompressionDataMap(MinecraftServer ignored) {
+        assertThat(Items.AMETHYST_SHARD.builtInRegistryHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE))
+                .isEqualTo(Items.AMETHYST_BLOCK);
+        assertThat(Items.WHEAT_SEEDS.builtInRegistryHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE))
+                .isEqualTo(Items.AIR);
+    }
+
+    @Test
+    void testFilterMismatchOperations(MinecraftServer ignored) {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 

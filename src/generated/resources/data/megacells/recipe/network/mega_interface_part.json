@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_interface"
-    }
+    "megacells:mega_interface"
   ],
   "result": {
     "count": 1,

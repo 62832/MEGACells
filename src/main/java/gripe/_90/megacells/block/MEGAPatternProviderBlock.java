@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -16,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
 import appeng.api.networking.IManagedGridNode;
@@ -37,8 +37,8 @@ import gripe._90.megacells.block.entity.MEGAPatternProviderBlockEntity;
 public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProviderBlockEntity> {
     private static final EnumProperty<PushDirection> PUSH_DIRECTION = PatternProviderBlock.PUSH_DIRECTION;
 
-    public MEGAPatternProviderBlock() {
-        super(AEBaseBlock.metalProps());
+    public MEGAPatternProviderBlock(Properties properties) {
+        super(AEBaseBlock.metalProps(properties));
         registerDefaultState(defaultBlockState().setValue(PUSH_DIRECTION, PushDirection.ALL));
     }
 
@@ -58,7 +58,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     @ParametersAreNonnullByDefault
     @Override
     public void neighborChanged(
-            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+            BlockState state, Level level, BlockPos pos, Block block, Orientation orientation, boolean isMoving) {
         var be = getBlockEntity(level, pos);
 
         if (be != null) {
@@ -81,7 +81,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
                 be.openMenu(player, MenuLocators.forBlockEntity(be));
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
@@ -89,7 +89,7 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
 
     @NotNull
     @Override
-    protected ItemInteractionResult useItemOn(
+    protected InteractionResult useItemOn(
             ItemStack heldItem,
             BlockState state,
             Level level,
@@ -99,10 +99,10 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
             BlockHitResult hit) {
         if (InteractionUtil.canWrenchRotate(heldItem)) {
             setSide(level, pos, hit.getDirection());
-            return ItemInteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return super.useItemOn(heldItem, state, level, pos, player, hand, hit);
     }
 
     private void setSide(Level level, BlockPos pos, Direction facing) {

@@ -2,13 +2,7 @@ package gripe._90.megacells;
 
 import java.util.List;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -16,8 +10,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 import appeng.api.AECapabilities;
@@ -25,12 +17,10 @@ import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.parts.RegisterPartCapabilitiesEvent;
-import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 import appeng.hotkeys.HotkeyActions;
-import appeng.init.InitVillager;
 import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.items.tools.powered.powersink.PoweredItemCapabilities;
 
@@ -43,7 +33,6 @@ import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
-import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
@@ -62,22 +51,20 @@ public class MEGACells {
         MEGAMenus.DR.register(eventBus);
         MEGAComponents.DR.register(eventBus);
         MEGACreativeTab.DR.register(eventBus);
-        eventBus.addListener(MEGADataMaps::register);
-
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
         eventBus.addListener(MEGACells::initPartCapabilities);
         eventBus.addListener(MEGACells::initPacketHandlers);
+        eventBus.addListener(MEGADataMaps::register);
 
         CompressionService.init();
-        NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
     }
 
-    public static ResourceLocation makeId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    public static Identifier makeId(String path) {
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 
     private static void initUpgrades(FMLCommonSetupEvent event) {
@@ -154,24 +141,7 @@ public class MEGACells {
                                     : HotkeyAction.PORTABLE_FLUID_CELL);
                 }
             }
-
-            if (Addons.APPMEK.isLoaded()) {
-                StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
-            }
         });
-    }
-
-    private static void initVillagerTrades(VillagerTradesEvent event) {
-        if (event.getType() == InitVillager.PROFESSION) {
-            var trades = event.getTrades().get(5);
-            trades.add(villagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20));
-            trades.add(villagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50));
-        }
-    }
-
-    private static VillagerTrades.ItemListing villagerTrade(ItemLike item, int cost, int quantity, int xp) {
-        return (entity, random) ->
-                new MerchantOffer(new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F);
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -198,8 +168,9 @@ public class MEGACells {
         for (var cell : MEGAItems.getTieredCells()) {
             if (cell.portable() && cell.item().asItem() instanceof IAEItemPowerStorage powered) {
                 event.registerItem(
-                        Capabilities.EnergyStorage.ITEM,
-                        (stack, context) -> new PoweredItemCapabilities(stack, powered),
+                        Capabilities.Energy.ITEM,
+                        (stack, context) ->
+                                new PoweredItemCapabilities(context, cell.item().asItem(), powered),
                         cell.item());
             }
         }
@@ -222,8 +193,8 @@ public class MEGACells {
                 MEGAPatternProviderPart.class);
 
         event.register(
-                Capabilities.ItemHandler.BLOCK,
-                (part, ctx) -> part.getCellInventory().toItemHandler(),
+                Capabilities.Item.BLOCK,
+                (part, ctx) -> part.getCellInventory().toResourceHandler(),
                 CellDockPart.class);
     }
 

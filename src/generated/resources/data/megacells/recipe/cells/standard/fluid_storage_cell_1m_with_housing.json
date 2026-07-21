@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_fluid_cell_housing"
-    },
-    {
-      "item": "megacells:cell_component_1m"
-    }
+    "megacells:mega_fluid_cell_housing",
+    "megacells:cell_component_1m"
   ],
   "result": {
     "count": 1,
