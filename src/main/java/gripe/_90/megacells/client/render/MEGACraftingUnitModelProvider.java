@@ -50,8 +50,8 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
             case STORAGE_16M -> materialBaker.get(STORAGE_16M_LIGHT, this);
             case STORAGE_64M -> materialBaker.get(STORAGE_64M_LIGHT, this);
             case STORAGE_256M -> materialBaker.get(STORAGE_256M_LIGHT, this);
-            default -> throw new IllegalArgumentException(
-                    "Crafting unit type " + type + " does not use a light texture.");
+            default ->
+                throw new IllegalArgumentException("Crafting unit type " + type + " does not use a light texture.");
         };
     }
 
@@ -63,21 +63,23 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
 
         return switch (type) {
             case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, materialBaker.get(UNIT_BASE, this));
-            case ACCELERATOR, STORAGE_1M, STORAGE_4M, STORAGE_16M, STORAGE_64M, STORAGE_256M -> new LightBakedModel(
-                    ringCorner,
-                    ringSideHor,
-                    ringSideVer,
-                    materialBaker.get(LIGHT_BASE, this),
-                    getLightMaterial(materialBaker));
-            case MONITOR -> new MonitorBakedModel(
-                    ringCorner,
-                    ringSideHor,
-                    ringSideVer,
-                    materialBaker.get(UNIT_BASE, this),
-                    materialBaker.get(MONITOR_BASE, this),
-                    materialBaker.get(MONITOR_LIGHT_DARK, this),
-                    materialBaker.get(MONITOR_LIGHT_MEDIUM, this),
-                    materialBaker.get(MONITOR_LIGHT_BRIGHT, this));
+            case ACCELERATOR, STORAGE_1M, STORAGE_4M, STORAGE_16M, STORAGE_64M, STORAGE_256M ->
+                new LightBakedModel(
+                        ringCorner,
+                        ringSideHor,
+                        ringSideVer,
+                        materialBaker.get(LIGHT_BASE, this),
+                        getLightMaterial(materialBaker));
+            case MONITOR ->
+                new MonitorBakedModel(
+                        ringCorner,
+                        ringSideHor,
+                        ringSideVer,
+                        materialBaker.get(UNIT_BASE, this),
+                        materialBaker.get(MONITOR_BASE, this),
+                        materialBaker.get(MONITOR_LIGHT_DARK, this),
+                        materialBaker.get(MONITOR_LIGHT_MEDIUM, this),
+                        materialBaker.get(MONITOR_LIGHT_BRIGHT, this));
         };
     }
 

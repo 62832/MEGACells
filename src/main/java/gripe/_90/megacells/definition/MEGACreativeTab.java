@@ -19,11 +19,13 @@ public final class MEGACreativeTab {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MEGACells.MODID);
 
     static {
-        DR.register("tab", () -> CreativeModeTab.builder()
-                .title(MEGATranslations.ModName.text())
-                .icon(MEGAItems.ITEM_CELL_256M::stack)
-                .displayItems(MEGACreativeTab::populateTab)
-                .build());
+        DR.register(
+                "tab",
+                () -> CreativeModeTab.builder()
+                        .title(MEGATranslations.ModName.text())
+                        .icon(MEGAItems.ITEM_CELL_256M::stack)
+                        .displayItems(MEGACreativeTab::populateTab)
+                        .build());
     }
 
     private static void populateTab(CreativeModeTab.ItemDisplayParameters params, CreativeModeTab.Output output) {

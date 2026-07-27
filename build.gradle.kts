@@ -135,7 +135,10 @@ spotless {
         endWithNewline()
         leadingTabsToSpaces(4)
         removeUnusedImports()
-        palantirJavaFormat()
+        // Default palantir-java-format bundled with spotless 7.0.1 reflects into javac internals that
+        // changed shape in JDK 25 (DeferredDiagnosticHandler::getDiagnostics now returns a List, not a
+        // Queue), so spotlessJavaCheck crashes with a NoSuchMethodError on every file. 2.71.0+ fixes this.
+        palantirJavaFormat("2.96.0")
         importOrderFile(file("mega.importorder"))
         toggleOffOn()
         trimTrailingWhitespace()
