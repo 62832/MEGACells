@@ -66,6 +66,16 @@ run {
 
                 library("appbot", "curse.maven", "applied-botanics-addon-610632").version("7234122")
                 library("botania", "vazkii.botania", "botania-neoforge-1.21.1").version("451-SNAPSHOT")
+
+                // ArsEng, AppEx and Applied Soul each have their own storage cell item class
+                // (SourceCellItem, ExperienceStorageCell, SoulCellItem) that directly overrides
+                // Item#use() with a signature that no longer exists in 26.1, which javac can't route
+                // around even as a compile-only stub (see build.gradle.kts).
+                // 
+                // AppliedE compiles fine as a compile-only stub, but MEGA's own
+                // MEGAEMCInterfaceBlockEntity/MEGAEMCInterfacePart directly `extends` AppliedE's own
+                // classes, which crashes the whole mod at runtime regardless of Addons#isLoaded gating
+                // (see build.gradle.kts/Addons.java), so it stays fully excluded too.
             }
 
             create("testlibs") {

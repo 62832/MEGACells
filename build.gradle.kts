@@ -19,11 +19,23 @@ java {
 sourceSets {
     main {
         java {
-            // These integrations depend on add-ons that do not have Minecraft 26.1 releases yet.
+            // AppEx, AppSoul and ArsEng's own storage cell classes (ExperienceStorageCell,
+            // SoulCellItem, SourceCellItem) directly override Item#use(), whose signature changed too
+            // much between MC versions (old InteractionResultHolder<ItemStack> return type doesn't
+            // exist in 26.1 at all) for javac to even verify the class enough to construct it, let
+            // alone override anything on it - unlike the others, this isn't fixable by just avoiding
+            // the specific broken member. Stay excluded until each ships a real 26.1 build.
             exclude("gripe/_90/megacells/integration/appex/**")
-            exclude("gripe/_90/megacells/integration/appliede/**")
             exclude("gripe/_90/megacells/integration/appsoul/**")
             exclude("gripe/_90/megacells/integration/arseng/**")
+
+            // AppliedE's own MEGAEMCInterfaceBlockEntity/MEGAEMCInterfacePart directly `extends`
+            // AppliedE's own classes (not just reference them), so the JVM eagerly resolves that
+            // superclass the moment MEGA's own classes are loaded - crashing the WHOLE mod's
+            // construction at runtime, not just this integration, regardless of Addons#isLoaded
+            // gating. Unlike the others, this isn't just a compile-time stub problem, so it stays
+            // fully excluded (not just disabled) until AppliedE ships a real 26.1 build.
+            exclude("gripe/_90/megacells/integration/appliede/**")
         }
         resources.srcDir(file("src/generated/resources"))
     }

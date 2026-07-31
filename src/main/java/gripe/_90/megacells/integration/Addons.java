@@ -21,6 +21,11 @@ public enum Addons {
     ARSENG("Ars Énergistique"),
     APPEX("Applied Experienced"),
     APPFLUX("Applied Flux", () -> new AppFluxIntegration(), true),
+    // AppliedE stays disabled even as a compile-only stub: MEGA's own MEGAEMCInterfaceBlockEntity/
+    // MEGAEMCInterfacePart directly `extends` AppliedE's own classes (not just reference them), so the
+    // JVM eagerly resolves that superclass the moment MEGA's own classes are loaded - crashing the
+    // WHOLE mod's construction, not just this integration, regardless of Addons#isLoaded gating.
+    // Restore only once AppliedE ships a real 26.1 build to be present at runtime too.
     APPLIEDE("AppliedE"),
     APPLIEDSOUL("Applied Soul"),
 // APPELEM("Applied Elemental"),
