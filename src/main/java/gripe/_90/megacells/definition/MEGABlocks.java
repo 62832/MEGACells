@@ -58,14 +58,16 @@ public final class MEGABlocks {
                     .mapColor(MapColor.METAL)
                     .sound(SoundType.METAL)),
             (b, p) -> new AEBaseBlockItem(b, p.fireResistant()));
-    public static final BlockDefinition<?> SKY_OSMIUM_BLOCK = block(
+    public static final BlockDefinition<?> SKY_OSMIUM_BLOCK = integrationBlock(
             "Sky Osmium Block",
             "sky_osmium_block",
-            p -> new DummyIntegrationBlock(p.strength(7.5f, 24.0f)
+            p -> p.strength(7.5f, 24.0f)
                     .requiresCorrectToolForDrops()
                     .mapColor(MapColor.METAL)
-                    .sound(SoundType.METAL)),
-            (b, p) -> new DummyIntegrationBlock.Item(b, p.fireResistant(), Addons.APPMEK));
+                    .sound(SoundType.METAL),
+            AEDecorativeBlock::new,
+            (b, p) -> new AEBaseBlockItem(b, p.fireResistant()),
+            Addons.APPMEK);
 
     public static final BlockDefinition<EnergyCellBlock> MEGA_ENERGY_CELL = block(
             "Superdense Energy Cell",
@@ -139,5 +141,23 @@ public final class MEGABlocks {
         var definition = new BlockDefinition<>(englishName, block, new ItemDefinition<>(englishName, item));
         BLOCKS.add(definition);
         return definition;
+    }
+
+    private static BlockDefinition<?> integrationBlock(
+            String englishName,
+            String id,
+            Function<BlockBehaviour.Properties, BlockBehaviour.Properties> props,
+            Function<BlockBehaviour.Properties, Block> blockFactory,
+            BiFunction<Block, Item.Properties, BlockItem> itemFactory,
+            Addons addon) {
+        if (addon.isLoaded()) {
+            return block(englishName, id, p -> blockFactory.apply(props.apply(p)), itemFactory);
+        }
+
+        return block(
+                englishName,
+                id,
+                p -> new DummyIntegrationBlock(props.apply(p)),
+                (b, p) -> new DummyIntegrationBlock.Item(b, p, addon));
     }
 }

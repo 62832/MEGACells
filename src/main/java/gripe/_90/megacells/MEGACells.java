@@ -17,6 +17,7 @@ import appeng.api.features.HotkeyAction;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.parts.RegisterPartCapabilitiesEvent;
+import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
@@ -33,6 +34,7 @@ import gripe._90.megacells.definition.MEGADataMaps;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGAMenus;
 import gripe._90.megacells.integration.Addons;
+import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
@@ -140,6 +142,10 @@ public class MEGACells {
                                     ? HotkeyAction.PORTABLE_ITEM_CELL
                                     : HotkeyAction.PORTABLE_FLUID_CELL);
                 }
+            }
+
+            if (Addons.APPMEK.isLoaded()) {
+                StorageCells.addCellHandler(RadioactiveCellItem.HANDLER);
             }
         });
     }

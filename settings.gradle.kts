@@ -21,7 +21,25 @@ run {
             maven {
                 name = "ModMaven (K4U-NL)"
                 url = uri("https://modmaven.dev/")
-                content { includeGroup("de.mari_023") }
+                content {
+                    includeGroup("de.mari_023")
+                    includeGroup("mekanism")
+                }
+            }
+
+            maven {
+                name = "BlameJared"
+                url = uri("https://maven.blamejared.com")
+                content {
+                    includeGroup("vazkii.botania")
+                    includeGroup("vazkii.patchouli")
+                }
+            }
+
+            maven {
+                name = "CurseMaven"
+                url = uri("https://cursemaven.com")
+                content { includeGroup("curse.maven") }
             }
         }
 
@@ -38,6 +56,16 @@ run {
                 version("ae2wtlib", "26.1.1-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
+
+                // The rest don't have Minecraft 26.1 releases yet. Their integration code compiles
+                // against these last-known 1.21.1 jars as compile-only stubs (never on the runtime
+                // classpath, gated off by Addons#isLoaded) until each ships its own 26.1 port.
+                version("appmek", "1.6.2")
+                library("appmek", "curse.maven", "applied-mekanistics-574300").version("5978711")
+                library("mekanism", "mekanism", "Mekanism").version("1.21.1-10.7.9.72")
+
+                library("appbot", "curse.maven", "applied-botanics-addon-610632").version("7234122")
+                library("botania", "vazkii.botania", "botania-neoforge-1.21.1").version("451-SNAPSHOT")
             }
 
             create("testlibs") {

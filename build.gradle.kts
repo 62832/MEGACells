@@ -20,11 +20,8 @@ sourceSets {
     main {
         java {
             // These integrations depend on add-ons that do not have Minecraft 26.1 releases yet.
-            // Applied Flux and AE2WTLib are 26.1-compatible and remain enabled.
-            exclude("gripe/_90/megacells/integration/appbot/**")
             exclude("gripe/_90/megacells/integration/appex/**")
             exclude("gripe/_90/megacells/integration/appliede/**")
-            exclude("gripe/_90/megacells/integration/appmek/**")
             exclude("gripe/_90/megacells/integration/appsoul/**")
             exclude("gripe/_90/megacells/integration/arseng/**")
         }
@@ -48,6 +45,12 @@ dependencies {
 
     compileOnly(integration.ae2wtlibapi)
     "addonsRuntimeOnly"(integration.ae2wtlib)
+
+    compileOnly(integration.appmek)
+    compileOnly(integration.mekanism)
+
+    compileOnly(integration.appbot)
+    compileOnly(integration.botania)
 
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
@@ -106,13 +109,10 @@ tasks {
         exclude("**/.cache")
         // Keep recipes for unavailable third-party integrations out of the release JAR.
         exclude(
-            "data/megacells/recipe/**/*chemical*",
             "data/megacells/recipe/**/*experience*",
-            "data/megacells/recipe/**/*mana*",
             "data/megacells/recipe/**/*source*",
             "data/megacells/recipe/**/*soul*",
             "data/megacells/recipe/**/*emc*",
-            "data/megacells/recipe/**/*sky_osmium*",
         )
 
         val props = mapOf("version" to version)
