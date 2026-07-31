@@ -53,9 +53,8 @@ sourceSets {
 
     create("data") {
         java {
-            // TODO: MEGAModelProvider needs the same rewrite the rest of datagen just got, against
-            // the new BlockModelGenerators API.
-            exclude("gripe/_90/megacells/datagen/MEGAModelProvider.java")
+            // TODO: OverrideModelProvider (optional_cell_colours pack) still needs the same
+            // rewrite MEGAModelProvider just got, against the new BlockModelGenerators API.
             exclude("gripe/_90/megacells/datagen/OverrideModelProvider.java")
 
             // Same four add-ons excluded from `main` (see above) don't have datagen counterparts

@@ -12,9 +12,10 @@ public class MEGADataGenerators {
     public static void onGatherClientData(GatherDataEvent.Client event) {
         var output = event.getGenerator().getPackOutput();
         event.addProvider(new MEGALanguageProvider(output));
+        event.addProvider(new MEGAModelProvider(output));
 
-        // TODO: MEGAModelProvider/OverrideModelProvider still need the new BlockModelGenerators
-        // API; see build.gradle.kts.
+        // TODO: OverrideModelProvider (optional_cell_colours pack) still needs the same
+        // rewrite MEGAModelProvider just got; see build.gradle.kts.
     }
 
     @SubscribeEvent
