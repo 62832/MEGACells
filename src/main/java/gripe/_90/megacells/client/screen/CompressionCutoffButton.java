@@ -28,6 +28,10 @@ public class CompressionCutoffButton extends IconButton {
         return null;
     }
 
+    // TODO (AE2): Probably better that IconButton::getItemOverlay simply returned an ItemStack rather than just
+    //  Item, since some ItemStacks render differently depending on component data. IconButton no longer exposes an
+    //  overridable renderWidget()/extractContents() to work around this the way MEGA used to on 1.21.1, so this is
+    //  the only remaining hook until AE2 addresses it.
     @Override
     protected Item getItemOverlay() {
         return item.isEmpty() ? null : item.getItem();

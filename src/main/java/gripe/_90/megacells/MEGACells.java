@@ -154,28 +154,28 @@ public class MEGACells {
     private static void initCapabilities(RegisterCapabilitiesEvent event) {
         for (var type : MEGABlockEntities.DR.getEntries()) {
             event.registerBlockEntity(
-                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type.get(), (be, context) -> (IInWorldGridNodeHost) be);
+                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type.get(), (be, _) -> (IInWorldGridNodeHost) be);
         }
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_INTERFACE.get(),
-                (be, context) -> be.getInterfaceLogic().getStorage());
+                (be, _) -> be.getInterfaceLogic().getStorage());
         event.registerBlockEntity(
                 AECapabilities.ME_STORAGE,
                 MEGABlockEntities.MEGA_INTERFACE.get(),
-                (be, context) -> be.getInterfaceLogic().getInventory());
+                (be, _) -> be.getInterfaceLogic().getInventory());
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_PATTERN_PROVIDER.get(),
-                (be, context) -> be.getLogic().getReturnInv());
+                (be, _) -> be.getLogic().getReturnInv());
 
         for (var cell : MEGAItems.getTieredCells()) {
             if (cell.portable() && cell.item().asItem() instanceof IAEItemPowerStorage powered) {
                 event.registerItem(
                         Capabilities.Energy.ITEM,
-                        (stack, context) ->
+                        (_, context) ->
                                 new PoweredItemCapabilities(context, cell.item().asItem(), powered),
                         cell.item());
             }
@@ -186,22 +186,20 @@ public class MEGACells {
     private static void initPartCapabilities(RegisterPartCapabilitiesEvent event) {
         event.register(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                (part, ctx) -> part.getInterfaceLogic().getStorage(),
+                (part, _) -> part.getInterfaceLogic().getStorage(),
                 MEGAInterfacePart.class);
         event.register(
                 AECapabilities.ME_STORAGE,
-                (part, ctx) -> part.getInterfaceLogic().getInventory(),
+                (part, _) -> part.getInterfaceLogic().getInventory(),
                 MEGAInterfacePart.class);
 
         event.register(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                (part, ctx) -> part.getLogic().getReturnInv(),
+                (part, _) -> part.getLogic().getReturnInv(),
                 MEGAPatternProviderPart.class);
 
         event.register(
-                Capabilities.Item.BLOCK,
-                (part, ctx) -> part.getCellInventory().toResourceHandler(),
-                CellDockPart.class);
+                Capabilities.Item.BLOCK, (part, _) -> part.getCellInventory().toResourceHandler(), CellDockPart.class);
     }
 
     private static void initPacketHandlers(RegisterPayloadHandlersEvent event) {

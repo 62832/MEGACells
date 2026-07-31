@@ -165,8 +165,15 @@ public class BulkCellInventoryTest {
 
     @Test
     void testCompressionDataMap(MinecraftServer ignored) {
+        // amethyst shard <-> block is a forced override: the vanilla crafting recipe isn't reversible
+        // (blocks don't shapelessly decompose back into shards), so it wouldn't be picked up as a
+        // compression chain member without an explicit data map entry
         assertThat(Items.AMETHYST_SHARD.builtInRegistryHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE))
                 .isEqualTo(Items.AMETHYST_BLOCK);
+        // any/all seeds (the c:seeds tag) are overridden to Items.AIR to exclude them from compression
+        // altogether, since CompressionService#isBlacklisted() treats that as "never treat this item as
+        // a chain member", guarding against single-ingredient recipes across mods incidentally matching
+        // the heuristics for a valid compression/decompression pair
         assertThat(Items.WHEAT_SEEDS.builtInRegistryHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE))
                 .isEqualTo(Items.AIR);
     }

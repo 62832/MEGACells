@@ -12,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public record CompressionOverride(ItemStack larger, ItemStack smaller) {
+    // TODO: Extend further with support for specific amounts and components, to allow for e.g. compression variants
+    //  from recipes other than conventional crafting altogether
     public static final Codec<Item> CODEC = Codec.STRING
             .comapFlatMap(
                     value -> {

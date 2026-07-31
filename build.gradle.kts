@@ -8,7 +8,7 @@ plugins {
 val modId = "megacells"
 
 base.archivesName = modId
-version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "4.12.0"
+version = if (System.getenv("GITHUB_REF_TYPE") == "tag") System.getenv("GITHUB_REF_NAME") else "0.0.0"
 group = "gripe.90"
 
 java {
@@ -127,6 +127,7 @@ neoForge {
                 "--output", generatedResourcesClient.get().asFile.absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
+                "--existing-mod", "ae2",
             )
             sourceSet = sourceSets.getByName("data")
         }
@@ -141,6 +142,7 @@ neoForge {
                 "--output", generatedResourcesServer.get().asFile.absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
+                "--existing-mod", "ae2",
             )
             sourceSet = sourceSets.getByName("data")
         }
@@ -217,13 +219,6 @@ tasks {
 
     processResources {
         exclude("**/.cache")
-        // Keep recipes for unavailable third-party integrations out of the release JAR.
-        exclude(
-            "data/megacells/recipe/**/*experience*",
-            "data/megacells/recipe/**/*source*",
-            "data/megacells/recipe/**/*soul*",
-            "data/megacells/recipe/**/*emc*",
-        )
 
         val props = mapOf("version" to version)
         inputs.properties(props)

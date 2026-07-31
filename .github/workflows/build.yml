@@ -30,6 +30,12 @@ jobs:
           distribution: 'temurin'
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Generate assets
+        run: ./gradlew syncGeneratedResources
+      - name: Ensure generated data is up-to-date
+        run: |
+          git status
+          if [ -n "$(git status --porcelain)" ]; then exit 1; fi
       - name: Build release files
         run: ./gradlew build
       - name: Publish release files
@@ -48,4 +54,11 @@ jobs:
           loaders: neoforge
           dependencies: |
             ae2(required){curseforge:223794}{modrinth:XxWD5pD3}
+            appmek(optional){curseforge:574300}{modrinth:IiATswDj}
+            ae2wtlib(optional){curseforge:459929}{modrinth:pNabrMMw}
+            arseng(optional){curseforge:905641}{modrinth:IJI3QuK8}
             appflux(optional){curseforge:965012}
+            appex(optional){curseforge:1157608}{modrinth:yKwUnZCV}
+            appbot(optional){curseforge:610632}{modrinth:545hUrw9}
+            appliede(optional){curseforge:1009940}{modrinth:SyKS54UY}
+            appliedsoul(optional){curseforge:1337114}

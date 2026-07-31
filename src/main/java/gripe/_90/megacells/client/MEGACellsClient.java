@@ -39,11 +39,11 @@ import gripe._90.megacells.item.part.CellDockPart;
 public class MEGACellsClient {
     public MEGACellsClient(IEventBus eventBus) {
         eventBus.addListener(MEGACellsClient::initScreens);
-        eventBus.addListener(MEGACellsClient::initStorageCellModels);
         eventBus.addListener(MEGACellsClient::registerBlockStateModels);
         eventBus.addListener(MEGACellsClient::initBlockEntityRenderers);
-        eventBus.addListener(MEGACellsClient::initTooltipComponents);
         eventBus.addListener(MEGACellsClient::initPartRenderers);
+        eventBus.addListener(MEGACellsClient::initStorageCellModels);
+        eventBus.addListener(MEGACellsClient::initTooltipComponents);
         eventBus.addListener(MEGACellsClient::initResourcePackFinder);
     }
 
@@ -79,22 +79,6 @@ public class MEGACellsClient {
         event.registerBlockEntityRenderer(MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
     }
 
-    private static void initTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
-        event.register(PortableCellWorkbenchTooltipComponent.class, PortableCellWorkbenchClientTooltipComponent::new);
-    }
-
-    private static void initResourcePackFinder(AddPackFindersEvent event) {
-        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
-            event.addPackFinders(
-                    MEGACells.makeId("optional_cell_colours"),
-                    PackType.CLIENT_RESOURCES,
-                    MEGATranslations.ClassicCellColours.text(),
-                    PackSource.BUILT_IN,
-                    false,
-                    Pack.Position.TOP);
-        }
-    }
-
     private static void initStorageCellModels(FMLCommonSetupEvent event) {
         // Has to be done in common setup, otherwise textures are broken when first entering a world until one forces a
         // resource pack reload.
@@ -116,5 +100,21 @@ public class MEGACellsClient {
                     MEGACells.makeId(modelPrefix
                             + MEGAItems.RADIOACTIVE_CHEMICAL_CELL.id().getPath()));
         });
+    }
+
+    private static void initTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(PortableCellWorkbenchTooltipComponent.class, PortableCellWorkbenchClientTooltipComponent::new);
+    }
+
+    private static void initResourcePackFinder(AddPackFindersEvent event) {
+        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+            event.addPackFinders(
+                    MEGACells.makeId("optional_cell_colours"),
+                    PackType.CLIENT_RESOURCES,
+                    MEGATranslations.ClassicCellColours.text(),
+                    PackSource.BUILT_IN,
+                    false,
+                    Pack.Position.TOP);
+        }
     }
 }

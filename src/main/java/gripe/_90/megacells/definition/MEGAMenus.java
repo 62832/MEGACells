@@ -31,6 +31,17 @@ public final class MEGAMenus {
     public static final Supplier<MenuType<PortableCellWorkbenchMenu>> PORTABLE_CELL_WORKBENCH =
             create("portable_cell_workbench", PortableCellWorkbenchMenu::new, PortableCellWorkbenchMenuHost.class);
 
+    // AppliedE crashes the whole mod at runtime if loaded (see build.gradle.kts/Addons.java), so
+    // this stays commented out until it ships a real 26.1 build.
+    // static {
+    //     if (Addons.APPLIEDE.isLoaded()) {
+    //         AppliedEIntegration.MEGA_EMC_INTERFACE_MENU = createTyped(
+    //                 "mega_emc_interface",
+    //                 gripe._90.appliede.menu.EMCInterfaceMenu::new,
+    //                 gripe._90.appliede.me.misc.EMCInterfaceLogicHost.class);
+    //     }
+    // }
+
     private static <M extends AEBaseMenu, H> Supplier<MenuType<M>> create(
             String id, MenuTypeBuilder.MenuFactory<M, H> factory, Class<H> host) {
         return DR.register(id, () -> MenuTypeBuilder.create(factory, host).buildUnregistered(MEGACells.makeId(id)));
