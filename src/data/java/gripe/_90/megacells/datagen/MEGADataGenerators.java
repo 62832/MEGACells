@@ -13,9 +13,7 @@ public class MEGADataGenerators {
         var output = event.getGenerator().getPackOutput();
         event.addProvider(new MEGALanguageProvider(output));
         event.addProvider(new MEGAModelProvider(output));
-
-        // TODO: OverrideModelProvider (optional_cell_colours pack) still needs the same
-        // rewrite MEGAModelProvider just got; see build.gradle.kts.
+        event.addProvider(new OverrideModelProvider(event.getGenerator().getPackOutput("optional_cell_colours")));
     }
 
     @SubscribeEvent

@@ -53,10 +53,6 @@ sourceSets {
 
     create("data") {
         java {
-            // TODO: OverrideModelProvider (optional_cell_colours pack) still needs the same
-            // rewrite MEGAModelProvider just got, against the new BlockModelGenerators API.
-            exclude("gripe/_90/megacells/datagen/OverrideModelProvider.java")
-
             // Same four add-ons excluded from `main` (see above) don't have datagen counterparts
             // to compile against either.
             exclude("gripe/_90/megacells/datagen/integration/AppExIntegrationData.java")
@@ -176,10 +172,16 @@ tasks {
         // from both `from()` sources:
         preserve {
             // Static ae2:composite/ae2:status_indicator part models (see MEGAEMCInterfacePart.java)
-            // and the optional_cell_colours resource pack (still on the old ItemModelProvider API;
-            // see OverrideModelProvider.java) aren't produced by any datagen provider at all.
+            // aren't produced by any datagen provider at all.
             include("assets/megacells/ae2/**")
-            include("optional_cell_colours/**")
+
+            // OverrideModelProvider only generates optional_cell_colours overrides for AE2's own
+            // cells. The AppMek/ArsEng/AppEx/Applied Soul portions come from the same add-ons
+            // excluded/unloadable elsewhere in this file, so they can't regenerate either.
+            include("optional_cell_colours/assets/appmek/**")
+            include("optional_cell_colours/assets/arseng/**")
+            include("optional_cell_colours/assets/appex/**")
+            include("optional_cell_colours/assets/appliedsoul/**")
 
             // Cell Dock and Decompression Module use hand-authored Blockbench models (see
             // src/main/resources/assets/megacells/models/item), so MEGAModelProvider doesn't

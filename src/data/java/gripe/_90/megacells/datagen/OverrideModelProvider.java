@@ -1,26 +1,49 @@
 package gripe._90.megacells.datagen;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.stream.Stream;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.block.Block;
 
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 
 import gripe._90.megacells.MEGACells;
 
-public class OverrideModelProvider extends ItemModelProvider {
-    public OverrideModelProvider(PackOutput output, ExistingFileHelper existing) {
-        super(output, MEGACells.MODID, existing);
+public class OverrideModelProvider extends ModelProvider {
+    private ItemModelGenerators itemModels;
+
+    public OverrideModelProvider(PackOutput output) {
+        super(output, MEGACells.MODID);
+    }
+
+    // This pack only overrides AE2's own cell item models, not anything under MEGA's namespace,
+    // so opt out of the strict coverage validation the base class would otherwise enforce.
+    @Override
+    protected Stream<? extends Holder<Block>> getKnownBlocks() {
+        return Stream.empty();
     }
 
     @Override
-    protected void registerModels() {
+    protected Stream<? extends Holder<Item>> getKnownItems() {
+        return Stream.empty();
+    }
+
+    @Override
+    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        this.itemModels = itemModels;
+
         cell(AEItems.ITEM_CELL_1K, AEItems.ITEM_CELL_HOUSING);
         cell(AEItems.ITEM_CELL_4K, AEItems.ITEM_CELL_HOUSING);
         cell(AEItems.ITEM_CELL_16K, AEItems.ITEM_CELL_HOUSING);
@@ -40,18 +63,21 @@ public class OverrideModelProvider extends ItemModelProvider {
     private void cell(ItemLike cell, ItemLike housing) {
         var id = BuiltInRegistries.ITEM.getKey(cell.asItem());
         var tierSuffix = id.getPath().substring(id.getPath().lastIndexOf('_'));
+        var target = ModelLocationUtils.getModelLocation(cell.asItem());
 
-        singleTexture(id.toString(), mcLoc("item/generated"), "layer0", textureLocation(housing))
-                .texture("layer1", AppEng.makeId("item/storage_cell_led"))
-                .texture("layer2", AppEng.makeId("item/storage_cell_side" + tierSuffix));
+        itemModels.generateLayeredItem(
+                target,
+                new Material(textureLocation(housing)),
+                new Material(AppEng.makeId("item/storage_cell_led")),
+                new Material(AppEng.makeId("item/storage_cell_side" + tierSuffix)));
+        itemModels.itemModelOutput.accept(cell.asItem(), ItemModelUtils.plainModel(target));
     }
 
-    private ResourceLocation textureLocation(ItemLike item) {
+    private Identifier textureLocation(ItemLike item) {
         var id = BuiltInRegistries.ITEM.getKey(item.asItem());
-        return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath());
+        return Identifier.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath());
     }
 
-    @NotNull
     @Override
     public String getName() {
         return "Item Models (Classic Cell Colours)";
