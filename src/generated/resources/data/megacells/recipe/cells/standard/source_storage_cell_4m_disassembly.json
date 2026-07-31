@@ -9,11 +9,9 @@
   "cell": "megacells:source_storage_cell_4m",
   "cell_disassembly_items": [
     {
-      "count": 1,
       "id": "megacells:cell_component_4m"
     },
     {
-      "count": 1,
       "id": "megacells:mega_source_cell_housing"
     }
   ]

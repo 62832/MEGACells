@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/sky_steel_block"
+    "model": "megacells:block/sky_steel_block"
   }
 }

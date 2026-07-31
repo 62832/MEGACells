@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/mega_interface"
+    "model": "megacells:block/mega_interface"
   }
 }

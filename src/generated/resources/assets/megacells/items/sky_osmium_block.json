@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/sky_osmium_block"
+    "model": "megacells:block/sky_osmium_block"
   }
 }

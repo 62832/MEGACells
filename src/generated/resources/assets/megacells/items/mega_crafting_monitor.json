@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/mega_crafting_monitor"
+    "model": "megacells:block/crafting/monitor"
   }
 }

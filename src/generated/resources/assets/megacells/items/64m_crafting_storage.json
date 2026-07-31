@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/64m_crafting_storage"
+    "model": "megacells:block/crafting/64m_storage"
   }
 }

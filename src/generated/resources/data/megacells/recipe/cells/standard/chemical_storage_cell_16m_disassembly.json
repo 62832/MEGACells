@@ -9,11 +9,9 @@
   "cell": "megacells:chemical_storage_cell_16m",
   "cell_disassembly_items": [
     {
-      "count": 1,
       "id": "megacells:cell_component_16m"
     },
     {
-      "count": 1,
       "id": "megacells:mega_chemical_cell_housing"
     }
   ]

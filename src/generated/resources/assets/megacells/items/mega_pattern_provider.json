@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "megacells:item/mega_pattern_provider"
+    "model": "megacells:block/mega_pattern_provider"
   }
 }
