@@ -8,11 +8,12 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.util.Lazy;
 
 import gripe._90.megacells.definition.MEGATranslations;
+import gripe._90.megacells.integration.ae2wt.AE2WTIntegration;
 import gripe._90.megacells.integration.appflux.AppFluxIntegration;
 
 @SuppressWarnings("Convert2MethodRef")
 public enum Addons {
-    AE2WTLIB("AE2WTLib"),
+    AE2WTLIB("AE2WTLib", () -> new AE2WTIntegration(), true),
     APPMEK("Applied Mekanistics"),
     APPBOT("Applied Botanics"),
     ARSENG("Ars Énergistique"),

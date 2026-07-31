@@ -20,8 +20,7 @@ sourceSets {
     main {
         java {
             // These integrations depend on add-ons that do not have Minecraft 26.1 releases yet.
-            // Applied Flux is 26.1-compatible and remains enabled.
-            exclude("gripe/_90/megacells/integration/ae2wt/**")
+            // Applied Flux and AE2WTLib are 26.1-compatible and remain enabled.
             exclude("gripe/_90/megacells/integration/appbot/**")
             exclude("gripe/_90/megacells/integration/appex/**")
             exclude("gripe/_90/megacells/integration/appliede/**")
@@ -31,10 +30,24 @@ sourceSets {
         }
         resources.srcDir(file("src/generated/resources"))
     }
+
+    // Add-ons that are actually available for 26.1 get their real API on the compile classpath here,
+    // and their runtime jar added below purely so `runs` can load them for local testing; the shipped
+    // mod jar itself never bundles or requires them (see Addons#isLoaded). The other six don't have
+    // Minecraft 26.1 releases yet, so their integration code only ever compiles against last-known
+    // 1.21.1 jars (never on the runtime classpath) until each ships its own 26.1 port.
+    val addons = create("addons") {
+        val main = main.get()
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath + main.output
+    }
 }
 
 dependencies {
     api(core.ae2)
+
+    compileOnly(integration.ae2wtlibapi)
+    "addonsRuntimeOnly"(integration.ae2wtlib)
 
     testImplementation(testlibs.junit.jupiter)
     testImplementation(testlibs.assertj)
@@ -56,7 +69,7 @@ neoForge {
 
         configureEach {
             logLevel = org.slf4j.event.Level.DEBUG
-            sourceSet = sourceSets.main.get()
+            sourceSet = sourceSets.getByName("addons")
         }
 
         create("client") {
