@@ -50,6 +50,24 @@ sourceSets {
         compileClasspath += main.compileClasspath + main.output
         runtimeClasspath += main.runtimeClasspath + main.output
     }
+
+    create("data") {
+        java {
+            // TODO: MEGAModelProvider needs the same rewrite the rest of datagen just got, against
+            // the new BlockModelGenerators API.
+            exclude("gripe/_90/megacells/datagen/MEGAModelProvider.java")
+            exclude("gripe/_90/megacells/datagen/OverrideModelProvider.java")
+
+            // Same four add-ons excluded from `main` (see above) don't have datagen counterparts
+            // to compile against either.
+            exclude("gripe/_90/megacells/datagen/integration/AppExIntegrationData.java")
+            exclude("gripe/_90/megacells/datagen/integration/AppSoulIntegrationData.java")
+            exclude("gripe/_90/megacells/datagen/integration/ArsEngIntegrationData.java")
+            exclude("gripe/_90/megacells/datagen/integration/AppliedEIntegrationData.java")
+        }
+        compileClasspath += addons.compileClasspath + addons.output
+        runtimeClasspath += addons.runtimeClasspath + addons.output
+    }
 }
 
 dependencies {
@@ -60,6 +78,7 @@ dependencies {
 
     compileOnly(integration.appmek)
     compileOnly(integration.mekanism)
+    "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
 
     compileOnly(integration.appbot)
     compileOnly(integration.botania)
@@ -76,6 +95,7 @@ neoForge {
     mods {
         create(modId) {
             sourceSet(sourceSets.main.get())
+            sourceSet(sourceSets.getByName("data"))
         }
     }
 
@@ -97,6 +117,34 @@ neoForge {
         create("server") {
             server()
             gameDirectory = file("run/server")
+        }
+
+        create("clientData") {
+            clientData()
+            gameDirectory = file("run/data")
+            logLevel = org.slf4j.event.Level.INFO
+            programArguments.addAll(
+                "--mod", modId,
+                "--all",
+                "--output", file("src/generated/resources/").absolutePath,
+                "--existing", main,
+                "--existing", "$main/optional_cell_colours",
+            )
+            sourceSet = sourceSets.getByName("data")
+        }
+
+        create("serverData") {
+            serverData()
+            gameDirectory = file("run/data")
+            logLevel = org.slf4j.event.Level.INFO
+            programArguments.addAll(
+                "--mod", modId,
+                "--all",
+                "--output", file("src/generated/resources/").absolutePath,
+                "--existing", main,
+                "--existing", "$main/optional_cell_colours",
+            )
+            sourceSet = sourceSets.getByName("data")
         }
     }
 
