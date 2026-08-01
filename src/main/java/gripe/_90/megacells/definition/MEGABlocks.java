@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -84,7 +88,13 @@ public final class MEGABlocks {
             "MEGA Crafting Co-Processing Unit",
             "mega_crafting_accelerator",
             p -> new CraftingUnitBlock(p, MEGACraftingUnitType.ACCELERATOR),
-            CraftingBlockItem::new);
+            (block, props) -> new CraftingBlockItem(block, props) {
+                @Override
+                public void addCheckedInformation(
+                        ItemStack stack, TooltipContext context, Consumer<Component> lines, TooltipFlag flag) {
+                    lines.accept(MEGATranslations.AcceleratorThreads.text());
+                }
+            });
     public static final BlockDefinition<CraftingUnitBlock> CRAFTING_STORAGE_1M = block(
             "1M MEGA Crafting Storage",
             "1m_crafting_storage",
