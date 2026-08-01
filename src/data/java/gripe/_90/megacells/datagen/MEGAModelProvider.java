@@ -9,6 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.math.Quadrant;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -56,18 +58,20 @@ public class MEGAModelProvider extends ModelProvider {
     // AE2's own AE2ModelProvider already covers AE2's namespace; MEGA only ever generated
     // for its own explicit set of blocks/items, not everything under its namespace, so opt out
     // of the strict coverage validation the base class would otherwise enforce.
+    @NotNull
     @Override
     protected Stream<? extends Holder<Block>> getKnownBlocks() {
         return Stream.empty();
     }
 
+    @NotNull
     @Override
     protected Stream<? extends Holder<Item>> getKnownItems() {
         return Stream.empty();
     }
 
     @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    protected void registerModels(@NotNull BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         this.blockModels = blockModels;
         this.itemModels = itemModels;
 
@@ -481,6 +485,7 @@ public class MEGAModelProvider extends ModelProvider {
         blockModels.modelOutput.accept(id, () -> json);
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "Block States / Models";

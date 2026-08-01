@@ -1,6 +1,5 @@
 package gripe._90.megacells.menu;
 
-import java.util.Map;
 import java.util.Objects;
 
 import com.google.common.collect.Iterators;
@@ -176,14 +175,11 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
             var cellInv = StorageCells.getCellInventory(is, null);
 
             if (cellInv != null) {
-                var it = Iterators.transform(cellInv.getAvailableStacks().iterator(), Map.Entry::getKey);
+                var it = Iterators.transform(
+                        cellInv.getAvailableStacks().iterator(), stack -> stack != null ? stack.getKey() : null);
 
                 for (var x = 0; x < inv.size(); x++) {
-                    if (it.hasNext()) {
-                        inv.setStack(x, new GenericStack(it.next(), 0));
-                    } else {
-                        inv.setStack(x, null);
-                    }
+                    inv.setStack(x, it.hasNext() ? new GenericStack(it.next(), 0) : null);
                 }
             }
 

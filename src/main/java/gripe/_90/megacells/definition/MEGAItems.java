@@ -103,9 +103,7 @@ public final class MEGAItems {
     public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
             "MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
     public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
-    public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
-        return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
-    });
+    public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new));
 
     public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
             part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);

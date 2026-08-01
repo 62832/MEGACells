@@ -73,7 +73,7 @@ public final class MEGABlockEntities {
             var blocks = Arrays.stream(blockDefs).map(BlockDefinition::block).toArray(AEBaseEntityBlock[]::new);
 
             var typeHolder = new AtomicReference<BlockEntityType<T>>();
-            var type = new BlockEntityType<T>((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks);
+            var type = new BlockEntityType<>((pos, state) -> factory.create(typeHolder.get(), pos, state), blocks);
             typeHolder.set(type);
 
             AEBaseBlockEntity.registerBlockEntityItem(type, blockDefs[0].asItem());
