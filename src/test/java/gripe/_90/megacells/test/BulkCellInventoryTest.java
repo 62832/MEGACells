@@ -175,7 +175,8 @@ public class BulkCellInventoryTest {
         // altogether, since CompressionService#isBlacklisted() treats that as "never treat this item as
         // a chain member", guarding against single-ingredient recipes across mods incidentally matching
         // the heuristics for a valid compression/decompression pair
-        assertThat(CompressionService.getChain(AEItemKey.of(Items.WHEAT_SEEDS)).isEmpty()).isTrue();
+        assertThat(CompressionService.getChain(AEItemKey.of(Items.WHEAT_SEEDS)).isEmpty())
+                .isTrue();
     }
 
     @Test
