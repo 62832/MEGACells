@@ -1,10 +1,14 @@
 package gripe._90.megacells.datagen;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -544,5 +548,22 @@ public class MEGARecipeProvider extends RecipeProvider {
 
     private static RecipeOutput conditional(RecipeOutput output, Addons addon) {
         return output.withConditions(new ModLoadedCondition(addon.getModId()));
+    }
+
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+            super(output, registries);
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+            return new MEGARecipeProvider(registries, output);
+        }
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "Recipes";
+        }
     }
 }
