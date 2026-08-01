@@ -127,7 +127,6 @@ neoForge {
                 "--output", generatedResourcesClient.get().asFile.absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
-                "--existing-mod", "ae2",
             )
             sourceSet = sourceSets.getByName("data")
         }
@@ -142,7 +141,6 @@ neoForge {
                 "--output", generatedResourcesServer.get().asFile.absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
-                "--existing-mod", "ae2",
             )
             sourceSet = sourceSets.getByName("data")
         }
