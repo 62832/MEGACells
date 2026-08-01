@@ -45,7 +45,7 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testGreaterCapacity() {
+    void testGreaterCapacity(MinecraftServer ignored) {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 
@@ -163,7 +163,24 @@ public class BulkCellInventoryTest {
     }
 
     @Test
-    void testFilterMismatchOperations() {
+    void testCompressionOverrides(MinecraftServer ignored) {
+        // amethyst shard <-> block is a forced override: the vanilla crafting recipe isn't reversible
+        // (blocks don't shapelessly decompose back into shards), so it wouldn't be picked up as a
+        // compression chain member without an explicit data map entry
+        var amethyst = CompressionService.getChain(AEItemKey.of(Items.AMETHYST_SHARD));
+        assertThat(amethyst.isEmpty()).isFalse();
+        assertThat(amethyst.containsVariant(AEItemKey.of(Items.AMETHYST_BLOCK))).isTrue();
+
+        // any/all seeds (the c:seeds tag) are overridden to Items.AIR to exclude them from compression
+        // altogether, since CompressionService#isBlacklisted() treats that as "never treat this item as
+        // a chain member", guarding against single-ingredient recipes across mods incidentally matching
+        // the heuristics for a valid compression/decompression pair
+        assertThat(CompressionService.getChain(AEItemKey.of(Items.WHEAT_SEEDS)).isEmpty())
+                .isTrue();
+    }
+
+    @Test
+    void testFilterMismatchOperations(MinecraftServer ignored) {
         var item = MEGAItems.BULK_ITEM_CELL.asItem();
         var stack = item.getDefaultInstance();
 

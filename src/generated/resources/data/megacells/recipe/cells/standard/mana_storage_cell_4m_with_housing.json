@@ -8,15 +8,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_mana_cell_housing"
-    },
-    {
-      "item": "megacells:cell_component_4m"
-    }
+    "megacells:mega_mana_cell_housing",
+    "megacells:cell_component_4m"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:mana_storage_cell_4m"
   }
 }

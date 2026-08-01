@@ -3,6 +3,7 @@
     "description": {
       "translate": "pack.megacells.ClassicCellColoursDesc"
     },
-    "pack_format": 34
+    "min_format": [84, 0],
+    "max_format": [84, 0]
   }
 }

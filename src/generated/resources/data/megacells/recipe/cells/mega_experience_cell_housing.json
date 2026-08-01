@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "ae2:quartz_vibrant_glass"
-    },
-    "b": {
-      "item": "ae2:sky_dust"
-    },
-    "d": {
-      "item": "minecraft:experience_bottle"
-    }
+    "a": "ae2:quartz_vibrant_glass",
+    "b": "ae2:sky_dust",
+    "d": "minecraft:experience_bottle"
   },
   "pattern": [
     "aba",
@@ -24,7 +18,6 @@
     "ddd"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:mega_experience_cell_housing"
   }
 }

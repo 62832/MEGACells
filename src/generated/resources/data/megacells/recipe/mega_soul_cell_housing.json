@@ -7,30 +7,14 @@
   ],
   "type": "industrialforegoing:dissolution_chamber",
   "input": [
-    {
-      "item": "minecraft:echo_shard"
-    },
-    {
-      "item": "minecraft:echo_shard"
-    },
-    {
-      "item": "minecraft:echo_shard"
-    },
-    {
-      "item": "industrialforegoing:pink_slime_ingot"
-    },
-    {
-      "item": "industrialforegoing:pink_slime_ingot"
-    },
-    {
-      "tag": "c:plastics"
-    },
-    {
-      "item": "appliedsoul:soul_cell_housing"
-    },
-    {
-      "tag": "c:plastics"
-    }
+    "minecraft:echo_shard",
+    "minecraft:echo_shard",
+    "minecraft:echo_shard",
+    "industrialforegoing:pink_slime_ingot",
+    "industrialforegoing:pink_slime_ingot",
+    "#c:plastics",
+    "appliedsoul:soul_cell_housing",
+    "#c:plastics"
   ],
   "inputFluid": {
     "amount": 1000,

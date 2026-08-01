@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_pattern_provider"
-    }
+    "megacells:mega_pattern_provider"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:cable_mega_pattern_provider"
   }
 }

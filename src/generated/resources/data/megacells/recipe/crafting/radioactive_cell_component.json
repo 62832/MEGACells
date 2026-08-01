@@ -8,21 +8,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "ae2:sky_dust"
-    },
-    "b": {
-      "item": "megacells:accumulation_processor"
-    },
-    "c": {
-      "item": "mekanism:radioactive_waste_barrel"
-    },
-    "d": {
-      "item": "ae2:quartz_vibrant_glass"
-    },
-    "e": {
-      "item": "ae2:cell_component_256k"
-    }
+    "a": "ae2:sky_dust",
+    "b": "megacells:accumulation_processor",
+    "c": "mekanism:radioactive_waste_barrel",
+    "d": "ae2:quartz_vibrant_glass",
+    "e": "ae2:cell_component_256k"
   },
   "pattern": [
     "aba",

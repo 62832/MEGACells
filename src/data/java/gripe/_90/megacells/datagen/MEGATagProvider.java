@@ -9,13 +9,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.BlockTagCopyingItemTagProvider;
 
 import appeng.api.features.P2PTunnelAttunement;
 
@@ -26,15 +25,13 @@ import gripe._90.megacells.definition.MEGATags;
 
 public class MEGATagProvider {
     public static class Blocks extends IntrinsicHolderTagsProvider<Block> {
-        public Blocks(
-                PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existing) {
+        public Blocks(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
             super(
                     output,
                     Registries.BLOCK,
                     registries,
                     block -> BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow(),
-                    MEGACells.MODID,
-                    existing);
+                    MEGACells.MODID);
         }
 
         @Override
@@ -60,13 +57,12 @@ public class MEGATagProvider {
         }
     }
 
-    public static class Items extends ItemTagsProvider {
+    public static class Items extends BlockTagCopyingItemTagProvider {
         public Items(
                 PackOutput output,
                 CompletableFuture<HolderLookup.Provider> registries,
-                CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> blockTags,
-                ExistingFileHelper existing) {
-            super(output, registries, blockTags, MEGACells.MODID, existing);
+                CompletableFuture<TagsProvider.TagLookup<net.minecraft.world.level.block.Block>> blockTags) {
+            super(output, registries, blockTags, MEGACells.MODID);
         }
 
         @Override

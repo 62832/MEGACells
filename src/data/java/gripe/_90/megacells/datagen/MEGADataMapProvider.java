@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -40,14 +40,14 @@ public class MEGADataMapProvider extends DataMapProvider {
                 .add(itemId(Items.POINTED_DRIPSTONE), Items.DRIPSTONE_BLOCK, false)
                 .add(Tags.Items.SEEDS, none, false)
                 .add(
-                        ItemTags.create(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "essences")),
+                        ItemTags.create(Identifier.fromNamespaceAndPath("mysticalagriculture", "essences")),
                         none,
                         false,
                         new ModLoadedCondition("mysticalagriculture"))
-                .remove(ResourceLocation.fromNamespaceAndPath("mysticalagriculture", "inferium_essence"));
+                .remove(Identifier.fromNamespaceAndPath("mysticalagriculture", "inferium_essence"));
     }
 
-    private static ResourceLocation itemId(Item item) {
+    private static Identifier itemId(Item item) {
         return BuiltInRegistries.ITEM.getKey(item);
     }
 }

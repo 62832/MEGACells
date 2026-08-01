@@ -2,7 +2,7 @@ package gripe._90.megacells.item.cell;
 
 import java.util.function.Supplier;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -62,7 +62,7 @@ public class PortableCellWorkbenchMenuHost extends ItemMenuHost<PortableCellWork
     }
 
     @Override
-    public InternalInventory getSubInventory(ResourceLocation id) {
+    public InternalInventory getSubInventory(Identifier id) {
         return id.equals(ISegmentedInventory.CELLS) ? cellInv.get() : null;
     }
 }

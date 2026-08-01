@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.PartModels;
 import appeng.api.stacks.AEKeyType;
 import appeng.core.definitions.ItemDefinition;
 import appeng.items.materials.EnergyCardItem;
@@ -20,7 +19,6 @@ import appeng.items.materials.MaterialItem;
 import appeng.items.materials.StorageComponentItem;
 import appeng.items.materials.UpgradeCardItem;
 import appeng.items.parts.PartItem;
-import appeng.items.parts.PartModelsHelper;
 import appeng.items.storage.BasicStorageCell;
 import appeng.items.storage.StorageTier;
 import appeng.menu.me.common.MEStorageMenu;
@@ -28,15 +26,12 @@ import appeng.menu.me.common.MEStorageMenu;
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.integration.Addons;
 import gripe._90.megacells.integration.DummyIntegrationItem;
-import gripe._90.megacells.integration.appliede.MEGAEMCInterfacePart;
-import gripe._90.megacells.integration.appmek.RadioactiveCellItem;
 import gripe._90.megacells.item.cell.BulkCellItem;
 import gripe._90.megacells.item.cell.MEGAPortableCell;
 import gripe._90.megacells.item.cell.PortableCellWorkbenchItem;
 import gripe._90.megacells.item.part.CellDockPart;
 import gripe._90.megacells.item.part.DecompressionModulePart;
 import gripe._90.megacells.item.part.MEGAInterfacePart;
-import gripe._90.megacells.item.part.MEGAPatternProviderPart;
 import gripe._90.megacells.item.part.MEGAPatternProviderPartItem;
 
 public final class MEGAItems {
@@ -105,16 +100,17 @@ public final class MEGAItems {
     public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
     public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
-    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part("MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
-
+    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
+            "MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
     public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
     public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> {
-        PartModels.registerModels(PartModelsHelper.createModels(MEGAPatternProviderPart.class));
         return item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new);
     });
 
-    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
-    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH = item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
+            part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
+    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH =
+            item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
 
     public static final ItemDefinition<?> SKY_OSMIUM_INGOT = integrationItem("Sky Osmium Ingot", "sky_osmium_ingot", () -> MaterialItem::new, Item.Properties::fireResistant, Addons.APPMEK);
     public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem("MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
@@ -132,7 +128,7 @@ public final class MEGAItems {
     public static final ItemDefinition<?> PORTABLE_CHEMICAL_CELL_256M = integrationPortable(TIER_256M, "Chemical", Addons.APPMEK);
 
     public static final ItemDefinition<?> RADIOACTIVE_CELL_COMPONENT = integrationItem("MEGA Radioactive Storage Component", "radioactive_cell_component", () -> MaterialItem::new, Addons.APPMEK);
-    public static final ItemDefinition<?> RADIOACTIVE_CHEMICAL_CELL = integrationItem("MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", () -> RadioactiveCellItem::new, Addons.APPMEK);
+    public static final ItemDefinition<?> RADIOACTIVE_CHEMICAL_CELL = integrationItem("MEGA Radioactive Chemical Storage Cell", "radioactive_chemical_cell", () -> MaterialItem::new, Addons.APPMEK);
 
     public static final ItemDefinition<?> MEGA_MANA_CELL_HOUSING = integrationItem("MEGA Mana Cell Housing", "mega_mana_cell_housing", () -> MaterialItem::new, Addons.APPBOT);
 
@@ -182,10 +178,8 @@ public final class MEGAItems {
     public static final ItemDefinition<?> SOUL_CELL_64M = integrationCell(TIER_64M, "Soul", Addons.APPLIEDSOUL);
     public static final ItemDefinition<?> SOUL_CELL_256M = integrationCell(TIER_256M, "Soul", Addons.APPLIEDSOUL);
     public static final ItemDefinition<?> MEGA_SOUL_CELL_HOUSING = integrationItem("MEGA Soul Cell Housing", "mega_soul_cell_housing", () -> MaterialItem::new, Addons.APPLIEDSOUL);
-    public static final ItemDefinition<?> MEGA_EMC_INTERFACE = integrationItem("MEGA Transmutation Interface", "cable_mega_emc_interface", () -> p -> {
-        PartModels.registerModels(PartModelsHelper.createModels(MEGAEMCInterfacePart.class));
-        return new PartItem<>(p, MEGAEMCInterfacePart.class, MEGAEMCInterfacePart::new);
-    }, Addons.APPLIEDE);
+    public static final ItemDefinition<?> MEGA_EMC_INTERFACE = integrationItem(
+            "MEGA Transmutation Interface", "cable_mega_emc_interface", () -> MaterialItem::new, Addons.APPLIEDE);
     // spotless:on
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
@@ -273,7 +267,6 @@ public final class MEGAItems {
 
     private static <T extends IPart> ItemDefinition<PartItem<T>> part(
             String englishName, String id, Class<T> partClass, Function<IPartItem<T>, T> factory) {
-        PartModels.registerModels(PartModelsHelper.createModels(partClass));
         return item(englishName, id, p -> new PartItem<>(p, partClass, factory));
     }
 

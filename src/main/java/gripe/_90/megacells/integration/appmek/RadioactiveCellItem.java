@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.GenericStack;
@@ -57,31 +59,33 @@ public class RadioactiveCellItem extends AEBaseItem implements ICellWorkbenchIte
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack is, TooltipContext context, List<Component> lines, TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack is, TooltipContext context, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
         var inv = HANDLER.getCellInventory(is, null);
 
         if (inv != null) {
             var containedType = inv.getAvailableStacks().getFirstKey();
             var filterItem = inv.getFilterChemical();
 
-            lines.add(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
-            lines.add(Tooltips.of(
+            lines.accept(Tooltips.bytesUsed(inv.getUsedBytes(), RadioactiveCellInventory.MAX_BYTES));
+            lines.accept(Tooltips.of(
                     containedType != null
                             ? MEGATranslations.Contains.text(containedType.getDisplayName())
                             : MEGATranslations.Empty.text()));
 
             if (filterItem != null) {
                 if (containedType == null) {
-                    lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
+                    lines.accept(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
                 } else if (!containedType.equals(filterItem)) {
-                    lines.add(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
+                    lines.accept(MEGATranslations.MismatchedFilter.text().withStyle(ChatFormatting.DARK_RED));
                 }
 
                 if (inv.isBlackListed(filterItem)) {
-                    lines.add(MEGATranslations.FilterChemicalUnsupported.text().withStyle(ChatFormatting.DARK_RED));
+                    lines.accept(
+                            MEGATranslations.FilterChemicalUnsupported.text().withStyle(ChatFormatting.DARK_RED));
                 }
             } else {
-                lines.add(Tooltips.of(MEGATranslations.NotPartitioned.text()));
+                lines.accept(Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
         }
     }

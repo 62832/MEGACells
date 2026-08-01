@@ -8,18 +8,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "ae2:quartz_vibrant_glass"
-    },
-    "b": {
-      "item": "ae2:sky_dust"
-    },
-    "c": {
-      "item": "megacells:cell_component_64m"
-    },
-    "d": {
-      "item": "minecraft:experience_bottle"
-    }
+    "a": "ae2:quartz_vibrant_glass",
+    "b": "ae2:sky_dust",
+    "c": "megacells:cell_component_64m",
+    "d": "minecraft:experience_bottle"
   },
   "pattern": [
     "aba",
@@ -27,7 +19,6 @@
     "ddd"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:experience_storage_cell_64m"
   }
 }

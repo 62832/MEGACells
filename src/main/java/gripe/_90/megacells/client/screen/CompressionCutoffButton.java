@@ -3,12 +3,12 @@ package gripe._90.megacells.client.screen;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.IconButton;
+import appeng.util.Icon;
 
 import gripe._90.megacells.definition.MEGATranslations;
 
@@ -28,6 +28,15 @@ public class CompressionCutoffButton extends IconButton {
         return null;
     }
 
+    // TODO (AE2): Probably better that IconButton::getItemOverlay simply returned an ItemStack rather than just
+    //  Item, since some ItemStacks render differently depending on component data. IconButton no longer exposes an
+    //  overridable renderWidget()/extractContents() to work around this the way MEGA used to on 1.21.1, so this is
+    //  the only remaining hook until AE2 addresses it.
+    @Override
+    protected Item getItemOverlay() {
+        return item.isEmpty() ? null : item.getItem();
+    }
+
     @Override
     public List<Component> getTooltipMessage() {
         var message = new ArrayList<Component>();
@@ -38,22 +47,5 @@ public class CompressionCutoffButton extends IconButton {
         }
 
         return message;
-    }
-
-    // TODO (AE2): Probably better that IconButton::getItemOverlay simply returned an ItemStack rather than just Item?
-    @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
-        if (this.visible) {
-            var yOffset = isHovered() ? 1 : 0;
-            var bgIcon = isHovered()
-                    ? Icon.TOOLBAR_BUTTON_BACKGROUND_HOVER
-                    : isFocused() ? Icon.TOOLBAR_BUTTON_BACKGROUND_FOCUS : Icon.TOOLBAR_BUTTON_BACKGROUND;
-
-            bgIcon.getBlitter()
-                    .dest(getX() - 1, getY() + yOffset, 18, 20)
-                    .zOffset(2)
-                    .blit(guiGraphics);
-            guiGraphics.renderItem(item, getX(), getY() + 1 + yOffset, 0, 3);
-        }
     }
 }

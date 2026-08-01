@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 
@@ -12,7 +13,6 @@ import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 import appeng.items.storage.StorageTier;
 
-import appbot.AppliedBotanics;
 import appbot.item.ManaCellItem;
 import appbot.item.PortableManaCellItem;
 
@@ -58,6 +58,7 @@ public class AppBotIntegration implements IntegrationHelper {
     }
 
     private static ItemLike portable(StorageTier tier) {
-        return BuiltInRegistries.ITEM.get(AppliedBotanics.id("portable_mana_storage_cell_" + tier.namePrefix()));
+        return BuiltInRegistries.ITEM.getValue(
+                Identifier.fromNamespaceAndPath("appbot", "portable_mana_storage_cell_" + tier.namePrefix()));
     }
 }

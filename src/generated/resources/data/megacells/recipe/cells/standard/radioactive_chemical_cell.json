@@ -8,21 +8,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "mekanismgenerators:reactor_glass"
-    },
-    "b": {
-      "item": "ae2:sky_dust"
-    },
-    "c": {
-      "item": "megacells:radioactive_cell_component"
-    },
-    "d": {
-      "item": "mekanism:hdpe_sheet"
-    },
-    "e": {
-      "item": "mekanism:pellet_polonium"
-    }
+    "a": "mekanismgenerators:reactor_glass",
+    "b": "ae2:sky_dust",
+    "c": "megacells:radioactive_cell_component",
+    "d": "mekanism:hdpe_sheet",
+    "e": "mekanism:pellet_polonium"
   },
   "pattern": [
     "aba",

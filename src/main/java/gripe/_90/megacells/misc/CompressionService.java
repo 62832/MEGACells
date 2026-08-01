@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.WeakHashMap;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.NeoForge;
@@ -26,6 +28,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import appeng.api.networking.GridServices;
 import appeng.api.stacks.AEItemKey;
+import appeng.util.CraftingRecipeUtil;
 
 import gripe._90.megacells.definition.MEGADataMaps;
 
@@ -120,7 +123,7 @@ public class CompressionService {
         var decompressed = new ArrayList<CraftingRecipe>();
         var overrides = new ArrayList<CompressionOverride>();
 
-        for (var recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
+        for (var recipe : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
             if (isCompressionRecipe(recipe.value(), access)) {
                 compressed.add(recipe.value());
             } else if (isDecompressionRecipe(recipe.value())) {
@@ -138,13 +141,13 @@ public class CompressionService {
         // have not been unified properly and some (modded) item's subsequent variant is of an identical resource from
         // a different mod than intended
         var ingredientSize = Comparator.<CraftingRecipe>comparingInt(
-                r -> r.getIngredients().getFirst().getItems().length);
+                r -> stacks(ingredients(r).getFirst()).size());
         compressed.sort(ingredientSize);
         decompressed.sort(ingredientSize);
 
         while (!compressed.isEmpty()) {
-            var base = compressed.removeFirst().getResultItem(access).copy();
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, recipe.getResultItem(access)));
+            var base = result(compressed.removeFirst()).copy();
+            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, result(recipe)));
             chains.add(generateChain(base, compressed, decompressed, overrides, access));
         }
 
@@ -186,7 +189,7 @@ public class CompressionService {
             }
 
             lowerList.add(stack);
-            compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, result(recipe)));
             lower = getNextVariant(stack, decompressed, overrides, false, access);
         }
 
@@ -211,7 +214,7 @@ public class CompressionService {
 
             var stack = higher;
             variantList.add(stack);
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, result(recipe)));
             higher = getNextVariant(stack, compressed, overrides, true, access);
         }
 
@@ -243,14 +246,14 @@ public class CompressionService {
         }
 
         for (var recipe : recipes) {
-            for (var input : recipe.getIngredients().getFirst().getItems()) {
+            for (var input : stacks(ingredients(recipe).getFirst())) {
                 if (ItemStack.isSameItemSameComponents(item, input)) {
                     recipes.remove(recipe);
-                    return recipe.getResultItem(access)
+                    return result(recipe)
                             .copyWithCount(
                                     compressed
-                                            ? recipe.getIngredients().size()
-                                            : recipe.getResultItem(access).getCount());
+                                            ? ingredients(recipe).size()
+                                            : result(recipe).getCount());
                 }
             }
         }
@@ -263,7 +266,7 @@ public class CompressionService {
      * being split into some quantity of a "smaller" result item.
      */
     private static boolean isDecompressionRecipe(CraftingRecipe recipe) {
-        return recipe.getIngredients().stream().filter(i -> !i.isEmpty()).count() == 1;
+        return ingredients(recipe).size() == 1;
     }
 
     /**
@@ -273,14 +276,11 @@ public class CompressionService {
      * crafted.
      */
     private static boolean isCompressionRecipe(CraftingRecipe recipe, RegistryAccess access) {
-        if (recipe.getResultItem(access).getCount() != 1) {
+        if (result(recipe).getCount() != 1) {
             return false;
         }
 
-        var ingredients = recipe.getIngredients().stream()
-                .filter(i -> !i.isEmpty())
-                .distinct()
-                .toList();
+        var ingredients = ingredients(recipe).stream().distinct().toList();
 
         if (ingredients.isEmpty()) {
             return false;
@@ -291,17 +291,17 @@ public class CompressionService {
         }
 
         // Check further for any odd cases such as certain mods' metal ingot/block recipes post-unification
-        var first = ingredients.getFirst().getItems();
+        var first = stacks(ingredients.getFirst());
 
         for (var i = 1; i < ingredients.size(); i++) {
-            var stacks = ingredients.get(i).getItems();
+            var stacks = stacks(ingredients.get(i));
 
-            if (stacks.length != first.length) {
+            if (stacks.size() != first.size()) {
                 return false;
             }
 
-            for (var j = 0; j < stacks.length; j++) {
-                if (!ItemStack.isSameItemSameComponents(stacks[j], first[j])) {
+            for (var j = 0; j < stacks.size(); j++) {
+                if (!ItemStack.isSameItemSameComponents(stacks.get(j), first.get(j))) {
                     return false;
                 }
             }
@@ -326,12 +326,12 @@ public class CompressionService {
             return false;
         }
 
-        var testInput = recipe.getIngredients().getFirst().getItems();
-        var testOutput = recipe.getResultItem(access).getItem();
+        var testInput = stacks(ingredients(recipe).getFirst());
+        var testOutput = result(recipe).getItem();
 
         for (var candidate : candidates) {
-            var input = candidate.getIngredients().getFirst().getItems();
-            var output = candidate.getResultItem(access).getItem();
+            var input = stacks(ingredients(candidate).getFirst());
+            var output = result(candidate).getItem();
 
             var compressible = false;
             var decompressible = false;
@@ -351,8 +351,8 @@ public class CompressionService {
             }
 
             // spotless:off
-            var sameQuantity = candidate.getResultItem(access).getCount() == recipe.getIngredients().size()
-                            && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
+            var sameQuantity = result(candidate).getCount() == ingredients(recipe).size()
+                            && result(recipe).getCount() == ingredients(candidate).size();
             // spotless:on
 
             if (compressible && decompressible && sameQuantity) {
@@ -370,24 +370,21 @@ public class CompressionService {
      */
     private static boolean overrideRecipe(
             CraftingRecipe recipe, List<CompressionOverride> overrides, RegistryAccess access) {
-        var output = recipe.getResultItem(access);
+        var output = result(recipe);
 
         if (isBlacklisted(output)) {
             return false;
         }
 
-        var ingredients = recipe.getIngredients().stream()
-                .filter(ingredient -> !ingredient.isEmpty())
-                .toList();
+        var ingredients = ingredients(recipe);
+        if (ingredients.isEmpty()) {
+            return false;
+        }
 
-        for (var input : ingredients.getFirst().getItems()) {
-            var inputVariant = input.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
+        for (var input : stacks(ingredients.getFirst())) {
+            var inputVariant = input.typeHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE);
 
-            if (inputVariant == null) {
-                continue;
-            }
-
-            if (inputVariant != output.getItem()) {
+            if (inputVariant == null || inputVariant != output.getItem()) {
                 continue;
             }
 
@@ -411,7 +408,24 @@ public class CompressionService {
      * (or equivalently, the "air" item that this value resolves to) specifies that this item should be excluded.
      */
     private static boolean isBlacklisted(ItemStack stack) {
-        return stack.getItemHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
+        return stack.typeHolder().getData(MEGADataMaps.COMPRESSION_OVERRIDE) == Items.AIR;
+    }
+
+    private static List<Ingredient> ingredients(CraftingRecipe recipe) {
+        return CraftingRecipeUtil.getIngredients(recipe).stream()
+                .flatMap(Optional::stream)
+                .toList();
+    }
+
+    private static List<ItemStack> stacks(Ingredient ingredient) {
+        return ingredient
+                .items()
+                .map(holder -> holder.value().getDefaultInstance())
+                .toList();
+    }
+
+    private static ItemStack result(CraftingRecipe recipe) {
+        return CraftingRecipeUtil.getResult(recipe);
     }
 
     static String variantString(ItemStack stack) {

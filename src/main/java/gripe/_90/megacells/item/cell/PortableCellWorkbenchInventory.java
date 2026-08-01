@@ -2,12 +2,12 @@ package gripe._90.megacells.item.cell;
 
 import java.util.List;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import appeng.api.config.CopyMode;
 import appeng.api.config.Settings;
@@ -141,13 +141,13 @@ public class PortableCellWorkbenchInventory extends AppEngInternalInventory impl
         }
 
         @Override
-        public void readFromNBT(CompoundTag data, String subtag, HolderLookup.Provider registries) {
-            delegate.readFromNBT(data, subtag, registries);
+        public void readFromNBT(ValueInput input, String subtag) {
+            delegate.readFromNBT(input, subtag);
         }
 
         @Override
-        public void writeToNBT(CompoundTag data, String subtag, HolderLookup.Provider registries) {
-            delegate.writeToNBT(data, subtag, registries);
+        public void writeToNBT(ValueOutput output, String subtag) {
+            delegate.writeToNBT(output, subtag);
         }
 
         @Override

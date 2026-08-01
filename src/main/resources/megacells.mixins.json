@@ -10,10 +10,7 @@
     "ItemEntityMixin",
     "ItemMenuHostMixin"
   ],
-  "client": [
-    "client.BuiltInModelHooksMixin",
-    "client.CellWorkbenchScreenMixin"
-  ],
+  "client": ["client.CellWorkbenchScreenMixin"],
   "injectors": {
     "defaultRequire": 1
   }

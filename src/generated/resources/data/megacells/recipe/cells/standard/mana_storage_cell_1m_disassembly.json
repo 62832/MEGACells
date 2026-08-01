@@ -9,11 +9,9 @@
   "cell": "megacells:mana_storage_cell_1m",
   "cell_disassembly_items": [
     {
-      "count": 1,
       "id": "megacells:cell_component_1m"
     },
     {
-      "count": 1,
       "id": "megacells:mega_mana_cell_housing"
     }
   ]

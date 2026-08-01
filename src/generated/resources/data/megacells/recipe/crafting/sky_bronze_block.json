@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "tag": "c:ingots/sky_bronze"
-    }
+    "#": "#c:ingots/sky_bronze"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:sky_bronze_block"
   }
 }

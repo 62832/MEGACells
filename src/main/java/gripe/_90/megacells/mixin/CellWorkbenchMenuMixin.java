@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
@@ -26,7 +27,7 @@ public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkben
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void registerAction(int id, Inventory ip, CellWorkbenchBlockEntity te, CallbackInfo ci) {
-        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, Boolean.class, this::mega$nextCompressionLimit);
+        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, ByteBufCodecs.BOOL, this::mega$nextCompressionLimit);
     }
 
     @Override

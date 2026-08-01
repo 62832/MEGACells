@@ -8,24 +8,17 @@ import net.minecraft.world.phys.Vec3;
 import appeng.api.networking.GridFlags;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartItem;
-import appeng.api.parts.IPartModel;
 import appeng.helpers.IPriorityHost;
-import appeng.items.parts.PartModels;
 import appeng.menu.ISubMenu;
 import appeng.menu.MenuOpener;
 import appeng.menu.implementations.PriorityMenu;
 import appeng.menu.locator.MenuLocators;
 import appeng.parts.AEBasePart;
-import appeng.parts.PartModel;
 
-import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.misc.DecompressionService;
 
 public class DecompressionModulePart extends AEBasePart implements IPriorityHost {
-    @PartModels
-    private static final IPartModel MODEL = new PartModel(MEGACells.makeId("part/decompression_module"));
-
     public DecompressionModulePart(IPartItem<?> partItem) {
         super(partItem);
         getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL).setIdlePowerUsage(10.0);
@@ -33,7 +26,7 @@ public class DecompressionModulePart extends AEBasePart implements IPriorityHost
 
     @Override
     public boolean onUseWithoutItem(Player player, Vec3 pos) {
-        if (!player.getCommandSenderWorld().isClientSide()) {
+        if (!player.level().isClientSide()) {
             MenuOpener.open(PriorityMenu.TYPE, player, MenuLocators.forPart(this));
         }
 
@@ -72,10 +65,5 @@ public class DecompressionModulePart extends AEBasePart implements IPriorityHost
     public void getBoxes(IPartCollisionHelper bch) {
         bch.addBox(3, 3, 12, 13, 13, 16);
         bch.addBox(5, 5, 11, 11, 11, 12);
-    }
-
-    @Override
-    public IPartModel getStaticModels() {
-        return MODEL;
     }
 }

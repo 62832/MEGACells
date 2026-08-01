@@ -1,42 +1,76 @@
 package gripe._90.megacells.datagen;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.mojang.math.Quadrant;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.blockstates.PropertyDispatch;
-import net.minecraft.data.models.blockstates.Variant;
-import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.blockstate.CustomBlockStateModelBuilder;
 
-import appeng.api.orientation.BlockOrientation;
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
+import appeng.client.item.EnergyFillLevelProperty;
+import appeng.client.item.PortableCellColorTintSource;
+import appeng.client.item.StorageCellStateTintSource;
 import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
-import appeng.datagen.providers.models.AE2BlockStateProvider;
-import appeng.init.client.InitItemModelsProperties;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
+import gripe._90.megacells.client.render.MEGACraftingUnitModelProvider;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 
-public class MEGAModelProvider extends AE2BlockStateProvider {
-    public MEGAModelProvider(PackOutput output, ExistingFileHelper existing) {
-        super(output, MEGACells.MODID, existing);
+public class MEGAModelProvider extends ModelProvider {
+    private BlockModelGenerators blockModels;
+    private ItemModelGenerators itemModels;
+
+    public MEGAModelProvider(PackOutput output) {
+        super(output, MEGACells.MODID);
+    }
+
+    // AE2's own AE2ModelProvider already covers AE2's namespace; MEGA only ever generated
+    // for its own explicit set of blocks/items, not everything under its namespace, so opt out
+    // of the strict coverage validation the base class would otherwise enforce.
+    @Override
+    protected Stream<? extends Holder<Block>> getKnownBlocks() {
+        return Stream.empty();
     }
 
     @Override
-    protected void registerStatesAndModels() {
+    protected Stream<? extends Holder<Item>> getKnownItems() {
+        return Stream.empty();
+    }
+
+    @Override
+    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        this.blockModels = blockModels;
+        this.itemModels = itemModels;
+
         basicItem(MEGAItems.SKY_STEEL_INGOT);
         basicItem(MEGAItems.SKY_BRONZE_INGOT);
         basicItem(MEGAItems.SKY_OSMIUM_INGOT);
@@ -80,154 +114,80 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         driveCell(MEGAItems.BULK_ITEM_CELL, 0);
         driveCell(MEGAItems.RADIOACTIVE_CHEMICAL_CELL, 2);
 
-        simpleBlockWithItem(MEGABlocks.SKY_STEEL_BLOCK.block(), cubeAll(MEGABlocks.SKY_STEEL_BLOCK.block()));
-        simpleBlockWithItem(MEGABlocks.SKY_BRONZE_BLOCK.block(), cubeAll(MEGABlocks.SKY_BRONZE_BLOCK.block()));
-        simpleBlockWithItem(MEGABlocks.SKY_OSMIUM_BLOCK.block(), cubeAll(MEGABlocks.SKY_OSMIUM_BLOCK.block()));
-        simpleBlockWithItem(MEGABlocks.MEGA_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_INTERFACE.block()));
-        simpleBlockWithItem(MEGABlocks.MEGA_EMC_INTERFACE.block(), cubeAll(MEGABlocks.MEGA_EMC_INTERFACE.block()));
+        simpleCube(MEGABlocks.SKY_STEEL_BLOCK.block());
+        simpleCube(MEGABlocks.SKY_BRONZE_BLOCK.block());
+        simpleCube(MEGABlocks.SKY_OSMIUM_BLOCK.block());
+        simpleCube(MEGABlocks.MEGA_INTERFACE.block());
+        simpleCube(MEGABlocks.MEGA_EMC_INTERFACE.block());
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);
         interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER);
         interfaceOrProviderPart(MEGAItems.MEGA_EMC_INTERFACE);
 
-        // CRAFTING UNITS
-        for (var type : MEGACraftingUnitType.values()) {
-            if (type == MEGACraftingUnitType.MONITOR) continue;
-
-            var craftingBlock = type.getDefinition().block();
-            var name = type.getAffix();
-            var blockModel = models().cubeAll("block/crafting/" + name, MEGACells.makeId("block/crafting/" + name));
-            getVariantBuilder(craftingBlock)
-                    .partialState()
-                    .with(AbstractCraftingUnitBlock.FORMED, false)
-                    .setModels(new ConfiguredModel(blockModel))
-                    .partialState()
-                    .with(AbstractCraftingUnitBlock.FORMED, true)
-                    .setModels(new ConfiguredModel(models().getBuilder("block/crafting/" + name + "_formed")));
-            simpleBlockItem(craftingBlock, blockModel);
-        }
-
-        // CRAFTING MONITOR
-        var craftingUnit = MEGACells.makeId("block/crafting/unit");
-        var craftingMonitor = MEGACells.makeId("block/crafting/monitor");
-        var monitorUnformed = models().cube(
-                        "block/crafting/monitor",
-                        craftingUnit,
-                        craftingUnit,
-                        craftingMonitor,
-                        craftingUnit,
-                        craftingUnit,
-                        craftingUnit)
-                .texture("particle", craftingMonitor);
-        simpleBlockItem(MEGABlocks.CRAFTING_MONITOR.block(), monitorUnformed);
-        multiVariantGenerator(MEGABlocks.CRAFTING_MONITOR)
-                .with(PropertyDispatch.properties(AbstractCraftingUnitBlock.FORMED, BlockStateProperties.FACING)
-                        .generate((formed, facing) -> {
-                            if (formed) {
-                                return Variant.variant()
-                                        .with(
-                                                VariantProperties.MODEL,
-                                                models().getBuilder("block/crafting/monitor_formed")
-                                                        .getLocation());
-                            } else {
-                                return applyOrientation(
-                                        Variant.variant().with(VariantProperties.MODEL, monitorUnformed.getLocation()),
-                                        BlockOrientation.get(facing));
-                            }
-                        }));
-
-        // ENERGY CELL
-        var energyCellPath = MEGABlocks.MEGA_ENERGY_CELL.id().getPath();
-        var energyCellModels = new ArrayList<ModelFile>();
-
-        for (var i = 0; i < 5; i++) {
-            var model =
-                    models().cubeAll(energyCellPath + "_" + i, MEGACells.makeId("block/" + energyCellPath + "_" + i));
-            getVariantBuilder(MEGABlocks.MEGA_ENERGY_CELL.block())
-                    .partialState()
-                    .with(EnergyCellBlock.ENERGY_STORAGE, i)
-                    .setModels(new ConfiguredModel(model));
-            energyCellModels.add(model);
-        }
-
-        for (var i = 1; i < energyCellModels.size(); i++) {
-            // The predicate matches "greater than", meaning for fill-level > 0 the first non-empty texture is used
-            itemModels()
-                    .withExistingParent(
-                            energyCellPath, energyCellModels.getFirst().getLocation())
-                    .override()
-                    .predicate(InitItemModelsProperties.ENERGY_FILL_LEVEL_ID, i / (float) energyCellModels.size())
-                    .model(energyCellModels.get(i));
-        }
-
-        // PATTERN PROVIDER
-        var patternProviderNormal = cubeAll(MEGABlocks.MEGA_PATTERN_PROVIDER.block());
-        simpleBlockItem(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), patternProviderNormal);
-
-        var patternProviderOriented = models().cubeBottomTop(
-                        "block/mega_pattern_provider_oriented",
-                        MEGACells.makeId("block/mega_pattern_provider_alternate_arrow"),
-                        MEGACells.makeId("block/mega_pattern_provider_alternate"),
-                        MEGACells.makeId("block/mega_pattern_provider_alternate_front"));
-        multiVariantGenerator(MEGABlocks.MEGA_PATTERN_PROVIDER, Variant.variant())
-                .with(PropertyDispatch.property(PatternProviderBlock.PUSH_DIRECTION)
-                        .generate(pushDirection -> {
-                            var forward = pushDirection.getDirection();
-                            if (forward == null) {
-                                return Variant.variant()
-                                        .with(VariantProperties.MODEL, patternProviderNormal.getLocation());
-                            } else {
-                                var orientation = BlockOrientation.get(forward);
-                                return applyRotation(
-                                        Variant.variant()
-                                                .with(VariantProperties.MODEL, patternProviderOriented.getLocation()),
-                                        // + 90 because the default model is oriented UP, while block orientation
-                                        // assumes NORTH
-                                        orientation.getAngleX() + 90,
-                                        orientation.getAngleY(),
-                                        0);
-                            }
-                        }));
+        craftingUnits();
+        craftingMonitor();
+        energyCell();
+        patternProvider();
     }
 
     private void basicItem(ItemLike item) {
-        itemModels().basicItem(item.asItem());
+        itemModels.generateFlatItem(item.asItem(), ModelTemplates.FLAT_ITEM);
+    }
+
+    private void simpleCube(Block block) {
+        blockModels.createTrivialCube(block);
+        blockModels.registerSimpleItemModel(block, ModelLocationUtils.getModelLocation(block));
     }
 
     private void cell(ItemDefinition<?> cell, String housingType) {
         var id = cell.id().getPath();
         var tierSuffix = id.substring(id.lastIndexOf('_'));
 
-        itemModels()
-                .singleTexture(
-                        id,
-                        mcLoc("item/generated"),
-                        "layer0",
-                        MEGACells.makeId("item/mega_" + housingType + "_cell_housing"))
-                .texture("layer1", AppEng.makeId("item/storage_cell_led"))
-                .texture("layer2", MEGACells.makeId("item/storage_cell_side" + tierSuffix));
+        var target = ModelLocationUtils.getModelLocation(cell.asItem());
+        itemModels.generateLayeredItem(
+                target,
+                new Material(MEGACells.makeId("item/mega_" + housingType + "_cell_housing")),
+                new Material(AppEng.makeId("item/storage_cell_led")),
+                new Material(MEGACells.makeId("item/storage_cell_side" + tierSuffix)));
+        registerCellTint(cell.asItem(), target);
     }
 
     private void cell(ItemDefinition<?> cell) {
         var id = cell.id().getPath();
-        itemModels()
-                .singleTexture(id, mcLoc("item/generated"), "layer0", MEGACells.makeId("item/" + id))
-                .texture("layer1", AppEng.makeId("item/storage_cell_led"));
+        var target = ModelLocationUtils.getModelLocation(cell.asItem());
+        itemModels.generateLayeredItem(
+                target,
+                new Material(MEGACells.makeId("item/" + id)),
+                new Material(AppEng.makeId("item/storage_cell_led")));
+        registerCellTint(cell.asItem(), target);
     }
 
     private void portable(ItemDefinition<?> portable, String housingType) {
         var id = portable.id().getPath();
         var tierSuffix = id.substring(id.lastIndexOf('_'));
+        var target = ModelLocationUtils.getModelLocation(portable.asItem());
 
-        itemModels()
-                .singleTexture(
-                        id,
-                        mcLoc("item/generated"),
-                        "layer0",
-                        MEGACells.makeId("item/portable_cell_" + housingType + "_housing"))
-                .texture("layer1", AppEng.makeId("item/portable_cell_led"))
-                .texture("layer2", AppEng.makeId("item/portable_cell_screen"))
-                .texture("layer3", MEGACells.makeId("item/portable_cell_side" + tierSuffix));
+        rawModel(
+                target,
+                "minecraft:item/generated",
+                Map.of(
+                        "layer0", MEGACells.makeId("item/portable_cell_" + housingType + "_housing"),
+                        "layer1", AppEng.makeId("item/portable_cell_led"),
+                        "layer2", AppEng.makeId("item/portable_cell_screen"),
+                        "layer3", MEGACells.makeId("item/portable_cell_side" + tierSuffix)));
+        blockModels.itemModelOutput.accept(
+                portable.asItem(),
+                ItemModelUtils.tintedModel(
+                        target,
+                        ItemModelUtils.constantTint(-1),
+                        new StorageCellStateTintSource(),
+                        new PortableCellColorTintSource()));
+    }
+
+    private void registerCellTint(Item item, Identifier target) {
+        blockModels.itemModelOutput.accept(
+                item,
+                ItemModelUtils.tintedModel(target, ItemModelUtils.constantTint(-1), new StorageCellStateTintSource()));
     }
 
     private void driveCell(MEGAItems.CellDefinition cell) {
@@ -248,48 +208,80 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
                 };
 
         var tierOffset = (cell.tier().index() - 6) * 2;
-        driveCell(cell.tier().namePrefix() + "_" + cell.keyType() + "_cell", "standard_cell", typeOffset)
-                .texture("tier", "block/drive/cells/standard_cell_tiers")
-                .element()
-                .to(6, 2, 2)
-                .face(Direction.NORTH)
-                .uvs(0, tierOffset, 6, tierOffset + 2)
-                .end()
-                .face(Direction.UP)
-                .uvs(6, tierOffset, 0, tierOffset + 2)
-                .end()
-                .face(Direction.DOWN)
-                .uvs(6, tierOffset, 0, tierOffset + 2)
-                .end()
-                .faces((dir, builder) ->
-                        builder.texture("#tier").cullface(Direction.NORTH).end())
-                .end();
+        var name = cell.tier().namePrefix() + "_" + cell.keyType() + "_cell";
+
+        var textures = new JsonObject();
+        textures.addProperty(
+                "cell", MEGACells.makeId("block/drive/cells/standard_cell").toString());
+        textures.addProperty(
+                "particle", MEGACells.makeId("block/drive/cells/standard_cell").toString());
+        textures.addProperty(
+                "tier",
+                MEGACells.makeId("block/drive/cells/standard_cell_tiers").toString());
+
+        var elements = new JsonArray();
+        elements.add(driveCellElement("#cell", typeOffset));
+        elements.add(driveCellElement("#tier", tierOffset));
+
+        driveCellJson(MEGACells.makeId("block/drive/cells/" + name), textures, elements);
     }
 
     private void driveCell(ItemDefinition<?> cell, int offset) {
-        driveCell(cell.id().getPath(), "misc_cell", offset);
+        var id = cell.id().getPath();
+
+        var textures = new JsonObject();
+        textures.addProperty(
+                "cell", MEGACells.makeId("block/drive/cells/misc_cell").toString());
+        textures.addProperty(
+                "particle", MEGACells.makeId("block/drive/cells/misc_cell").toString());
+
+        var elements = new JsonArray();
+        elements.add(driveCellElement("#cell", offset));
+
+        driveCellJson(MEGACells.makeId("block/drive/cells/" + id), textures, elements);
     }
 
-    private BlockModelBuilder driveCell(String cell, String texture, int offset) {
-        var texturePrefix = "block/drive/cells/";
-        return models().getBuilder(texturePrefix + cell)
-                .ao(false)
-                .texture("cell", texturePrefix + texture)
-                .texture("particle", texturePrefix + texture)
-                .element()
-                .to(6, 2, 2)
-                .face(Direction.NORTH)
-                .uvs(0, offset, 6, offset + 2)
-                .end()
-                .face(Direction.UP)
-                .uvs(6, offset, 0, offset + 2)
-                .end()
-                .face(Direction.DOWN)
-                .uvs(6, offset, 0, offset + 2)
-                .end()
-                .faces((dir, builder) ->
-                        builder.texture("#cell").cullface(Direction.NORTH).end())
-                .end();
+    private void driveCellJson(Identifier id, JsonObject textures, JsonArray elements) {
+        var json = new JsonObject();
+        json.addProperty("ambientocclusion", false);
+        json.add("textures", textures);
+        json.add("elements", elements);
+        rawJson(id, json);
+    }
+
+    private static JsonObject driveCellElement(String texture, int offset) {
+        var element = new JsonObject();
+        element.add("from", vec3(0, 0, 0));
+        element.add("to", vec3(6, 2, 2));
+
+        var faces = new JsonObject();
+        faces.add("north", face(0, offset, 6, offset + 2, texture));
+        faces.add("up", face(6, offset, 0, offset + 2, texture));
+        faces.add("down", face(6, offset, 0, offset + 2, texture));
+        element.add("faces", faces);
+
+        return element;
+    }
+
+    private static JsonArray vec3(int x, int y, int z) {
+        var array = new JsonArray();
+        array.add(x);
+        array.add(y);
+        array.add(z);
+        return array;
+    }
+
+    private static JsonObject face(double u1, double v1, double u2, double v2, String texture) {
+        var face = new JsonObject();
+        var uv = new JsonArray();
+        uv.add(u1);
+        uv.add(v1);
+        uv.add(u2);
+        uv.add(v2);
+        face.add("uv", uv);
+        face.addProperty("texture", texture);
+        face.addProperty("cullface", "north");
+        return face;
     }
 
     private void interfaceOrProviderPart(ItemDefinition<?> part) {
@@ -299,22 +291,196 @@ public class MEGAModelProvider extends AE2BlockStateProvider {
         var back = MEGACells.makeId("part/" + partName + "_back");
         var sides = MEGACells.makeId("part/mega_monitor_sides");
 
-        models().singleTexture(
-                        "part/" + partName,
-                        AppEng.makeId("part/interface_base"),
-                        "sides_status",
-                        MEGACells.makeId("part/mega_monitor_sides_status"))
-                .texture("sides", sides)
-                .texture("front", front)
-                .texture("back", back)
-                .texture("particle", back);
-        itemModels()
-                .singleTexture("item/" + id, AppEng.makeId("item/cable_interface"), "sides", sides)
-                .texture("front", front)
-                .texture("back", back);
+        rawModel(MEGACells.makeId("part/" + partName), "ae2:part/interface_base", new LinkedHashMap<>() {
+            {
+                put("sides_status", MEGACells.makeId("part/mega_monitor_sides_status"));
+                put("sides", sides);
+                put("front", front);
+                put("back", back);
+                put("particle", back);
+            }
+        });
+        rawModel(MEGACells.makeId("item/" + id), "ae2:item/cable_interface", new LinkedHashMap<>() {
+            {
+                put("sides", sides);
+                put("front", front);
+                put("back", back);
+            }
+        });
+        blockModels.registerSimpleItemModel(part.asItem(), MEGACells.makeId("item/" + id));
     }
 
-    @NotNull
+    private void craftingUnits() {
+        for (var type : MEGACraftingUnitType.values()) {
+            if (type == MEGACraftingUnitType.MONITOR) {
+                continue;
+            }
+
+            var craftingBlock = type.getDefinition().block();
+            var name = type.getAffix();
+            var unformedModel = MEGACells.makeId("block/crafting/" + name);
+            rawModel(
+                    unformedModel,
+                    "minecraft:block/cube_all",
+                    Map.of("all", MEGACells.makeId("block/crafting/" + name)));
+
+            var formed = new CustomBlockStateModelBuilder.Simple(new MEGACraftingUnitModelProvider.Unbaked(type));
+
+            blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(craftingBlock)
+                    .with(PropertyDispatch.initial(AbstractCraftingUnitBlock.FORMED)
+                            .select(false, plainVariant(unformedModel))
+                            .select(true, MultiVariant.of(formed))));
+            blockModels.registerSimpleItemModel(craftingBlock, unformedModel);
+        }
+    }
+
+    private void craftingMonitor() {
+        var craftingUnit = MEGACells.makeId("block/crafting/unit");
+        var craftingMonitor = MEGACells.makeId("block/crafting/monitor");
+        var monitorUnformed = MEGACells.makeId("block/crafting/monitor");
+
+        rawModel(monitorUnformed, "minecraft:block/cube", new LinkedHashMap<>() {
+            {
+                put("north", craftingMonitor);
+                put("east", craftingUnit);
+                put("south", craftingUnit);
+                put("west", craftingUnit);
+                put("up", craftingUnit);
+                put("down", craftingUnit);
+                put("particle", craftingMonitor);
+            }
+        });
+
+        blockModels.registerSimpleItemModel(MEGABlocks.CRAFTING_MONITOR.block(), monitorUnformed);
+
+        var formed = new CustomBlockStateModelBuilder.Simple(
+                new MEGACraftingUnitModelProvider.Unbaked(MEGACraftingUnitType.MONITOR));
+
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(MEGABlocks.CRAFTING_MONITOR.block())
+                .with(PropertyDispatch.initial(AbstractCraftingUnitBlock.FORMED, BlockStateProperties.FACING)
+                        .generate((isFormed, facing) -> {
+                            if (isFormed) {
+                                return MultiVariant.of(formed);
+                            }
+
+                            return plainVariant(monitorUnformed).with(orient(facing));
+                        })));
+    }
+
+    private void energyCell() {
+        var energyCellPath = MEGABlocks.MEGA_ENERGY_CELL.id().getPath();
+        var energyCellModels = new ArrayList<Identifier>();
+
+        for (var i = 0; i < 5; i++) {
+            var model = MEGACells.makeId("block/" + energyCellPath + "_" + i);
+            rawModel(
+                    model,
+                    "minecraft:block/cube_all",
+                    Map.of("all", MEGACells.makeId("block/" + energyCellPath + "_" + i)));
+            energyCellModels.add(model);
+        }
+
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(MEGABlocks.MEGA_ENERGY_CELL.block())
+                .with(PropertyDispatch.initial(EnergyCellBlock.ENERGY_STORAGE)
+                        .generate(i -> plainVariant(energyCellModels.get(i)))));
+
+        var entries = new ArrayList<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry>();
+        for (var i = 1; i < energyCellModels.size(); i++) {
+            entries.add(ItemModelUtils.override(
+                    ItemModelUtils.plainModel(energyCellModels.get(i)), i / (float) energyCellModels.size()));
+        }
+
+        blockModels.itemModelOutput.accept(
+                MEGABlocks.MEGA_ENERGY_CELL.asItem(),
+                ItemModelUtils.rangeSelect(
+                        new EnergyFillLevelProperty(),
+                        ItemModelUtils.plainModel(energyCellModels.getFirst()),
+                        entries));
+    }
+
+    private void patternProvider() {
+        var normal = MEGACells.makeId("block/mega_pattern_provider");
+        rawModel(normal, "minecraft:block/cube_all", Map.of("all", normal));
+        blockModels.registerSimpleItemModel(MEGABlocks.MEGA_PATTERN_PROVIDER.block(), normal);
+
+        var oriented = MEGACells.makeId("block/mega_pattern_provider_oriented");
+        rawModel(oriented, "minecraft:block/cube_bottom_top", new LinkedHashMap<>() {
+            {
+                put("top", MEGACells.makeId("block/mega_pattern_provider_alternate_front"));
+                put("bottom", MEGACells.makeId("block/mega_pattern_provider_alternate"));
+                put("side", MEGACells.makeId("block/mega_pattern_provider_alternate_arrow"));
+            }
+        });
+
+        blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(MEGABlocks.MEGA_PATTERN_PROVIDER.block())
+                .with(PropertyDispatch.initial(PatternProviderBlock.PUSH_DIRECTION)
+                        .generate(pushDirection -> {
+                            var forward = pushDirection.getDirection();
+                            if (forward == null) {
+                                return plainVariant(normal);
+                            }
+
+                            // + 90 on X because the default model is oriented UP, while orientation assumes NORTH
+                            return switch (forward) {
+                                case DOWN -> plainVariant(oriented).with(xRot(Quadrant.R180));
+                                case UP -> plainVariant(oriented);
+                                case NORTH -> plainVariant(oriented).with(xRot(Quadrant.R90));
+                                case SOUTH ->
+                                    plainVariant(oriented)
+                                            .with(xRot(Quadrant.R90))
+                                            .with(yRot(Quadrant.R180));
+                                case EAST ->
+                                    plainVariant(oriented)
+                                            .with(xRot(Quadrant.R90))
+                                            .with(yRot(Quadrant.R90));
+                                case WEST ->
+                                    plainVariant(oriented)
+                                            .with(xRot(Quadrant.R90))
+                                            .with(yRot(Quadrant.R270));
+                            };
+                        })));
+    }
+
+    private static VariantMutator xRot(Quadrant quadrant) {
+        return VariantMutator.X_ROT.withValue(quadrant);
+    }
+
+    private static VariantMutator yRot(Quadrant quadrant) {
+        return VariantMutator.Y_ROT.withValue(quadrant);
+    }
+
+    private static VariantMutator orient(Direction facing) {
+        return switch (facing) {
+            case DOWN -> xRot(Quadrant.R180);
+            case UP -> xRot(Quadrant.R0);
+            case NORTH -> xRot(Quadrant.R90);
+            case SOUTH -> xRot(Quadrant.R90).then(yRot(Quadrant.R180));
+            case EAST -> xRot(Quadrant.R90).then(yRot(Quadrant.R90));
+            case WEST -> xRot(Quadrant.R90).then(yRot(Quadrant.R270));
+        };
+    }
+
+    private static MultiVariant plainVariant(Identifier model) {
+        return BlockModelGenerators.plainVariant(model);
+    }
+
+    private void rawModel(Identifier id, String parent, Map<String, Identifier> textures) {
+        var json = new JsonObject();
+        if (parent != null) {
+            json.addProperty("parent", parent);
+        }
+
+        var texturesJson = new JsonObject();
+        textures.forEach((slot, texture) -> texturesJson.addProperty(slot, texture.toString()));
+        json.add("textures", texturesJson);
+
+        rawJson(id, json);
+    }
+
+    private void rawJson(Identifier id, JsonObject json) {
+        blockModels.modelOutput.accept(id, () -> json);
+    }
+
     @Override
     public String getName() {
         return "Block States / Models";

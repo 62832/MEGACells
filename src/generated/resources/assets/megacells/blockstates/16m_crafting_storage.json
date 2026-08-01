@@ -4,7 +4,8 @@
       "model": "megacells:block/crafting/16m_storage"
     },
     "formed=true": {
-      "model": "megacells:block/crafting/16m_storage_formed"
+      "type": "megacells:crafting_cube",
+      "unit_type": "16m_storage"
     }
   }
 }

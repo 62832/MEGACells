@@ -8,34 +8,16 @@
   "type": "ars_nouveau:enchanting_apparatus",
   "keepNbtOfReagent": false,
   "pedestalItems": [
-    {
-      "item": "ars_nouveau:manipulation_essence"
-    },
-    {
-      "item": "ars_nouveau:manipulation_essence"
-    },
-    {
-      "item": "ars_nouveau:manipulation_essence"
-    },
-    {
-      "item": "ars_nouveau:source_gem_block"
-    },
-    {
-      "item": "ars_nouveau:source_gem_block"
-    },
-    {
-      "item": "megacells:sky_steel_ingot"
-    },
-    {
-      "item": "megacells:sky_steel_ingot"
-    },
-    {
-      "item": "megacells:sky_steel_ingot"
-    }
+    "ars_nouveau:manipulation_essence",
+    "ars_nouveau:manipulation_essence",
+    "ars_nouveau:manipulation_essence",
+    "ars_nouveau:source_gem_block",
+    "ars_nouveau:source_gem_block",
+    "megacells:sky_steel_ingot",
+    "megacells:sky_steel_ingot",
+    "megacells:sky_steel_ingot"
   ],
-  "reagent": {
-    "item": "arseng:source_cell_housing"
-  },
+  "reagent": "arseng:source_cell_housing",
   "result": {
     "count": 1,
     "id": "megacells:mega_source_cell_housing"

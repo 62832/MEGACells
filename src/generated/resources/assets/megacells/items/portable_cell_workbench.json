@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "megacells:item/portable_cell_workbench"
+  }
+}

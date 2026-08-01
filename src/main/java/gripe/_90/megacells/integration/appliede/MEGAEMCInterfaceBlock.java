@@ -43,7 +43,7 @@ public class MEGAEMCInterfaceBlock extends AEBaseEntityBlock<MEGAEMCInterfaceBlo
                 be.openMenu(player, MenuLocators.forBlockEntity(be));
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
         return InteractionResult.PASS;

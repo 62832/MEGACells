@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -40,12 +40,12 @@ public class PortableCellWorkbenchItem extends AEBaseItem implements IMenuItem {
     @ParametersAreNonnullByDefault
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide()) {
             MenuOpener.open(MEGAMenus.PORTABLE_CELL_WORKBENCH.get(), player, MenuLocators.forHand(player, hand));
         }
 
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @NotNull

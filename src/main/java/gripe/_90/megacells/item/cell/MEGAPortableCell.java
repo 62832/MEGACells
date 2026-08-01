@@ -2,7 +2,7 @@ package gripe._90.megacells.item.cell;
 
 import java.util.Objects;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,7 +31,7 @@ public class MEGAPortableCell extends PortableCellItem {
     }
 
     @Override
-    public ResourceLocation getRecipeId() {
+    public Identifier getRecipeId() {
         return MEGACells.makeId(
                 "cells/portable/" + Objects.requireNonNull(getRegistryName()).getPath());
     }
