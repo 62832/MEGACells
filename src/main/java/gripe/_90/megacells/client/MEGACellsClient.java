@@ -129,6 +129,10 @@ public class MEGACellsClient {
             StorageCellModels.registerModel(
                     MEGAItems.BULK_ITEM_CELL,
                     MEGACells.makeId(modelPrefix + MEGAItems.BULK_ITEM_CELL.id().getPath()));
+            
+            StorageCellModels.registerModel(
+                    MEGAItems.BULK_FLUID_CELL,
+                    MEGACells.makeId(modelPrefix + MEGAItems.BULK_FLUID_CELL.id().getPath()));
 
             StorageCellModels.registerModel(
                     MEGAItems.RADIOACTIVE_CHEMICAL_CELL,
@@ -146,6 +150,7 @@ public class MEGACellsClient {
         }
 
         standardCells.add(MEGAItems.BULK_ITEM_CELL);
+        standardCells.add(MEGAItems.BULK_FLUID_CELL);
         standardCells.add(MEGAItems.RADIOACTIVE_CHEMICAL_CELL);
 
         event.register(
