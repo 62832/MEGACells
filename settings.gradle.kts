@@ -92,6 +92,25 @@ run {
                 library("appbot", "curse.maven", "applied-botanics-addon-610632").version("7234122")
                 library("botania", "vazkii.botania", "botania-neoforge-1.21.1").version("451-SNAPSHOT")
 
+                // version("arseng", "2.0.5-beta")
+                // library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
+                // library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.10.0.1183")
+                // 
+                // library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
+                // library("glodium", "curse.maven", "glodium-957920").version("5821676")
+                // 
+                // library("appex", "curse.maven", "applied-experienced-1157608").version("6112629")
+                // library("explib", "curse.maven", "experiencelib-1156551").version("5992832")
+                // 
+                // library("appliede", "curse.maven", "appliede-1009940").version("6430033")
+                // library("projecte", "curse.maven", "projecte-226410").version("6301953")
+                // 
+                // library("appsoul", "curse.maven", "applied-soul-1337114").version("7653184")
+                // library("industrialforegoing", "curse.maven", "industrial-foregoing-266515").version("6626624")
+                // library("ifsouls", "curse.maven", "industrial-foregoing-souls-904394").version("6235883")
+                // library("titanium", "curse.maven", "titanium-287342").version("6875285")
+                // library("soulpliedenergistics", "curse.maven", "soulplied-energistics-1143614").version("6771121")
+
                 // ArsEng, AppEx and Applied Soul each have their own storage cell item class
                 // (SourceCellItem, ExperienceStorageCell, SoulCellItem) that directly overrides
                 // Item#use() with a signature that no longer exists in 26.1, which javac can't route
