@@ -84,9 +84,6 @@ dependencies {
     testRuntimeOnly(testlibs.junit.platform)
 }
 
-val generatedResourcesClient = layout.buildDirectory.dir("generatedResources/client")
-val generatedResourcesServer = layout.buildDirectory.dir("generatedResources/server")
-
 neoForge {
     version = core.versions.neoforge.get()
 
@@ -124,7 +121,8 @@ neoForge {
             programArguments.addAll(
                 "--mod", modId,
                 "--all",
-                "--output", generatedResourcesClient.get().asFile.absolutePath,
+                "--output", layout.buildDirectory.dir("generatedResources/client").get().asFile
+                    .absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
             )
@@ -138,7 +136,8 @@ neoForge {
             programArguments.addAll(
                 "--mod", modId,
                 "--all",
-                "--output", generatedResourcesServer.get().asFile.absolutePath,
+                "--output", layout.buildDirectory.dir("generatedResources/server").get().asFile
+                    .absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
             )
@@ -162,8 +161,8 @@ tasks {
     register<Sync>("syncGeneratedResources") {
         group = "megacells"
         description = "Merges clientData/serverData datagen output into src/generated/resources."
-        from(generatedResourcesClient) { exclude(".cache/**") }
-        from(generatedResourcesServer) { exclude(".cache/**") }
+        from(layout.buildDirectory.dir("generatedResources/client")) { exclude(".cache/**") }
+        from(layout.buildDirectory.dir("generatedResources/server")) { exclude(".cache/**") }
         into("src/generated/resources")
         dependsOn("runClientData", "runServerData")
 
