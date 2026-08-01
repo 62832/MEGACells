@@ -1,9 +1,9 @@
 package gripe._90.megacells.item.cell;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.AEKeyType;
@@ -57,7 +58,8 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack is, TooltipContext context, List<Component> lines, TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack is, TooltipContext context, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
         var inv = (BulkCellInventory) HANDLER.getCellInventory(is, null);
 
         if (inv != null) {
@@ -65,32 +67,32 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
             var filterItem = inv.getFilterItem();
 
             if (storedItem != null) {
-                lines.add(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
+                lines.accept(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
                 var quantity = inv.getStoredQuantity();
-                lines.add(Tooltips.of(MEGATranslations.Quantity.text(
+                lines.accept(Tooltips.of(MEGATranslations.Quantity.text(
                         quantity < Long.MAX_VALUE
                                 ? Tooltips.ofNumber(quantity)
                                 : MEGATranslations.ALot.text().withStyle(Tooltips.NUMBER_TEXT))));
             } else {
-                lines.add(Tooltips.of(MEGATranslations.Empty.text()));
+                lines.accept(Tooltips.of(MEGATranslations.Empty.text()));
             }
 
             if (filterItem != null) {
                 if (storedItem == null) {
-                    lines.add(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
+                    lines.accept(Tooltips.of(MEGATranslations.PartitionedFor.text(filterItem.getDisplayName())));
                 } else if (!storedItem.equals(filterItem)) {
-                    lines.add(MEGATranslations.MismatchedFilter.text(filterItem.getDisplayName())
+                    lines.accept(MEGATranslations.MismatchedFilter.text(filterItem.getDisplayName())
                             .withStyle(ChatFormatting.DARK_RED));
                 }
             } else {
-                lines.add(
+                lines.accept(
                         storedItem != null
                                 ? MEGATranslations.MismatchedFilter.text(MEGATranslations.Empty.text())
                                         .withStyle(ChatFormatting.DARK_RED)
                                 : Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
 
-            lines.add(Tooltips.of(MEGATranslations.Compression.text(
+            lines.accept(Tooltips.of(MEGATranslations.Compression.text(
                     inv.isCompressionEnabled()
                             ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
                             : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
@@ -98,7 +100,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
             var trace = inv.getTraceUnits();
 
             if (trace > 0) {
-                lines.add(Tooltips.of(
+                lines.accept(Tooltips.of(
                                 inv.isCompressionEnabled()
                                         ? MEGATranslations.TraceUnits.text(
                                                 Tooltips.ofNumber(trace),
@@ -111,7 +113,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                 var cutoffItem = inv.getCutoffItem();
 
                 if (!ItemStack.isSameItemSameComponents(cutoffItem, inv.getHighestVariant())) {
-                    lines.add(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getHoverName())));
+                    lines.accept(Tooltips.of(MEGATranslations.Cutoff.text(cutoffItem.getHoverName())));
                 }
             }
         }

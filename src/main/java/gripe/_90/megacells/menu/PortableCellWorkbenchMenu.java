@@ -7,6 +7,7 @@ import com.google.common.collect.Iterators;
 
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
@@ -19,8 +20,8 @@ import appeng.api.storage.StorageCells;
 import appeng.api.util.IConfigManager;
 import appeng.helpers.externalstorage.GenericStackInv;
 import appeng.menu.SlotSemantics;
+import appeng.menu.guisync.ClientActionKey;
 import appeng.menu.guisync.GuiSync;
-import appeng.menu.implementations.CellWorkbenchMenu;
 import appeng.menu.implementations.UpgradeableMenu;
 import appeng.menu.slot.CellPartitionSlot;
 import appeng.menu.slot.IPartitionSlotHost;
@@ -38,21 +39,26 @@ import gripe._90.megacells.item.cell.PortableCellWorkbenchMenuHost;
  */
 public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkbenchMenuHost>
         implements IPartitionSlotHost, CompressionCutoffHost {
+    private static final ClientActionKey<Void> ACTION_NEXT_COPYMODE = new ClientActionKey<>("nextCopyMode");
+    private static final ClientActionKey<Void> ACTION_PARTITION = new ClientActionKey<>("partition");
+    private static final ClientActionKey<Void> ACTION_CLEAR = new ClientActionKey<>("clear");
+    private static final ClientActionKey<FuzzyMode> ACTION_SET_FUZZY_MODE = new ClientActionKey<>("setFuzzyMode");
+
     @GuiSync(2)
     public CopyMode copyMode = CopyMode.CLEAR_ON_REMOVE;
 
     public PortableCellWorkbenchMenu(int id, Inventory ip, PortableCellWorkbenchMenuHost host) {
         super(MEGAMenus.PORTABLE_CELL_WORKBENCH.get(), id, ip, host);
-        registerClientAction(CellWorkbenchMenu.ACTION_NEXT_COPYMODE, this::nextWorkBenchCopyMode);
-        registerClientAction(CellWorkbenchMenu.ACTION_PARTITION, this::partition);
-        registerClientAction(CellWorkbenchMenu.ACTION_CLEAR, this::clear);
-        registerClientAction(CellWorkbenchMenu.ACTION_SET_FUZZY_MODE, FuzzyMode.class, this::setCellFuzzyMode);
-        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, Boolean.class, this::mega$nextCompressionLimit);
+        registerClientAction(ACTION_NEXT_COPYMODE, this::nextWorkBenchCopyMode);
+        registerClientAction(ACTION_PARTITION, this::partition);
+        registerClientAction(ACTION_CLEAR, this::clear);
+        registerClientAction(ACTION_SET_FUZZY_MODE, FuzzyMode.STREAM_CODEC, this::setCellFuzzyMode);
+        registerClientAction(ACTION_SET_COMPRESSION_LIMIT, ByteBufCodecs.BOOL, this::mega$nextCompressionLimit);
     }
 
     public void setCellFuzzyMode(FuzzyMode fuzzyMode) {
         if (isClientSide()) {
-            sendClientAction(CellWorkbenchMenu.ACTION_SET_FUZZY_MODE, fuzzyMode);
+            sendClientAction(ACTION_SET_FUZZY_MODE, fuzzyMode);
         } else {
             var cell = getHost().getCell();
 
@@ -65,7 +71,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
 
     public void nextWorkBenchCopyMode() {
         if (isClientSide()) {
-            sendClientAction(CellWorkbenchMenu.ACTION_NEXT_COPYMODE);
+            sendClientAction(ACTION_NEXT_COPYMODE);
         } else {
             getHost().getConfigManager().putSetting(Settings.COPY_MODE, EnumCycler.next(getWorkBenchCopyMode()));
         }
@@ -153,7 +159,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
 
     public void clear() {
         if (isClientSide()) {
-            sendClientAction(CellWorkbenchMenu.ACTION_CLEAR);
+            sendClientAction(ACTION_CLEAR);
         } else {
             getConfigInventory().clear();
             broadcastChanges();
@@ -162,7 +168,7 @@ public class PortableCellWorkbenchMenu extends UpgradeableMenu<PortableCellWorkb
 
     public void partition() {
         if (isClientSide()) {
-            sendClientAction(CellWorkbenchMenu.ACTION_PARTITION);
+            sendClientAction(ACTION_PARTITION);
         } else {
             var inv = getConfigInventory();
             var is = getWorkbenchItem();

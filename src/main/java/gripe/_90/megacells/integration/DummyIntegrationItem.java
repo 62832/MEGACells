@@ -1,12 +1,13 @@
 package gripe._90.megacells.integration;
 
-import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 import appeng.items.AEBaseItem;
 
@@ -20,8 +21,13 @@ public class DummyIntegrationItem extends AEBaseItem {
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        lines.add(addon.getUnavailableTooltip());
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            TooltipDisplay display,
+            Consumer<Component> lines,
+            TooltipFlag flag) {
+        lines.accept(addon.getUnavailableTooltip());
     }
 
     @Override

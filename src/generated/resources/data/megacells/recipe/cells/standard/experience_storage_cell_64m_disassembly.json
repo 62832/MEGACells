@@ -9,11 +9,9 @@
   "cell": "megacells:experience_storage_cell_64m",
   "cell_disassembly_items": [
     {
-      "count": 1,
       "id": "megacells:cell_component_64m"
     },
     {
-      "count": 1,
       "id": "megacells:mega_experience_cell_housing"
     }
   ]

@@ -17,8 +17,8 @@ import appeng.util.InteractionUtil;
 import gripe._90.megacells.block.entity.MEGAInterfaceBlockEntity;
 
 public class MEGAInterfaceBlock extends AEBaseEntityBlock<MEGAInterfaceBlockEntity> {
-    public MEGAInterfaceBlock() {
-        super(AEBaseBlock.metalProps());
+    public MEGAInterfaceBlock(Properties properties) {
+        super(AEBaseBlock.metalProps(properties));
     }
 
     @NotNull
@@ -36,7 +36,7 @@ public class MEGAInterfaceBlock extends AEBaseEntityBlock<MEGAInterfaceBlockEnti
                 be.openMenu(player, MenuLocators.forBlockEntity(be));
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;

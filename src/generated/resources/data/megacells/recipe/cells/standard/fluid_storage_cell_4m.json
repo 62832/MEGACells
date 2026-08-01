@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "a": {
-      "item": "ae2:quartz_vibrant_glass"
-    },
-    "b": {
-      "item": "ae2:sky_dust"
-    },
-    "c": {
-      "item": "megacells:cell_component_4m"
-    },
-    "d": {
-      "tag": "c:ingots/sky_bronze"
-    }
+    "a": "ae2:quartz_vibrant_glass",
+    "b": "ae2:sky_dust",
+    "c": "megacells:cell_component_4m",
+    "d": "#c:ingots/sky_bronze"
   },
   "pattern": [
     "aba",
@@ -21,7 +13,6 @@
     "ddd"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:fluid_storage_cell_4m"
   }
 }

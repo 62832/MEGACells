@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "megacells:item/cable_mega_interface"
+  }
+}

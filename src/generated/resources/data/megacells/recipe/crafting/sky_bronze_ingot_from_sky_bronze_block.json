@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:sky_bronze_block"
-    }
+    "megacells:sky_bronze_block"
   ],
   "result": {
     "count": 9,

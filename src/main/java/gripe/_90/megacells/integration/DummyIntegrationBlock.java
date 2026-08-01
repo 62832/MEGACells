@@ -1,6 +1,6 @@
 package gripe._90.megacells.integration;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,8 +29,8 @@ public class DummyIntegrationBlock extends AEBaseBlock {
 
         @Override
         public void addCheckedInformation(
-                ItemStack itemStack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-            lines.add(addon.getUnavailableTooltip());
+                ItemStack itemStack, TooltipContext context, Consumer<Component> lines, TooltipFlag flag) {
+            lines.accept(addon.getUnavailableTooltip());
         }
     }
 }

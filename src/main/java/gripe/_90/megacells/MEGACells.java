@@ -2,13 +2,7 @@ package gripe._90.megacells;
 
 import java.util.List;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -16,8 +10,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 import appeng.api.AECapabilities;
@@ -30,7 +22,6 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.core.localization.GuiText;
 import appeng.hotkeys.HotkeyActions;
-import appeng.init.InitVillager;
 import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.items.tools.powered.powersink.PoweredItemCapabilities;
 
@@ -62,22 +53,20 @@ public class MEGACells {
         MEGAMenus.DR.register(eventBus);
         MEGAComponents.DR.register(eventBus);
         MEGACreativeTab.DR.register(eventBus);
-        eventBus.addListener(MEGADataMaps::register);
-
         eventBus.addListener(MEGACells::initUpgrades);
         eventBus.addListener(MEGACells::initStorageCells);
         eventBus.addListener(MEGACells::initCapabilities);
         eventBus.addListener(MEGACells::initPartCapabilities);
         eventBus.addListener(MEGACells::initPacketHandlers);
+        eventBus.addListener(MEGADataMaps::register);
 
         CompressionService.init();
-        NeoForge.EVENT_BUS.addListener(MEGACells::initVillagerTrades);
 
         container.registerConfig(ModConfig.Type.COMMON, MEGAConfig.SPEC);
     }
 
-    public static ResourceLocation makeId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    public static Identifier makeId(String path) {
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 
     private static void initUpgrades(FMLCommonSetupEvent event) {
@@ -161,45 +150,33 @@ public class MEGACells {
         });
     }
 
-    private static void initVillagerTrades(VillagerTradesEvent event) {
-        if (event.getType() == InitVillager.PROFESSION) {
-            var trades = event.getTrades().get(5);
-            trades.add(villagerTrade(MEGAItems.SKY_STEEL_INGOT, 8, 3, 20));
-            trades.add(villagerTrade(MEGAItems.ACCUMULATION_PROCESSOR_PRESS, 40, 1, 50));
-        }
-    }
-
-    private static VillagerTrades.ItemListing villagerTrade(ItemLike item, int cost, int quantity, int xp) {
-        return (entity, random) ->
-                new MerchantOffer(new ItemCost(Items.EMERALD, cost), new ItemStack(item, quantity), 12, xp, 0.05F);
-    }
-
     @SuppressWarnings("UnstableApiUsage")
     private static void initCapabilities(RegisterCapabilitiesEvent event) {
         for (var type : MEGABlockEntities.DR.getEntries()) {
             event.registerBlockEntity(
-                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type.get(), (be, context) -> (IInWorldGridNodeHost) be);
+                    AECapabilities.IN_WORLD_GRID_NODE_HOST, type.get(), (be, _) -> (IInWorldGridNodeHost) be);
         }
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_INTERFACE.get(),
-                (be, context) -> be.getInterfaceLogic().getStorage());
+                (be, _) -> be.getInterfaceLogic().getStorage());
         event.registerBlockEntity(
                 AECapabilities.ME_STORAGE,
                 MEGABlockEntities.MEGA_INTERFACE.get(),
-                (be, context) -> be.getInterfaceLogic().getInventory());
+                (be, _) -> be.getInterfaceLogic().getInventory());
 
         event.registerBlockEntity(
                 AECapabilities.GENERIC_INTERNAL_INV,
                 MEGABlockEntities.MEGA_PATTERN_PROVIDER.get(),
-                (be, context) -> be.getLogic().getReturnInv());
+                (be, _) -> be.getLogic().getReturnInv());
 
         for (var cell : MEGAItems.getTieredCells()) {
             if (cell.portable() && cell.item().asItem() instanceof IAEItemPowerStorage powered) {
                 event.registerItem(
-                        Capabilities.EnergyStorage.ITEM,
-                        (stack, context) -> new PoweredItemCapabilities(stack, powered),
+                        Capabilities.Energy.ITEM,
+                        (_, context) ->
+                                new PoweredItemCapabilities(context, cell.item().asItem(), powered),
                         cell.item());
             }
         }
@@ -209,22 +186,20 @@ public class MEGACells {
     private static void initPartCapabilities(RegisterPartCapabilitiesEvent event) {
         event.register(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                (part, ctx) -> part.getInterfaceLogic().getStorage(),
+                (part, _) -> part.getInterfaceLogic().getStorage(),
                 MEGAInterfacePart.class);
         event.register(
                 AECapabilities.ME_STORAGE,
-                (part, ctx) -> part.getInterfaceLogic().getInventory(),
+                (part, _) -> part.getInterfaceLogic().getInventory(),
                 MEGAInterfacePart.class);
 
         event.register(
                 AECapabilities.GENERIC_INTERNAL_INV,
-                (part, ctx) -> part.getLogic().getReturnInv(),
+                (part, _) -> part.getLogic().getReturnInv(),
                 MEGAPatternProviderPart.class);
 
         event.register(
-                Capabilities.ItemHandler.BLOCK,
-                (part, ctx) -> part.getCellInventory().toItemHandler(),
-                CellDockPart.class);
+                Capabilities.Item.BLOCK, (part, _) -> part.getCellInventory().toResourceHandler(), CellDockPart.class);
     }
 
     private static void initPacketHandlers(RegisterPayloadHandlersEvent event) {

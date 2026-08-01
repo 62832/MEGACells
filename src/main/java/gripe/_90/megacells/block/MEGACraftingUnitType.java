@@ -1,5 +1,7 @@
 package gripe._90.megacells.block;
 
+import com.mojang.serialization.Codec;
+
 import net.minecraft.world.item.Item;
 
 import appeng.block.crafting.ICraftingUnitType;
@@ -16,6 +18,17 @@ public enum MEGACraftingUnitType implements ICraftingUnitType {
     STORAGE_64M(64, "64m_storage"),
     STORAGE_256M(256, "256m_storage"),
     MONITOR(0, "monitor");
+
+    public static final Codec<MEGACraftingUnitType> CODEC = Codec.STRING.xmap(
+            id -> {
+                for (var type : values()) {
+                    if (type.affix.equals(id)) {
+                        return type;
+                    }
+                }
+                throw new IllegalArgumentException("Unknown MEGA crafting unit type: " + id);
+            },
+            MEGACraftingUnitType::getAffix);
 
     private final int storageMb;
     private final String affix;

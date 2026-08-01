@@ -1,17 +1,14 @@
 package gripe._90.megacells.client.render;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 
-import appeng.api.client.AEKeyRendering;
+import appeng.client.api.AEKeyRendering;
 import appeng.items.storage.StorageCellTooltipComponent;
 
 import gripe._90.megacells.definition.MEGATranslations;
@@ -23,7 +20,7 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
     private static final Component CONFIG_LABEL = MEGATranslations.WorkbenchConfig.text();
 
     @Override
-    public int getHeight() {
+    public int getHeight(Font font) {
         var height = 0;
 
         if (!tooltipComponent.config().isEmpty()) {
@@ -49,7 +46,7 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
                 configWidth += 10;
             }
 
-            width = font.width(CONFIG_LABEL) + 2 + Math.max(width, configWidth);
+            width = font.width(CONFIG_LABEL) + 2 + configWidth;
         }
 
         var cellOpt = tooltipComponent.cell().getTooltipImage();
@@ -64,72 +61,44 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
     }
 
     @Override
-    public void renderText(
-            @NotNull Font font,
-            int x,
-            int y,
-            @NotNull Matrix4f matrix,
-            @NotNull MultiBufferSource.BufferSource bufferSource) {
-        y += (16 - font.lineHeight) / 2;
+    public void extractText(GuiGraphicsExtractor guiGraphics, @NotNull Font font, int x, int y) {
+        var yOffset = (16 - font.lineHeight) / 2;
 
         if (!tooltipComponent.config().isEmpty()) {
-            font.drawInBatch(
-                    CONFIG_LABEL,
-                    x,
-                    y,
-                    0x7E7E7E,
-                    false,
-                    matrix,
-                    bufferSource,
-                    Font.DisplayMode.NORMAL,
-                    0,
-                    LightTexture.FULL_BRIGHT);
+            guiGraphics.text(font, CONFIG_LABEL, x, y + yOffset, 0x7E7E7E, false);
 
             if (tooltipComponent.hasMoreConfig()) {
-                font.drawInBatch(
-                        "…",
+                guiGraphics.text(
+                        font,
+                        "\u2026",
                         x
                                 + font.width(CONFIG_LABEL)
                                 + 4
                                 + tooltipComponent.config().size() * 17,
                         y + 2,
                         -1,
-                        false,
-                        matrix,
-                        bufferSource,
-                        Font.DisplayMode.NORMAL,
-                        0,
-                        LightTexture.FULL_BRIGHT);
+                        false);
             }
 
             y += 17;
         }
 
         if (!tooltipComponent.cell().isEmpty()) {
-            font.drawInBatch(
-                    CELL_LABEL,
-                    x,
-                    y,
-                    0x7E7E7E,
-                    false,
-                    matrix,
-                    bufferSource,
-                    Font.DisplayMode.NORMAL,
-                    0,
-                    LightTexture.FULL_BRIGHT);
+            guiGraphics.text(font, CELL_LABEL, x, y + yOffset, 0x7E7E7E, false);
         }
     }
 
     @Override
-    public void renderImage(@NotNull Font font, int x, int y, @NotNull GuiGraphics guiGraphics) {
+    public void extractImage(
+            @NotNull Font font, int x, int y, int width, int height, @NotNull GuiGraphicsExtractor guiGraphics) {
         var config = tooltipComponent.config();
 
         if (!config.isEmpty()) {
-            var xOff = font.width(CONFIG_LABEL) + 2;
+            var xOffset = font.width(CONFIG_LABEL) + 2;
 
             for (var stack : config) {
-                AEKeyRendering.drawInGui(Minecraft.getInstance(), guiGraphics, x + xOff, y, stack.what());
-                xOff += 17;
+                AEKeyRendering.drawInGui(Minecraft.getInstance(), guiGraphics, x + xOffset, y, stack.what());
+                xOffset += 17;
             }
 
             y += 17;
@@ -138,18 +107,12 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
         var cellOpt = tooltipComponent.cell().getTooltipImage();
 
         if (cellOpt.isPresent() && cellOpt.get() instanceof StorageCellTooltipComponent cellComponent) {
-            var xOff = font.width(CELL_LABEL) + 2;
-            guiGraphics.renderItem(tooltipComponent.cell(), x + xOff, y);
+            var xOffset = font.width(CELL_LABEL) + 2;
+            guiGraphics.item(tooltipComponent.cell(), x + xOffset, y);
 
-            var upgrades = cellComponent.upgrades();
-
-            if (!upgrades.isEmpty()) {
-                xOff += 17;
-
-                for (var upgrade : upgrades) {
-                    guiGraphics.renderItem(upgrade, x + xOff, y);
-                    xOff += 17;
-                }
+            for (var upgrade : cellComponent.upgrades()) {
+                xOffset += 17;
+                guiGraphics.item(upgrade, x + xOffset, y);
             }
         }
     }

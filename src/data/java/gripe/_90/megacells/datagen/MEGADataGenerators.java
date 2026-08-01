@@ -1,37 +1,32 @@
 package gripe._90.megacells.datagen;
 
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import gripe._90.megacells.MEGACells;
 
-@EventBusSubscriber(modid = MEGACells.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MEGACells.MODID)
 public class MEGADataGenerators {
     @SubscribeEvent
-    public static void onGatherData(GatherDataEvent event) {
-        var generator = event.getGenerator();
+    public static void onGatherClientData(GatherDataEvent.Client event) {
+        var output = event.getGenerator().getPackOutput();
+        event.addProvider(new MEGALanguageProvider(output));
+        event.addProvider(new MEGAModelProvider(output));
+        event.addProvider(new OverrideModelProvider(event.getGenerator().getPackOutput("optional_cell_colours")));
+    }
 
-        var output = generator.getPackOutput();
-        generator.addProvider(event.includeClient(), new MEGALanguageProvider(output));
-
-        var existing = event.getExistingFileHelper();
-        generator.addProvider(event.includeClient(), new MEGAModelProvider(output, existing));
-
+    @SubscribeEvent
+    public static void onGatherServerData(GatherDataEvent.Server event) {
+        var output = event.getGenerator().getPackOutput();
         var registries = event.getLookupProvider();
-        generator.addProvider(event.includeServer(), new MEGARecipeProvider(output, registries));
-        generator.addProvider(event.includeServer(), new MEGALootProvider(output, registries));
-        generator.addProvider(event.includeServer(), new MEGADataMapProvider(output, registries));
 
-        var blockTags = new MEGATagProvider.Blocks(output, registries, existing);
-        generator.addProvider(event.includeServer(), blockTags);
-        generator.addProvider(
-                event.includeServer(),
-                new MEGATagProvider.Items(output, registries, blockTags.contentsGetter(), existing));
+        event.addProvider(new MEGARecipeProvider.Runner(output, registries));
+        event.addProvider(new MEGALootProvider(output, registries));
+        event.addProvider(new MEGADataMapProvider(output, registries));
 
-        generator.addProvider(
-                event.includeClient(),
-                new OverrideModelProvider(generator.getPackOutput("optional_cell_colours"), existing));
+        var blockTags = new MEGATagProvider.Blocks(output, registries);
+        event.addProvider(blockTags);
+        event.addProvider(new MEGATagProvider.Items(output, registries, blockTags.contentsGetter()));
     }
 }

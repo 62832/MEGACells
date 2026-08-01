@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "megacells:mega_emc_interface"
-    }
+    "megacells:mega_emc_interface"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:cable_mega_emc_interface"
   }
 }

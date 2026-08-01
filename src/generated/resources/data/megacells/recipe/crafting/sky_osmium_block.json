@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "tag": "c:ingots/sky_osmium"
-    }
+    "#": "#c:ingots/sky_osmium"
   },
   "pattern": [
     "###",
@@ -12,7 +10,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "megacells:sky_osmium_block"
   }
 }

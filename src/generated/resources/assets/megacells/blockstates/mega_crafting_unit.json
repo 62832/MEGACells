@@ -4,7 +4,8 @@
       "model": "megacells:block/crafting/unit"
     },
     "formed=true": {
-      "model": "megacells:block/crafting/unit_formed"
+      "type": "megacells:crafting_cube",
+      "unit_type": "unit"
     }
   }
 }
