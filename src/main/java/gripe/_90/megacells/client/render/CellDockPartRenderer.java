@@ -1,5 +1,7 @@
 package gripe._90.megacells.client.render;
 
+import java.util.Objects;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import org.joml.Vector3f;
@@ -35,7 +37,7 @@ public class CellDockPartRenderer implements PartRenderer<CellDockPart, CellDock
 
     @Override
     public void extract(CellDockPart part, CellDockRenderState state, float partialTicks) {
-        state.orientation = BlockOrientation.get(part.getSide(), part.getSpin());
+        state.orientation = BlockOrientation.get(Objects.requireNonNull(part.getSide()), part.getSpin());
         state.cell.clear();
 
         var cellItem = part.getCellItem(0);

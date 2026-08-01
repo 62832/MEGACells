@@ -3,6 +3,7 @@ package gripe._90.megacells.block;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -58,7 +59,12 @@ public class MEGAPatternProviderBlock extends AEBaseEntityBlock<MEGAPatternProvi
     @ParametersAreNonnullByDefault
     @Override
     public void neighborChanged(
-            BlockState state, Level level, BlockPos pos, Block block, Orientation orientation, boolean isMoving) {
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Block block,
+            @Nullable Orientation orientation,
+            boolean isMoving) {
         var be = getBlockEntity(level, pos);
 
         if (be != null) {

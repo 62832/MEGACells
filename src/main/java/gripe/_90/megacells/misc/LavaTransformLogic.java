@@ -18,14 +18,15 @@ public final class LavaTransformLogic {
     private static final Set<Item> lavaCache = new HashSet<>();
 
     static {
-        NeoForge.EVENT_BUS.addListener((ServerStartedEvent event) -> lavaCache.clear());
-        NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+        NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, _ -> lavaCache.clear());
+        NeoForge.EVENT_BUS.addListener(OnDatapackSyncEvent.class, event -> {
             if (event.getPlayer() == null) {
                 lavaCache.clear();
             }
         });
     }
 
+    @SuppressWarnings("resource")
     public static boolean canTransformInLava(ItemEntity entity) {
         return entity.level() instanceof ServerLevel level
                 && getLavaTransformableItems(level).contains(entity.getItem().getItem());

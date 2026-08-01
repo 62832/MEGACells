@@ -2,6 +2,8 @@ package gripe._90.megacells.datagen;
 
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -30,18 +32,20 @@ public class OverrideModelProvider extends ModelProvider {
 
     // This pack only overrides AE2's own cell item models, not anything under MEGA's namespace,
     // so opt out of the strict coverage validation the base class would otherwise enforce.
+    @NotNull
     @Override
     protected Stream<? extends Holder<Block>> getKnownBlocks() {
         return Stream.empty();
     }
 
+    @NotNull
     @Override
     protected Stream<? extends Holder<Item>> getKnownItems() {
         return Stream.empty();
     }
 
     @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    protected void registerModels(@NotNull BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         this.itemModels = itemModels;
 
         cell(AEItems.ITEM_CELL_1K, AEItems.ITEM_CELL_HOUSING);
@@ -105,6 +109,7 @@ public class OverrideModelProvider extends ModelProvider {
         return Identifier.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath());
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "Item Models (Classic Cell Colours)";

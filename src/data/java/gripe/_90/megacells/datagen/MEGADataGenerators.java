@@ -21,7 +21,7 @@ public class MEGADataGenerators {
         var output = event.getGenerator().getPackOutput();
         var registries = event.getLookupProvider();
 
-        event.addProvider(new MEGARecipeProvider.Runner(output, registries));
+        event.addProvider(new MEGARecipeProvider(output, registries));
         event.addProvider(new MEGALootProvider(output, registries));
         event.addProvider(new MEGADataMapProvider(output, registries));
 

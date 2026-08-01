@@ -3,6 +3,8 @@ package gripe._90.megacells.client.render;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelDebugName;
@@ -91,6 +93,7 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
         return new Material(AppEng.makeId("block/crafting/monitor_light_" + suffix));
     }
 
+    @NotNull
     @Override
     public String debugName() {
         return getClass().toString();
@@ -102,14 +105,16 @@ public class MEGACraftingUnitModelProvider extends AbstractCraftingUnitModelProv
                         MEGACraftingUnitType.CODEC.fieldOf("unit_type").forGetter(Unbaked::type))
                 .apply(instance, Unbaked::new));
 
+        @NotNull
         @Override
         public BlockStateModel bake(ModelBaker baker) {
             return new MEGACraftingUnitModelProvider(type).bake(baker.materials());
         }
 
         @Override
-        public void resolveDependencies(Resolver resolver) {}
+        public void resolveDependencies(@NotNull Resolver resolver) {}
 
+        @NotNull
         @Override
         public MapCodec<? extends CustomUnbakedBlockStateModel> codec() {
             return MAP_CODEC;

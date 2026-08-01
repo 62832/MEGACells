@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -31,6 +33,7 @@ public class MEGALootProvider extends LootTableProvider {
             super(Set.of(), FeatureFlags.DEFAULT_FLAGS, registries);
         }
 
+        @NotNull
         @Override
         protected Iterable<Block> getKnownBlocks() {
             return MEGABlocks.getBlocks().stream()

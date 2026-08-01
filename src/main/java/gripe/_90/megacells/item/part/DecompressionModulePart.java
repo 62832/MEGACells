@@ -24,6 +24,7 @@ public class DecompressionModulePart extends AEBasePart implements IPriorityHost
         getMainNode().setFlags(GridFlags.REQUIRE_CHANNEL).setIdlePowerUsage(10.0);
     }
 
+    @SuppressWarnings("resource")
     @Override
     public boolean onUseWithoutItem(Player player, Vec3 pos) {
         if (!player.level().isClientSide()) {

@@ -20,7 +20,7 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
     private static final Component CONFIG_LABEL = MEGATranslations.WorkbenchConfig.text();
 
     @Override
-    public int getHeight(Font font) {
+    public int getHeight(@NotNull Font font) {
         var height = 0;
 
         if (!tooltipComponent.config().isEmpty()) {
@@ -61,7 +61,7 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
     }
 
     @Override
-    public void extractText(GuiGraphicsExtractor guiGraphics, @NotNull Font font, int x, int y) {
+    public void extractText(@NotNull GuiGraphicsExtractor guiGraphics, @NotNull Font font, int x, int y) {
         var yOffset = (16 - font.lineHeight) / 2;
 
         if (!tooltipComponent.config().isEmpty()) {
@@ -70,7 +70,7 @@ public record PortableCellWorkbenchClientTooltipComponent(PortableCellWorkbenchT
             if (tooltipComponent.hasMoreConfig()) {
                 guiGraphics.text(
                         font,
-                        "\u2026",
+                        "…",
                         x
                                 + font.width(CONFIG_LABEL)
                                 + 4
