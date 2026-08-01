@@ -58,6 +58,33 @@ public class OverrideModelProvider extends ModelProvider {
 
         // AppMek, AppBot, ArsEng, AppEx and Applied Soul don't have Minecraft 26.1 releases yet
         // (see build.gradle.kts), so there's no datagen counterpart to call into here right now.
+        // Left commented out as a reference point for when their datagen is re-implemented:
+        //
+        // if (Addons.APPMEK.isLoaded()) {
+        //     existingFileHelper.trackGenerated(textureLocation(AppMekIntegrationData.CHEMICAL_CELL_HOUSING), TEXTURE);
+        //     AppMekIntegrationData.getCells().forEach(c -> cell(c, AppMekIntegrationData.CHEMICAL_CELL_HOUSING));
+        // }
+        //
+        // if (Addons.APPBOT.isLoaded()) {
+        //     existingFileHelper.trackGenerated(textureLocation(AppBotIntegrationData.MANA_CELL_HOUSING), TEXTURE);
+        //     AppBotIntegrationData.getCells().forEach(c -> cell(c, AppBotIntegrationData.MANA_CELL_HOUSING));
+        // }
+        //
+        // if (Addons.ARSENG.isLoaded()) {
+        //     existingFileHelper.trackGenerated(textureLocation(ArsEngIntegrationData.SOURCE_CELL_HOUSING), TEXTURE);
+        //     ArsEngIntegrationData.getCells().forEach(c -> cell(c, ArsEngIntegrationData.SOURCE_CELL_HOUSING));
+        // }
+        //
+        // if (Addons.APPEX.isLoaded()) {
+        //     existingFileHelper.trackGenerated(textureLocation(AppExIntegrationData.EXPERIENCE_CELL_HOUSING),
+        // TEXTURE);
+        //     AppExIntegrationData.getCells().forEach(c -> cell(c, AppExIntegrationData.EXPERIENCE_CELL_HOUSING));
+        // }
+        //
+        // if (Addons.APPLIEDSOUL.isLoaded()) {
+        //     existingFileHelper.trackGenerated(textureLocation(AppSoulIntegrationData.SOUL_CELL_HOSING), TEXTURE);
+        //     AppSoulIntegrationData.getCells().forEach(c -> cell(c, AppSoulIntegrationData.SOUL_CELL_HOSING));
+        // }
     }
 
     private void cell(ItemLike cell, ItemLike housing) {
