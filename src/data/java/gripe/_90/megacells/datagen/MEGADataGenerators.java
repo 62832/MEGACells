@@ -14,13 +14,8 @@ public class MEGADataGenerators {
         event.addProvider(new MEGALanguageProvider(output));
         event.addProvider(new MEGAModelProvider(output));
         event.addProvider(new OverrideModelProvider(event.getGenerator().getPackOutput("optional_cell_colours")));
-    }
 
-    @SubscribeEvent
-    public static void onGatherServerData(GatherDataEvent.Server event) {
-        var output = event.getGenerator().getPackOutput();
         var registries = event.getLookupProvider();
-
         event.addProvider(new MEGARecipeProvider(output, registries));
         event.addProvider(new MEGALootProvider(output, registries));
         event.addProvider(new MEGADataMapProvider(output, registries));
