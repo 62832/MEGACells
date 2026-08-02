@@ -31,11 +31,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Generate assets
-        run: ./gradlew syncGeneratedResources
+        run: ./gradlew runData
       - name: Check that data was generated
-        run: |
-          test -d ./build/generatedResources/client/.cache
-          test -d ./build/generatedResources/server/.cache
+        run: test -d ./src/generated/resources/.cache
       - name: Ensure generated data is up-to-date
         run: |
           git status
