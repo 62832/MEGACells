@@ -67,18 +67,20 @@ run {
         }
 
         versionCatalogs {
-            val neoforgeVersion = "26.1.2.80"
+            val mc = "26.1.2"
+            val nf = "$mc.80"
+            val maj = mc.substringBeforeLast('.')
 
             create("core") {
-                version("minecraft", "26.1.2")
-                version("neoforge", neoforgeVersion)
-                version("ae2", "26.1.10-beta")
+                version("minecraft", mc)
+                version("neoforge", nf)
+                version("ae2", "$maj.10-beta")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
             create("integration") {
                 // AE2WTLib is the only add-on currently shipping a Minecraft 26.1 build.
-                version("ae2wtlib", "26.1.1-beta")
+                version("ae2wtlib", "$maj.1-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
 
@@ -123,7 +125,7 @@ run {
             }
 
             create("testlibs") {
-                library("neoforge-test", "net.neoforged", "testframework").version(neoforgeVersion)
+                library("neoforge-test", "net.neoforged", "testframework").version(nf)
                 library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").version("5.7.1")
                 library("junit-platform", "org.junit.platform", "junit-platform-launcher").version("1.11.4")
                 library("assertj", "org.assertj", "assertj-core").version("3.26.0")
