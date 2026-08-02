@@ -79,7 +79,6 @@ dependencies {
 
     // compileOnly(integration.arseng)
     // "addonsRuntimeOnly"(integration.arseng)
-
     // "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
     // "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
 
@@ -96,8 +95,7 @@ dependencies {
     // "addonsRuntimeOnly"(integration.projecte)
 
     compileOnly(integration.appbot)
-    compileOnly(integration.botania)
-    // "addonsCompileOnly"(integration.botania)
+    "addonsCompileOnly"(integration.botania)
 
     // compileOnly(integration.appsoul)
     // "dataCompileOnly"(integration.titanium)
@@ -144,30 +142,14 @@ neoForge {
             gameDirectory = file("run/server")
         }
 
-        create("clientData") {
+        create("data") {
             clientData()
             gameDirectory = file("run/data")
             logLevel = org.slf4j.event.Level.INFO
             programArguments.addAll(
                 "--mod", modId,
                 "--all",
-                "--output", layout.buildDirectory.dir("generatedResources/client").get().asFile
-                    .absolutePath,
-                "--existing", main,
-                "--existing", "$main/optional_cell_colours",
-            )
-            sourceSet = sourceSets.getByName("data")
-        }
-
-        create("serverData") {
-            serverData()
-            gameDirectory = file("run/data")
-            logLevel = org.slf4j.event.Level.INFO
-            programArguments.addAll(
-                "--mod", modId,
-                "--all",
-                "--output", layout.buildDirectory.dir("generatedResources/server").get().asFile
-                    .absolutePath,
+                "--output", file("src/generated/resources/").absolutePath,
                 "--existing", main,
                 "--existing", "$main/optional_cell_colours",
             )
@@ -182,58 +164,6 @@ neoForge {
 }
 
 tasks {
-    // clientData and serverData run as separate JVM processes, each with its own HashCache that
-    // only knows about the providers it registered. Pointing both directly at the same --output
-    // (the old approach) meant each run's cleanup pass deleted whatever the other run's providers
-    // had written, since neither cache manifest recognised the sibling's files as "still wanted".
-    // Routing each run into its own scratch directory and merging with a Sync task afterwards keeps
-    // that cleanup logic scoped to files it actually knows about.
-    register<Sync>("syncGeneratedResources") {
-        group = "megacells"
-        description = "Merges clientData/serverData datagen output into src/generated/resources."
-        from(layout.buildDirectory.dir("generatedResources/client")) { exclude(".cache/**") }
-        from(layout.buildDirectory.dir("generatedResources/server")) { exclude(".cache/**") }
-        into("src/generated/resources")
-        dependsOn("runClientData", "runServerData")
-
-        // Content that no provider run in this repo can currently regenerate, but that's still
-        // correct and still ships in the jar, so it must survive a sync even though it's absent
-        // from both `from()` sources:
-        preserve {
-            // Static ae2:composite/ae2:status_indicator part models (see MEGAEMCInterfacePart.java)
-            // aren't produced by any datagen provider at all.
-            include("assets/megacells/ae2/**")
-
-            // OverrideModelProvider only generates optional_cell_colours overrides for AE2's own
-            // cells. The AppMek/ArsEng/AppEx/Applied Soul portions come from the same add-ons
-            // excluded/unloadable elsewhere in this file, so they can't regenerate either.
-            include("optional_cell_colours/assets/appmek/**")
-            include("optional_cell_colours/assets/arseng/**")
-            include("optional_cell_colours/assets/appex/**")
-            include("optional_cell_colours/assets/appliedsoul/**")
-
-            // Cell Dock and Decompression Module use hand-authored Blockbench models (see
-            // src/main/resources/assets/megacells/models/item), so MEGAModelProvider doesn't
-            // generate anything for them; their item definitions are static too.
-            include("assets/megacells/items/cell_dock.json")
-            include("assets/megacells/items/decompression_module.json")
-
-            // AppMek's Radioactive Chemical Cell recipe is only written when Addons#isLoaded is
-            // true, which requires Mekanism/AppMek's real jar on the runtime classpath - never the
-            // case here, since they're compile-only stubs (see build.gradle.kts dependencies).
-            include("data/megacells/recipe/cells/standard/radioactive_chemical_cell.json")
-            include("data/megacells/recipe/crafting/radioactive_cell_component.json")
-            include("data/megacells/advancement/recipes/misc/cells/standard/radioactive_chemical_cell.json")
-            include("data/megacells/advancement/recipes/misc/crafting/radioactive_cell_component.json")
-
-            // ArsEng's and Applied Soul's housing recipes come from ArsEngIntegrationData/
-            // AppSoulIntegrationData, which are excluded from compilation entirely (see the `data`
-            // source set above), so nothing can regenerate these until either addon ships a 26.1 build.
-            include("data/megacells/recipe/cells/mega_source_cell_housing.json")
-            include("data/megacells/recipe/mega_soul_cell_housing.json")
-        }
-    }
-
     jar {
         from(rootProject.file("LICENSE")) {
             rename { "${it}_$modId" }
