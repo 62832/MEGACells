@@ -1,5 +1,6 @@
 package gripe._90.megacells.datagen;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
@@ -7,21 +8,17 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
 import appeng.core.AppEng;
-import appeng.core.definitions.AEItems;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.integration.Addons;
 
 public class OverrideModelProvider extends ModelProvider {
     private ItemModelGenerators itemModels;
@@ -30,7 +27,7 @@ public class OverrideModelProvider extends ModelProvider {
         super(output, MEGACells.MODID);
     }
 
-    // This pack only overrides AE2's own cell item models, not anything under MEGA's namespace,
+    // This pack only overrides AE2's and other add-ons' own cell item models, not anything under MEGA's namespace,
     // so opt out of the strict coverage validation the base class would otherwise enforce.
     @NotNull
     @Override
@@ -47,66 +44,28 @@ public class OverrideModelProvider extends ModelProvider {
     @Override
     protected void registerModels(@NotNull BlockModelGenerators blockModels, @NotNull ItemModelGenerators itemModels) {
         this.itemModels = itemModels;
+        cells("item", null);
+        cells("fluid", null);
 
-        cell(AEItems.ITEM_CELL_1K, AEItems.ITEM_CELL_HOUSING);
-        cell(AEItems.ITEM_CELL_4K, AEItems.ITEM_CELL_HOUSING);
-        cell(AEItems.ITEM_CELL_16K, AEItems.ITEM_CELL_HOUSING);
-        cell(AEItems.ITEM_CELL_64K, AEItems.ITEM_CELL_HOUSING);
-        cell(AEItems.ITEM_CELL_256K, AEItems.ITEM_CELL_HOUSING);
-
-        cell(AEItems.FLUID_CELL_1K, AEItems.FLUID_CELL_HOUSING);
-        cell(AEItems.FLUID_CELL_4K, AEItems.FLUID_CELL_HOUSING);
-        cell(AEItems.FLUID_CELL_16K, AEItems.FLUID_CELL_HOUSING);
-        cell(AEItems.FLUID_CELL_64K, AEItems.FLUID_CELL_HOUSING);
-        cell(AEItems.FLUID_CELL_256K, AEItems.FLUID_CELL_HOUSING);
-
-        // AppMek, AppBot, ArsEng, AppEx and Applied Soul don't have Minecraft 26.1 releases yet
-        // (see build.gradle.kts), so there's no datagen counterpart to call into here right now.
-        // Left commented out as a reference point for when their datagen is re-implemented:
-        //
-        // if (Addons.APPMEK.isLoaded()) {
-        //     existingFileHelper.trackGenerated(textureLocation(AppMekIntegrationData.CHEMICAL_CELL_HOUSING), TEXTURE);
-        //     AppMekIntegrationData.getCells().forEach(c -> cell(c, AppMekIntegrationData.CHEMICAL_CELL_HOUSING));
-        // }
-        //
-        // if (Addons.APPBOT.isLoaded()) {
-        //     existingFileHelper.trackGenerated(textureLocation(AppBotIntegrationData.MANA_CELL_HOUSING), TEXTURE);
-        //     AppBotIntegrationData.getCells().forEach(c -> cell(c, AppBotIntegrationData.MANA_CELL_HOUSING));
-        // }
-        //
-        // if (Addons.ARSENG.isLoaded()) {
-        //     existingFileHelper.trackGenerated(textureLocation(ArsEngIntegrationData.SOURCE_CELL_HOUSING), TEXTURE);
-        //     ArsEngIntegrationData.getCells().forEach(c -> cell(c, ArsEngIntegrationData.SOURCE_CELL_HOUSING));
-        // }
-        //
-        // if (Addons.APPEX.isLoaded()) {
-        //     existingFileHelper.trackGenerated(textureLocation(AppExIntegrationData.EXPERIENCE_CELL_HOUSING),
-        // TEXTURE);
-        //     AppExIntegrationData.getCells().forEach(c -> cell(c, AppExIntegrationData.EXPERIENCE_CELL_HOUSING));
-        // }
-        //
-        // if (Addons.APPLIEDSOUL.isLoaded()) {
-        //     existingFileHelper.trackGenerated(textureLocation(AppSoulIntegrationData.SOUL_CELL_HOSING), TEXTURE);
-        //     AppSoulIntegrationData.getCells().forEach(c -> cell(c, AppSoulIntegrationData.SOUL_CELL_HOSING));
-        // }
+        cells("chemical", Addons.APPMEK);
+        cells("mana", Addons.APPBOT);
+        cells("source", Addons.ARSENG);
+        cells("experience", Addons.APPEX);
+        cells("soul", Addons.APPLIEDSOUL);
     }
 
-    private void cell(ItemLike cell, ItemLike housing) {
-        var id = BuiltInRegistries.ITEM.getKey(cell.asItem());
-        var tierSuffix = id.getPath().substring(id.getPath().lastIndexOf('_'));
-        var target = ModelLocationUtils.getModelLocation(cell.asItem());
+    private void cells(String keyType, Addons addon) {
+        var namespace = addon == null ? AppEng.MOD_ID : addon.getModId();
 
-        itemModels.generateLayeredItem(
-                target,
-                new Material(textureLocation(housing)),
-                new Material(AppEng.makeId("item/storage_cell_led")),
-                new Material(AppEng.makeId("item/storage_cell_side" + tierSuffix)));
-        itemModels.itemModelOutput.accept(cell.asItem(), ItemModelUtils.plainModel(target));
-    }
-
-    private Identifier textureLocation(ItemLike item) {
-        var id = BuiltInRegistries.ITEM.getKey(item.asItem());
-        return Identifier.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath());
+        for (var tier : List.of("1k", "4k", "16k", "64k", "256k")) {
+            var cell = Identifier.fromNamespaceAndPath(namespace, keyType + "_storage_cell_" + tier);
+            var target = cell.withPrefix("item/");
+            itemModels.generateLayeredItem(
+                    target,
+                    new Material(Identifier.fromNamespaceAndPath(namespace, "item/" + keyType + "_cell_housing")),
+                    new Material(AppEng.makeId("item/storage_cell_led")),
+                    new Material(AppEng.makeId("item/storage_cell_side_" + tier)));
+        }
     }
 
     @NotNull
