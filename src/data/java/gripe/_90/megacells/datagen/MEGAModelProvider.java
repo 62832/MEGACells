@@ -3,6 +3,8 @@ package gripe._90.megacells.datagen;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
@@ -10,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.mojang.math.Quadrant;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -24,6 +27,7 @@ import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -35,11 +39,15 @@ import net.neoforged.neoforge.client.model.generators.blockstate.CustomBlockStat
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.PatternProviderBlock;
 import appeng.block.networking.EnergyCellBlock;
+import appeng.client.api.model.parts.StaticPartModel;
 import appeng.client.item.EnergyFillLevelProperty;
 import appeng.client.item.PortableCellColorTintSource;
 import appeng.client.item.StorageCellStateTintSource;
+import appeng.client.model.StatusIndicatorPartModel;
 import appeng.core.AppEng;
 import appeng.core.definitions.ItemDefinition;
+import appeng.datagen.providers.models.AE2ModelProvider;
+import appeng.datagen.providers.models.PartModelOutput;
 
 import gripe._90.megacells.MEGACells;
 import gripe._90.megacells.block.MEGACraftingUnitType;
@@ -51,8 +59,14 @@ public class MEGAModelProvider extends ModelProvider {
     private BlockModelGenerators blockModels;
     private ItemModelGenerators itemModels;
 
+    private final PackOutput.PathProvider partModelOutput;
+
+    @Nullable
+    private PartModelOutput partModels;
+
     public MEGAModelProvider(PackOutput output) {
         super(output, MEGACells.MODID);
+        this.partModelOutput = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "ae2/parts");
     }
 
     // AE2's own AE2ModelProvider already covers AE2's namespace; MEGA only ever generated
@@ -126,12 +140,26 @@ public class MEGAModelProvider extends ModelProvider {
 
         interfaceOrProviderPart(MEGAItems.MEGA_INTERFACE);
         interfaceOrProviderPart(MEGAItems.MEGA_PATTERN_PROVIDER);
-        interfaceOrProviderPart(MEGAItems.MEGA_EMC_INTERFACE);
+        // interfaceOrProviderPart(MEGAItems.MEGA_EMC_INTERFACE);
 
         craftingUnits();
         craftingMonitor();
         energyCell();
         patternProvider();
+
+        itemModels.itemModelOutput.accept(
+                MEGAItems.CELL_DOCK.asItem(),
+                ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(MEGAItems.CELL_DOCK.asItem())));
+        itemModels.itemModelOutput.accept(
+                MEGAItems.DECOMPRESSION_MODULE.asItem(),
+                ItemModelUtils.plainModel(
+                        ModelLocationUtils.getModelLocation(MEGAItems.DECOMPRESSION_MODULE.asItem())));
+
+        Objects.requireNonNull(partModels);
+        partModels.staticModel(MEGAItems.CELL_DOCK, MEGAItems.CELL_DOCK.id().withPrefix("part/"));
+        partModels.staticModel(
+                MEGAItems.DECOMPRESSION_MODULE,
+                MEGAItems.DECOMPRESSION_MODULE.id().withPrefix("part/"));
     }
 
     private void basicItem(ItemLike item) {
@@ -312,6 +340,15 @@ public class MEGAModelProvider extends ModelProvider {
             }
         });
         blockModels.registerSimpleItemModel(part.asItem(), MEGACells.makeId("item/" + id));
+        var baseModel = AppEng.makeId("part/interface");
+        Objects.requireNonNull(partModels)
+                .composite(
+                        part,
+                        new StaticPartModel.Unbaked(MEGACells.makeId("part/" + partName)),
+                        new StatusIndicatorPartModel.Unbaked(
+                                baseModel.withSuffix("_has_channel"),
+                                baseModel.withSuffix("_on"),
+                                baseModel.withSuffix("_off")));
     }
 
     private void craftingUnits() {
@@ -483,6 +520,23 @@ public class MEGAModelProvider extends ModelProvider {
 
     private void rawJson(Identifier id, JsonObject json) {
         blockModels.modelOutput.accept(id, () -> json);
+    }
+
+    @NotNull
+    @Override
+    public CompletableFuture<?> run(@NotNull CachedOutput output) {
+        var partModels = new AE2ModelProvider.PartModelCollector(this::getKnownItems);
+        this.partModels = partModels;
+        CompletableFuture<?> future;
+
+        try {
+            future = super.run(output);
+        } finally {
+            this.partModels = null;
+        }
+
+        partModels.finalizeAndValidate();
+        return CompletableFuture.allOf(future, partModels.save(output, partModelOutput));
     }
 
     @NotNull
