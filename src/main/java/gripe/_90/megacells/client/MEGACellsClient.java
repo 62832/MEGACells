@@ -6,8 +6,8 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.InitializeClientRegistriesEvent;
 import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -79,27 +79,23 @@ public class MEGACellsClient {
         event.registerBlockEntityRenderer(MEGABlockEntities.MEGA_CRAFTING_MONITOR.get(), CraftingMonitorRenderer::new);
     }
 
-    private static void initStorageCellModels(FMLCommonSetupEvent event) {
-        // Has to be done in common setup, otherwise textures are broken when first entering a world until one forces a
-        // resource pack reload.
-        event.enqueueWork(() -> {
-            var modelPrefix = "block/drive/cells/";
+    private static void initStorageCellModels(InitializeClientRegistriesEvent event) {
+        var modelPrefix = "block/drive/cells/";
 
-            for (var cell : MEGAItems.getTieredCells()) {
-                StorageCellModels.registerModel(
-                        cell.item(),
-                        MEGACells.makeId(modelPrefix + cell.tier().namePrefix() + "_" + cell.keyType() + "_cell"));
-            }
-
+        for (var cell : MEGAItems.getTieredCells()) {
             StorageCellModels.registerModel(
-                    MEGAItems.BULK_ITEM_CELL,
-                    MEGACells.makeId(modelPrefix + MEGAItems.BULK_ITEM_CELL.id().getPath()));
+                    cell.item(),
+                    MEGACells.makeId(modelPrefix + cell.tier().namePrefix() + "_" + cell.keyType() + "_cell"));
+        }
 
-            StorageCellModels.registerModel(
-                    MEGAItems.RADIOACTIVE_CHEMICAL_CELL,
-                    MEGACells.makeId(modelPrefix
-                            + MEGAItems.RADIOACTIVE_CHEMICAL_CELL.id().getPath()));
-        });
+        StorageCellModels.registerModel(
+                MEGAItems.BULK_ITEM_CELL,
+                MEGACells.makeId(modelPrefix + MEGAItems.BULK_ITEM_CELL.id().getPath()));
+
+        StorageCellModels.registerModel(
+                MEGAItems.RADIOACTIVE_CHEMICAL_CELL,
+                MEGACells.makeId(
+                        modelPrefix + MEGAItems.RADIOACTIVE_CHEMICAL_CELL.id().getPath()));
     }
 
     private static void initTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
