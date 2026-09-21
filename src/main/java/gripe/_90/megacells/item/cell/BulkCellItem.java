@@ -37,8 +37,11 @@ import gripe._90.megacells.definition.MEGATranslations;
 public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
     private static final ICellHandler HANDLER = new Handler();
 
-    public BulkCellItem(Properties properties) {
+    private final AEKeyType keyType;
+    
+    public BulkCellItem(Properties properties, AEKeyType keyType) {
         super(properties.stacksTo(1));
+        this.keyType = keyType;
     }
 
     public static void registerHandler() {
@@ -47,12 +50,12 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
 
     @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(Set.of(AEKeyType.items()), is, 1);
+        return CellConfig.create(Set.of(keyType), is, 1);
     }
 
     @Override
     public IUpgradeInventory getUpgrades(ItemStack is) {
-        return UpgradeInventories.forItem(is, 1);
+        return UpgradeInventories.forItem(is, this.keyType.equals(AEKeyType.items()) ? 1 : 0);
     }
 
     @ParametersAreNonnullByDefault
@@ -61,8 +64,8 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
         var inv = (BulkCellInventory) HANDLER.getCellInventory(is, null);
 
         if (inv != null) {
-            var storedItem = inv.getStoredItem();
-            var filterItem = inv.getFilterItem();
+            var storedItem = inv.getStoredKey();
+            var filterItem = inv.getFilterKey();
 
             if (storedItem != null) {
                 lines.add(Tooltips.of(MEGATranslations.Contains.text(storedItem.getDisplayName())));
@@ -89,17 +92,19 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                                         .withStyle(ChatFormatting.DARK_RED)
                                 : Tooltips.of(MEGATranslations.NotPartitioned.text()));
             }
-
-            lines.add(Tooltips.of(MEGATranslations.Compression.text(
-                    inv.isCompressionEnabled()
-                            ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
-                            : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
+            
+            if (this.keyType.equals(AEKeyType.items())) {
+                lines.add(Tooltips.of(MEGATranslations.Compression.text(
+                        inv.isCompressionEnabled() && inv.hasCompressionChain()
+                                ? MEGATranslations.Enabled.text().withStyle(ChatFormatting.GREEN)
+                                : MEGATranslations.Disabled.text().withStyle(ChatFormatting.RED))));
+            }
 
             var trace = inv.getTraceUnits();
 
             if (trace > 0) {
                 lines.add(Tooltips.of(
-                                inv.isCompressionEnabled()
+                                inv.isCompressionEnabled() && inv.hasCompressionChain()
                                         ? MEGATranslations.TraceUnits.text(
                                                 Tooltips.ofNumber(trace),
                                                 inv.getLowestVariant().getHoverName())
@@ -107,7 +112,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
                         .withStyle(ChatFormatting.YELLOW));
             }
 
-            if (inv.isCompressionEnabled()) {
+            if (inv.isCompressionEnabled() && inv.hasCompressionChain()) {
                 var cutoffItem = inv.getCutoffItem();
 
                 if (!ItemStack.isSameItemSameComponents(cutoffItem, inv.getHighestVariant())) {
@@ -134,10 +139,10 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
         }
 
         if (AEConfig.instance().isTooltipShowCellContent()) {
-            if (inv.getStoredItem() != null) {
-                content.add(new GenericStack(inv.getStoredItem(), inv.getStoredQuantity()));
-            } else if (inv.getFilterItem() != null) {
-                content.add(new GenericStack(inv.getFilterItem(), 0));
+            if (inv.getStoredKey() != null) {
+                content.add(new GenericStack(inv.getStoredKey(), inv.getStoredQuantity()));
+            } else if (inv.getFilterKey() != null) {
+                content.add(new GenericStack(inv.getFilterKey(), 0));
             }
         }
 
@@ -157,7 +162,7 @@ public class BulkCellItem extends AEBaseItem implements ICellWorkbenchItem {
 
         @Override
         public boolean isCell(ItemStack is) {
-            return is != null && is.is(MEGAItems.BULK_ITEM_CELL.asItem());
+            return is != null && is.getItem() instanceof BulkCellItem;
         }
 
         @Nullable
