@@ -15,6 +15,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -42,6 +43,11 @@ public class CompressionService {
 
     private static final Map<AEItemKey, CompressionChain> cachedChains = new WeakHashMap<>();
 
+    private static List<CraftingRecipe> compressionRecipes = List.of();
+    private static List<CraftingRecipe> decompressionRecipes = List.of();
+    private static List<CompressionOverride> compressionOverrides = List.of();
+    private static RegistryAccess recipeAccess;
+
     public static void init() {
         GridServices.register(DecompressionService.class, DecompressionService.class);
 
@@ -65,6 +71,11 @@ public class CompressionService {
     /**
      * Retrieves a compression chain containing a given item as any of its "variants".
      *
+     * <p>Most chains are generated eagerly from recipe result templates when recipes are loaded. If no preloaded chain
+     * matches the requested item exactly, this method attempts to build a concrete chain from the requested stack using
+     * the cached recipe candidates. This allows recipes with dynamic component/NBT outputs to be represented by exact
+     * item variants after the first lookup.
+     *
      * @param item The item to retrieve a corresponding chain for.
      * @return The {@link CompressionChain} corresponding to this item, or the {@code EMPTY} chain if no real chain
      * exists for it or the given item was {@code null}.
@@ -83,16 +94,31 @@ public class CompressionService {
 
         for (var chain : chains) {
             if (chain.containsVariant(item)) {
-                for (var j = 0; j < chain.size(); j++) {
-                    cachedChains.put(AEItemKey.of(chain.getItem(j)), chain);
-                }
-
+                cacheChain(chain);
                 return chain;
             }
         }
 
+        var generated = generateChainFor(item);
+
+        if (generated != EMPTY) {
+            chains.add(generated);
+            cacheChain(generated);
+            return generated;
+        }
+
         cachedChains.put(item, EMPTY);
         return EMPTY;
+    }
+
+    /**
+     * Caches every concrete variant in a chain to make future exact lookups cheap. This is especially useful for
+     * dynamically generated chains, as the generated stacks include all components from simulated crafting outputs.
+     */
+    private static void cacheChain(CompressionChain chain) {
+        for (var j = 0; j < chain.size(); j++) {
+            cachedChains.put(AEItemKey.of(chain.getItem(j)), chain);
+        }
     }
 
     /**
@@ -110,6 +136,9 @@ public class CompressionService {
     /**
      * (Re-)Initialises all compression chains upon initial server start-up, and upon any datapack {@code /reload}s in
      * case of any crafting recipes changing which may differ from those used to generate previous chains.
+     *
+     * <p>The filtered recipe candidates are retained after the eager pass so that later lookups can specialise a chain
+     * for stacks whose actual output components are only known after calling {@link CraftingRecipe#assemble}.
      */
     private static void loadRecipes(RecipeManager recipeManager, RegistryAccess access) {
         // Clear old chain cache in case of the server restarting or recipes being reloaded
@@ -142,9 +171,14 @@ public class CompressionService {
         compressed.sort(ingredientSize);
         decompressed.sort(ingredientSize);
 
+        compressionRecipes = List.copyOf(compressed);
+        decompressionRecipes = List.copyOf(decompressed);
+        compressionOverrides = List.copyOf(overrides);
+        recipeAccess = access;
+
         while (!compressed.isEmpty()) {
             var base = compressed.removeFirst().getResultItem(access).copy();
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(base, recipe.getResultItem(access)));
+            decompressed.removeIf(recipe -> isSameResultItem(base, recipe, access));
             chains.add(generateChain(base, compressed, decompressed, overrides, access));
         }
 
@@ -159,6 +193,10 @@ public class CompressionService {
      * "compression" and "decompression" recipe candidates and a list of "overrides" gathered previously. Operates
      * destructively on the given recipe lists in order to remove corresponding "opposite" recipes and prevent further
      * unnecessary reiterations with items already put into a previous chain.
+     *
+     * <p>The base variant may be either a static recipe template or a concrete stack requested by storage code. When
+     * cleaning up the opposite recipe list, matching is intentionally by item type only because dynamic recipe result
+     * templates may omit the components present on the concrete variant.
      */
     private static CompressionChain generateChain(
             ItemStack baseVariant,
@@ -186,7 +224,7 @@ public class CompressionService {
             }
 
             lowerList.add(stack);
-            compressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            compressed.removeIf(recipe -> isSameResultItem(stack, recipe, access));
             lower = getNextVariant(stack, decompressed, overrides, false, access);
         }
 
@@ -211,7 +249,7 @@ public class CompressionService {
 
             var stack = higher;
             variantList.add(stack);
-            decompressed.removeIf(recipe -> ItemStack.isSameItemSameComponents(stack, recipe.getResultItem(access)));
+            decompressed.removeIf(recipe -> isSameResultItem(stack, recipe, access));
             higher = getNextVariant(stack, compressed, overrides, true, access);
         }
 
@@ -221,8 +259,33 @@ public class CompressionService {
     }
 
     /**
+     * Attempts to specialise a compression chain around a concrete item that was not found in the eager chain list.
+     * This uses fresh copies of the cached recipe lists because chain generation removes recipes as it walks them.
+     *
+     * @return a concrete chain with at least two variants, or {@code EMPTY} if no usable chain can be generated.
+     */
+    private static CompressionChain generateChainFor(AEItemKey item) {
+        if (recipeAccess == null) {
+            return EMPTY;
+        }
+
+        var chain = generateChain(
+                item.getReadOnlyStack().copyWithCount(1),
+                new ArrayList<>(compressionRecipes),
+                new ArrayList<>(decompressionRecipes),
+                new ArrayList<>(compressionOverrides),
+                recipeAccess);
+
+        return chain.size() > 1 ? chain : EMPTY;
+    }
+
+    /**
      * Retrieves the "next" variant for a given item based on a given list of recipes and overrides, and whether the
      * recipes given are "compression" or "decompression" recipes.
+     *
+     * <p>Exact input matches keep the original static behavior. If only the item type matches, the recipe is simulated
+     * so dynamic recipes can copy components from the current input stack into the returned result. Exact matches with
+     * components also get a simulation pass, but fall back to the recipe template if the simulated output is static.
      */
     private static ItemStack getNextVariant(
             ItemStack item,
@@ -244,18 +307,93 @@ public class CompressionService {
 
         for (var recipe : recipes) {
             for (var input : recipe.getIngredients().getFirst().getItems()) {
-                if (ItemStack.isSameItemSameComponents(item, input)) {
-                    recipes.remove(recipe);
-                    return recipe.getResultItem(access)
-                            .copyWithCount(
-                                    compressed
-                                            ? recipe.getIngredients().size()
-                                            : recipe.getResultItem(access).getCount());
+                var exactMatch = ItemStack.isSameItemSameComponents(item, input);
+
+                if (!exactMatch && !ItemStack.isSameItem(item, input)) {
+                    continue;
                 }
+
+                var result = recipe.getResultItem(access);
+
+                if (!exactMatch || !item.isComponentsPatchEmpty()) {
+                    var dynamicResult = assembleDynamicResult(recipe, item, access);
+
+                    if (dynamicResult == null) {
+                        if (exactMatch) {
+                            dynamicResult = result;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    result = dynamicResult;
+                }
+
+                recipes.remove(recipe);
+                return result.copyWithCount(
+                        compressed
+                                ? recipe.getIngredients().size()
+                                : recipe.getResultItem(access).getCount());
             }
         }
 
         return null;
+    }
+
+    /**
+     * Simulates a recipe with the current item as its crafting input and returns the concrete dynamic result.
+     *
+     * <p>A result is accepted only when it has the same item type as {@link CraftingRecipe#getResultItem} but different
+     * components. Returning {@code null} means the recipe was static for this input, produced an unexpected item, or
+     * could not be simulated safely.
+     */
+    private static ItemStack assembleDynamicResult(CraftingRecipe recipe, ItemStack item, RegistryAccess access) {
+        var template = recipe.getResultItem(access);
+
+        try {
+            var result = recipe.assemble(createCraftingInput(recipe, item), access);
+
+            if (result.isEmpty() || !ItemStack.isSameItem(result, template)) {
+                return null;
+            }
+
+            return ItemStack.isSameItemSameComponents(result, template) ? null : result;
+        } catch (RuntimeException e) {
+            LOGGER.debug("Could not simulate dynamic compression recipe output for {}.", item, e);
+            return null;
+        }
+    }
+
+    /**
+     * Builds a minimal crafting input containing only copies of the current item. The grid dimensions are chosen to fit
+     * the recipe's ingredient count within the normal crafting width, which is sufficient for dynamic recipes that read
+     * their output components from the supplied stacks during {@link CraftingRecipe#assemble}.
+     */
+    private static CraftingInput createCraftingInput(CraftingRecipe recipe, ItemStack item) {
+        var slotCount = Math.max(1, recipe.getIngredients().size());
+        var width =
+                switch (slotCount) {
+                    case 1 -> 1;
+                    case 2, 3 -> slotCount;
+                    case 4 -> 2;
+                    default -> 3;
+                };
+        var height = (slotCount + width - 1) / width;
+        var stacks = new ArrayList<ItemStack>(width * height);
+
+        for (var i = 0; i < width * height; i++) {
+            stacks.add(i < slotCount ? item.copy() : ItemStack.EMPTY);
+        }
+
+        return CraftingInput.of(width, height, stacks);
+    }
+
+    /**
+     * Tests whether a recipe result has the same item type as a concrete stack. Component data is ignored here so
+     * dynamic recipes whose templates omit inherited components are still removed after their concrete variant is used.
+     */
+    private static boolean isSameResultItem(ItemStack stack, CraftingRecipe recipe, RegistryAccess access) {
+        return ItemStack.isSameItem(stack, recipe.getResultItem(access));
     }
 
     /**
@@ -352,7 +490,7 @@ public class CompressionService {
 
             // spotless:off
             var sameQuantity = candidate.getResultItem(access).getCount() == recipe.getIngredients().size()
-                            && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
+                    && recipe.getResultItem(access).getCount() == candidate.getIngredients().size();
             // spotless:on
 
             if (compressible && decompressible && sameQuantity) {
