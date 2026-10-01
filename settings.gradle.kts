@@ -68,21 +68,23 @@ run {
 
         versionCatalogs {
             val mc = "26.1.2"
-            val nf = "$mc.80"
+            val nf = "$mc.107"
             val maj = mc.substringBeforeLast('.')
 
             create("core") {
                 version("minecraft", mc)
                 version("neoforge", nf)
-                version("ae2", "$maj.10-beta")
+                version("ae2", "$maj.13-beta")
                 library("ae2", "org.appliedenergistics", "appliedenergistics2").versionRef("ae2")
             }
 
             create("integration") {
-                // AE2WTLib is the only add-on currently shipping a Minecraft 26.1 build.
                 version("ae2wtlib", "$maj.1-beta")
                 library("ae2wtlib", "de.mari_023", "ae2wtlib").versionRef("ae2wtlib")
                 library("ae2wtlibapi", "de.mari_023", "ae2wtlib_api").versionRef("ae2wtlib")
+
+                library("appflux", "curse.maven", "applied-flux-965012").version("9025081")
+                library("glodium", "curse.maven", "glodium-957920").version("8196173")
 
                 // The rest don't have Minecraft 26.1 releases yet. Their integration code compiles
                 // against these last-known 1.21.1 jars as compile-only stubs (never on the runtime
@@ -97,9 +99,6 @@ run {
                 // version("arseng", "2.0.5-beta")
                 // library("arseng", "curse.maven", "ars-energistique-905641").version("6021072")
                 // library("arsnouveau", "com.hollingsworth.ars_nouveau", "ars_nouveau-1.21.1").version("5.10.0.1183")
-                // 
-                // library("appflux", "curse.maven", "applied-flux-965012").version("5946853")
-                // library("glodium", "curse.maven", "glodium-957920").version("5821676")
                 // 
                 // library("appex", "curse.maven", "applied-experienced-1157608").version("6112629")
                 // library("explib", "curse.maven", "experiencelib-1156551").version("5992832")

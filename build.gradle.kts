@@ -71,6 +71,10 @@ dependencies {
     compileOnly(integration.ae2wtlibapi)
     "addonsRuntimeOnly"(integration.ae2wtlib)
 
+    compileOnly(integration.appflux)
+    "addonsRuntimeOnly"(integration.appflux)
+    "addonsRuntimeOnly"(integration.glodium)
+
     compileOnly(integration.appmek)
     compileOnly(integration.mekanism)
     // "addonsRuntimeOnly"(integration.appmek)
@@ -81,10 +85,6 @@ dependencies {
     // "addonsRuntimeOnly"(integration.arseng)
     // "dataCompileOnly"(integration.arsnouveau) { exclude("mezz.jei") }
     // "addonsRuntimeOnly"(integration.arsnouveau) { exclude("mezz.jei") }
-
-    // compileOnly(integration.appflux)
-    // "addonsRuntimeOnly"(integration.appflux)
-    // "addonsRuntimeOnly"(integration.glodium)
 
     // compileOnly(integration.appex)
     // "addonsRuntimeOnly"(integration.appex)

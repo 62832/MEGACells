@@ -100,15 +100,12 @@ public final class MEGAItems {
     public static final ItemDefinition<MaterialItem> BULK_CELL_COMPONENT = item("MEGA Bulk Storage Component", "bulk_cell_component", MaterialItem::new);
     public static final ItemDefinition<BulkCellItem> BULK_ITEM_CELL = item("MEGA Bulk Item Storage Cell", "bulk_item_cell", BulkCellItem::new);
     public static final ItemDefinition<UpgradeCardItem> COMPRESSION_CARD = item("Compression Card", "compression_card", UpgradeCardItem::new);
-    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part(
-            "MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
+    public static final ItemDefinition<PartItem<DecompressionModulePart>> DECOMPRESSION_MODULE = part("MEGA Decompression Module", "decompression_module", DecompressionModulePart.class, DecompressionModulePart::new);
     public static final ItemDefinition<PartItem<MEGAInterfacePart>> MEGA_INTERFACE = part("MEGA Interface", "cable_mega_interface", MEGAInterfacePart.class, MEGAInterfacePart::new);
     public static final ItemDefinition<MEGAPatternProviderPartItem> MEGA_PATTERN_PROVIDER = Util.make(() -> item("MEGA Pattern Provider", "cable_mega_pattern_provider", MEGAPatternProviderPartItem::new));
 
-    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK =
-            part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
-    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH =
-            item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
+    public static final ItemDefinition<PartItem<CellDockPart>> CELL_DOCK = part("ME Cell Dock", "cell_dock", CellDockPart.class, CellDockPart::new);
+    public static final ItemDefinition<PortableCellWorkbenchItem> PORTABLE_CELL_WORKBENCH = item("Portable Cell Workbench", "portable_cell_workbench", PortableCellWorkbenchItem::new);
 
     public static final ItemDefinition<?> SKY_OSMIUM_INGOT = integrationItem("Sky Osmium Ingot", "sky_osmium_ingot", () -> MaterialItem::new, Item.Properties::fireResistant, Addons.APPMEK);
     public static final ItemDefinition<?> MEGA_CHEMICAL_CELL_HOUSING = integrationItem("MEGA Chemical Cell Housing", "mega_chemical_cell_housing", () -> MaterialItem::new, Addons.APPMEK);
@@ -176,8 +173,7 @@ public final class MEGAItems {
     public static final ItemDefinition<?> SOUL_CELL_64M = integrationCell(TIER_64M, "Soul", Addons.APPLIEDSOUL);
     public static final ItemDefinition<?> SOUL_CELL_256M = integrationCell(TIER_256M, "Soul", Addons.APPLIEDSOUL);
     public static final ItemDefinition<?> MEGA_SOUL_CELL_HOUSING = integrationItem("MEGA Soul Cell Housing", "mega_soul_cell_housing", () -> MaterialItem::new, Addons.APPLIEDSOUL);
-    public static final ItemDefinition<?> MEGA_EMC_INTERFACE = integrationItem(
-            "MEGA Transmutation Interface", "cable_mega_emc_interface", () -> MaterialItem::new, Addons.APPLIEDE);
+    public static final ItemDefinition<?> MEGA_EMC_INTERFACE = integrationItem("MEGA Transmutation Interface", "cable_mega_emc_interface", () -> MaterialItem::new, Addons.APPLIEDE);
     // spotless:on
 
     private static StorageTier tier(int index, ItemDefinition<StorageComponentItem> component) {
