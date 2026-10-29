@@ -88,7 +88,7 @@ neoForge {
         minecraftVersion = core.versions.minecraft.get()
         mappingsVersion = core.versions.parchment.get()
     }
-    
+
     mods {
         create(modId) {
             sourceSet(sourceSets.main.get())

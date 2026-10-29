@@ -5,11 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -29,8 +32,26 @@ public class CompressionChain {
     private final List<ItemStack> variants;
     private final Supplier<List<Pair<IPatternDetails, IPatternDetails>>> patterns = Lazy.of(this::gatherPatterns);
 
+    private final Set<AEItemKey> variantKeys;
+    private final Map<AEItemKey, BigInteger> factors;
+
     CompressionChain(List<ItemStack> variants) {
         this.variants = Collections.unmodifiableList(variants);
+
+        var keys = new ObjectOpenHashSet<AEItemKey>(variants.size());
+        var map = new Object2ObjectOpenHashMap<AEItemKey, BigInteger>(variants.size());
+        var factor = BigInteger.ONE;
+
+        for (var variant : variants) {
+            factor = factor.multiply(bigCount(variant));
+            var key = AEItemKey.of(variant);
+            if (key != null && keys.add(key)) {
+                map.put(key, factor);
+            }
+        }
+
+        this.variantKeys = keys;
+        this.factors = map;
     }
 
     public static long clamp(BigInteger toClamp, long limit) {
@@ -46,13 +67,7 @@ public class CompressionChain {
     }
 
     public boolean containsVariant(AEItemKey item) {
-        for (var variant : variants) {
-            if (ItemStack.isSameItemSameComponents(item.getReadOnlyStack(), variant)) {
-                return true;
-            }
-        }
-
-        return false;
+        return variantKeys.contains(item);
     }
 
     public ItemStack getItem(int index) {
@@ -60,21 +75,7 @@ public class CompressionChain {
     }
 
     public BigInteger unitFactor(AEItemKey item) {
-        if (item == null) {
-            return BigInteger.ONE;
-        }
-
-        var potentialFactor = BigInteger.ONE;
-
-        for (var variant : variants) {
-            potentialFactor = potentialFactor.multiply(bigCount(variant));
-
-            if (ItemStack.isSameItemSameComponents(item.getReadOnlyStack(), variant)) {
-                return potentialFactor;
-            }
-        }
-
-        return BigInteger.ONE;
+        return item == null ? BigInteger.ONE : factors.getOrDefault(item, BigInteger.ONE);
     }
 
     public int size() {
