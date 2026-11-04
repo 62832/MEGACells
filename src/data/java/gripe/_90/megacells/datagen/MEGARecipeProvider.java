@@ -39,8 +39,7 @@ import appeng.recipes.transform.TransformCircumstance;
 import appeng.recipes.transform.TransformRecipeBuilder;
 
 import gripe._90.megacells.MEGACells;
-import gripe._90.megacells.datagen.integration.AppBotIntegrationData;
-import gripe._90.megacells.datagen.integration.AppMekIntegrationData;
+import gripe._90.megacells.datagen.integration.DummyObjects;
 import gripe._90.megacells.definition.MEGABlocks;
 import gripe._90.megacells.definition.MEGAItems;
 import gripe._90.megacells.definition.MEGATags;
@@ -71,7 +70,6 @@ public class MEGARecipeProvider extends RecipeProvider.Runner {
 
         @Override
         protected void buildRecipes() {
-            var output = this.output;
             // spotless:off
             component(output, MEGAItems.TIER_1M, StorageTier.SIZE_256K, Ingredient.of(AEItems.SKY_DUST.asItem()));
             component(output, MEGAItems.TIER_4M, MEGAItems.TIER_1M, Ingredient.of(items.getOrThrow(ConventionTags.ENDER_PEARL_DUST)));
@@ -437,17 +435,45 @@ public class MEGARecipeProvider extends RecipeProvider.Runner {
                             output,
                             ResourceKey.create(Registries.RECIPE, MEGACells.makeId("network/portable_cell_workbench")));
 
-            if (Addons.APPMEK.isLoaded()) {
-                AppMekIntegrationData.recipes(output);
-            }
+            // INTEGRATION RECIPES
+            ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CHEMICAL_CELL)
+                    .pattern("aba")
+                    .pattern("bcb")
+                    .pattern("ded")
+                    .define('a', DummyObjects.REACTOR_GLASS.value())
+                    .define('b', AEItems.SKY_DUST)
+                    .define('c', MEGAItems.RADIOACTIVE_CELL_COMPONENT)
+                    .define('d', DummyObjects.HDPE_SHEET.value())
+                    .define('e', DummyObjects.POLONIUM_PELLET.value())
+                    .unlockedBy("has_radioactive_cell_component", has(MEGAItems.RADIOACTIVE_CELL_COMPONENT))
+                    .save(
+                            conditional(output, Addons.APPMEK),
+                            ResourceKey.create(
+                                    Registries.RECIPE, MEGACells.makeId("cells/standard/radioactive_chemical_cell")));
+            ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, MEGAItems.RADIOACTIVE_CELL_COMPONENT)
+                    .pattern("aba")
+                    .pattern("cdc")
+                    .pattern("aea")
+                    .define('a', AEItems.SKY_DUST)
+                    .define('b', MEGAItems.ACCUMULATION_PROCESSOR)
+                    .define('c', DummyObjects.RADIOACTIVE_WASTE_BARREL.value())
+                    .define('d', AEBlocks.QUARTZ_VIBRANT_GLASS)
+                    .define('e', AEItems.CELL_COMPONENT_256K)
+                    .unlockedBy("has_cell_component_256k", has(AEItems.CELL_COMPONENT_256K))
+                    .unlockedBy("has_waste_barrel", has(DummyObjects.RADIOACTIVE_WASTE_BARREL.value()))
+                    .save(
+                            conditional(output, Addons.APPMEK),
+                            ResourceKey.create(
+                                    Registries.RECIPE, MEGACells.makeId("crafting/radioactive_cell_component")));
 
-            if (Addons.APPBOT.isLoaded()) {
-                AppBotIntegrationData.recipes(output);
-            }
-
-            // ArsEng, AppEx, Applied Soul and AppliedE don't have Minecraft 26.1 releases available at
-            // runtime yet (see build.gradle.kts), so there's no datagen counterpart to call into here
-            // right now.
+            ShapelessRecipeBuilder.shapeless(items, RecipeCategory.MISC, MEGABlocks.MEGA_EMC_INTERFACE)
+                    .requires(DummyObjects.EMC_INTERFACE.value())
+                    .requires(MEGAItems.ACCUMULATION_PROCESSOR)
+                    .unlockedBy("has_emc_interface", has(DummyObjects.EMC_INTERFACE.value()))
+                    .unlockedBy("has_accumulation_processor", has(MEGAItems.ACCUMULATION_PROCESSOR))
+                    .save(
+                            conditional(output, Addons.APPLIEDE),
+                            ResourceKey.create(Registries.RECIPE, MEGACells.makeId("network/mega_emc_interface")));
         }
 
         private void component(RecipeOutput output, StorageTier tier, StorageTier preceding, Ingredient binder) {

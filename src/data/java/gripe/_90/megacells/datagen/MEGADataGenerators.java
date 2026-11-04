@@ -1,15 +1,24 @@
 package gripe._90.megacells.datagen;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
 
 import gripe._90.megacells.MEGACells;
+import gripe._90.megacells.datagen.integration.DummyObjects;
 
-@EventBusSubscriber(modid = MEGACells.MODID)
+@Mod(value = MEGACells.MODID, dist = Dist.CLIENT)
 public class MEGADataGenerators {
-    @SubscribeEvent
-    public static void onGatherClientData(GatherDataEvent.Client event) {
+    public MEGADataGenerators(IEventBus eventBus) {
+        if (DatagenModLoader.isRunningDataGen()) {
+            DummyObjects.init(eventBus);
+            eventBus.addListener(MEGADataGenerators::onGatherClientData);
+        }
+    }
+
+    private static void onGatherClientData(GatherDataEvent.Client event) {
         var output = event.getGenerator().getPackOutput();
         event.addProvider(new MEGALanguageProvider(output));
         event.addProvider(new MEGAModelProvider(output));

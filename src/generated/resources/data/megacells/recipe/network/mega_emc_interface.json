@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appliede"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "appliede:emc_interface",
+    "megacells:accumulation_processor"
+  ],
+  "result": {
+    "id": "megacells:mega_emc_interface"
+  }
+}

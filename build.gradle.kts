@@ -52,14 +52,6 @@ sourceSets {
     }
 
     create("data") {
-        java {
-            // Same four add-ons excluded from `main` (see above) don't have datagen counterparts
-            // to compile against either.
-            exclude("gripe/_90/megacells/datagen/integration/AppExIntegrationData.java")
-            exclude("gripe/_90/megacells/datagen/integration/AppSoulIntegrationData.java")
-            exclude("gripe/_90/megacells/datagen/integration/ArsEngIntegrationData.java")
-            exclude("gripe/_90/megacells/datagen/integration/AppliedEIntegrationData.java")
-        }
         compileClasspath += addons.compileClasspath + addons.output
         runtimeClasspath += addons.runtimeClasspath + addons.output
     }
@@ -78,7 +70,6 @@ dependencies {
     compileOnly(integration.appmek)
     compileOnly(integration.mekanism)
     // "addonsRuntimeOnly"(integration.appmek)
-    "dataCompileOnly"(variantOf(integration.mekanism) { classifier("generators") })
     // "addonsRuntimeOnly"(variantOf(integration.mekanism) { classifier("all") })
 
     // compileOnly(integration.arseng)
