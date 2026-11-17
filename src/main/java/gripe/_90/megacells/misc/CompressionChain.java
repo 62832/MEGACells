@@ -45,9 +45,9 @@ public class CompressionChain {
         return variants.isEmpty();
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     public boolean containsVariant(AEItemKey item) {
         // Avoid iterator overhead by using a traditional indexed loop
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, size = variants.size(); i < size; i++) {
             if (ItemStack.isSameItemSameComponents(item.getReadOnlyStack(), variants.get(i))) {
                 return true;
